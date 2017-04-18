@@ -100,6 +100,7 @@ class Account < ApplicationRecord
   scope :by_domain_accounts, -> { group(:domain).select(:domain, 'COUNT(*) AS accounts_count').order('accounts_count desc') }
   scope :matches_username, ->(value) { where(arel_table[:username].matches("#{value}%")) }
   scope :matches_display_name, ->(value) { where(arel_table[:display_name].matches("#{value}%")) }
+  scope :with_follows_count, -> { select('(select count(*) from follows inner join accounts followed_accounts on followed_accounts.id = follows.target_account_id where followed_accounts.domain = accounts.domain) as followed_count') }
 
   delegate :email,
            :current_sign_in_ip,
