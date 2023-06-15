@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Fabricator(:webhook) do
-  url { Faker::Internet.url }
+  url { sequence(:url) { |i| "https://example.com/page_#{i}" } }
   secret { SecureRandom.hex }
   events { Webhook::EVENTS }
 end
