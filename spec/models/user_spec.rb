@@ -3,6 +3,15 @@
 require 'rails_helper'
 require 'devise_two_factor/spec_helpers'
 
+# The devise-two-factor shared example expects Faker to be available
+module Faker
+  class Lorem
+    def self.words
+      %w(these are some fake words)
+    end
+  end
+end
+
 RSpec.describe User do
   let(:password) { 'abcd1234' }
   let(:account) { Fabricate(:account, username: 'alice') }
