@@ -225,8 +225,6 @@ GEM
     excon (1.2.5)
       logger
     fabrication (2.31.0)
-    faker (3.5.1)
-      i18n (>= 1.8.11, < 2)
     faraday (2.12.2)
       faraday-net_http (>= 2.0, < 3.5)
       json
@@ -959,7 +957,6 @@ DEPENDENCIES
   dotenv
   email_spec
   fabrication (~> 2.30)
-  faker (~> 3.2)
   faraday-httpclient
   fast_blank (~> 1.0)
   fastimage
