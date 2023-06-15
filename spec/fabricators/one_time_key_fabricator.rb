@@ -2,7 +2,7 @@
 
 Fabricator(:one_time_key) do
   device { Fabricate.build(:device) }
-  key_id { Faker::Alphanumeric.alphanumeric(number: 10) }
+  key_id { '1a2s3d4f5g' }
   key { Base64.strict_encode64(Ed25519::SigningKey.generate.verify_key.to_bytes) }
 
   signature do |attrs|

@@ -3,8 +3,8 @@
 Fabricator(:device) do
   access_token { Fabricate.build(:access_token) }
   account { Fabricate.build(:account) }
-  device_id        { Faker::Number.number(digits: 5) }
-  name             { Faker::App.name }
+  device_id        { '12345' }
+  name             { 'Device name' }
   fingerprint_key  { Base64.strict_encode64(Ed25519::SigningKey.generate.verify_key.to_bytes) }
   identity_key     { Base64.strict_encode64(Ed25519::SigningKey.generate.verify_key.to_bytes) }
 end
