@@ -25,7 +25,7 @@ RSpec.describe AccountModerationNote do
     end
 
     def comment_over_limit
-      Faker::Lorem.paragraph_by_chars(number: described_class::CONTENT_SIZE_LIMIT * 2)
+      'a' * described_class::CONTENT_SIZE_LIMIT * 2
     end
   end
 end
