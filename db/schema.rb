@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_24_181224) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["account_id", "uri"], name: "index_account_aliases_on_account_id_and_uri", unique: true
     t.index ["account_id"], name: "index_account_aliases_on_account_id"
+    t.index ["uri", "account_id"], name: "index_account_aliases_on_uri_and_account_id", unique: true
   end
 
   create_table "account_conversations", force: :cascade do |t|
