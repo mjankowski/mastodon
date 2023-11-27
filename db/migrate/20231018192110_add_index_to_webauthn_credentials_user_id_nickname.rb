@@ -46,4 +46,8 @@ class AddIndexToWebauthnCredentialsUserIdNickname < ActiveRecord::Migration[7.0]
       SQL
     end
   end
+
+  def down
+    remove_index :webauthn_credentials, [:nickname, :user_id]
+  end
 end

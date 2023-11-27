@@ -46,4 +46,8 @@ class AddIndexToAccountAliasUriAccountId < ActiveRecord::Migration[7.0]
       SQL
     end
   end
+
+  def down
+    remove_index :account_aliases, [:uri, :account_id]
+  end
 end
