@@ -6,7 +6,7 @@ module Mastodon::CLI
   class Cache < Base
     desc 'clear', 'Clear out the cache storage'
     def clear
-      Rails.cache.clear
+      command_cache_clear.clear_rails_cache
       say('OK', :green)
     end
 
@@ -21,18 +21,7 @@ module Mastodon::CLI
       size of the database.
     LONG_DESC
     def recount(type)
-      case type
-      when 'accounts'
-        processed, = parallelize_with_progress(accounts_with_stats) do |account|
-          recount_account_stats(account)
-        end
-      when 'statuses'
-        processed, = parallelize_with_progress(statuses_with_stats) do |status|
-          recount_status_stats(status)
-        end
-      else
-        fail_with_message "Unknown type: #{type}"
-      end
+      processed, _aggregate = process_recount(type)
 
       say
       say("OK, recounted #{processed} records", :green)
@@ -40,32 +29,23 @@ module Mastodon::CLI
 
     private
 
-    def accounts_with_stats
-      Account.local.includes(:account_stat)
-    end
-
-    def statuses_with_stats
-      Status.includes(:status_stat)
-    end
-
-    def recount_account_stats(account)
-      account.account_stat.tap do |account_stat|
-        account_stat.following_count = account.active_relationships.count
-        account_stat.followers_count = account.passive_relationships.count
-        account_stat.statuses_count  = account.statuses.not_direct_visibility.count
-
-        account_stat.save if account_stat.changed?
+    def process_recount(type)
+      case type.to_sym
+      when :accounts
+        command_cache_recount.recount_accounts
+      when :statuses
+        command_cache_recount.recount_statuses
+      else
+        fail_with_message "Unknown type: #{type}"
       end
     end
 
-    def recount_status_stats(status)
-      status.status_stat.tap do |status_stat|
-        status_stat.replies_count    = status.replies.not_direct_visibility.count
-        status_stat.reblogs_count    = status.reblogs.count
-        status_stat.favourites_count = status.favourites.count
+    def command_cache_clear
+      Commands::Cache::Clear.new
+    end
 
-        status_stat.save if status_stat.changed?
-      end
+    def command_cache_recount
+      Commands::Cache::Recount.new
     end
   end
 end
