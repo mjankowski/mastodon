@@ -13,9 +13,7 @@ module Mastodon::CLI
       This command can be used to find whether a known email address is blocked.
     LONG_DESC
     def find(email)
-      accts = CanonicalEmailBlock.matching_email(email)
-
-      if accts.empty?
+      if canonical_email_block_on(email).empty?
         say("#{email} is not blocked", :green)
       else
         say("#{email} is blocked", :red)
@@ -30,7 +28,7 @@ module Mastodon::CLI
       This command allows removing a canonical email block.
     LONG_DESC
     def remove(email)
-      blocks = CanonicalEmailBlock.matching_email(email)
+      blocks = canonical_email_block_on(email)
 
       if blocks.empty?
         say("#{email} is not blocked", :green)
@@ -38,6 +36,12 @@ module Mastodon::CLI
         blocks.destroy_all
         say("Unblocked #{email}", :green)
       end
+    end
+
+    private
+
+    def canonical_email_block_on(email)
+      CanonicalEmailBlock.matching_email(email)
     end
   end
 end
