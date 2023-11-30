@@ -48,8 +48,8 @@ module Mastodon::CLI
 
       # Build scopes from command arguments
       if options[:limited_federation_mode]
-        account_scope = Account.remote.where.not(domain: DomainAllow.select(:domain))
-        emoji_scope   = CustomEmoji.remote.where.not(domain: DomainAllow.select(:domain))
+        account_scope = remote_accounts.where.not(domain: DomainAllow.select(:domain))
+        emoji_scope   = remote_custom_emojis.where.not(domain: DomainAllow.select(:domain))
       else
         # Handle wildcard subdomains
         subdomain_patterns = domains.filter_map { |domain| "%.#{Account.sanitize_sql_like(domain[2..])}" if domain.start_with?('*.') }
@@ -64,13 +64,13 @@ module Mastodon::CLI
         end
 
         if options[:by_uri]
-          account_scope = Account.remote.where(Account.arel_table[:uri].matches_any(uri_patterns, false, true))
-          emoji_scope   = CustomEmoji.remote.where(CustomEmoji.arel_table[:uri].matches_any(uri_patterns, false, true))
+          account_scope = remote_accounts.where(Account.arel_table[:uri].matches_any(uri_patterns, false, true))
+          emoji_scope   = remote_custom_emojis.where(CustomEmoji.arel_table[:uri].matches_any(uri_patterns, false, true))
         else
-          account_scope = Account.remote.where(domain: domains)
-          account_scope = account_scope.or(Account.remote.where(Account.arel_table[:domain].matches_any(subdomain_patterns))) unless subdomain_patterns.empty?
+          account_scope = remote_accounts.where(domain: domains)
+          account_scope = account_scope.or(remote_accounts.where(Account.arel_table[:domain].matches_any(subdomain_patterns))) unless subdomain_patterns.empty?
           emoji_scope   = CustomEmoji.where(domain: domains)
-          emoji_scope   = emoji_scope.or(CustomEmoji.remote.where(CustomEmoji.arel_table[:uri].matches_any(subdomain_patterns))) unless subdomain_patterns.empty?
+          emoji_scope   = emoji_scope.or(remote_custom_emojis.where(CustomEmoji.arel_table[:uri].matches_any(subdomain_patterns))) unless subdomain_patterns.empty?
         end
       end
 
@@ -188,6 +188,14 @@ module Mastodon::CLI
     end
 
     private
+
+    def remote_accounts
+      Account.remote
+    end
+
+    def remote_custom_emojis
+      CustomEmoji.remote
+    end
 
     def domain_block_suspended_domains
       DomainBlock.suspend.pluck(:domain)
