@@ -38,7 +38,7 @@ module Mastodon::CLI
       time_ago = options[:days].days.ago
 
       if options[:prune_profiles] || options[:remove_headers]
-        processed, aggregate = parallelize_with_progress(Account.remote.where({ last_webfingered_at: ..time_ago, updated_at: ..time_ago })) do |account|
+        processed, aggregate = parallelize_with_progress(remote_accounts_inactive_since(time_ago)) do |account|
           next if !options[:include_follows] && Follow.where(account: account).or(Follow.where(target_account: account)).exists?
           next if account.avatar.blank? && account.header.blank?
           next if options[:remove_headers] && account.header.blank?
@@ -75,6 +75,10 @@ module Mastodon::CLI
 
         say("Removed #{processed} media attachments (approx. #{number_to_human_size(aggregate)})#{dry_run_mode_suffix}", :green, true)
       end
+    end
+
+    def remote_accounts_inactive_since(time_ago)
+      Account.remote.where({ last_webfingered_at: ..time_ago, updated_at: ..time_ago })
     end
 
     option :start_after
@@ -286,6 +290,22 @@ module Mastodon::CLI
       say("Backups:\t#{number_to_human_size(Backup.sum(:dump_file_size))}")
       say("Imports:\t#{number_to_human_size(Import.sum(:data_file_size))}")
       say("Settings:\t#{number_to_human_size(SiteUpload.sum(:file_file_size))}")
+    end
+
+    def media_attachment_storage_size
+      MediaAttachment.sum(file_and_thumbnail_size_sql)
+    end
+
+    def local_media_attachment_storage_size
+      MediaAttachment.where(account: Account.local).sum(file_and_thumbnail_size_sql)
+    end
+
+    def file_and_thumbnail_size_sql
+      Arel.sql(
+        <<~SQL.squish
+          COALESCE(file_file_size, 0) + COALESCE(thumbnail_file_size, 0)
+        SQL
+      )
     end
 
     desc 'lookup URL', 'Lookup where media is displayed by passing a media URL'
