@@ -19,10 +19,9 @@ module Mastodon::CLI
       if options[:all]
         processed = 0
         delay     = 0
-        scope     = Account.local.without_suspended
-        progress  = create_progress_bar(scope.count)
+        progress  = create_progress_bar(local_non_suspended_accounts.count)
 
-        scope.find_in_batches do |accounts|
+        local_non_suspended_accounts.find_in_batches do |accounts|
           accounts.each do |account|
             rotate_keys_for_account(account, delay)
             progress.increment
@@ -387,7 +386,7 @@ module Mastodon::CLI
 
       fail_with_message 'No such account' if target_account.nil?
 
-      processed, = parallelize_with_progress(Account.local.without_suspended) do |account|
+      processed, = parallelize_with_progress(local_non_suspended_accounts) do |account|
         FollowService.new.call(account, target_account, bypass_limit: true)
       end
 
@@ -591,6 +590,10 @@ module Mastodon::CLI
         .select(1)
         .arel
         .exists
+    end
+
+    def local_non_suspended_accounts
+      Account.local.without_suspended
     end
 
     def report_errors(errors)
