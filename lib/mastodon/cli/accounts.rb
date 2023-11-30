@@ -20,10 +20,9 @@ module Mastodon::CLI
       if options[:all]
         processed = 0
         delay     = 0
-        scope     = Account.local.without_suspended
-        progress  = create_progress_bar(scope.count)
+        progress  = create_progress_bar(local_non_suspended_accounts.count)
 
-        scope.find_in_batches do |accounts|
+        local_non_suspended_accounts.find_in_batches do |accounts|
           accounts.each do |account|
             rotate_keys_for_account(account, delay)
             progress.increment
@@ -252,7 +251,7 @@ module Mastodon::CLI
       domain configuration.
     LONG_DESC
     def fix_duplicates
-      Account.remote.select(:uri, 'count(*)').group(:uri).having('count(*) > 1').pluck(:uri).each do |uri|
+      duplicate_remote_accounts.pluck(:uri).each do |uri|
         say("Duplicates found for #{uri}")
         begin
           ActivityPub::FetchRemoteAccountService.new.call(uri) unless dry_run?
@@ -342,10 +341,7 @@ module Mastodon::CLI
     LONG_DESC
     def refresh(*usernames)
       if options[:domain] || options[:all]
-        scope  = Account.remote
-        scope  = scope.where(domain: options[:domain]) if options[:domain]
-
-        processed, = parallelize_with_progress(scope) do |account|
+        processed, = parallelize_with_progress(accounts_for_refresh) do |account|
           next if dry_run?
 
           account.reset_avatar!
@@ -386,7 +382,7 @@ module Mastodon::CLI
 
       fail_with_message 'No such account' if target_account.nil?
 
-      processed, = parallelize_with_progress(Account.local.without_suspended) do |account|
+      processed, = parallelize_with_progress(local_non_suspended_accounts) do |account|
         FollowService.new.call(account, target_account, bypass_limit: true)
       end
 
@@ -477,7 +473,7 @@ module Mastodon::CLI
         User.pending.find_each(&:approve!)
         say('OK', :green)
       elsif options[:number]&.positive?
-        User.pending.order(created_at: :asc).limit(options[:number]).each(&:approve!)
+        limited_ordered_pending_users.each(&:approve!)
         say('OK', :green)
       elsif username.present?
         account = Account.find_local(username)
@@ -502,7 +498,7 @@ module Mastodon::CLI
       - not muted/blocked by us
     LONG_DESC
     def prune
-      query = Account.remote.where.not(actor_type: %i(Application Service))
+      query = non_automated_remote_accounts
       query = query.where('NOT EXISTS (SELECT 1 FROM mentions WHERE account_id = accounts.id)')
       query = query.where('NOT EXISTS (SELECT 1 FROM favourites WHERE account_id = accounts.id)')
       query = query.where('NOT EXISTS (SELECT 1 FROM statuses WHERE account_id = accounts.id)')
@@ -576,6 +572,40 @@ module Mastodon::CLI
     end
 
     private
+
+    def local_non_suspended_accounts
+      Account.local.without_suspended
+    end
+
+    def duplicate_remote_accounts
+      Account.remote.select(:uri, 'count(*)').group(:uri).having('count(*) > 1')
+    end
+
+    def accounts_for_refresh
+      Account.remote.tap do |scope|
+        scope.merge!(accounts_with_domain_option) if options[:domain]
+      end
+    end
+
+    def accounts_with_domain_option
+      Account.where(domain: options[:domain])
+    end
+
+    def follows_for(account)
+      Account.where(id: ::Follow.where(account: account).select(:target_account_id))
+    end
+
+    def followers_for(account)
+      Account.where(id: ::Follow.where(target_account: account).select(:account_id))
+    end
+
+    def limited_ordered_pending_users
+      User.pending.order(created_at: :asc).limit(options[:number])
+    end
+
+    def non_automated_remote_accounts
+      Account.remote.where.not(actor_type: %i(Application Service))
+    end
 
     def report_errors(errors)
       message = errors.map do |error|
