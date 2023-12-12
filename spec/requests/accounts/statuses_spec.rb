@@ -9,10 +9,8 @@ describe 'Accounts Statuses RSS' do
     before { account.user.update(approved: false) }
 
     it 'returns http not found' do
-      %w(rss).each do |format|
-        get short_account_path(username: account.username, format: format)
-        expect(response).to have_http_status(404)
-      end
+      get short_account_path(username: account.username, format: :rss)
+      expect(response).to have_http_status(404)
     end
   end
 
@@ -23,10 +21,8 @@ describe 'Accounts Statuses RSS' do
     end
 
     it 'returns http gone' do
-      %w(rss).each do |format|
-        get short_account_path(username: account.username, format: format)
-        expect(response).to have_http_status(410)
-      end
+      get short_account_path(username: account.username, format: :rss)
+      expect(response).to have_http_status(410)
     end
   end
 
@@ -34,11 +30,9 @@ describe 'Accounts Statuses RSS' do
     before { account.suspend! }
 
     it 'returns appropriate http response code' do
-      { rss: 403 }.each do |format, code|
-        get short_account_path(username: account.username, format: format)
+      get short_account_path(username: account.username, format: :rss)
 
-        expect(response).to have_http_status(code)
-      end
+      expect(response).to have_http_status(403)
     end
   end
 
