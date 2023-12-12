@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
-  PAGE_SIZE     = 20
-  PAGE_SIZE_MAX = 200
-
   include AccountControllerConcern
   include SignatureAuthentication
 
@@ -11,21 +8,13 @@ class AccountsController < ApplicationController
 
   before_action :require_account_signature!, if: -> { request.format == :json && authorized_fetch_mode? }
 
-  skip_around_action :set_locale, if: -> { [:json, :rss].include?(request.format&.to_sym) }
+  skip_around_action :set_locale, if: -> { request.format == :json }
   skip_before_action :require_functional!, unless: :limited_federation_mode?
 
   def show
     respond_to do |format|
       format.html do
         expires_in(15.seconds, public: true, stale_while_revalidate: 30.seconds, stale_if_error: 1.hour) unless user_signed_in?
-      end
-
-      format.rss do
-        expires_in 1.minute, public: true
-
-        limit     = params[:limit].present? ? [params[:limit].to_i, PAGE_SIZE_MAX].min : PAGE_SIZE
-        @statuses = filtered_statuses.without_reblogs.limit(limit)
-        @statuses = cache_collection(@statuses, Status)
       end
 
       format.json do
@@ -36,36 +25,6 @@ class AccountsController < ApplicationController
   end
 
   private
-
-  def filtered_statuses
-    default_statuses.tap do |statuses|
-      statuses.merge!(hashtag_scope)    if tag_requested?
-      statuses.merge!(only_media_scope) if media_requested?
-      statuses.merge!(no_replies_scope) unless replies_requested?
-    end
-  end
-
-  def default_statuses
-    @account.statuses.where(visibility: [:public, :unlisted])
-  end
-
-  def only_media_scope
-    Status.joins(:media_attachments).merge(@account.media_attachments).group(:id)
-  end
-
-  def no_replies_scope
-    Status.without_replies
-  end
-
-  def hashtag_scope
-    tag = Tag.find_normalized(params[:tag])
-
-    if tag
-      Status.tagged_with(tag.id)
-    else
-      Status.none
-    end
-  end
 
   def username_param
     params[:username]
@@ -83,14 +42,6 @@ class AccountsController < ApplicationController
     end
   end
   helper_method :rss_url
-
-  def media_requested?
-    path_without_format.end_with?('/media') && !tag_requested?
-  end
-
-  def replies_requested?
-    path_without_format.end_with?('/with_replies') && !tag_requested?
-  end
 
   def tag_requested?
     path_without_format.end_with?(Addressable::URI.parse("/tagged/#{params[:tag]}").normalize)

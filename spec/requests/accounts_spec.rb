@@ -9,7 +9,7 @@ describe 'Accounts show response' do
     before { account.user.update(approved: false) }
 
     it 'returns http not found' do
-      %w(html json rss).each do |format|
+      %w(html json).each do |format|
         get short_account_path(username: account.username), as: format
 
         expect(response).to have_http_status(404)
@@ -24,7 +24,7 @@ describe 'Accounts show response' do
     end
 
     it 'returns http gone' do
-      %w(html json rss).each do |format|
+      %w(html json).each do |format|
         get short_account_path(username: account.username), as: format
 
         expect(response).to have_http_status(410)
@@ -36,7 +36,7 @@ describe 'Accounts show response' do
     before { account.suspend! }
 
     it 'returns appropriate http response code' do
-      { html: 403, json: 200, rss: 403 }.each do |format, code|
+      { html: 403, json: 200 }.each do |format, code|
         get short_account_path(username: account.username), as: format
 
         expect(response).to have_http_status(code)
@@ -46,14 +46,9 @@ describe 'Accounts show response' do
 
   describe 'GET to short username paths' do
     context 'with existing statuses' do
-      let!(:status) { Fabricate(:status, account: account) }
-      let!(:status_reply) { Fabricate(:status, account: account, thread: Fabricate(:status)) }
-      let!(:status_self_reply) { Fabricate(:status, account: account, thread: status) }
       let!(:status_media) { Fabricate(:status, account: account) }
       let!(:status_pinned) { Fabricate(:status, account: account) }
       let!(:status_private) { Fabricate(:status, account: account, visibility: :private) }
-      let!(:status_direct) { Fabricate(:status, account: account, visibility: :direct) }
-      let!(:status_reblog) { Fabricate(:status, account: account, reblog: Fabricate(:status)) }
 
       before do
         status_media.media_attachments << Fabricate(:media_attachment, account: account, type: :image)
@@ -203,92 +198,6 @@ describe 'Accounts show response' do
 
               expect(body_as_json).to include(:id, :type, :preferredUsername, :inbox, :publicKey, :name, :summary)
             end
-          end
-        end
-      end
-
-      context 'with RSS' do
-        let(:format) { 'rss' }
-
-        context 'with a normal account in an RSS request' do
-          before do
-            get short_account_path(username: account.username, format: format)
-          end
-
-          it_behaves_like 'cacheable response', expects_vary: 'Accept, Accept-Language, Cookie'
-
-          it 'responds with correct statuses', :aggregate_failures do
-            expect(response).to have_http_status(200)
-            expect(response.body).to include(status_tag_for(status_media))
-            expect(response.body).to include(status_tag_for(status_self_reply))
-            expect(response.body).to include(status_tag_for(status))
-            expect(response.body).to_not include(status_tag_for(status_direct))
-            expect(response.body).to_not include(status_tag_for(status_private))
-            expect(response.body).to_not include(status_tag_for(status_reblog.reblog))
-            expect(response.body).to_not include(status_tag_for(status_reply))
-          end
-        end
-
-        context 'with replies' do
-          before do
-            get short_account_with_replies_path(username: account.username, format: format)
-          end
-
-          it_behaves_like 'cacheable response', expects_vary: 'Accept, Accept-Language, Cookie'
-
-          it 'responds with correct statuses with replies', :aggregate_failures do
-            expect(response).to have_http_status(200)
-            expect(response.body).to include(status_tag_for(status_media))
-            expect(response.body).to include(status_tag_for(status_reply))
-            expect(response.body).to include(status_tag_for(status_self_reply))
-            expect(response.body).to include(status_tag_for(status))
-            expect(response.body).to_not include(status_tag_for(status_direct))
-            expect(response.body).to_not include(status_tag_for(status_private))
-            expect(response.body).to_not include(status_tag_for(status_reblog.reblog))
-          end
-        end
-
-        context 'with media' do
-          before do
-            get short_account_media_path(username: account.username, format: format)
-          end
-
-          it_behaves_like 'cacheable response', expects_vary: 'Accept, Accept-Language, Cookie'
-
-          it 'responds with correct statuses with media', :aggregate_failures do
-            expect(response).to have_http_status(200)
-            expect(response.body).to include(status_tag_for(status_media))
-            expect(response.body).to_not include(status_tag_for(status_direct))
-            expect(response.body).to_not include(status_tag_for(status_private))
-            expect(response.body).to_not include(status_tag_for(status_reblog.reblog))
-            expect(response.body).to_not include(status_tag_for(status_reply))
-            expect(response.body).to_not include(status_tag_for(status_self_reply))
-            expect(response.body).to_not include(status_tag_for(status))
-          end
-        end
-
-        context 'with tag' do
-          let(:tag) { Fabricate(:tag) }
-
-          let!(:status_tag) { Fabricate(:status, account: account) }
-
-          before do
-            status_tag.tags << tag
-            get short_account_tag_path(username: account.username, tag: tag, format: format)
-          end
-
-          it_behaves_like 'cacheable response', expects_vary: 'Accept, Accept-Language, Cookie'
-
-          it 'responds with correct statuses with a tag', :aggregate_failures do
-            expect(response).to have_http_status(200)
-            expect(response.body).to include(status_tag_for(status_tag))
-            expect(response.body).to_not include(status_tag_for(status_direct))
-            expect(response.body).to_not include(status_tag_for(status_media))
-            expect(response.body).to_not include(status_tag_for(status_private))
-            expect(response.body).to_not include(status_tag_for(status_reblog.reblog))
-            expect(response.body).to_not include(status_tag_for(status_reply))
-            expect(response.body).to_not include(status_tag_for(status_self_reply))
-            expect(response.body).to_not include(status_tag_for(status))
           end
         end
       end
