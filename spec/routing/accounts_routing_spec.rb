@@ -15,7 +15,7 @@ describe 'Routes under accounts/' do
     end
 
     it 'routes /@:username.rss' do
-      expect(get("/@#{username}.rss")).to route_to('accounts#show', username: username, format: 'rss')
+      expect(get("/@#{username}.rss")).to route_to('accounts/statuses#index', username: username, format: 'rss')
     end
 
     it 'routes /@:username/:id' do
@@ -38,12 +38,24 @@ describe 'Routes under accounts/' do
       expect(get("/@#{username}/with_replies")).to route_to('accounts#show', username: username)
     end
 
+    it 'routes /@:username/with_replies.rss' do
+      expect(get("/@#{username}/with_replies.rss")).to route_to('accounts/statuses#index', username: username, format: 'rss')
+    end
+
     it 'routes /@:username/media' do
       expect(get("/@#{username}/media")).to route_to('accounts#show', username: username)
     end
 
+    it 'routes /@:username/media.rss' do
+      expect(get("/@#{username}/media.rss")).to route_to('accounts/statuses#index', username: username, format: 'rss')
+    end
+
     it 'routes /@:username/tagged/:tag' do
       expect(get("/@#{username}/tagged/foo")).to route_to('accounts#show', username: username, tag: 'foo')
+    end
+
+    it 'routes /@:username/tagged/:tag.rss' do
+      expect(get("/@#{username}/tagged/foo.rss")).to route_to('accounts/statuses#index', username: username, tag: 'foo', format: 'rss')
     end
   end
 

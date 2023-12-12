@@ -142,6 +142,13 @@ Rails.application.routes.draw do
   get '/:encoded_at(*path)', to: redirect("/@%{path}"), constraints: { encoded_at: /%40/ }
 
   constraints(username: %r{[^@/.]+}) do
+    with_options to: 'accounts/statuses#index', constraints: ->(req) { req.format == :rss } do
+      get '/@:username'
+      get '/@:username/with_replies'
+      get '/@:username/media'
+      get '/@:username/tagged/:tag'
+    end
+
     with_options to: 'accounts#show' do
       get '/@:username', as: :short_account
       get '/@:username/with_replies', as: :short_account_with_replies
