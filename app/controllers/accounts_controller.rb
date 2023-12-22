@@ -44,7 +44,10 @@ class AccountsController < ApplicationController
   end
 
   def default_statuses
-    @account.statuses.distributable_visibility
+    @account
+      .statuses
+      .without_replies
+      .distributable_visibility
   end
 
   def hashtag_scope
