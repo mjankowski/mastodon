@@ -6,38 +6,29 @@ describe Admin::DashboardController do
   render_views
 
   describe 'GET #index' do
-    let(:user) { Fabricate(:user, role: UserRole.find_by(name: 'Admin')) }
+    let(:user) { Fabricate(:user, role: UserRole.find_by(name: 'Owner')) }
 
     before do
-      stub_system_check_with_safe_results
+      stub_system_checks
+      Fabricate :software_update
       sign_in(user)
     end
 
-    it 'returns http success' do
+    it 'returns http success and body with system check messages' do
       get :index
 
       expect(response)
         .to have_http_status(200)
-
-      expect(response.body)
-        .to include(
-          I18n.t('admin.system_checks.database_schema_check.message_html')
+        .and have_attributes(
+          body: include(I18n.t('admin.system_checks.software_version_patch_check.message_html'))
         )
     end
 
     private
 
-    def stub_system_check_with_safe_results
-      allow(Admin::SystemCheck)
-        .to receive(:perform)
-        .and_return(safe_system_check_messages)
-    end
-
-    def safe_system_check_messages
-      [
-        Admin::SystemCheck::Message.new(:database_schema_check),
-        Admin::SystemCheck::Message.new(:rules_check, nil, admin_rules_path),
-        Admin::SystemCheck::Message.new(:sidekiq_process_check, 'foo, bar'),
+    def stub_system_checks
+      stub_const 'Admin::SystemCheck::ACTIVE_CHECKS', [
+        Admin::SystemCheck::SoftwareVersionCheck,
       ]
     end
   end
