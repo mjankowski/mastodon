@@ -42,39 +42,40 @@ Layout/FirstHashElementIndentation:
 Layout/LineLength:
   Max: 300 # Default of 120 causes a duplicate entry in generated todo file
 
-## Disable most Metrics/*Length cops
-# Reason: those are often triggered and force significant refactors when this happend
-#         but the team feel they are not really improving the code quality.
-
-# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsblocklength
-Metrics/BlockLength:
-  Enabled: false
-
-# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsclasslength
-Metrics/ClassLength:
-  Enabled: false
-
-# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsmethodlength
-Metrics/MethodLength:
-  Enabled: false
-
-# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsmodulelength
-Metrics/ModuleLength:
-  Enabled: false
-
-## End Disable Metrics/*Length cops
-
 # Reason: Currently disabled in .rubocop_todo.yml
 # https://docs.rubocop.org/rubocop/cops_metrics.html#metricsabcsize
 Metrics/AbcSize:
   Exclude:
     - 'lib/mastodon/cli/*.rb'
 
+# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsblocklength
+Metrics/BlockLength:
+  AllowedMethods:
+    - 'class_methods'
+  CountAsOne:
+    - 'heredoc'
+  Exclude:
+    - 'config/**/*.rb'
+    - 'lib/**/*.rake'
+  Max: 64 # TODO: Default is 25
+
+# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsclasslength
+Metrics/ClassLength:
+  Max: 256 # TODO: Default is 100
+
 # Reason: Currently disabled in .rubocop_todo.yml
 # https://docs.rubocop.org/rubocop/cops_metrics.html#metricscyclomaticcomplexity
 Metrics/CyclomaticComplexity:
   Exclude:
     - lib/mastodon/cli/*.rb
+
+# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsmethodlength
+Metrics/MethodLength:
+  Max: 64 # TODO: Default is 10
+
+# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsmodulelength
+Metrics/ModuleLength:
+  Max: 256 # TODO: Default is 100
 
 # Reason:
 # https://docs.rubocop.org/rubocop/cops_metrics.html#metricsparameterlists
