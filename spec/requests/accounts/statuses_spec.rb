@@ -65,13 +65,14 @@ describe 'Accounts Statuses RSS' do
 
           it 'responds with correct statuses', :aggregate_failures do
             expect(response).to have_http_status(200)
-            expect(response.body).to include_status_tag(status_media)
-            expect(response.body).to include_status_tag(status_self_reply)
-            expect(response.body).to include_status_tag(status)
-            expect(response.body).to_not include_status_tag(status_direct)
-            expect(response.body).to_not include_status_tag(status_private)
-            expect(response.body).to_not include_status_tag(status_reblog.reblog)
-            expect(response.body).to_not include_status_tag(status_reply)
+            expect(response.body)
+              .to include(status_tag_for(status_media))
+              .and include(status_tag_for(status_self_reply))
+              .and include(status_tag_for(status))
+              .and not_include(status_tag_for(status_direct))
+              .and not_include(status_tag_for(status_private))
+              .and not_include(status_tag_for(status_reblog.reblog))
+              .and not_include(status_tag_for(status_reply))
           end
         end
 
@@ -84,13 +85,14 @@ describe 'Accounts Statuses RSS' do
 
           it 'responds with correct statuses with replies', :aggregate_failures do
             expect(response).to have_http_status(200)
-            expect(response.body).to include_status_tag(status_media)
-            expect(response.body).to include_status_tag(status_reply)
-            expect(response.body).to include_status_tag(status_self_reply)
-            expect(response.body).to include_status_tag(status)
-            expect(response.body).to_not include_status_tag(status_direct)
-            expect(response.body).to_not include_status_tag(status_private)
-            expect(response.body).to_not include_status_tag(status_reblog.reblog)
+            expect(response.body)
+              .to include(status_tag_for(status_media))
+              .and include(status_tag_for(status_reply))
+              .and include(status_tag_for(status_self_reply))
+              .and include(status_tag_for(status))
+              .and not_include(status_tag_for(status_direct))
+              .and not_include(status_tag_for(status_private))
+              .and not_include(status_tag_for(status_reblog.reblog))
           end
         end
 
@@ -103,13 +105,14 @@ describe 'Accounts Statuses RSS' do
 
           it 'responds with correct statuses with media', :aggregate_failures do
             expect(response).to have_http_status(200)
-            expect(response.body).to include_status_tag(status_media)
-            expect(response.body).to_not include_status_tag(status_direct)
-            expect(response.body).to_not include_status_tag(status_private)
-            expect(response.body).to_not include_status_tag(status_reblog.reblog)
-            expect(response.body).to_not include_status_tag(status_reply)
-            expect(response.body).to_not include_status_tag(status_self_reply)
-            expect(response.body).to_not include_status_tag(status)
+            expect(response.body)
+              .to include(status_tag_for(status_media))
+              .and not_include(status_tag_for(status_direct))
+              .and not_include(status_tag_for(status_private))
+              .and not_include(status_tag_for(status_reblog.reblog))
+              .and not_include(status_tag_for(status_reply))
+              .and not_include(status_tag_for(status_self_reply))
+              .and not_include(status_tag_for(status))
           end
         end
 
@@ -127,21 +130,22 @@ describe 'Accounts Statuses RSS' do
 
           it 'responds with correct statuses with a tag', :aggregate_failures do
             expect(response).to have_http_status(200)
-            expect(response.body).to include_status_tag(status_tag)
-            expect(response.body).to_not include_status_tag(status_direct)
-            expect(response.body).to_not include_status_tag(status_media)
-            expect(response.body).to_not include_status_tag(status_private)
-            expect(response.body).to_not include_status_tag(status_reblog.reblog)
-            expect(response.body).to_not include_status_tag(status_reply)
-            expect(response.body).to_not include_status_tag(status_self_reply)
-            expect(response.body).to_not include_status_tag(status)
+            expect(response.body)
+              .to include(status_tag_for(status_tag))
+              .and not_include(status_tag_for(status_direct))
+              .and not_include(status_tag_for(status_media))
+              .and not_include(status_tag_for(status_private))
+              .and not_include(status_tag_for(status_reblog.reblog))
+              .and not_include(status_tag_for(status_reply))
+              .and not_include(status_tag_for(status_self_reply))
+              .and not_include(status_tag_for(status))
           end
         end
       end
     end
   end
 
-  def include_status_tag(status)
-    include ActivityPub::TagManager.instance.url_for(status)
+  def status_tag_for(status)
+    ActivityPub::TagManager.instance.url_for(status)
   end
 end
