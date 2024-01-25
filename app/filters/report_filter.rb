@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReportFilter
+class ReportFilter < BaseFilter
   KEYS = %i(
     resolved
     account_id
@@ -9,27 +9,15 @@ class ReportFilter
     target_origin
   ).freeze
 
-  attr_reader :params
-
-  def initialize(params)
-    @params = params
-  end
-
-  def results
-    scope = Report.unresolved
-
-    relevant_params.each do |key, value|
-      scope = scope.merge scope_for(key, value)
-    end
-
-    scope
-  end
-
   private
 
-  def relevant_params
-    params.tap do |args|
-      args.delete(:target_origin) if origin_is_remote_and_domain_present?
+  def default_filter_scope
+    Report.unresolved
+  end
+
+  def ignored_params
+    %i(page).tap do |params|
+      params << :target_origin if origin_is_remote_and_domain_present?
     end
   end
 
@@ -38,7 +26,7 @@ class ReportFilter
   end
 
   def scope_for(key, value)
-    case key.to_sym
+    case key
     when :by_target_domain
       Report.where(target_account: Account.where(domain: value))
     when :resolved
