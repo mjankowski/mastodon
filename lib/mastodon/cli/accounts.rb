@@ -406,6 +406,7 @@ module Mastodon::CLI
           account.reset_avatar!
           account.reset_header!
           account.save
+          say "Refreshed remote assets for `#{account.acct}`" if options[:verbose]
         end
 
         say("Refreshed #{processed} accounts#{dry_run_mode_suffix}", :green, true)
@@ -422,6 +423,7 @@ module Mastodon::CLI
             account.reset_avatar!
             account.reset_header!
             account.save
+            say "Refreshed remote assets for `#{account.acct}`" if options[:verbose]
           rescue Mastodon::UnexpectedResponseError
             say("Account failed: #{user}@#{domain}", :red)
           end
