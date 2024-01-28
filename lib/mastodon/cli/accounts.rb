@@ -445,6 +445,7 @@ module Mastodon::CLI
 
       processed, = parallelize_with_progress(local_non_suspended_accounts) do |account|
         FollowService.new.call(account, target_account, bypass_limit: true)
+        say "Local account `#{account.acct}` now follows `#{target_account.acct}`" if options[:verbose]
       end
 
       say("OK, followed target from #{processed} accounts", :green)
