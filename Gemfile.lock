@@ -468,6 +468,8 @@ GEM
       statsd-ruby (~> 1.4, >= 1.4.0)
     oj (3.16.3)
       bigdecimal (>= 3.0)
+    oj_serializers (2.0.3)
+      oj (>= 3.14.0)
     omniauth (2.1.2)
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
@@ -888,6 +890,7 @@ DEPENDENCIES
   nokogiri (~> 1.15)
   nsa
   oj (~> 3.14)
+  oj_serializers (~> 2.0)
   omniauth (~> 2.0)
   omniauth-cas (~> 3.0.0.beta.1)
   omniauth-rails_csrf_protection (~> 1.0)
