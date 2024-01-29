@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class REST::MarkerSerializer < ActiveModel::Serializer
+class REST::MarkerSerializer < REST::BaseSerializer
   attributes :last_read_id, :version, :updated_at
 
   def last_read_id
