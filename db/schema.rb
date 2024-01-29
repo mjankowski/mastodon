@@ -1165,6 +1165,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_07_094856) do
     t.boolean "highlighted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "users_count"
   end
 
   create_table "users", force: :cascade do |t|
