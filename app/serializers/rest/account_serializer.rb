@@ -51,7 +51,7 @@ class REST::AccountSerializer < REST::BaseSerializer
     attributes :name, :verified_at
 
     attribute :value do
-      account_field_value_format(account)
+      account_field_value_format(field)
     end
   end
 
