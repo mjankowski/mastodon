@@ -207,7 +207,8 @@ module ApplicationHelper
 
     state_params[:owner] = Account.local.without_suspended.without_internal.first if single_user_mode?
 
-    json = InitialStateSerializer.one(InitialStatePresenter.new(state_params)).to_json
+    json = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(state_params), serializer: InitialStateSerializer).to_json
+    # json = InitialStateSerializer.one(InitialStatePresenter.new(state_params)).to_json
     # rubocop:disable Rails/OutputSafety
     content_tag(:script, json_escape(json).html_safe, id: 'initial-state', type: 'application/json')
     # rubocop:enable Rails/OutputSafety

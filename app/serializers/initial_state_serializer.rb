@@ -5,12 +5,23 @@ class InitialStateSerializer < ActiveModel::Serializer
 
   attributes :meta, :compose, :accounts,
              :media_attachments, :settings,
-             :languages
+             :languages, :push_subscription
 
   attribute :critical_updates_pending, if: -> { object&.role&.can?(:view_devops) && SoftwareUpdate.check_enabled? }
 
-  has_one :push_subscription, serializer: REST::WebPushSubscriptionSerializer
-  has_one :role, serializer: REST::RoleSerializer
+  # TODO: eh
+  def push_subscription
+    REST::WebPushSubscriptionSerializer.one(object.push_subscription) if object.push_subscription.present?
+  end
+
+  # TODO: eh
+  def role
+    REST::RoleSerializer.one(object.role) if object.role.present?
+  end
+
+  # TODO: eh
+  # has_one :push_subscription, serializer: REST::WebPushSubscriptionSerializer
+  # has_one :role, serializer: REST::RoleSerializer
 
   def meta
     store = default_meta_store
@@ -117,7 +128,8 @@ class InitialStateSerializer < ActiveModel::Serializer
   end
 
   def serialized_account(account)
-    ActiveModelSerializers::SerializableResource.new(account, serializer: REST::AccountSerializer)
+    REST::AccountSerializer.one(account) # TODO: eh
+    # ActiveModelSerializers::SerializableResource.new(account, serializer: REST::AccountSerializer)
   end
 
   def instance_presenter
