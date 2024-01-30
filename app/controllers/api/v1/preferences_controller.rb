@@ -5,6 +5,6 @@ class Api::V1::PreferencesController < Api::BaseController
   before_action :require_user!
 
   def index
-    render json: current_account, serializer: REST::PreferencesSerializer
+    render json: REST::PreferencesSerializer.one(current_account)
   end
 end

@@ -5,7 +5,7 @@ class Api::V1::Statuses::HistoriesController < Api::V1::Statuses::BaseController
 
   def show
     cache_if_unauthenticated!
-    render json: status_edits, each_serializer: REST::StatusEditSerializer
+    render json: REST::StatusEditSerializer.many(status_edits)
   end
 
   private

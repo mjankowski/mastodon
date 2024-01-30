@@ -3,27 +3,25 @@
 class REST::FeaturedTagSerializer < REST::BaseSerializer
   include RoutingHelper
 
-  attributes :id, :name, :url, :statuses_count, :last_status_at
-
-  def id
-    object.id.to_s
+  attribute :id do
+    featured_tag.id.to_s
   end
 
-  def url
+  attribute :url do
     # The path is hardcoded because we have to deal with both local and
     # remote users, which are different routes
-    account_with_domain_url(object.account, "tagged/#{object.tag.to_param}")
+    account_with_domain_url(featured_tag.account, "tagged/#{featured_tag.tag.to_param}")
   end
 
-  def name
-    object.display_name
+  attribute :name do
+    featured_tag.display_name
   end
 
-  def statuses_count
-    object.statuses_count.to_s
+  attribute :statuses_count do
+    featured_tag.statuses_count.to_s
   end
 
-  def last_status_at
-    object.last_status_at&.to_date&.iso8601
+  attribute :last_status_at do
+    featured_tag.last_status_at&.to_date&.iso8601
   end
 end

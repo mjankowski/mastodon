@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 class REST::ReportSerializer < REST::BaseSerializer
-  attributes :id, :action_taken, :action_taken_at, :category, :comment,
-             :forwarded, :created_at, :status_ids, :rule_ids
+  attributes :action_taken, :action_taken_at, :category, :comment,
+             :forwarded, :created_at
 
   has_one :target_account, serializer: REST::AccountSerializer
 
-  def id
-    object.id.to_s
+  attribute :id do
+    report.id.to_s
   end
 
-  def status_ids
-    object&.status_ids&.map(&:to_s)
+  attribute :status_ids do
+    report&.status_ids&.map(&:to_s)
   end
 
-  def rule_ids
-    object&.rule_ids&.map(&:to_s)
+  attribute :rule_ids do
+    report&.rule_ids&.map(&:to_s)
   end
 end

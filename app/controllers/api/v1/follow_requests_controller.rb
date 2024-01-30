@@ -8,18 +8,24 @@ class Api::V1::FollowRequestsController < Api::BaseController
 
   def index
     @accounts = load_accounts
-    render json: @accounts, each_serializer: REST::AccountSerializer
+    render json: REST::AccountSerializer.many(@accounts)
   end
 
   def authorize
     AuthorizeFollowService.new.call(account, current_account)
     LocalNotificationWorker.perform_async(current_account.id, Follow.find_by(account: account, target_account: current_account).id, 'Follow', 'follow')
-    render json: account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(
+      account,
+      relationships: relationships
+    )
   end
 
   def reject
     RejectFollowService.new.call(account, current_account)
-    render json: account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(
+      account,
+      relationships: relationships
+    )
   end
 
   private

@@ -16,7 +16,7 @@ class Api::V1::Statuses::TranslationsController < Api::V1::Statuses::BaseControl
   end
 
   def create
-    render json: @translation, serializer: REST::TranslationSerializer
+    render json: REST::TranslationSerializer.one(@translation)
   end
 
   private

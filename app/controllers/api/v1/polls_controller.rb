@@ -9,7 +9,11 @@ class Api::V1::PollsController < Api::BaseController
 
   def show
     cache_if_unauthenticated!
-    render json: @poll, serializer: REST::PollSerializer, include_results: true
+    render json: REST::PollSerializer.one(
+      @poll,
+      include_results: true, # TODO, is this used?
+      current_user: current_user
+    )
   end
 
   private

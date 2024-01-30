@@ -6,19 +6,22 @@ class REST::AccountSerializer < REST::BaseSerializer
 
   # Please update `app/javascript/mastodon/api_types/accounts.ts` when making changes to the attributes
 
-  attributes :id, :username, :acct, :display_name, :locked, :bot, :discoverable, :indexable, :group, :created_at,
-             :note, :url, :uri, :avatar, :avatar_static, :header, :header_static,
-             :followers_count, :following_count, :statuses_count, :last_status_at, :hide_collections
+  attributes(
+    :followers_count,
+    :following_count,
+    :group,
+    :hide_collections,
+    :statuses_count,
+    :username
+  )
 
-  has_one :moved_to_account, key: :moved, serializer: REST::AccountSerializer, if: :moved_and_not_nested?
+  has_one :moved_to_account,
+          as: :moved,
+          serializer: REST::AccountSerializer,
+          if: :moved_and_not_nested?
 
-  has_many :emojis, serializer: REST::CustomEmojiSerializer
-
-  attribute :suspended, if: :suspended?
-  attribute :silenced, key: :limited, if: :silenced?
-  attribute :noindex, if: :local?
-
-  attribute :memorial, if: :memorial?
+  has_many :emojis,
+           serializer: REST::CustomEmojiSerializer
 
   class AccountDecorator < SimpleDelegator
     def self.model_name
@@ -31,130 +34,132 @@ class REST::AccountSerializer < REST::BaseSerializer
   end
 
   class RoleSerializer < REST::BaseSerializer
-    attributes :id, :name, :color
+    attributes :name, :color
 
-    def id
-      object.id.to_s
+    attribute :id do
+      role.id.to_s
     end
   end
 
-  has_many :roles, serializer: RoleSerializer, if: :local?
+  has_many :roles,
+           serializer: RoleSerializer,
+           if: :local?
 
   class FieldSerializer < REST::BaseSerializer
     include FormattingHelper
 
-    attributes :name, :value, :verified_at
+    attributes :name, :verified_at
 
-    def value
-      account_field_value_format(object)
+    attribute :value do
+      account_field_value_format(account)
     end
   end
 
-  has_many :fields
+  has_many :fields, serializer: FieldSerializer
 
-  def id
-    object.id.to_s
+  attribute :id do
+    account.id.to_s
   end
 
-  def acct
-    object.pretty_acct
+  attribute :acct do
+    account.pretty_acct
   end
 
-  def note
-    object.unavailable? ? '' : account_bio_format(object)
+  attribute :note do
+    account.unavailable? ? '' : account_bio_format(account)
   end
 
-  def url
-    ActivityPub::TagManager.instance.url_for(object)
+  attribute :url do
+    ActivityPub::TagManager.instance.url_for(account)
   end
 
-  def uri
-    ActivityPub::TagManager.instance.uri_for(object)
+  attribute :uri do
+    ActivityPub::TagManager.instance.uri_for(account)
   end
 
-  def avatar
-    full_asset_url(object.unavailable? ? object.avatar.default_url : object.avatar_original_url)
+  attribute :avatar do
+    full_asset_url(account.unavailable? ? account.avatar.default_url : account.avatar_original_url)
   end
 
-  def avatar_static
-    full_asset_url(object.unavailable? ? object.avatar.default_url : object.avatar_static_url)
+  attribute :avatar_static do
+    full_asset_url(account.unavailable? ? account.avatar.default_url : account.avatar_static_url)
   end
 
-  def header
-    full_asset_url(object.unavailable? ? object.header.default_url : object.header_original_url)
+  attribute :header do
+    full_asset_url(account.unavailable? ? account.header.default_url : account.header_original_url)
   end
 
-  def header_static
-    full_asset_url(object.unavailable? ? object.header.default_url : object.header_static_url)
+  attribute :header_static do
+    full_asset_url(account.unavailable? ? account.header.default_url : account.header_static_url)
   end
 
-  def created_at
-    object.created_at.midnight.as_json
+  attribute :created_at do
+    account.created_at.midnight.as_json
   end
 
-  def last_status_at
-    object.last_status_at&.to_date&.iso8601
+  attribute :last_status_at do
+    account.last_status_at&.to_date&.iso8601
   end
 
-  def display_name
-    object.unavailable? ? '' : object.display_name
+  attribute :display_name do
+    account.unavailable? ? '' : account.display_name
   end
 
-  def locked
-    object.unavailable? ? false : object.locked
+  attribute :locked do
+    account.unavailable? ? false : account.locked
   end
 
-  def bot
-    object.unavailable? ? false : object.bot
+  attribute :bot do
+    account.unavailable? ? false : account.bot
   end
 
-  def discoverable
-    object.unavailable? ? false : object.discoverable
+  attribute :discoverable do
+    account.unavailable? ? false : account.discoverable
   end
 
-  def indexable
-    object.unavailable? ? false : object.indexable
+  attribute :indexable do
+    account.unavailable? ? false : account.indexable
+  end
+
+  attribute :suspended, if: :suspended? do
+    account.unavailable?
+  end
+
+  attribute :silenced, as: :limited, if: :silenced? do
+    account.silenced?
+  end
+
+  attribute :memorial, if: :memorial? do
+    account.memorial?
+  end
+
+  attribute :noindex, if: :local? do
+    account.user_prefers_noindex?
   end
 
   def moved_to_account
-    object.unavailable? ? nil : AccountDecorator.new(object.moved_to_account)
+    account.unavailable? ? nil : AccountDecorator.new(account.moved_to_account)
   end
 
   def emojis
-    object.unavailable? ? [] : object.emojis
+    account.unavailable? ? [] : account.emojis
   end
 
   def fields
-    object.unavailable? ? [] : object.fields
-  end
-
-  def suspended
-    object.unavailable?
-  end
-
-  def silenced
-    object.silenced?
-  end
-
-  def memorial
-    object.memorial?
+    account.unavailable? ? [] : account.fields
   end
 
   def roles
-    if object.unavailable? || object.user.nil?
+    if account.unavailable? || account.user.nil?
       []
     else
-      [object.user.role].compact.filter(&:highlighted?)
+      [account.user.role].compact.filter(&:highlighted?)
     end
   end
 
-  def noindex
-    object.user_prefers_noindex?
-  end
-
-  delegate :suspended?, :silenced?, :local?, :memorial?, to: :object
-
   def moved_and_not_nested?
-    object.moved?
+    account.moved?
   end
+
+  delegate :suspended?, :silenced?, :local?, :memorial?, to: :account
 end

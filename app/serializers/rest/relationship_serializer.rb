@@ -3,72 +3,70 @@
 class REST::RelationshipSerializer < REST::BaseSerializer
   # Please update `app/javascript/mastodon/api_types/relationships.ts` when making changes to the attributes
 
-  attributes :id, :following, :showing_reblogs, :notifying, :languages, :followed_by,
-             :blocking, :blocked_by, :muting, :muting_notifications,
-             :requested, :requested_by, :domain_blocking, :endorsed, :note
+  object_as :account
 
-  def id
-    object.id.to_s
+  attribute :id do
+    account.id.to_s
   end
 
-  def following
-    instance_options[:relationships].following[object.id] ? true : false
+  attribute :following do
+    options[:relationships].following[account.id] ? true : false
   end
 
-  def showing_reblogs
-    (instance_options[:relationships].following[object.id] || {})[:reblogs] ||
-      (instance_options[:relationships].requested[object.id] || {})[:reblogs] ||
+  attribute :showing_reblogs do
+    (options[:relationships].following[account.id] || {})[:reblogs] ||
+      (options[:relationships].requested[account.id] || {})[:reblogs] ||
       false
   end
 
-  def notifying
-    (instance_options[:relationships].following[object.id] || {})[:notify] ||
-      (instance_options[:relationships].requested[object.id] || {})[:notify] ||
+  attribute :notifying do
+    (options[:relationships].following[account.id] || {})[:notify] ||
+      (options[:relationships].requested[account.id] || {})[:notify] ||
       false
   end
 
-  def languages
-    (instance_options[:relationships].following[object.id] || {})[:languages] ||
-      (instance_options[:relationships].requested[object.id] || {})[:languages]
+  attribute :languages do
+    (options[:relationships].following[account.id] || {})[:languages] ||
+      (options[:relationships].requested[account.id] || {})[:languages]
   end
 
-  def followed_by
-    instance_options[:relationships].followed_by[object.id] || false
+  attribute :followed_by do
+    options[:relationships].followed_by[account.id] || false
   end
 
-  def blocking
-    instance_options[:relationships].blocking[object.id] || false
+  attribute :blocking do
+    options[:relationships].blocking[account.id] || false
   end
 
-  def blocked_by
-    instance_options[:relationships].blocked_by[object.id] || false
+  attribute :blocked_by do
+    options[:relationships].blocked_by[account.id] || false
   end
 
-  def muting
-    instance_options[:relationships].muting[object.id] ? true : false
+  attribute :muting do
+    options[:relationships].muting[account.id] ? true : false
   end
 
-  def muting_notifications
-    (instance_options[:relationships].muting[object.id] || {})[:notifications] || false
+  attribute :muting_notifications do
+    (options[:relationships].muting[account.id] || {})[:notifications] || false
   end
 
-  def requested
-    instance_options[:relationships].requested[object.id] ? true : false
+  attribute :requested do
+    options[:relationships].requested[account.id] ? true : false
   end
 
-  def requested_by
-    instance_options[:relationships].requested_by[object.id] ? true : false
+  attribute :requested_by do
+    options[:relationships].requested_by[account.id] ? true : false
   end
 
-  def domain_blocking
-    instance_options[:relationships].domain_blocking[object.id] || false
+  attribute :domain_blocking do
+    options[:relationships].domain_blocking[account.id] || false
   end
 
-  def endorsed
-    instance_options[:relationships].endorsed[object.id] || false
+  attribute :endorsed do
+    options[:relationships].endorsed[account.id] || false
   end
 
-  def note
-    (instance_options[:relationships].account_note[object.id] || {})[:comment] || ''
+  attribute :note do
+    (options[:relationships].account_note[account.id] || {})[:comment] || ''
   end
 end

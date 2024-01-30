@@ -26,7 +26,7 @@ class Api::V1::StatusesController < Api::BaseController
   def show
     cache_if_unauthenticated!
     @status = cache_collection([@status], Status).first
-    render json: @status, serializer: REST::StatusSerializer
+    render json: REST::StatusSerializer.one(@status, current_user: current_user)
   end
 
   def context
@@ -50,7 +50,7 @@ class Api::V1::StatusesController < Api::BaseController
     @context = Context.new(ancestors: loaded_ancestors, descendants: loaded_descendants)
     statuses = [@status] + @context.ancestors + @context.descendants
 
-    render json: @context, serializer: REST::ContextSerializer, relationships: StatusRelationshipsPresenter.new(statuses, current_user&.account_id)
+    render json: REST::ContextSerializer.one(@context, relationships: StatusRelationshipsPresenter.new(statuses, current_user&.account_id))
   end
 
   def create
@@ -92,7 +92,7 @@ class Api::V1::StatusesController < Api::BaseController
       poll: status_params[:poll]
     )
 
-    render json: @status, serializer: REST::StatusSerializer
+    render json: REST::StatusSerializer.one(@status)
   end
 
   def destroy
@@ -102,7 +102,7 @@ class Api::V1::StatusesController < Api::BaseController
     @status.discard_with_reblogs
     StatusPin.find_by(status: @status)&.destroy
     @status.account.statuses_count = @status.account.statuses_count - 1
-    json = render_to_body json: @status, serializer: REST::StatusSerializer, source_requested: true
+    json = render_to_body json: REST::StatusSerializer.one(@status, source_requested: true, current_user: current_user)
 
     RemovalWorker.perform_async(@status.id, { 'redraft' => true })
 
@@ -163,7 +163,7 @@ class Api::V1::StatusesController < Api::BaseController
   end
 
   def serialized_accounts(accounts)
-    ActiveModel::Serializer::CollectionSerializer.new(accounts, serializer: REST::AccountSerializer)
+    REST::AccountSerializer.many(accounts)
   end
 
   def pagination_params(core_params)

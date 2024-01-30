@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class REST::Admin::Trends::LinkSerializer < REST::Trends::LinkSerializer
-  attributes :id, :requires_review
+  attributes :id
 
-  def requires_review
-    object.requires_review?
+  attribute :requires_review do
+    link.requires_review?
   end
 end

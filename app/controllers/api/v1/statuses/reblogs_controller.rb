@@ -16,7 +16,7 @@ class Api::V1::Statuses::ReblogsController < Api::V1::Statuses::BaseController
       @status = ReblogService.new.call(current_account, @reblog, reblog_params)
     end
 
-    render json: @status, serializer: REST::StatusSerializer
+    render json: REST::StatusSerializer.one(@status, current_user: current_user)
   end
 
   def destroy
@@ -35,7 +35,11 @@ class Api::V1::Statuses::ReblogsController < Api::V1::Statuses::BaseController
     end
 
     relationships = StatusRelationshipsPresenter.new([@status], current_account.id, reblogs_map: { @reblog.id => false }, attributes_map: { @reblog.id => { reblogs_count: count } })
-    render json: @reblog, serializer: REST::StatusSerializer, relationships: relationships
+    render json: REST::StatusSerializer.one(
+      @reblog,
+      relationships: relationships,
+      current_user: current_user
+    )
   rescue Mastodon::NotPermittedError
     not_found
   end

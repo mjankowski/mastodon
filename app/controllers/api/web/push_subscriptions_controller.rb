@@ -9,12 +9,12 @@ class Api::Web::PushSubscriptionsController < Api::Web::BaseController
   def create
     @push_subscription = ::Web::PushSubscription.create!(web_push_subscription_params)
 
-    render json: @push_subscription, serializer: REST::WebPushSubscriptionSerializer
+    render json: REST::WebPushSubscriptionSerializer.one(@push_subscription)
   end
 
   def update
     @push_subscription.update!(data: data_params)
-    render json: @push_subscription, serializer: REST::WebPushSubscriptionSerializer
+    render json: REST::WebPushSubscriptionSerializer.one(@push_subscription)
   end
 
   private

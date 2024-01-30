@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
 class REST::Admin::EmailDomainBlockSerializer < REST::BaseSerializer
-  attributes :id, :domain, :created_at, :history, :allow_with_approval
+  attributes(
+    :allow_with_approval,
+    :created_at,
+    :domain,
+    :history
+  )
 
-  def id
-    object.id.to_s
+  attribute :id do
+    email_domain_block.id.to_s
   end
 end

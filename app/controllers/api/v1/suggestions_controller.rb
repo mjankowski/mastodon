@@ -9,7 +9,9 @@ class Api::V1::SuggestionsController < Api::BaseController
   before_action :set_suggestions
 
   def index
-    render json: @suggestions.get(limit_param(DEFAULT_ACCOUNTS_LIMIT), params[:offset].to_i).map(&:account), each_serializer: REST::AccountSerializer
+    render json: REST::AccountSerializer.many(
+      @suggestions.get(limit_param(DEFAULT_ACCOUNTS_LIMIT), params[:offset].to_i).map(&:account)
+    )
   end
 
   def destroy

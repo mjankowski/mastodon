@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 class REST::Admin::TagSerializer < REST::TagSerializer
-  attributes :id, :trendable, :usable, :requires_review, :listable
+  attributes(
+    :listable,
+    :trendable,
+    :usable
+  )
 
-  def id
-    object.id.to_s
+  attribute :id do
+    tag.id.to_s
   end
 
-  def requires_review
-    object.requires_review?
+  attribute :requires_review do
+    tag.requires_review?
   end
 end

@@ -5,7 +5,7 @@ class Api::V1::AppsController < Api::BaseController
 
   def create
     @app = Doorkeeper::Application.create!(application_options)
-    render json: @app, serializer: REST::ApplicationSerializer
+    render json: REST::ApplicationSerializer.one(@app)
   end
 
   private

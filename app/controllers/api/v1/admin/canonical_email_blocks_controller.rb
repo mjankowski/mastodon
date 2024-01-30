@@ -20,24 +20,24 @@ class Api::V1::Admin::CanonicalEmailBlocksController < Api::BaseController
 
   def index
     authorize :canonical_email_block, :index?
-    render json: @canonical_email_blocks, each_serializer: REST::Admin::CanonicalEmailBlockSerializer
+    render json: REST::Admin::CanonicalEmailBlockSerializer.many(@canonical_email_blocks)
   end
 
   def show
     authorize @canonical_email_block, :show?
-    render json: @canonical_email_block, serializer: REST::Admin::CanonicalEmailBlockSerializer
+    render json: REST::Admin::CanonicalEmailBlockSerializer.one(@canonical_email_block)
   end
 
   def test
     authorize :canonical_email_block, :test?
-    render json: @canonical_email_blocks, each_serializer: REST::Admin::CanonicalEmailBlockSerializer
+    render json: REST::Admin::CanonicalEmailBlockSerializer.many(@canonical_email_blocks)
   end
 
   def create
     authorize :canonical_email_block, :create?
     @canonical_email_block = CanonicalEmailBlock.create!(resource_params)
     log_action :create, @canonical_email_block
-    render json: @canonical_email_block, serializer: REST::Admin::CanonicalEmailBlockSerializer
+    render json: REST::Admin::CanonicalEmailBlockSerializer.one(@canonical_email_block)
   end
 
   def destroy

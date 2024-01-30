@@ -3,29 +3,23 @@
 class REST::ReactionSerializer < REST::BaseSerializer
   include RoutingHelper
 
-  attributes :name, :count
+  attributes :name
 
   attribute :me, if: :current_user?
-  attribute :url, if: :custom_emoji?
-  attribute :static_url, if: :custom_emoji?
 
-  def count
-    object.respond_to?(:count) ? object.count : 0
-  end
-
-  def current_user?
-    !current_user.nil?
+  attribute :count do
+    reaction.respond_to?(:count) ? reaction.count : 0
   end
 
   def custom_emoji?
-    object.custom_emoji.present?
+    reaction.custom_emoji.present?
   end
 
-  def url
-    full_asset_url(object.custom_emoji.image.url)
+  attribute :url, if: :custom_emoji? do
+    full_asset_url(reaction.custom_emoji.image.url)
   end
 
-  def static_url
-    full_asset_url(object.custom_emoji.image.url(:static))
+  attribute :static_url, if: :custom_emoji? do
+    full_asset_url(reaction.custom_emoji.image.url(:static))
   end
 end

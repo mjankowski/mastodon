@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
 class REST::Admin::IpBlockSerializer < REST::BaseSerializer
-  attributes :id, :ip, :severity, :comment,
-             :created_at, :expires_at
+  attributes(
+    :created_at,
+    :expires_at,
+    :comment,
+    :severity
+  )
 
-  def id
-    object.id.to_s
+  attribute :id do
+    ip_block.id.to_s
   end
 
-  def ip
-    "#{object.ip}/#{object.ip.prefix}"
+  attribute :ip do
+    "#{ip_block.ip}/#{ip_block.ip.prefix}"
   end
 end

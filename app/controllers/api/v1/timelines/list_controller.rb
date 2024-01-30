@@ -9,9 +9,10 @@ class Api::V1::Timelines::ListController < Api::V1::Timelines::BaseController
   PERMITTED_PARAMS = %i(limit).freeze
 
   def show
-    render json: @statuses,
-           each_serializer: REST::StatusSerializer,
-           relationships: StatusRelationshipsPresenter.new(@statuses, current_user.account_id)
+    render json: REST::StatusSerializer.many(
+      @statuses,
+      relationships: StatusRelationshipsPresenter.new(@statuses, current_user.account_id)
+    )
   end
 
   private

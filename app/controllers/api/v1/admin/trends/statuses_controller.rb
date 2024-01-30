@@ -10,7 +10,7 @@ class Api::V1::Admin::Trends::StatusesController < Api::V1::Trends::StatusesCont
 
   def index
     if current_user&.can?(:manage_taxonomies)
-      render json: @statuses, each_serializer: REST::Admin::Trends::StatusSerializer
+      render json: REST::Admin::Trends::StatusSerializer.many(@statuses)
     else
       super
     end
@@ -21,7 +21,7 @@ class Api::V1::Admin::Trends::StatusesController < Api::V1::Trends::StatusesCont
 
     status = Status.find(params[:id])
     status.update(trendable: true)
-    render json: status, serializer: REST::Admin::Trends::StatusSerializer
+    render json: REST::Admin::Trends::StatusSerializer.one(status)
   end
 
   def reject
@@ -29,7 +29,7 @@ class Api::V1::Admin::Trends::StatusesController < Api::V1::Trends::StatusesCont
 
     status = Status.find(params[:id])
     status.update(trendable: false)
-    render json: status, serializer: REST::Admin::Trends::StatusSerializer
+    render json: REST::Admin::Trends::StatusSerializer.one(status)
   end
 
   private

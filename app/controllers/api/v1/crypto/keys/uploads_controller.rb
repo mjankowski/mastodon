@@ -18,7 +18,7 @@ class Api::V1::Crypto::Keys::UploadsController < Api::BaseController
       end
     end
 
-    render json: device, serializer: REST::Keys::DeviceSerializer
+    render json: REST::Keys::DeviceSerializer.one(device)
   end
 
   private

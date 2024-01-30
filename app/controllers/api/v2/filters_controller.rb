@@ -8,23 +8,23 @@ class Api::V2::FiltersController < Api::BaseController
   before_action :set_filter, only: [:show, :update, :destroy]
 
   def index
-    render json: @filters, each_serializer: REST::FilterSerializer, rules_requested: true
+    render json: REST::FilterSerializer.many(@filters, rules_requested: true)
   end
 
   def show
-    render json: @filter, serializer: REST::FilterSerializer, rules_requested: true
+    render json: REST::FilterSerializer.one(@filter, rules_requested: true)
   end
 
   def create
     @filter = current_account.custom_filters.create!(resource_params)
 
-    render json: @filter, serializer: REST::FilterSerializer, rules_requested: true
+    render json: REST::FilterSerializer.one(@filter, rules_requested: true)
   end
 
   def update
     @filter.update!(resource_params)
 
-    render json: @filter, serializer: REST::FilterSerializer, rules_requested: true
+    render json: REST::FilterSerializer.one(@filter, rules_requested: true)
   end
 
   def destroy

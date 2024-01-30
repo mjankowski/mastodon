@@ -6,7 +6,7 @@ class Api::V1::Crypto::Keys::ClaimsController < Api::BaseController
   before_action :set_claim_results
 
   def create
-    render json: @claim_results, each_serializer: REST::Keys::ClaimResultSerializer
+    render json: REST::Keys::ClaimResultSerializer.many(@claim_results)
   end
 
   private

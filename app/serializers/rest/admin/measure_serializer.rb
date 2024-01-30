@@ -1,21 +1,19 @@
 # frozen_string_literal: true
 
 class REST::Admin::MeasureSerializer < REST::BaseSerializer
-  attributes :key, :unit, :total
+  attributes :key, :unit
 
-  attribute :human_value, if: -> { object.respond_to?(:value_to_human_value) }
-  attribute :previous_total, if: -> { object.total_in_time_range? }
-  attribute :data
+  attribute :data # TODO: eh?
 
-  def total
-    object.total.to_s
+  attribute :total do
+    measure.total.to_s
   end
 
-  def human_value
-    object.value_to_human_value(object.total)
+  attribute :human_value, if: -> { measure.respond_to?(:value_to_human_value) } do
+    measure.value_to_human_value(measure.total)
   end
 
-  def previous_total
-    object.previous_total.to_s
+  attribute :previous_total, if: -> { measure.total_in_time_range? } do
+    measure.previous_total.to_s
   end
 end

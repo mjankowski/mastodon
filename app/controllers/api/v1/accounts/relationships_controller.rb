@@ -7,7 +7,10 @@ class Api::V1::Accounts::RelationshipsController < Api::BaseController
   def index
     @accounts = Account.where(id: account_ids).select(:id, :domain)
     @accounts.merge!(Account.without_suspended) unless truthy_param?(:with_suspended)
-    render json: @accounts, each_serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.many(
+      @accounts,
+      relationships: relationships
+    )
   end
 
   private

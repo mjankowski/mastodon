@@ -3,20 +3,20 @@
 class REST::PreviewCardSerializer < REST::BaseSerializer
   include RoutingHelper
 
-  attributes :url, :title, :description, :language, :type,
+  attributes :title, :description, :language, :type,
              :author_name, :author_url, :provider_name,
-             :provider_url, :html, :width, :height,
-             :image, :image_description, :embed_url, :blurhash, :published_at
+             :provider_url, :width, :height,
+             :image_description, :embed_url, :blurhash, :published_at
 
-  def url
-    object.original_url.presence || object.url
+  attribute :url do
+    preview_card.original_url.presence || preview_card.url
   end
 
-  def image
-    object.image? ? full_asset_url(object.image.url(:original)) : nil
+  attribute :image do
+    preview_card.image? ? full_asset_url(preview_card.image.url(:original)) : nil
   end
 
-  def html
-    Sanitize.fragment(object.html, Sanitize::Config::MASTODON_OEMBED)
+  attribute :html do
+    Sanitize.fragment(preview_card.html, Sanitize::Config::MASTODON_OEMBED)
   end
 end

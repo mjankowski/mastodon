@@ -8,6 +8,6 @@ class Api::V1::Profile::HeadersController < Api::BaseController
     @account = current_account
     UpdateAccountService.new.call(@account, { header: nil }, raise_error: true)
     ActivityPub::UpdateDistributionWorker.perform_async(@account.id)
-    render json: @account, serializer: REST::CredentialAccountSerializer
+    render json: REST::CredentialAccountSerializer.one(@account)
   end
 end

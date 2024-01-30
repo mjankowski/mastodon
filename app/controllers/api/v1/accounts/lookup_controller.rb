@@ -6,7 +6,7 @@ class Api::V1::Accounts::LookupController < Api::BaseController
 
   def show
     cache_if_unauthenticated!
-    render json: @account, serializer: REST::AccountSerializer
+    render json: REST::AccountSerializer.one(@account)
   end
 
   private

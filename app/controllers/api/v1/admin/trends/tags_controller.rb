@@ -10,7 +10,7 @@ class Api::V1::Admin::Trends::TagsController < Api::V1::Trends::TagsController
 
   def index
     if current_user&.can?(:manage_taxonomies)
-      render json: @tags, each_serializer: REST::Admin::TagSerializer
+      render json: REST::Admin::TagSerializer.many(@tags)
     else
       super
     end
@@ -21,7 +21,7 @@ class Api::V1::Admin::Trends::TagsController < Api::V1::Trends::TagsController
 
     tag = Tag.find(params[:id])
     tag.update(trendable: true, reviewed_at: Time.now.utc)
-    render json: tag, serializer: REST::Admin::TagSerializer
+    render json: REST::Admin::TagSerializer.one(tag)
   end
 
   def reject
@@ -29,7 +29,7 @@ class Api::V1::Admin::Trends::TagsController < Api::V1::Trends::TagsController
 
     tag = Tag.find(params[:id])
     tag.update(trendable: false, reviewed_at: Time.now.utc)
-    render json: tag, serializer: REST::Admin::TagSerializer
+    render json: REST::Admin::TagSerializer.one(tag)
   end
 
   private

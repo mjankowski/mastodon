@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class REST::MarkerSerializer < REST::BaseSerializer
-  attributes :last_read_id, :version, :updated_at
+  attributes :updated_at
 
-  def last_read_id
-    object.last_read_id.to_s
+  attribute :last_read_id do
+    marker.last_read_id.to_s
   end
 
-  def version
-    object.lock_version
+  attribute :version do
+    marker.lock_version
   end
 end

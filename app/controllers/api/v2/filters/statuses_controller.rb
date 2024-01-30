@@ -9,17 +9,17 @@ class Api::V2::Filters::StatusesController < Api::BaseController
   before_action :set_status_filter, only: [:show, :destroy]
 
   def index
-    render json: @status_filters, each_serializer: REST::FilterStatusSerializer
+    render json: REST::FilterStatusSerializer.many(@status_filters)
   end
 
   def show
-    render json: @status_filter, serializer: REST::FilterStatusSerializer
+    render json: REST::FilterStatusSerializer.one(@status_filter)
   end
 
   def create
     @status_filter = current_account.custom_filters.find(params[:filter_id]).statuses.create!(resource_params)
 
-    render json: @status_filter, serializer: REST::FilterStatusSerializer
+    render json: REST::FilterStatusSerializer.one(@status_filter)
   end
 
   def destroy

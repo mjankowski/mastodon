@@ -1,36 +1,31 @@
 # frozen_string_literal: true
 
 class REST::PollSerializer < REST::BaseSerializer
-  attributes :id, :expires_at, :expired,
-             :multiple, :votes_count, :voters_count
-
-  has_many :loaded_options, key: :options
-  has_many :emojis, serializer: REST::CustomEmojiSerializer
-
-  attribute :voted, if: :current_user?
-  attribute :own_votes, if: :current_user?
-
-  def id
-    object.id.to_s
-  end
-
-  def expired
-    object.expired?
-  end
-
-  def voted
-    object.voted?(current_user.account)
-  end
-
-  def own_votes
-    object.own_votes(current_user.account)
-  end
-
-  def current_user?
-    !current_user.nil?
-  end
-
   class OptionSerializer < REST::BaseSerializer
     attributes :title, :votes_count
+  end
+
+  attributes :expires_at,
+             :multiple,
+             :votes_count,
+             :voters_count
+
+  has_many :loaded_options, as: :options, serializer: OptionSerializer
+  has_many :emojis, serializer: REST::CustomEmojiSerializer
+
+  attribute :id do
+    poll.id.to_s
+  end
+
+  attribute :expired do
+    poll.expired?
+  end
+
+  attribute :voted, if: :current_user? do
+    poll.voted?(current_user.account)
+  end
+
+  attribute :own_votes, if: :current_user? do
+    poll.own_votes(current_user.account)
   end
 end

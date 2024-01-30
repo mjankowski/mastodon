@@ -7,7 +7,7 @@ class Api::V1::BlocksController < Api::BaseController
 
   def index
     @accounts = load_accounts
-    render json: @accounts, each_serializer: REST::AccountSerializer
+    render json: REST::AccountSerializer.many(@accounts)
   end
 
   private

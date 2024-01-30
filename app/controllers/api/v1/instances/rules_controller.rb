@@ -12,7 +12,7 @@ class Api::V1::Instances::RulesController < Api::V1::Instances::BaseController
 
   def index
     cache_even_if_authenticated!
-    render json: @rules, each_serializer: REST::RuleSerializer
+    render json: REST::RuleSerializer.many(@rules)
   end
 
   private

@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 class REST::ExtendedDescriptionSerializer < REST::BaseSerializer
-  attributes :updated_at, :content
-
-  def updated_at
-    object.updated_at&.iso8601
+  attribute :updated_at do
+    extended_description.updated_at&.iso8601
   end
 
-  def content
-    if object.text.present?
-      markdown.render(object.text)
+  attribute :content do
+    if extended_description.text.present?
+      markdown.render(extended_description.text)
     else
       ''
     end

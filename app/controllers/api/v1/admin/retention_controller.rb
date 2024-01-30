@@ -10,7 +10,7 @@ class Api::V1::Admin::RetentionController < Api::BaseController
 
   def create
     authorize :dashboard, :index?
-    render json: @cohorts, each_serializer: REST::Admin::CohortSerializer
+    render json: REST::Admin::CohortSerializer.many(@cohorts)
   end
 
   private

@@ -6,7 +6,7 @@ class Api::V1::DirectoriesController < Api::BaseController
 
   def show
     cache_if_unauthenticated!
-    render json: @accounts, each_serializer: REST::AccountSerializer
+    render json: REST::AccountSerializer.many(@accounts)
   end
 
   private

@@ -11,7 +11,7 @@ class Api::V1::Crypto::EncryptedMessagesController < Api::BaseController
   after_action  :insert_pagination_headers, only: :index
 
   def index
-    render json: @encrypted_messages, each_serializer: REST::EncryptedMessageSerializer
+    render json: REST::EncryptedMessageSerializer.many(@encrypted_messages)
   end
 
   def clear

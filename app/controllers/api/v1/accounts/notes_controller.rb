@@ -15,7 +15,10 @@ class Api::V1::Accounts::NotesController < Api::BaseController
       @note.comment = params[:comment]
       @note.save! if @note.changed?
     end
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships_presenter
+    render json: REST::RelationshipSerializer.one(
+      @account,
+      relationships: relationships_presenter
+    )
   end
 
   private

@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class REST::Admin::Trends::Links::PreviewCardProviderSerializer < REST::BaseSerializer
-  attributes :id, :domain, :trendable, :reviewed_at,
-             :requested_review_at, :requires_review
+  attributes(
+    :domain,
+    :id,
+    :requested_review_at,
+    :reviewed_at,
+    :trendable
+  )
 
-  def requires_review
-    object.requires_review?
+  attribute :requires_review do
+    preview_card_provider.requires_review?
   end
 end

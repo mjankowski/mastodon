@@ -3,196 +3,187 @@
 class REST::StatusSerializer < REST::BaseSerializer
   include FormattingHelper
 
-  attributes :id, :created_at, :in_reply_to_id, :in_reply_to_account_id,
-             :sensitive, :spoiler_text, :visibility, :language,
-             :uri, :url, :replies_count, :reblogs_count,
-             :favourites_count, :edited_at
-
-  attribute :favourited, if: :current_user?
-  attribute :reblogged, if: :current_user?
-  attribute :muted, if: :current_user?
-  attribute :bookmarked, if: :current_user?
-  attribute :pinned, if: :pinnable?
-  has_many :filtered, serializer: REST::FilterResultSerializer, if: :current_user?
-
-  attribute :content, unless: :source_requested?
-  attribute :text, if: :source_requested?
-
-  belongs_to :reblog, serializer: REST::StatusSerializer
-  belongs_to :application, if: :show_application?
-  belongs_to :account, serializer: REST::AccountSerializer
-
-  has_many :ordered_media_attachments, key: :media_attachments, serializer: REST::MediaAttachmentSerializer
-  has_many :ordered_mentions, key: :mentions
-  has_many :tags
-  has_many :emojis, serializer: REST::CustomEmojiSerializer
-
-  has_one :preview_card, key: :card, serializer: REST::PreviewCardSerializer
-  has_one :preloadable_poll, key: :poll, serializer: REST::PollSerializer
-
-  def id
-    object.id.to_s
-  end
-
-  def in_reply_to_id
-    object.in_reply_to_id&.to_s
-  end
-
-  def in_reply_to_account_id
-    object.in_reply_to_account_id&.to_s
-  end
-
-  def current_user?
-    !current_user.nil?
-  end
-
-  def show_application?
-    object.account.user_shows_application? || (current_user? && current_user.account_id == object.account_id)
-  end
-
-  def visibility
-    # This visibility is masked behind "private"
-    # to avoid API changes because there are no
-    # UX differences
-    if object.limited_visibility?
-      'private'
-    else
-      object.visibility
-    end
-  end
-
-  def sensitive
-    if current_user? && current_user.account_id == object.account_id
-      object.sensitive
-    else
-      object.account.sensitized? || object.sensitive
-    end
-  end
-
-  def uri
-    ActivityPub::TagManager.instance.uri_for(object)
-  end
-
-  def content
-    status_content_format(object)
-  end
-
-  def url
-    ActivityPub::TagManager.instance.url_for(object)
-  end
-
-  def reblogs_count
-    relationships&.attributes_map&.dig(object.id, :reblogs_count) || object.reblogs_count
-  end
-
-  def favourites_count
-    relationships&.attributes_map&.dig(object.id, :favourites_count) || object.favourites_count
-  end
-
-  def favourited
-    if relationships
-      relationships.favourites_map[object.id] || false
-    else
-      current_user.account.favourited?(object)
-    end
-  end
-
-  def reblogged
-    if relationships
-      relationships.reblogs_map[object.id] || false
-    else
-      current_user.account.reblogged?(object)
-    end
-  end
-
-  def muted
-    if relationships
-      relationships.mutes_map[object.conversation_id] || false
-    else
-      current_user.account.muting_conversation?(object.conversation)
-    end
-  end
-
-  def bookmarked
-    if relationships
-      relationships.bookmarks_map[object.id] || false
-    else
-      current_user.account.bookmarked?(object)
-    end
-  end
-
-  def pinned
-    if relationships
-      relationships.pins_map[object.id] || false
-    else
-      current_user.account.pinned?(object)
-    end
-  end
-
-  def filtered
-    if relationships
-      relationships.filters_map[object.id] || []
-    else
-      current_user.account.status_matches_filters(object)
-    end
-  end
-
-  def pinnable?
-    current_user? &&
-      current_user.account_id == object.account_id &&
-      !object.reblog? &&
-      %w(public unlisted private).include?(object.visibility)
-  end
-
-  def source_requested?
-    instance_options[:source_requested]
-  end
-
-  def ordered_mentions
-    object.active_mentions.to_a.sort_by(&:id)
-  end
-
-  private
-
-  def relationships
-    instance_options && instance_options[:relationships]
-  end
-
   class ApplicationSerializer < REST::BaseSerializer
-    attributes :name, :website
+    attributes :name
 
-    def website
-      object.website.presence
+    attribute :website do
+      application.website.presence
     end
   end
 
   class MentionSerializer < REST::BaseSerializer
-    attributes :id, :username, :url, :acct
-
-    def id
-      object.account_id.to_s
+    attribute :id do
+      mention.account_id.to_s
     end
 
-    def username
-      object.account_username
+    attribute :username do
+      mention.account_username
     end
 
-    def url
-      ActivityPub::TagManager.instance.url_for(object.account)
+    attribute :url do
+      ActivityPub::TagManager.instance.url_for(mention.account)
     end
 
-    def acct
-      object.account.pretty_acct
+    attribute :acct do
+      mention.account.pretty_acct
     end
   end
 
   class TagSerializer < REST::BaseSerializer
     include RoutingHelper
 
-    attributes :name, :url
+    attributes :name
 
-    def url
-      tag_url(object)
+    attribute :url do
+      tag_url(tag)
     end
+  end
+
+  attributes :created_at,
+             :spoiler_text, :language,
+             :replies_count, :edited_at
+
+  has_many :filtered, serializer: REST::FilterResultSerializer, if: :current_user?
+
+  attributes :text, if: :source_requested?
+
+  attribute :reblog, if: -> { status.reblog? } do
+    # TODO: needs to pass in current_user from options, which cant happen via a belongs_to approach?
+    REST::StatusSerializer.one(status.reblog, current_user: current_user)
+  end
+
+  belongs_to :application, if: :show_application?, serializer: ApplicationSerializer
+  belongs_to :account, serializer: REST::AccountSerializer
+
+  has_many :ordered_media_attachments, as: :media_attachments, serializer: REST::MediaAttachmentSerializer
+  has_many :ordered_mentions, as: :mentions, serializer: MentionSerializer
+  has_many :tags, serializer: TagSerializer
+  has_many :emojis, serializer: REST::CustomEmojiSerializer
+
+  has_one :preview_card, as: :card, serializer: REST::PreviewCardSerializer
+  # has_one :preloadable_poll, as: :poll, serializer: REST::PollSerializer
+
+  attribute :id do
+    status.id.to_s
+  end
+
+  attribute :in_reply_to_id do
+    status.in_reply_to_id&.to_s
+  end
+
+  attribute :in_reply_to_account_id do
+    status.in_reply_to_account_id&.to_s
+  end
+
+  def show_application?
+    status.account.user_shows_application? || (current_user? && current_user.account_id == status.account_id)
+  end
+
+  attribute :visibility do
+    # This visibility is masked behind "private"
+    # to avoid API changes because there are no
+    # UX differences
+    if status.limited_visibility?
+      'private'
+    else
+      status.visibility
+    end
+  end
+
+  attribute :sensitive do
+    if current_user? && current_user.account_id == status.account_id
+      status.sensitive
+    else
+      status.account.sensitized? || status.sensitive
+    end
+  end
+
+  attribute :uri do
+    ActivityPub::TagManager.instance.uri_for(status)
+  end
+
+  attribute :content, if: -> { !source_requested? } do
+    status_content_format(status)
+  end
+
+  attribute :url do
+    ActivityPub::TagManager.instance.url_for(status)
+  end
+
+  attribute :reblogs_count do
+    relationships&.attributes_map&.dig(status.id, :reblogs_count) || status.reblogs_count
+  end
+
+  attribute :favourites_count do
+    relationships&.attributes_map&.dig(status.id, :favourites_count) || status.favourites_count
+  end
+
+  attribute :favourited, if: :current_user? do
+    if relationships
+      relationships.favourites_map[status.id] || false
+    else
+      current_user.account.favourited?(status)
+    end
+  end
+
+  attribute :reblogged, if: :current_user? do
+    if relationships
+      relationships.reblogs_map[status.id] || false
+    else
+      current_user.account.reblogged?(status)
+    end
+  end
+
+  attribute :muted, if: :current_user? do
+    if relationships
+      relationships.mutes_map[status.conversation_id] || false
+    else
+      current_user.account.muting_conversation?(status.conversation)
+    end
+  end
+
+  attribute :bookmarked, if: :current_user? do
+    if relationships
+      relationships.bookmarks_map[status.id] || false
+    else
+      current_user.account.bookmarked?(status)
+    end
+  end
+
+  attribute :pinned, if: :pinnable? do
+    if relationships
+      relationships.pins_map[status.id] || false
+    else
+      current_user.account.pinned?(status)
+    end
+  end
+
+  def filtered
+    if relationships
+      relationships.filters_map[status.id] || []
+    else
+      current_user.account.status_matches_filters(status)
+    end
+  end
+
+  def pinnable?
+    current_user? &&
+      current_user.account_id == status.account_id &&
+      !status.reblog? &&
+      %w(public unlisted private).include?(status.visibility)
+  end
+
+  def source_requested?
+    options[:source_requested]
+  end
+
+  def ordered_mentions
+    status.active_mentions.to_a.sort_by(&:id)
+  end
+
+  private
+
+  def relationships
+    options && options[:relationships]
   end
 end

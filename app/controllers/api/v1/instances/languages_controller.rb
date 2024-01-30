@@ -7,7 +7,7 @@ class Api::V1::Instances::LanguagesController < Api::V1::Instances::BaseControll
 
   def show
     cache_even_if_authenticated!
-    render json: @languages, each_serializer: REST::LanguageSerializer
+    render json: REST::LanguageSerializer.many(@languages)
   end
 
   private

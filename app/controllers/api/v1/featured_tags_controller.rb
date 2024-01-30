@@ -9,12 +9,12 @@ class Api::V1::FeaturedTagsController < Api::BaseController
   before_action :set_featured_tag, except: [:index, :create]
 
   def index
-    render json: @featured_tags, each_serializer: REST::FeaturedTagSerializer
+    render json: REST::FeaturedTagSerializer.many(@featured_tags)
   end
 
   def create
     featured_tag = CreateFeaturedTagService.new.call(current_account, params.require(:name))
-    render json: featured_tag, serializer: REST::FeaturedTagSerializer
+    render json: REST::FeaturedTagSerializer.one(featured_tag)
   end
 
   def destroy

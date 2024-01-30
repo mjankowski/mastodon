@@ -3,60 +3,59 @@
 class REST::V1::InstanceSerializer < REST::BaseSerializer
   include RoutingHelper
 
-  attributes :uri, :title, :short_description, :description, :email,
-             :version, :urls, :stats, :thumbnail,
-             :languages, :registrations, :approval_required, :invites_enabled,
-             :configuration
+  attributes :title,
+             :version,
+             :languages
 
   has_one :contact_account, serializer: REST::AccountSerializer
 
   has_many :rules, serializer: REST::RuleSerializer
 
-  def uri
-    object.domain
+  attribute :uri do
+    instance.domain
   end
 
-  def short_description
-    object.description
+  attribute :short_description do
+    instance.description
   end
 
-  def description
+  attribute :description do
     Setting.site_description # Legacy
   end
 
-  def email
-    object.contact.email
+  attribute :email do
+    instance.contact.email
   end
 
   def contact_account
-    object.contact.account
+    instance.contact.account
   end
 
-  def thumbnail
-    instance_presenter.thumbnail ? full_asset_url(instance_presenter.thumbnail.file.url(:'@1x')) : frontend_asset_url('images/preview.png')
+  attribute :thumbnail do
+    instance.thumbnail ? full_asset_url(instance.thumbnail.file.url(:'@1x')) : frontend_asset_url('images/preview.png')
   end
 
-  def stats
+  attribute :stats do
     {
-      user_count: instance_presenter.user_count,
-      status_count: instance_presenter.status_count,
-      domain_count: instance_presenter.domain_count,
+      user_count: instance.user_count,
+      status_count: instance.status_count,
+      domain_count: instance.domain_count,
     }
   end
 
-  def urls
+  attribute :urls do
     { streaming_api: Rails.configuration.x.streaming_api_base_url }
   end
 
   def usage
     {
       users: {
-        active_month: instance_presenter.active_user_count(4),
+        active_month: instance.active_user_count(4),
       },
     }
   end
 
-  def configuration
+  attribute :configuration do
     {
       accounts: {
         max_featured_tags: FeaturedTag::LIMIT,
@@ -86,21 +85,15 @@ class REST::V1::InstanceSerializer < REST::BaseSerializer
     }
   end
 
-  def registrations
+  attribute :registrations do
     Setting.registrations_mode != 'none' && !Rails.configuration.x.single_user_mode
   end
 
-  def approval_required
+  attribute :approval_required do
     Setting.registrations_mode == 'approved'
   end
 
-  def invites_enabled
+  attribute :invites_enabled do
     UserRole.everyone.can?(:invite_users)
-  end
-
-  private
-
-  def instance_presenter
-    @instance_presenter ||= InstancePresenter.new
   end
 end

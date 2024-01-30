@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class REST::StatusSourceSerializer < REST::BaseSerializer
-  attributes :id, :text, :spoiler_text
+  attributes :text, :spoiler_text
 
-  def id
-    object.id.to_s
+  attribute :id do
+    status_source.id.to_s
   end
 end

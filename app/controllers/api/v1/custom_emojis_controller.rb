@@ -5,6 +5,7 @@ class Api::V1::CustomEmojisController < Api::BaseController
 
   def index
     cache_even_if_authenticated! unless disallow_unauthenticated_api_access?
-    render_with_cache(each_serializer: REST::CustomEmojiSerializer) { CustomEmoji.listed.includes(:category) }
+    # TODO: eh?!
+    render_with_cache json: REST::CustomEmojiSerializer.many(CustomEmoji.listed.includes(:category))
   end
 end

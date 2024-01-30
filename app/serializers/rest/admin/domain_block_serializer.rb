@@ -1,12 +1,21 @@
 # frozen_string_literal: true
 
 class REST::Admin::DomainBlockSerializer < REST::BaseSerializer
-  attributes :id, :domain, :digest, :created_at, :severity,
-             :reject_media, :reject_reports,
-             :private_comment, :public_comment, :obfuscate
+  attributes(
+    :created_at,
+    :digest,
+    :domain,
+    :id,
+    :obfuscate,
+    :private_comment,
+    :public_comment,
+    :reject_media,
+    :reject_reports,
+    :severity
+  )
 
-  def id
-    object.id.to_s
+  attribute :id do
+    domain_block.id.to_s
   end
 
   def digest

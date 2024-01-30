@@ -7,7 +7,7 @@ class Api::V1::Statuses::RebloggedByAccountsController < Api::V1::Statuses::Base
   def index
     cache_if_unauthenticated!
     @accounts = load_accounts
-    render json: @accounts, each_serializer: REST::AccountSerializer
+    render json: REST::AccountSerializer.many(@accounts)
   end
 
   private

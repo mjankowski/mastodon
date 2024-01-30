@@ -36,26 +36,26 @@ class Api::V1::Admin::AccountsController < Api::BaseController
 
   def index
     authorize :account, :index?
-    render json: @accounts, each_serializer: REST::Admin::AccountSerializer
+    render json: REST::Admin::AccountSerializer.many(@accounts)
   end
 
   def show
     authorize @account, :show?
-    render json: @account, serializer: REST::Admin::AccountSerializer
+    render json: REST::Admin::AccountSerializer.one(@account)
   end
 
   def enable
     authorize @account.user, :enable?
     @account.user.enable!
     log_action :enable, @account.user
-    render json: @account, serializer: REST::Admin::AccountSerializer
+    render json: REST::Admin::AccountSerializer.one(@account)
   end
 
   def approve
     authorize @account.user, :approve?
     @account.user.approve!
     log_action :approve, @account.user
-    render json: @account, serializer: REST::Admin::AccountSerializer
+    render json: REST::Admin::AccountSerializer.one(@account)
   end
 
   def reject
@@ -75,14 +75,14 @@ class Api::V1::Admin::AccountsController < Api::BaseController
     authorize @account, :unsensitive?
     @account.unsensitize!
     log_action :unsensitive, @account
-    render json: @account, serializer: REST::Admin::AccountSerializer
+    render json: REST::Admin::AccountSerializer.one(@account)
   end
 
   def unsilence
     authorize @account, :unsilence?
     @account.unsilence!
     log_action :unsilence, @account
-    render json: @account, serializer: REST::Admin::AccountSerializer
+    render json: REST::Admin::AccountSerializer.one(@account)
   end
 
   def unsuspend
@@ -90,7 +90,7 @@ class Api::V1::Admin::AccountsController < Api::BaseController
     @account.unsuspend!
     Admin::UnsuspensionWorker.perform_async(@account.id)
     log_action :unsuspend, @account
-    render json: @account, serializer: REST::Admin::AccountSerializer
+    render json: REST::Admin::AccountSerializer.one(@account)
   end
 
   private

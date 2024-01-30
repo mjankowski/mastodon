@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 class REST::Keys::QueryResultSerializer < REST::BaseSerializer
-  attributes :account_id
-
   has_many :devices, serializer: REST::Keys::DeviceSerializer
 
-  def account_id
-    object.account.id.to_s
+  attribute :account_id do
+    query_result.account.id.to_s
   end
 end

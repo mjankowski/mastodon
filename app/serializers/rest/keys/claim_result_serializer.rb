@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class REST::Keys::ClaimResultSerializer < REST::BaseSerializer
-  attributes :account_id, :device_id, :key_id, :key, :signature
+  attributes :device_id, :key_id, :key, :signature
 
-  def account_id
-    object.account.id.to_s
+  attribute :account_id do
+    claim_result.account.id.to_s
   end
 end

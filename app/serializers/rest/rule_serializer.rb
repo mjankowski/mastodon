@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class REST::RuleSerializer < REST::BaseSerializer
-  attributes :id, :text, :hint
+  attributes :text, :hint
 
-  def id
-    object.id.to_s
+  attribute :id do
+    rule.id.to_s
   end
 end

@@ -17,7 +17,7 @@ class Api::V1::Admin::Trends::Links::PreviewCardProvidersController < Api::BaseC
   def index
     authorize :preview_card_provider, :index?
 
-    render json: @providers, each_serializer: REST::Admin::Trends::Links::PreviewCardProviderSerializer
+    render json: REST::Admin::Trends::Links::PreviewCardProviderSerializer.many(@providers)
   end
 
   def approve
@@ -25,7 +25,7 @@ class Api::V1::Admin::Trends::Links::PreviewCardProvidersController < Api::BaseC
 
     provider = PreviewCardProvider.find(params[:id])
     provider.update(trendable: true, reviewed_at: Time.now.utc)
-    render json: provider, serializer: REST::Admin::Trends::Links::PreviewCardProviderSerializer
+    render json: REST::Admin::Trends::Links::PreviewCardProviderSerializer.one(provider)
   end
 
   def reject
@@ -33,7 +33,7 @@ class Api::V1::Admin::Trends::Links::PreviewCardProvidersController < Api::BaseC
 
     provider = PreviewCardProvider.find(params[:id])
     provider.update(trendable: false, reviewed_at: Time.now.utc)
-    render json: provider, serializer: REST::Admin::Trends::Links::PreviewCardProviderSerializer
+    render json: REST::Admin::Trends::Links::PreviewCardProviderSerializer.one(provider)
   end
 
   private

@@ -9,21 +9,24 @@ class REST::InstanceSerializer < REST::BaseSerializer
 
   include RoutingHelper
 
-  attributes :domain, :title, :version, :source_url, :description,
-             :usage, :thumbnail, :languages, :configuration,
-             :registrations
+  attributes :domain,
+             :title,
+             :version,
+             :source_url,
+             :description,
+             :languages
 
   has_one :contact, serializer: ContactSerializer
   has_many :rules, serializer: REST::RuleSerializer
 
-  def thumbnail
-    if object.thumbnail
+  attribute :thumbnail do
+    if instance.thumbnail
       {
-        url: full_asset_url(object.thumbnail.file.url(:'@1x')),
-        blurhash: object.thumbnail.blurhash,
+        url: full_asset_url(instance.thumbnail.file.url(:'@1x')),
+        blurhash: instance.thumbnail.blurhash,
         versions: {
-          '@1x': full_asset_url(object.thumbnail.file.url(:'@1x')),
-          '@2x': full_asset_url(object.thumbnail.file.url(:'@2x')),
+          '@1x': full_asset_url(instance.thumbnail.file.url(:'@1x')),
+          '@2x': full_asset_url(instance.thumbnail.file.url(:'@2x')),
         },
       }
     else
@@ -33,19 +36,19 @@ class REST::InstanceSerializer < REST::BaseSerializer
     end
   end
 
-  def usage
+  attribute :usage do
     {
       users: {
-        active_month: object.active_user_count(4),
+        active_month: instance.active_user_count(4),
       },
     }
   end
 
-  def configuration
+  attribute :configuration do
     {
       urls: {
         streaming: Rails.configuration.x.streaming_api_base_url,
-        status: object.status_page_url,
+        status: instance.status_page_url,
       },
 
       vapid: {
@@ -84,7 +87,7 @@ class REST::InstanceSerializer < REST::BaseSerializer
     }
   end
 
-  def registrations
+  attribute :registrations do
     {
       enabled: registrations_enabled?,
       approval_required: Setting.registrations_mode == 'approved',

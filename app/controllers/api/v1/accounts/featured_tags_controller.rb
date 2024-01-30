@@ -7,7 +7,9 @@ class Api::V1::Accounts::FeaturedTagsController < Api::BaseController
   respond_to :json
 
   def index
-    render json: @featured_tags, each_serializer: REST::FeaturedTagSerializer
+    render json: REST::FeaturedTagSerializer.many(
+      @featured_tags
+    )
   end
 
   private

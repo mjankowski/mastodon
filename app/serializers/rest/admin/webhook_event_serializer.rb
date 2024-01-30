@@ -14,15 +14,13 @@ class REST::Admin::WebhookEventSerializer < REST::BaseSerializer
     end
   end
 
-  attributes :event, :created_at
+  attributes :created_at
 
-  has_one :virtual_object, key: :object
-
-  def virtual_object
-    object.object
+  attribute :object do
+    webhook_event.object
   end
 
-  def event
-    object.type
+  attribute :event do
+    webhook_event.type
   end
 end

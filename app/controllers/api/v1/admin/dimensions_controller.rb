@@ -10,7 +10,7 @@ class Api::V1::Admin::DimensionsController < Api::BaseController
 
   def create
     authorize :dashboard, :index?
-    render json: @dimensions, each_serializer: REST::Admin::DimensionSerializer
+    render json: REST::Admin::DimensionSerializer.many(@dimensions)
   end
 
   private

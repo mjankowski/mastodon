@@ -4,35 +4,34 @@ class REST::TranslationSerializer < REST::BaseSerializer
   attributes :detected_source_language, :language, :provider, :spoiler_text, :content
 
   class PollSerializer < REST::BaseSerializer
-    attribute :id
-    has_many :options
+    class OptionSerializer < REST::BaseSerializer
+      attributes :title
+    end
 
-    def id
-      object.status.preloadable_poll.id.to_s
+    has_many :options, serializer: OptionSerializer
+
+    attribute :id do
+      poll.status.preloadable_poll.id.to_s
     end
 
     def options
-      object.poll_options
-    end
-
-    class OptionSerializer < REST::BaseSerializer
-      attributes :title
+      poll.poll_options
     end
   end
 
   has_one :poll, serializer: PollSerializer
 
   class MediaAttachmentSerializer < REST::BaseSerializer
-    attributes :id, :description
+    attributes :description
 
-    def id
-      object.id.to_s
+    attribute :id do
+      media_attachment.id.to_s
     end
   end
 
   has_many :media_attachments, serializer: MediaAttachmentSerializer
 
   def poll
-    object if object.status.preloadable_poll
+    translation if translation.status.preloadable_poll
   end
 end

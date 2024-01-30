@@ -18,24 +18,24 @@ class Api::V1::Admin::DomainBlocksController < Api::BaseController
 
   def index
     authorize :domain_block, :index?
-    render json: @domain_blocks, each_serializer: REST::Admin::DomainBlockSerializer
+    render json: REST::Admin::DomainBlockSerializer.many(@domain_blocks)
   end
 
   def show
     authorize @domain_block, :show?
-    render json: @domain_block, serializer: REST::Admin::DomainBlockSerializer
+    render json: REST::Admin::DomainBlockSerializer.one(@domain_block)
   end
 
   def create
     authorize :domain_block, :create?
 
     existing_domain_block = resource_params[:domain].present? ? DomainBlock.rule_for(resource_params[:domain]) : nil
-    return render json: existing_domain_block, serializer: REST::Admin::ExistingDomainBlockErrorSerializer, status: 422 if existing_domain_block.present?
+    return render json: REST::Admin::ExistingDomainBlockErrorSerializer.one(existing_domain_block), status: 422 if existing_domain_block.present?
 
     @domain_block = DomainBlock.create!(resource_params)
     DomainBlockWorker.perform_async(@domain_block.id)
     log_action :create, @domain_block
-    render json: @domain_block, serializer: REST::Admin::DomainBlockSerializer
+    render json: REST::Admin::DomainBlockSerializer.one(@domain_block)
   end
 
   def update
@@ -43,7 +43,7 @@ class Api::V1::Admin::DomainBlocksController < Api::BaseController
     @domain_block.update!(domain_block_params)
     DomainBlockWorker.perform_async(@domain_block.id, @domain_block.severity_previously_changed?)
     log_action :update, @domain_block
-    render json: @domain_block, serializer: REST::Admin::DomainBlockSerializer
+    render json: REST::Admin::DomainBlockSerializer.one(@domain_block)
   end
 
   def destroy

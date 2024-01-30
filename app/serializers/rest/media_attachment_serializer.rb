@@ -3,47 +3,47 @@
 class REST::MediaAttachmentSerializer < REST::BaseSerializer
   include RoutingHelper
 
-  attributes :id, :type, :url, :preview_url,
-             :remote_url, :preview_remote_url, :text_url, :meta,
-             :description, :blurhash
+  attributes :type,
+             :description,
+             :blurhash
 
-  def id
-    object.id.to_s
+  attribute :id do
+    media_attachment.id.to_s
   end
 
-  def url
-    if object.not_processed?
+  attribute :url do
+    if media_attachment.not_processed?
       nil
-    elsif object.needs_redownload?
-      media_proxy_url(object.id, :original)
+    elsif media_attachment.needs_redownload?
+      media_proxy_url(media_attachment.id, :original)
     else
-      full_asset_url(object.file.url(:original))
+      full_asset_url(media_attachment.file.url(:original))
     end
   end
 
-  def remote_url
-    object.remote_url.presence
+  attribute :remote_url do
+    media_attachment.remote_url.presence
   end
 
-  def preview_url
-    if object.needs_redownload?
-      media_proxy_url(object.id, :small)
-    elsif object.thumbnail.present?
-      full_asset_url(object.thumbnail.url(:original))
-    elsif object.file.styles.key?(:small)
-      full_asset_url(object.file.url(:small))
+  attribute :preview_url do
+    if media_attachment.needs_redownload?
+      media_proxy_url(media_attachment.id, :small)
+    elsif media_attachment.thumbnail.present?
+      full_asset_url(media_attachment.thumbnail.url(:original))
+    elsif media_attachment.file.styles.key?(:small)
+      full_asset_url(media_attachment.file.url(:small))
     end
   end
 
-  def preview_remote_url
-    object.thumbnail_remote_url.presence
+  attribute :preview_remote_url do
+    media_attachment.thumbnail_remote_url.presence
   end
 
-  def text_url
-    object.local? && object.shortcode.present? ? medium_url(object) : nil
+  attribute :text_url do
+    media_attachment.local? && media_attachment.shortcode.present? ? medium_url(media_attachment) : nil
   end
 
-  def meta
-    object.file.meta
+  attribute :meta do
+    media_attachment.file.meta
   end
 end

@@ -9,14 +9,14 @@ class Api::V1::Statuses::MutesController < Api::V1::Statuses::BaseController
     current_account.mute_conversation!(@conversation)
     @mutes_map = { @conversation.id => true }
 
-    render json: @status, serializer: REST::StatusSerializer
+    render json: REST::StatusSerializer.one(@status)
   end
 
   def destroy
     current_account.unmute_conversation!(@conversation)
     @mutes_map = { @conversation.id => false }
 
-    render json: @status, serializer: REST::StatusSerializer
+    render json: REST::StatusSerializer.one(@status)
   end
 
   private

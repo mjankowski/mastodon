@@ -9,13 +9,19 @@ class Api::V1::Accounts::PinsController < Api::BaseController
 
   def create
     AccountPin.find_or_create_by!(account: current_account, target_account: @account)
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships_presenter
+    render json: REST::RelationshipSerializer.one(
+      @account,
+      relationships: relationships_presenter
+    )
   end
 
   def destroy
     pin = AccountPin.find_by(account: current_account, target_account: @account)
     pin&.destroy!
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships_presenter
+    render json: REST::RelationshipSerializer.one(
+      @account,
+      relationships: relationships_presenter
+    )
   end
 
   private

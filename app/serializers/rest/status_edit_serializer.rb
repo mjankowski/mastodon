@@ -5,18 +5,21 @@ class REST::StatusEditSerializer < REST::BaseSerializer
 
   has_one :account, serializer: REST::AccountSerializer
 
-  attributes :content, :spoiler_text, :sensitive, :created_at
+  attributes :spoiler_text,
+             :sensitive,
+             :created_at
 
-  has_many :ordered_media_attachments, key: :media_attachments, serializer: REST::MediaAttachmentSerializer
-  has_many :emojis, serializer: REST::CustomEmojiSerializer
+  has_many :ordered_media_attachments,
+           as: :media_attachments,
+           serializer: REST::MediaAttachmentSerializer
+  has_many :emojis,
+           serializer: REST::CustomEmojiSerializer
 
-  attribute :poll, if: -> { object.poll_options.present? }
-
-  def content
-    status_content_format(object)
+  attribute :content do
+    status_content_format(status_edit)
   end
 
-  def poll
-    { options: object.poll_options.map { |title| { title: title } } }
+  attribute :poll, if: -> { status_edit.poll_options.present? } do
+    { options: status_edit.poll_options.map { |title| { title: title } } }
   end
 end

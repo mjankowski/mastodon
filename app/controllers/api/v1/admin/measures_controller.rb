@@ -10,7 +10,7 @@ class Api::V1::Admin::MeasuresController < Api::BaseController
 
   def create
     authorize :dashboard, :index?
-    render json: @measures, each_serializer: REST::Admin::MeasureSerializer
+    render json: REST::Admin::MeasureSerializer.many(@measures)
   end
 
   private

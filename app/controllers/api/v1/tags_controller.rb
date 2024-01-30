@@ -9,18 +9,18 @@ class Api::V1::TagsController < Api::BaseController
 
   def show
     cache_if_unauthenticated!
-    render json: @tag, serializer: REST::TagSerializer
+    render json: REST::TagSerializer.one(@tag)
   end
 
   def follow
     TagFollow.create_with(rate_limit: true).find_or_create_by!(tag: @tag, account: current_account)
-    render json: @tag, serializer: REST::TagSerializer
+    render json: REST::TagSerializer.one(@tag)
   end
 
   def unfollow
     TagFollow.find_by(account: current_account, tag: @tag)&.destroy!
     TagUnmergeWorker.perform_async(@tag.id, current_account.id)
-    render json: @tag, serializer: REST::TagSerializer
+    render json: REST::TagSerializer.one(@tag)
   end
 
   private

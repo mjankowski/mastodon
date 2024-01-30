@@ -10,7 +10,7 @@ class Api::V1::Admin::Trends::LinksController < Api::V1::Trends::LinksController
 
   def index
     if current_user&.can?(:manage_taxonomies)
-      render json: @links, each_serializer: REST::Admin::Trends::LinkSerializer
+      render json: REST::Admin::Trends::LinkSerializer.many(@links)
     else
       super
     end
@@ -21,7 +21,7 @@ class Api::V1::Admin::Trends::LinksController < Api::V1::Trends::LinksController
 
     link = PreviewCard.find(params[:id])
     link.update(trendable: true)
-    render json: link, serializer: REST::Admin::Trends::LinkSerializer
+    render json: REST::Admin::Trends::LinkSerializer.one(link)
   end
 
   def reject
@@ -29,7 +29,7 @@ class Api::V1::Admin::Trends::LinksController < Api::V1::Trends::LinksController
 
     link = PreviewCard.find(params[:id])
     link.update(trendable: false)
-    render json: link, serializer: REST::Admin::Trends::LinkSerializer
+    render json: REST::Admin::Trends::LinkSerializer.one(link)
   end
 
   private

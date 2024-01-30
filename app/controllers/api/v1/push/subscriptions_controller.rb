@@ -7,7 +7,7 @@ class Api::V1::Push::SubscriptionsController < Api::BaseController
   before_action :check_push_subscription, only: [:show, :update]
 
   def show
-    render json: @push_subscription, serializer: REST::WebPushSubscriptionSerializer
+    render json: REST::WebPushSubscriptionSerializer.one(@push_subscription)
   end
 
   def create
@@ -22,12 +22,12 @@ class Api::V1::Push::SubscriptionsController < Api::BaseController
       access_token_id: doorkeeper_token.id
     )
 
-    render json: @push_subscription, serializer: REST::WebPushSubscriptionSerializer
+    render json: REST::WebPushSubscriptionSerializer.one(@push_subscription)
   end
 
   def update
     @push_subscription.update!(data: data_params)
-    render json: @push_subscription, serializer: REST::WebPushSubscriptionSerializer
+    render json: REST::WebPushSubscriptionSerializer.one(@push_subscription)
   end
 
   def destroy

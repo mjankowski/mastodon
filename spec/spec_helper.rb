@@ -51,14 +51,10 @@ def json_str_to_hash(str)
 end
 
 def serialized_record_json(record, serializer, adapter: nil)
-  options = { serializer: serializer }
-  options[:adapter] = adapter if adapter.present?
-  JSON.parse(
-    ActiveModelSerializers::SerializableResource.new(
-      record,
-      options
-    ).to_json
-  )
+  _sdf = adapter
+  # options = { serializer: serializer }
+  # options[:adapter] = adapter if adapter.present?
+  JSON.parse serializer.one(record).to_json
 end
 
 def expect_push_bulk_to_match(klass, matcher)

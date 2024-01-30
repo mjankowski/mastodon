@@ -9,7 +9,10 @@ class Api::V1::Trends::TagsController < Api::BaseController
 
   def index
     cache_if_unauthenticated!
-    render json: @tags, each_serializer: REST::TagSerializer, relationships: TagRelationshipsPresenter.new(@tags, current_user&.account_id)
+    render json: REST::TagSerializer.many(
+      @tags,
+      relationships: TagRelationshipsPresenter.new(@tags, current_user&.account_id)
+    )
   end
 
   private

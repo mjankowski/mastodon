@@ -5,7 +5,7 @@ class Api::V1::Instances::PrivacyPoliciesController < Api::V1::Instances::BaseCo
 
   def show
     cache_even_if_authenticated!
-    render json: @privacy_policy, serializer: REST::PrivacyPolicySerializer
+    render json: REST::PrivacyPolicySerializer.one(@privacy_policy)
   end
 
   private

@@ -5,23 +5,22 @@ class REST::CustomEmojiSerializer < REST::BaseSerializer
 
   # Please update `app/javascript/mastodon/api_types/custom_emoji.ts` when making changes to the attributes
 
-  attributes :shortcode, :url, :static_url, :visible_in_picker
+  attributes :shortcode,
+             :visible_in_picker
 
-  attribute :category, if: :category_loaded?
-
-  def url
-    full_asset_url(object.image.url)
+  attribute :url do
+    full_asset_url(custom_emoji.image.url)
   end
 
-  def static_url
-    full_asset_url(object.image.url(:static))
+  attribute :static_url do
+    full_asset_url(custom_emoji.image.url(:static))
   end
 
-  def category
-    object.category.name
+  attribute :category, if: :category_loaded? do
+    custom_emoji.category.name
   end
 
   def category_loaded?
-    object.association(:category).loaded? && object.category.present?
+    custom_emoji.association(:category).loaded? && custom_emoji.category.present?
   end
 end

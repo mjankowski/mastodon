@@ -9,23 +9,23 @@ class Api::V2::Filters::KeywordsController < Api::BaseController
   before_action :set_keyword, only: [:show, :update, :destroy]
 
   def index
-    render json: @keywords, each_serializer: REST::FilterKeywordSerializer
+    render json: REST::FilterKeywordSerializer.many(@keywords)
   end
 
   def show
-    render json: @keyword, serializer: REST::FilterKeywordSerializer
+    render json: REST::FilterKeywordSerializer.one(@keyword)
   end
 
   def create
     @keyword = current_account.custom_filters.find(params[:filter_id]).keywords.create!(resource_params)
 
-    render json: @keyword, serializer: REST::FilterKeywordSerializer
+    render json: REST::FilterKeywordSerializer.one(@keyword)
   end
 
   def update
     @keyword.update!(resource_params)
 
-    render json: @keyword, serializer: REST::FilterKeywordSerializer
+    render json: REST::FilterKeywordSerializer.one(@keyword)
   end
 
   def destroy

@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 class REST::DomainBlockSerializer < REST::BaseSerializer
-  attributes :domain, :digest, :severity, :comment
+  attributes :severity
 
-  def domain
-    object.public_domain
+  attribute :domain do
+    domain_block.public_domain
   end
 
-  def digest
-    object.domain_digest
+  attribute :digest do
+    domain_block.domain_digest
   end
 
-  def comment
-    object.public_comment if instance_options[:with_comment]
+  attribute :comment do
+    domain_block.public_comment if options[:with_comment]
   end
 end

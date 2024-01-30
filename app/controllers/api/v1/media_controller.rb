@@ -7,12 +7,12 @@ class Api::V1::MediaController < Api::BaseController
   before_action :check_processing, except: [:create]
 
   def show
-    render json: @media_attachment, serializer: REST::MediaAttachmentSerializer, status: status_code_for_media_attachment
+    render json: REST::MediaAttachmentSerializer.one(@media_attachment), status: status_code_for_media_attachment
   end
 
   def create
     @media_attachment = current_account.media_attachments.create!(media_attachment_params)
-    render json: @media_attachment, serializer: REST::MediaAttachmentSerializer
+    render json: REST::MediaAttachmentSerializer.one(@media_attachment)
   rescue Paperclip::Errors::NotIdentifiedByImageMagickError
     render json: file_type_error, status: 422
   rescue Paperclip::Error => e
@@ -22,7 +22,7 @@ class Api::V1::MediaController < Api::BaseController
 
   def update
     @media_attachment.update!(updateable_media_attachment_params)
-    render json: @media_attachment, serializer: REST::MediaAttachmentSerializer, status: status_code_for_media_attachment
+    render json: REST::MediaAttachmentSerializer.one(@media_attachment), status: status_code_for_media_attachment
   end
 
   private

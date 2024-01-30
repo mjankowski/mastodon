@@ -11,7 +11,7 @@ class Api::V1::Trends::LinksController < Api::BaseController
 
   def index
     cache_if_unauthenticated!
-    render json: @links, each_serializer: REST::Trends::LinkSerializer
+    render json: REST::Trends::LinkSerializer.many(@links)
   end
 
   private

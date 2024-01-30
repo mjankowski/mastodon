@@ -3,50 +3,27 @@
 class REST::AnnouncementSerializer < REST::BaseSerializer
   include FormattingHelper
 
-  attributes :id, :content, :starts_at, :ends_at, :all_day,
-             :published_at, :updated_at
-
-  attribute :read, if: :current_user?
-
-  has_many :mentions
-  has_many :statuses
-  has_many :tags, serializer: REST::StatusSerializer::TagSerializer
-  has_many :emojis, serializer: REST::CustomEmojiSerializer
-  has_many :reactions, serializer: REST::ReactionSerializer
-
-  def current_user?
-    !current_user.nil?
-  end
-
-  def id
-    object.id.to_s
-  end
-
-  def read
-    object.announcement_mutes.exists?(account: current_user.account)
-  end
-
-  def content
-    linkify(object.text)
-  end
-
-  def reactions
-    object.reactions(current_user&.account)
-  end
+  attributes(
+    :all_day,
+    :ends_at,
+    :starts_at,
+    :published_at,
+    :updated_at
+  )
 
   class AccountSerializer < REST::BaseSerializer
     attributes :id, :username, :url, :acct
 
     def id
-      object.id.to_s
+      account.id.to_s
     end
 
     def url
-      ActivityPub::TagManager.instance.url_for(object)
+      ActivityPub::TagManager.instance.url_for(account)
     end
 
     def acct
-      object.pretty_acct
+      account.pretty_acct
     end
   end
 
@@ -54,11 +31,33 @@ class REST::AnnouncementSerializer < REST::BaseSerializer
     attributes :id, :url
 
     def id
-      object.id.to_s
+      status.id.to_s
     end
 
     def url
-      ActivityPub::TagManager.instance.url_for(object)
+      ActivityPub::TagManager.instance.url_for(status)
     end
+  end
+
+  has_many :mentions, serializer: AccountSerializer
+  has_many :statuses, serializer: StatusSerializer
+  has_many :tags, serializer: REST::StatusSerializer::TagSerializer
+  has_many :emojis, serializer: REST::CustomEmojiSerializer
+  has_many :reactions, serializer: REST::ReactionSerializer
+
+  attribute :id do
+    announcement.id.to_s
+  end
+
+  attribute :read, if: :current_user? do
+    announcement.announcement_mutes.exists?(account: current_user.account)
+  end
+
+  attribute :content do
+    linkify(announcement.text)
+  end
+
+  def reactions
+    announcement.reactions(current_user&.account)
   end
 end

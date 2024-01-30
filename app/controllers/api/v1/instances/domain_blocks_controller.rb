@@ -13,7 +13,10 @@ class Api::V1::Instances::DomainBlocksController < Api::V1::Instances::BaseContr
       cache_if_unauthenticated!
     end
 
-    render json: @domain_blocks, each_serializer: REST::DomainBlockSerializer, with_comment: show_rationale_in_response?
+    render json: REST::DomainBlockSerializer.many(
+      @domain_blocks,
+      with_comment: show_rationale_in_response?
+    )
   end
 
   private

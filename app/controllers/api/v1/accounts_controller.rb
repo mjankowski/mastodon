@@ -21,7 +21,7 @@ class Api::V1::AccountsController < Api::BaseController
 
   def show
     cache_if_unauthenticated!
-    render json: @account, serializer: REST::AccountSerializer
+    render json: REST::AccountSerializer.one(@account)
   end
 
   def create
@@ -40,37 +40,37 @@ class Api::V1::AccountsController < Api::BaseController
     follow  = FollowService.new.call(current_user.account, @account, reblogs: params.key?(:reblogs) ? truthy_param?(:reblogs) : nil, notify: params.key?(:notify) ? truthy_param?(:notify) : nil, languages: params.key?(:languages) ? params[:languages] : nil, with_rate_limit: true)
     options = @account.locked? || current_user.account.silenced? ? {} : { following_map: { @account.id => { reblogs: follow.show_reblogs?, notify: follow.notify?, languages: follow.languages } }, requested_map: { @account.id => false } }
 
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships(**options)
+    render json: REST::RelationshipSerializer.one(@account, relationships: relationships(**options))
   end
 
   def block
     BlockService.new.call(current_user.account, @account)
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(@account, relationships: relationships)
   end
 
   def mute
     MuteService.new.call(current_user.account, @account, notifications: truthy_param?(:notifications), duration: params[:duration].to_i)
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(@account, relationships: relationships)
   end
 
   def unfollow
     UnfollowService.new.call(current_user.account, @account)
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(@account, relationships: relationships)
   end
 
   def remove_from_followers
     RemoveFromFollowersService.new.call(current_user.account, @account)
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(@account, relationships: relationships)
   end
 
   def unblock
     UnblockService.new.call(current_user.account, @account)
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(@account, relationships: relationships)
   end
 
   def unmute
     UnmuteService.new.call(current_user.account, @account)
-    render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
+    render json: REST::RelationshipSerializer.one(@account, relationships: relationships)
   end
 
   private

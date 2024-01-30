@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 class REST::Admin::ReportSerializer < REST::BaseSerializer
-  attributes :id, :action_taken, :action_taken_at, :category, :comment,
-             :forwarded, :created_at, :updated_at
+  attributes(
+    :created_at,
+    :forwarded,
+    :updated_at,
+    :action_taken_at,
+    :action_taken,
+    :category,
+    :comment
+  )
 
   has_one :account, serializer: REST::Admin::AccountSerializer
   has_one :target_account, serializer: REST::Admin::AccountSerializer
@@ -12,11 +19,11 @@ class REST::Admin::ReportSerializer < REST::BaseSerializer
   has_many :statuses, serializer: REST::StatusSerializer
   has_many :rules, serializer: REST::RuleSerializer
 
-  def id
-    object.id.to_s
+  attribute :id do
+    report.id.to_s
   end
 
   def statuses
-    object.statuses.with_includes
+    report.statuses.with_includes
   end
 end

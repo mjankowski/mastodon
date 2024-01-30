@@ -7,7 +7,7 @@ class Api::V1::Statuses::BookmarksController < Api::V1::Statuses::BaseController
 
   def create
     current_account.bookmarks.find_or_create_by!(account: current_account, status: @status)
-    render json: @status, serializer: REST::StatusSerializer
+    render json: REST::StatusSerializer.one(@status, current_user: current_user)
   end
 
   def destroy
@@ -22,7 +22,11 @@ class Api::V1::Statuses::BookmarksController < Api::V1::Statuses::BaseController
 
     bookmark&.destroy!
 
-    render json: @status, serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new([@status], current_account.id, bookmarks_map: { @status.id => false })
+    render json: REST::StatusSerializer.one(
+      @status,
+      relationships: StatusRelationshipsPresenter.new([@status], current_account.id, bookmarks_map: { @status.id => false }),
+      current_user: current_user
+    )
   rescue Mastodon::NotPermittedError
     not_found
   end

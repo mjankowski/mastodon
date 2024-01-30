@@ -13,21 +13,21 @@ class Api::V1::ListsController < Api::BaseController
 
   def index
     @lists = List.where(account: current_account).all
-    render json: @lists, each_serializer: REST::ListSerializer
+    render json: REST::ListSerializer.many(@lists)
   end
 
   def show
-    render json: @list, serializer: REST::ListSerializer
+    render json: REST::ListSerializer.one(@list)
   end
 
   def create
     @list = List.create!(list_params.merge(account: current_account))
-    render json: @list, serializer: REST::ListSerializer
+    render json: REST::ListSerializer.one(@list)
   end
 
   def update
     @list.update!(list_params)
-    render json: @list, serializer: REST::ListSerializer
+    render json: REST::ListSerializer.one(@list)
   end
 
   def destroy

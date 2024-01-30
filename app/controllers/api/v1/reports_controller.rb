@@ -13,7 +13,7 @@ class Api::V1::ReportsController < Api::BaseController
       report_params
     )
 
-    render json: @report, serializer: REST::ReportSerializer
+    render json: REST::ReportSerializer.one(@report)
   end
 
   private

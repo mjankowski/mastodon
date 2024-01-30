@@ -13,6 +13,6 @@ class Api::V1::InstancesController < Api::BaseController
 
   def show
     cache_even_if_authenticated!
-    render_with_cache json: InstancePresenter.new, serializer: REST::V1::InstanceSerializer, root: 'instance'
+    render_with_cache json: REST::V1::InstanceSerializer.one(InstancePresenter.new), root: 'instance'
   end
 end

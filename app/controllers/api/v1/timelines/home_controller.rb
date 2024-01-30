@@ -12,10 +12,10 @@ class Api::V1::Timelines::HomeController < Api::V1::Timelines::BaseController
       @relationships = StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
     end
 
-    render json: @statuses,
-           each_serializer: REST::StatusSerializer,
-           relationships: @relationships,
-           status: account_home_feed.regenerating? ? 206 : 200
+    render json: REST::StatusSerializer.many(
+      @statuses,
+      relationships: @relationships
+    ), status: account_home_feed.regenerating? ? 206 : 200 # TODO: this option?
   end
 
   private

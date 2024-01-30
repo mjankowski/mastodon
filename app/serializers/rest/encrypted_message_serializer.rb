@@ -1,19 +1,18 @@
 # frozen_string_literal: true
 
 class REST::EncryptedMessageSerializer < REST::BaseSerializer
-  attributes :id, :account_id, :device_id,
-             :type, :body, :digest, :message_franking,
+  attributes :type, :body, :digest, :message_franking,
              :created_at
 
-  def id
-    object.id.to_s
+  attribute :id do
+    encrypted_message.id.to_s
   end
 
-  def account_id
-    object.from_account_id.to_s
+  attribute :account_id do
+    encrypted_message.from_account_id.to_s
   end
 
-  def device_id
-    object.from_device_id
+  attribute :device_id do
+    encrypted_message.from_device_id
   end
 end

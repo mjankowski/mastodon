@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class REST::RoleSerializer < REST::BaseSerializer
-  attributes :id, :name, :permissions, :color, :highlighted
+  attributes :name, :color, :highlighted
 
-  def id
-    object.id.to_s
+  attribute :id do
+    role.id.to_s
   end
 
-  def permissions
-    object.computed_permissions.to_s
+  attribute :permissions do
+    role.computed_permissions.to_s
   end
 end

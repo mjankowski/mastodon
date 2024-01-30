@@ -12,7 +12,7 @@ class Api::V1::Instances::ExtendedDescriptionsController < Api::V1::Instances::B
 
   def show
     cache_even_if_authenticated!
-    render json: @extended_description, serializer: REST::ExtendedDescriptionSerializer
+    render json: REST::ExtendedDescriptionSerializer.one(@extended_description)
   end
 
   private

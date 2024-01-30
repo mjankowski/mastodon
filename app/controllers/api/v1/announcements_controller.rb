@@ -7,7 +7,7 @@ class Api::V1::AnnouncementsController < Api::BaseController
   before_action :set_announcement, except: :index
 
   def index
-    render json: @announcements, each_serializer: REST::AnnouncementSerializer
+    render json: REST::AnnouncementSerializer.many(@announcements)
   end
 
   def dismiss

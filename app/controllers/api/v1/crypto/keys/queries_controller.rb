@@ -7,7 +7,7 @@ class Api::V1::Crypto::Keys::QueriesController < Api::BaseController
   before_action :set_query_results
 
   def create
-    render json: @query_results, each_serializer: REST::Keys::QueryResultSerializer
+    render json: REST::Keys::QueryResultSerializer.many(@query_results)
   end
 
   private
