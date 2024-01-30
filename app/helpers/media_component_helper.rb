@@ -80,26 +80,15 @@ module MediaComponentHelper
   private
 
   def serialize_media_attachment(attachment)
-    ActiveModelSerializers::SerializableResource.new(
-      attachment,
-      serializer: REST::MediaAttachmentSerializer
-    )
+    REST::MediaAttachmentSerializer.one(attachment)
   end
 
   def serialize_status_card(status)
-    ActiveModelSerializers::SerializableResource.new(
-      status.preview_card,
-      serializer: REST::PreviewCardSerializer
-    )
+    REST::PreviewCardSerializer.one(status.preview_card)
   end
 
   def serialize_status_poll(status)
-    ActiveModelSerializers::SerializableResource.new(
-      status.preloadable_poll,
-      serializer: REST::PollSerializer,
-      scope: current_user,
-      scope_name: :current_user
-    )
+    REST::PollSerializer.one(status.preloadable_poll, current_user: current_user)
   end
 
   def sensitive_viewer?(status, account)
