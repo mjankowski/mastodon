@@ -26,9 +26,6 @@ module ReactComponentHelper
   end
 
   def serialized_attachment(attachment)
-    ActiveModelSerializers::SerializableResource.new(
-      attachment,
-      serializer: REST::MediaAttachmentSerializer
-    ).as_json
+    REST::MediaAttachmentSerializer.one(attachment).as_json
   end
 end
