@@ -15,7 +15,7 @@ class Api::V1::Timelines::HomeController < Api::V1::Timelines::BaseController
     render json: REST::StatusSerializer.many(
       @statuses,
       relationships: @relationships
-    ), status: account_home_feed.regenerating? ? 206 : 200 # TODO: this option?
+    ), status: account_home_feed.regenerating? ? 206 : 200 # TODO: status choose to helper?
   end
 
   private

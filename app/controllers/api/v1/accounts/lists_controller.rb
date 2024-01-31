@@ -7,9 +7,7 @@ class Api::V1::Accounts::ListsController < Api::BaseController
 
   def index
     @lists = @account.suspended? ? [] : @account.lists.where(account: current_account)
-    render json: REST::ListSerializer.many(
-      @lists
-    )
+    render json: REST::ListSerializer.many(@lists)
   end
 
   private

@@ -12,10 +12,7 @@ class Api::V1::AnnualReportsController < Api::BaseController
       @relationships = StatusRelationshipsPresenter.new(@presenter.statuses, current_account.id)
     end
 
-    render json: REST::AnnualReportsSerializer.one(
-      @presenter,
-      relationships: @relationships
-    )
+    render json: REST::AnnualReportsSerializer.one(@presenter, relationships: @relationships)
   end
 
   def read

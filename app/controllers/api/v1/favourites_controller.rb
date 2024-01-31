@@ -9,6 +9,7 @@ class Api::V1::FavouritesController < Api::BaseController
     @statuses = load_statuses
     render json: REST::StatusSerializer.many(
       @statuses,
+      # TODO: relationships to helper
       relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
     )
   end

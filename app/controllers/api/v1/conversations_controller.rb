@@ -13,6 +13,7 @@ class Api::V1::ConversationsController < Api::BaseController
     @conversations = paginated_conversations
     render json: REST::ConversationSerializer.many(
       @conversations,
+      # TODO: relationships to helper
       relationships: StatusRelationshipsPresenter.new(@conversations.map(&:last_status), current_user&.account_id)
     )
   end

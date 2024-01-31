@@ -11,6 +11,7 @@ class Api::V1::Timelines::ListController < Api::V1::Timelines::BaseController
   def show
     render json: REST::StatusSerializer.many(
       @statuses,
+      # TODO: chooser to helper
       relationships: StatusRelationshipsPresenter.new(@statuses, current_user.account_id)
     )
   end

@@ -12,6 +12,7 @@ class Api::V1::Timelines::TagController < Api::V1::Timelines::BaseController
     render json: REST::StatusSerializer.many(
       @statuses,
       relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
+      # TODO: relations to helper
     )
   end
 

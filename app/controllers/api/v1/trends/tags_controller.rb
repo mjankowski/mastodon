@@ -12,6 +12,7 @@ class Api::V1::Trends::TagsController < Api::BaseController
     render json: REST::TagSerializer.many(
       @tags,
       relationships: TagRelationshipsPresenter.new(@tags, current_user&.account_id)
+      # TODO: relations to helper
     )
   end
 

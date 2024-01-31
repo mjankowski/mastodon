@@ -14,10 +14,7 @@ class Api::V1::NotificationsController < Api::BaseController
       @relationships = StatusRelationshipsPresenter.new(target_statuses_from_notifications, current_user&.account_id)
     end
 
-    render json: REST::NotificationSerializer.many(
-      @notifications,
-      relationships: @relationships
-    )
+    render json: REST::NotificationSerializer.many(@notifications, relationships: @relationships)
   end
 
   def show

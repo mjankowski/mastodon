@@ -23,6 +23,7 @@ class Api::V1::Statuses::FavouritesController < Api::V1::Statuses::BaseControlle
       authorize @status, :show?
     end
 
+    # TODO: relationships to helper
     relationships = StatusRelationshipsPresenter.new([@status], current_account.id, favourites_map: { @status.id => false }, attributes_map: { @status.id => { favourites_count: count } })
     render json: REST::StatusSerializer.one(
       @status,

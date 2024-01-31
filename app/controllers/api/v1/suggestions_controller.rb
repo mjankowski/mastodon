@@ -10,6 +10,7 @@ class Api::V1::SuggestionsController < Api::BaseController
 
   def index
     render json: REST::AccountSerializer.many(
+      # TODO: to helper
       @suggestions.get(limit_param(DEFAULT_ACCOUNTS_LIMIT), params[:offset].to_i).map(&:account)
     )
   end

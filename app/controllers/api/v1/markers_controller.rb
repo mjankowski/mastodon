@@ -36,6 +36,7 @@ class Api::V1::MarkersController < Api::BaseController
 
     map.each_pair do |key, value|
       serialized[key] = REST::MarkerSerializer.one(value).as_json
+      # TODO: why is this not a regular one?
     end
 
     Oj.dump(serialized)

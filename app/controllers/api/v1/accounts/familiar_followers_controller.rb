@@ -6,9 +6,7 @@ class Api::V1::Accounts::FamiliarFollowersController < Api::BaseController
   before_action :set_accounts
 
   def index
-    render json: REST::FamiliarFollowersSerializer.many(
-      familiar_followers.accounts
-    )
+    render json: REST::FamiliarFollowersSerializer.many(familiar_followers.accounts)
   end
 
   private

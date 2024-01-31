@@ -24,6 +24,7 @@ class Api::V1::Statuses::BookmarksController < Api::V1::Statuses::BaseController
 
     render json: REST::StatusSerializer.one(
       @status,
+      # TODO: relationships to helper
       relationships: StatusRelationshipsPresenter.new([@status], current_account.id, bookmarks_map: { @status.id => false }),
       current_user: current_user
     )
