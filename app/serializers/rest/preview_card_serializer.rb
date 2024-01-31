@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class REST::PreviewCardSerializer < ActiveModel::Serializer
+class REST::PreviewCardSerializer < REST::BaseSerializer
   class AuthorSerializer < ActiveModel::Serializer
     attributes :name, :url
     has_one :account, serializer: REST::AccountSerializer

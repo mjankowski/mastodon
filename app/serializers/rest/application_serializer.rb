@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class REST::ApplicationSerializer < ActiveModel::Serializer
+class REST::ApplicationSerializer < REST::BaseSerializer
   attributes :id, :name, :website, :scopes, :redirect_uris
 
   # NOTE: Deprecated in 4.3.0, needs to be removed in 5.0.0

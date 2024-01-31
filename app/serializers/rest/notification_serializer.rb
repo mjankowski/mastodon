@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class REST::NotificationSerializer < ActiveModel::Serializer
+class REST::NotificationSerializer < REST::BaseSerializer
   # Please update app/javascript/api_types/notification.ts when making changes to the attributes
   attributes :id, :type, :created_at, :group_key
 
