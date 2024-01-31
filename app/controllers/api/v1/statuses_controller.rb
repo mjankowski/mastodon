@@ -55,9 +55,8 @@ class Api::V1::StatusesController < Api::BaseController
     loaded_descendants  = preload_collection(descendants_results, Status)
 
     @context = Context.new(ancestors: loaded_ancestors, descendants: loaded_descendants)
-    statuses = [@status] + @context.ancestors + @context.descendants
 
-    render json: @context, serializer: REST::ContextSerializer, relationships: StatusRelationshipsPresenter.new(statuses, current_user&.account_id)
+    render json: @context, serializer: REST::ContextSerializer, relationships: relationships
   end
 
   def create
@@ -187,5 +186,13 @@ class Api::V1::StatusesController < Api::BaseController
 
   def serialized_accounts(accounts)
     ActiveModel::Serializer::CollectionSerializer.new(accounts, serializer: REST::AccountSerializer)
+  end
+
+  def relationships
+    StatusRelationshipsPresenter.new(statuses_family_tree, current_user&.account_id)
+  end
+
+  def statuses_family_tree
+    [@status] + @context.ancestors + @context.descendants
   end
 end
