@@ -27,8 +27,7 @@ class InlineRenderer
     end
 
     # TODO: eh?
-    serializable_resource = serializer.one(@object, current_user: current_user)
-    serializable_resource.as_json
+    serializer.one(@object, current_user: current_user)
   end
 
   def self.render(object, current_account, template)

@@ -6,7 +6,7 @@ describe Webhooks::PayloadRenderer do
   subject(:renderer) { described_class.new(json) }
 
   let(:event)   { Webhooks::EventPresenter.new(type, object) }
-  let(:payload) { ActiveModelSerializers::SerializableResource.new(event, serializer: REST::Admin::WebhookEventSerializer, scope: nil, scope_name: :current_user).as_json }
+  let(:payload) { REST::Admin::WebhookEventSerializer.one(event, current_user: nil).as_json }
   let(:json)    { Oj.dump(payload) }
 
   describe '#render' do

@@ -81,10 +81,7 @@ class StatusCacheHydrator
   end
 
   def serialized_filter(filter)
-    ActiveModelSerializers::SerializableResource.new(
-      filter,
-      serializer: REST::FilterResultSerializer
-    ).as_json
+    REST::FilterResultSerializer.one(filter)
   end
 
   def payload_application
@@ -92,10 +89,7 @@ class StatusCacheHydrator
   end
 
   def serialized_status_application_json
-    ActiveModelSerializers::SerializableResource.new(
-      @status.application,
-      serializer: REST::StatusSerializer::ApplicationSerializer
-    ).as_json
+    REST::StatusSerializer::ApplicationSerializer.one(@status.application)
   end
 
   def payload_reblog_application
@@ -103,9 +97,6 @@ class StatusCacheHydrator
   end
 
   def serialized_status_reblog_application_json
-    ActiveModelSerializers::SerializableResource.new(
-      @status.reblog.application,
-      serializer: REST::StatusSerializer::ApplicationSerializer
-    ).as_json
+    REST::StatusSerializer::ApplicationSerializer.one(@status.reblog.application)
   end
 end
