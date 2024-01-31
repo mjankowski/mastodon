@@ -6,10 +6,14 @@ class Api::V1::FeaturedTags::SuggestionsController < Api::BaseController
   before_action :set_recently_used_tags, only: :index
 
   def index
-    render json: @recently_used_tags, each_serializer: REST::TagSerializer, relationships: TagRelationshipsPresenter.new(@recently_used_tags, current_user&.account_id)
+    render json: @recently_used_tags, each_serializer: REST::TagSerializer, relationships: relationships
   end
 
   private
+
+  def relationships
+    TagRelationshipsPresenter.new(@recently_used_tags, current_user&.account_id)
+  end
 
   def set_recently_used_tags
     @recently_used_tags = Tag.suggestions_for_account(current_account).limit(10)
