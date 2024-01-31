@@ -5,7 +5,8 @@ class InitialStateSerializer < ActiveModel::Serializer
 
   attributes :meta, :compose, :accounts,
              :media_attachments, :settings,
-             :languages, :push_subscription
+             :languages,
+             :push_subscription, :role
 
   attribute :critical_updates_pending, if: -> { object&.role&.can?(:view_devops) && SoftwareUpdate.check_enabled? }
 
@@ -129,7 +130,6 @@ class InitialStateSerializer < ActiveModel::Serializer
 
   def serialized_account(account)
     REST::AccountSerializer.one(account) # TODO: eh
-    # ActiveModelSerializers::SerializableResource.new(account, serializer: REST::AccountSerializer)
   end
 
   def instance_presenter
