@@ -54,8 +54,6 @@ def serialized_record_json(record, serializer, adapter: nil)
   options = { serializer: serializer }
   options[:adapter] = adapter if adapter.present?
 
-  puts serializer
-
   if serializer < ActiveModel::Serializer
     JSON.parse(
       ActiveModelSerializers::SerializableResource.new(
