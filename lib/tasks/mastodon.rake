@@ -11,8 +11,7 @@ namespace :mastodon do
       configure_instance_domain
       prompt.say "\n"
 
-      prompt.say('Single user mode disables registrations and redirects the landing page to your public profile.')
-      env['SINGLE_USER_MODE'] = prompt.yes?('Do you want to enable single user mode?', default: false)
+      configure_single_user_mode
 
       %w(SECRET_KEY_BASE OTP_SECRET).each do |key|
         env[key] = SecureRandom.hex(64)
@@ -591,6 +590,11 @@ namespace :mastodon do
       q.validate(/\A[a-z0-9.-]+\z/i)
       q.messages[:valid?] = 'Invalid domain. If you intend to use unicode characters, enter punycode here'
     end
+  end
+
+  def configure_single_user_mode
+    prompt.say('Single user mode disables registrations and redirects the landing page to your public profile.')
+    env['SINGLE_USER_MODE'] = prompt.yes?('Do you want to enable single user mode?', default: false)
   end
 
   def generate_header(include_warning)
