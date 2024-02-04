@@ -27,7 +27,7 @@ namespace :mastodon do
       configure_webpush_key
       prompt.say "\n"
 
-      using_docker        = prompt.yes?('Are you using Docker to run Mastodon?')
+      using_docker
       db_connection_works = false
 
       prompt.say "\n"
@@ -602,6 +602,10 @@ namespace :mastodon do
     %w(SECRET_KEY_BASE OTP_SECRET).each do |key|
       env[key] = SecureRandom.hex(64)
     end
+  end
+
+  def using_docker
+    @using_docker ||= prompt.yes?('Are you using Docker to run Mastodon?')
   end
 
   def generate_header(include_warning)
