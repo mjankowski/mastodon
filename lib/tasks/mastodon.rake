@@ -61,19 +61,8 @@ namespace :mastodon do
           q.echo false
         end
 
-        # The chosen database may not exist yet. Connect to default database
-        # to avoid "database does not exist" error.
-        db_options = {
-          adapter: :postgresql,
-          database: 'postgres',
-          host: env['DB_HOST'],
-          port: env['DB_PORT'],
-          user: env['DB_USER'],
-          password: env['DB_PASS'],
-        }
-
         begin
-          ActiveRecord::Base.establish_connection(db_options)
+          ActiveRecord::Base.establish_connection(database_options)
           ActiveRecord::Base.connection
           prompt.ok 'Database configuration works! 🎆'
           db_connection_works = true
@@ -606,6 +595,19 @@ namespace :mastodon do
 
   def using_docker
     @using_docker ||= prompt.yes?('Are you using Docker to run Mastodon?')
+  end
+
+  def database_options
+    # The chosen database may not exist yet. Connect to default database
+    # to avoid "database does not exist" error.
+    {
+      adapter: :postgresql,
+      database: 'postgres',
+      host: env['DB_HOST'],
+      port: env['DB_PORT'],
+      user: env['DB_USER'],
+      password: env['DB_PASS'],
+    }
   end
 
   def generate_header(include_warning)
