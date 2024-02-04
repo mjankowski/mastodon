@@ -28,57 +28,9 @@ namespace :mastodon do
       prompt.say "\n"
 
       using_docker
-      db_connection_works = false
-
       prompt.say "\n"
 
-      loop do
-        env['DB_HOST'] = prompt.ask('PostgreSQL host:') do |q|
-          q.required true
-          q.default using_docker ? 'db' : '/var/run/postgresql'
-          q.modify :strip
-        end
-
-        env['DB_PORT'] = prompt.ask('PostgreSQL port:') do |q|
-          q.required true
-          q.default 5432
-          q.convert :int
-        end
-
-        env['DB_NAME'] = prompt.ask('Name of PostgreSQL database:') do |q|
-          q.required true
-          q.default using_docker ? 'postgres' : 'mastodon_production'
-          q.modify :strip
-        end
-
-        env['DB_USER'] = prompt.ask('Name of PostgreSQL user:') do |q|
-          q.required true
-          q.default using_docker ? 'postgres' : 'mastodon'
-          q.modify :strip
-        end
-
-        env['DB_PASS'] = prompt.ask('Password of PostgreSQL user:') do |q|
-          q.echo false
-        end
-
-        begin
-          ActiveRecord::Base.establish_connection(database_options)
-          ActiveRecord::Base.connection
-          prompt.ok 'Database configuration works! 🎆'
-          db_connection_works = true
-          break
-        rescue => e
-          prompt.error 'Database connection could not be established with this configuration, try again.'
-          prompt.error e.message
-          unless prompt.yes?('Try again?')
-            return prompt.warn 'Nothing saved. Bye!' unless prompt.yes?('Continue anyway?')
-
-            errors << :database_configuration
-            break
-          end
-        end
-      end
-
+      configure_database_connection
       prompt.say "\n"
 
       loop do
@@ -608,6 +560,62 @@ namespace :mastodon do
       user: env['DB_USER'],
       password: env['DB_PASS'],
     }
+  end
+
+  def db_connection_works
+    begin
+      ActiveRecord::Base.establish_connection(database_options)
+      ActiveRecord::Base.connection
+      true
+    rescue => e
+      prompt.error 'Database connection could not be established with this configuration, try again.'
+      prompt.error e.message
+      false
+    end
+  end
+
+  def configure_database_connection
+    loop do
+      env['DB_HOST'] = prompt.ask('PostgreSQL host:') do |q|
+        q.required true
+        q.default using_docker ? 'db' : '/var/run/postgresql'
+        q.modify :strip
+      end
+
+      env['DB_PORT'] = prompt.ask('PostgreSQL port:') do |q|
+        q.required true
+        q.default 5432
+        q.convert :int
+      end
+
+      env['DB_NAME'] = prompt.ask('Name of PostgreSQL database:') do |q|
+        q.required true
+        q.default using_docker ? 'postgres' : 'mastodon_production'
+        q.modify :strip
+      end
+
+      env['DB_USER'] = prompt.ask('Name of PostgreSQL user:') do |q|
+        q.required true
+        q.default using_docker ? 'postgres' : 'mastodon'
+        q.modify :strip
+      end
+
+      env['DB_PASS'] = prompt.ask('Password of PostgreSQL user:') do |q|
+        q.echo false
+      end
+
+      if db_connection_works
+        prompt.ok 'Database configuration works! 🎆'
+        break
+      else
+        unless prompt.yes?('Try again?')
+          return prompt.warn 'Nothing saved. Bye!' unless prompt.yes?('Continue anyway?')
+
+          errors << :database_configuration
+          break
+        end
+      end
+    end
   end
 
   def generate_header(include_warning)
