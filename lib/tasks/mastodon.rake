@@ -5,13 +5,7 @@ require 'tty-prompt'
 namespace :mastodon do
   desc 'Configure the instance for production use'
   task :setup do
-    # When the application code gets loaded, it runs `lib/mastodon/redis_configuration.rb`.
-    # This happens before application environment configuration and sets REDIS_URL etc.
-    # These variables are then used even when REDIS_HOST etc. are changed, so clear them
-    # out so they don't interfere with our new configuration.
-    ENV.delete('REDIS_URL')
-    ENV.delete('CACHE_REDIS_URL')
-    ENV.delete('SIDEKIQ_REDIS_URL')
+    reset_previous_env!
 
     begin
       errors = false
@@ -582,6 +576,16 @@ namespace :mastodon do
 
   def prompt
     @prompt ||= TTY::Prompt.new
+  end
+
+  def reset_previous_env!
+    # When the application code gets loaded, it runs `lib/mastodon/redis_configuration.rb`.
+    # This happens before application environment configuration and sets REDIS_URL etc.
+    # These variables are then used even when REDIS_HOST etc. are changed, so clear them
+    # out so they don't interfere with our new configuration.
+    %w(REDIS_URL CACHE_REDIS_URL SIDEKIQ_REDIS_URL).each do |value|
+      ENV.delete(value)
+    end
   end
 
   def generate_header(include_warning)
