@@ -5,8 +5,7 @@ require 'tty-prompt'
 namespace :mastodon do
   desc 'Configure the instance for production use'
   task :setup do
-    prompt = TTY::Prompt.new
-    env    = {}
+    env = {}
 
     # When the application code gets loaded, it runs `lib/mastodon/redis_configuration.rb`.
     # This happens before application environment configuration and sets REDIS_URL etc.
@@ -578,6 +577,10 @@ namespace :mastodon do
   end
 
   private
+
+  def prompt
+    @prompt ||= TTY::Prompt.new
+  end
 
   def generate_header(include_warning)
     default_message = "# Generated with mastodon:setup on #{Time.now.utc}\n\n"
