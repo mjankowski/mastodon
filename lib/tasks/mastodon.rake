@@ -5,8 +5,6 @@ require 'tty-prompt'
 namespace :mastodon do
   desc 'Configure the instance for production use'
   task :setup do
-    env = {}
-
     # When the application code gets loaded, it runs `lib/mastodon/redis_configuration.rb`.
     # This happens before application environment configuration and sets REDIS_URL etc.
     # These variables are then used even when REDIS_HOST etc. are changed, so clear them
@@ -577,6 +575,10 @@ namespace :mastodon do
   end
 
   private
+
+  def env
+    @env ||= {}
+  end
 
   def prompt
     @prompt ||= TTY::Prompt.new
