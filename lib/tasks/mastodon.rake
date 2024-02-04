@@ -141,8 +141,7 @@ namespace :mastodon do
 
       prompt.say "\n"
 
-      env['UPDATE_CHECK_URL'] = '' unless prompt.yes?('Do you want Mastodon to periodically check for important updates and notify you? (Recommended)', default: true)
-
+      configure_software_update
       prompt.say "\n"
       prompt.say 'This configuration will be written to .env.production'
 
@@ -658,6 +657,10 @@ namespace :mastodon do
       q.default "files.#{env['LOCAL_DOMAIN']}"
       q.modify :strip
     end
+  end
+
+  def configure_software_update
+    env['UPDATE_CHECK_URL'] = '' unless prompt.yes?('Do you want Mastodon to periodically check for important updates and notify you? (Recommended)', default: true)
   end
 
   def generate_header(include_warning)
