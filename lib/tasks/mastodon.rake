@@ -36,197 +36,7 @@ namespace :mastodon do
       configure_redis_connection
       prompt.say "\n"
 
-      if prompt.yes?('Do you want to store uploaded files on the cloud?', default: false)
-        case prompt.select('Provider', ['DigitalOcean Spaces', 'Amazon S3', 'Wasabi', 'Minio', 'Google Cloud Storage', 'Storj DCS'])
-        when 'DigitalOcean Spaces'
-          env['S3_ENABLED'] = 'true'
-          env['S3_PROTOCOL'] = 'https'
-
-          env['S3_BUCKET'] = prompt.ask('Space name:') do |q|
-            q.required true
-            q.default "files.#{env['LOCAL_DOMAIN']}"
-            q.modify :strip
-          end
-
-          env['S3_REGION'] = prompt.ask('Space region:') do |q|
-            q.required true
-            q.default 'nyc3'
-            q.modify :strip
-          end
-
-          env['S3_HOSTNAME'] = prompt.ask('Space endpoint:') do |q|
-            q.required true
-            q.default 'nyc3.digitaloceanspaces.com'
-            q.modify :strip
-          end
-
-          env['S3_ENDPOINT'] = "https://#{env['S3_HOSTNAME']}"
-
-          env['AWS_ACCESS_KEY_ID'] = prompt.ask('Space access key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Space secret key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-        when 'Amazon S3'
-          env['S3_ENABLED']  = 'true'
-          env['S3_PROTOCOL'] = 'https'
-
-          env['S3_BUCKET'] = prompt.ask('S3 bucket name:') do |q|
-            q.required true
-            q.default "files.#{env['LOCAL_DOMAIN']}"
-            q.modify :strip
-          end
-
-          env['S3_REGION'] = prompt.ask('S3 region:') do |q|
-            q.required true
-            q.default 'us-east-1'
-            q.modify :strip
-          end
-
-          env['S3_HOSTNAME'] = prompt.ask('S3 hostname:') do |q|
-            q.required true
-            q.default 's3.us-east-1.amazonaws.com'
-            q.modify :strip
-          end
-
-          env['AWS_ACCESS_KEY_ID'] = prompt.ask('S3 access key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('S3 secret key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-        when 'Wasabi'
-          env['S3_ENABLED']  = 'true'
-          env['S3_PROTOCOL'] = 'https'
-          env['S3_REGION']   = 'us-east-1'
-          env['S3_HOSTNAME'] = 's3.wasabisys.com'
-          env['S3_ENDPOINT'] = 'https://s3.wasabisys.com/'
-
-          env['S3_BUCKET'] = prompt.ask('Wasabi bucket name:') do |q|
-            q.required true
-            q.default "files.#{env['LOCAL_DOMAIN']}"
-            q.modify :strip
-          end
-
-          env['AWS_ACCESS_KEY_ID'] = prompt.ask('Wasabi access key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Wasabi secret key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-        when 'Minio'
-          env['S3_ENABLED']  = 'true'
-          env['S3_PROTOCOL'] = 'https'
-          env['S3_REGION']   = 'us-east-1'
-
-          env['S3_ENDPOINT'] = prompt.ask('Minio endpoint URL:') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          env['S3_PROTOCOL'] = env['S3_ENDPOINT'].start_with?('https') ? 'https' : 'http'
-          env['S3_HOSTNAME'] = env['S3_ENDPOINT'].gsub(%r{\Ahttps?://}, '')
-
-          env['S3_BUCKET'] = prompt.ask('Minio bucket name:') do |q|
-            q.required true
-            q.default "files.#{env['LOCAL_DOMAIN']}"
-            q.modify :strip
-          end
-
-          env['AWS_ACCESS_KEY_ID'] = prompt.ask('Minio access key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Minio secret key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-        when 'Storj DCS'
-          env['S3_ENABLED']  = 'true'
-          env['S3_PROTOCOL'] = 'https'
-          env['S3_REGION']   = 'global'
-
-          env['S3_ENDPOINT'] = prompt.ask('Storj DCS endpoint URL:') do |q|
-            q.required true
-            q.default 'https://gateway.storjshare.io'
-            q.modify :strip
-          end
-
-          env['S3_PROTOCOL'] = env['S3_ENDPOINT'].start_with?('https') ? 'https' : 'http'
-          env['S3_HOSTNAME'] = env['S3_ENDPOINT'].gsub(%r{\Ahttps?://}, '')
-
-          env['S3_BUCKET'] = prompt.ask('Storj DCS bucket name:') do |q|
-            q.required true
-            q.default "files.#{env['LOCAL_DOMAIN']}"
-            q.modify :strip
-          end
-
-          env['AWS_ACCESS_KEY_ID'] = prompt.ask('Storj Gateway access key (uplink share --register --readonly=false --not-after=none sj://bucket):') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Storj Gateway secret key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          linksharing_access_key = prompt.ask('Storj Linksharing access key (uplink share --register --public --readonly=true --disallow-lists --not-after=none sj://bucket):') do |q|
-            q.required true
-            q.modify :strip
-          end
-          env['S3_ALIAS_HOST'] = "link.storjshare.io/raw/#{linksharing_access_key}/#{env['S3_BUCKET']}"
-
-        when 'Google Cloud Storage'
-          env['S3_ENABLED']             = 'true'
-          env['S3_PROTOCOL']            = 'https'
-          env['S3_HOSTNAME']            = 'storage.googleapis.com'
-          env['S3_ENDPOINT']            = 'https://storage.googleapis.com'
-          env['S3_MULTIPART_THRESHOLD'] = 50.megabytes
-
-          env['S3_BUCKET'] = prompt.ask('GCS bucket name:') do |q|
-            q.required true
-            q.default "files.#{env['LOCAL_DOMAIN']}"
-            q.modify :strip
-          end
-
-          env['S3_REGION'] = prompt.ask('GCS region:') do |q|
-            q.required true
-            q.default 'us-west1'
-            q.modify :strip
-          end
-
-          env['AWS_ACCESS_KEY_ID'] = prompt.ask('GCS access key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-
-          env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('GCS secret key:') do |q|
-            q.required true
-            q.modify :strip
-          end
-        end
-
-        if prompt.yes?('Do you want to access the uploaded files from your own domain?')
-          env['S3_ALIAS_HOST'] = prompt.ask('Domain for uploaded files:') do |q|
-            q.required true
-            q.default "files.#{env['LOCAL_DOMAIN']}"
-            q.modify :strip
-          end
-        end
-      end
-
+      configure_file_hosting
       prompt.say "\n"
 
       loop do
@@ -628,6 +438,226 @@ namespace :mastodon do
       password: env['REDIS_PASSWORD'],
       driver: :hiredis,
     }
+  end
+
+  def configure_file_hosting
+    return unless prompt.yes?('Do you want to store uploaded files on the cloud?', default: false)
+
+    case prompt.select('Provider', ['DigitalOcean Spaces', 'Amazon S3', 'Wasabi', 'Minio', 'Google Cloud Storage', 'Storj DCS'])
+    when 'DigitalOcean Spaces'
+      configure_file_digital_ocean_spaces
+    when 'Amazon S3'
+      configure_file_amazon_s3
+    when 'Wasabi'
+      configure_file_wasabi
+    when 'Minio'
+      configure_file_minio
+    when 'Storj DCS'
+      configure_file_storj_dcs
+    when 'Google Cloud Storage'
+      configure_file_google_cloud_storage
+    end
+
+    configure_file_asset_domain
+  end
+
+  def configure_file_digital_ocean_spaces
+    env['S3_ENABLED'] = 'true'
+    env['S3_PROTOCOL'] = 'https'
+
+    env['S3_BUCKET'] = prompt.ask('Space name:') do |q|
+      q.required true
+      q.default "files.#{env['LOCAL_DOMAIN']}"
+      q.modify :strip
+    end
+
+    env['S3_REGION'] = prompt.ask('Space region:') do |q|
+      q.required true
+      q.default 'nyc3'
+      q.modify :strip
+    end
+
+    env['S3_HOSTNAME'] = prompt.ask('Space endpoint:') do |q|
+      q.required true
+      q.default 'nyc3.digitaloceanspaces.com'
+      q.modify :strip
+    end
+
+    env['S3_ENDPOINT'] = "https://#{env['S3_HOSTNAME']}"
+
+    env['AWS_ACCESS_KEY_ID'] = prompt.ask('Space access key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Space secret key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+  end
+
+  def configure_file_amazon_s3
+    env['S3_ENABLED']  = 'true'
+    env['S3_PROTOCOL'] = 'https'
+
+    env['S3_BUCKET'] = prompt.ask('S3 bucket name:') do |q|
+      q.required true
+      q.default "files.#{env['LOCAL_DOMAIN']}"
+      q.modify :strip
+    end
+
+    env['S3_REGION'] = prompt.ask('S3 region:') do |q|
+      q.required true
+      q.default 'us-east-1'
+      q.modify :strip
+    end
+
+    env['S3_HOSTNAME'] = prompt.ask('S3 hostname:') do |q|
+      q.required true
+      q.default 's3.us-east-1.amazonaws.com'
+      q.modify :strip
+    end
+
+    env['AWS_ACCESS_KEY_ID'] = prompt.ask('S3 access key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('S3 secret key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+  end
+
+  def configure_file_wasabi
+    env['S3_ENABLED']  = 'true'
+    env['S3_PROTOCOL'] = 'https'
+    env['S3_REGION']   = 'us-east-1'
+    env['S3_HOSTNAME'] = 's3.wasabisys.com'
+    env['S3_ENDPOINT'] = 'https://s3.wasabisys.com/'
+
+    env['S3_BUCKET'] = prompt.ask('Wasabi bucket name:') do |q|
+      q.required true
+      q.default "files.#{env['LOCAL_DOMAIN']}"
+      q.modify :strip
+    end
+
+    env['AWS_ACCESS_KEY_ID'] = prompt.ask('Wasabi access key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Wasabi secret key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+  end
+
+  def configure_file_minio
+    env['S3_ENABLED']  = 'true'
+    env['S3_PROTOCOL'] = 'https'
+    env['S3_REGION']   = 'us-east-1'
+
+    env['S3_ENDPOINT'] = prompt.ask('Minio endpoint URL:') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    env['S3_PROTOCOL'] = env['S3_ENDPOINT'].start_with?('https') ? 'https' : 'http'
+    env['S3_HOSTNAME'] = env['S3_ENDPOINT'].gsub(%r{\Ahttps?://}, '')
+
+    env['S3_BUCKET'] = prompt.ask('Minio bucket name:') do |q|
+      q.required true
+      q.default "files.#{env['LOCAL_DOMAIN']}"
+      q.modify :strip
+    end
+
+    env['AWS_ACCESS_KEY_ID'] = prompt.ask('Minio access key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Minio secret key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+  end
+
+  def configure_file_storj_dcs
+    env['S3_ENABLED']  = 'true'
+    env['S3_PROTOCOL'] = 'https'
+    env['S3_REGION']   = 'global'
+
+    env['S3_ENDPOINT'] = prompt.ask('Storj DCS endpoint URL:') do |q|
+      q.required true
+      q.default 'https://gateway.storjshare.io'
+      q.modify :strip
+    end
+
+    env['S3_PROTOCOL'] = env['S3_ENDPOINT'].start_with?('https') ? 'https' : 'http'
+    env['S3_HOSTNAME'] = env['S3_ENDPOINT'].gsub(%r{\Ahttps?://}, '')
+
+    env['S3_BUCKET'] = prompt.ask('Storj DCS bucket name:') do |q|
+      q.required true
+      q.default "files.#{env['LOCAL_DOMAIN']}"
+      q.modify :strip
+    end
+
+    env['AWS_ACCESS_KEY_ID'] = prompt.ask('Storj Gateway access key (uplink share --register --readonly=false --not-after=none sj://bucket):') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('Storj Gateway secret key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    linksharing_access_key = prompt.ask('Storj Linksharing access key (uplink share --register --public --readonly=true --disallow-lists --not-after=none sj://bucket):') do |q|
+      q.required true
+      q.modify :strip
+    end
+    env['S3_ALIAS_HOST'] = "link.storjshare.io/raw/#{linksharing_access_key}/#{env['S3_BUCKET']}"
+  end
+
+  def configure_file_google_cloud_storage
+    env['S3_ENABLED']             = 'true'
+    env['S3_PROTOCOL']            = 'https'
+    env['S3_HOSTNAME']            = 'storage.googleapis.com'
+    env['S3_ENDPOINT']            = 'https://storage.googleapis.com'
+    env['S3_MULTIPART_THRESHOLD'] = 50.megabytes
+
+    env['S3_BUCKET'] = prompt.ask('GCS bucket name:') do |q|
+      q.required true
+      q.default "files.#{env['LOCAL_DOMAIN']}"
+      q.modify :strip
+    end
+
+    env['S3_REGION'] = prompt.ask('GCS region:') do |q|
+      q.required true
+      q.default 'us-west1'
+      q.modify :strip
+    end
+
+    env['AWS_ACCESS_KEY_ID'] = prompt.ask('GCS access key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+
+    env['AWS_SECRET_ACCESS_KEY'] = prompt.ask('GCS secret key:') do |q|
+      q.required true
+      q.modify :strip
+    end
+  end
+
+  def configure_file_asset_domain
+    return unless prompt.yes?('Do you want to access the uploaded files from your own domain?')
+
+    env['S3_ALIAS_HOST'] = prompt.ask('Domain for uploaded files:') do |q|
+      q.required true
+      q.default "files.#{env['LOCAL_DOMAIN']}"
+      q.modify :strip
+    end
   end
 
   def generate_header(include_warning)
