@@ -8,8 +8,6 @@ namespace :mastodon do
     reset_previous_env!
 
     begin
-      errors = false
-
       prompt.say('Your instance is identified by its domain name. Changing it afterward will break things.')
       env['LOCAL_DOMAIN'] = prompt.ask('Domain name:') do |q|
         q.required true
@@ -100,7 +98,7 @@ namespace :mastodon do
           unless prompt.yes?('Try again?')
             return prompt.warn 'Nothing saved. Bye!' unless prompt.yes?('Continue anyway?')
 
-            errors = true
+            errors << :database_configuration
             break
           end
         end
@@ -146,7 +144,7 @@ namespace :mastodon do
           unless prompt.yes?('Try again?')
             return prompt.warn 'Nothing saved. Bye!' unless prompt.yes?('Continue anyway?')
 
-            errors = true
+            errors << :redis_configuration
             break
           end
         end
@@ -441,7 +439,7 @@ namespace :mastodon do
           unless prompt.yes?('Try again?')
             return prompt.warn 'Nothing saved. Bye!' unless prompt.yes?('Continue anyway?')
 
-            errors = true
+            errors << :email
             break
           end
         end
@@ -489,7 +487,7 @@ namespace :mastodon do
             prompt.ok 'Done!'
           else
             prompt.error 'That failed! Perhaps your configuration is not right'
-            errors = true
+            errors << :database_schema
           end
         end
 
@@ -506,13 +504,13 @@ namespace :mastodon do
               prompt.say 'Done!'
             else
               prompt.error 'That failed! Maybe you need swap space?'
-              errors = true
+              errors << :assets
             end
           end
         end
 
         prompt.say "\n"
-        if errors
+        if errors.any?
           prompt.warn 'Your Mastodon server is set up, but there were some errors along the way, you may have to fix them.'
         else
           prompt.ok 'All done! You can now power on the Mastodon server 🐘'
@@ -586,6 +584,10 @@ namespace :mastodon do
     %w(REDIS_URL CACHE_REDIS_URL SIDEKIQ_REDIS_URL).each do |value|
       ENV.delete(value)
     end
+  end
+
+  def errors
+    @errors ||= []
   end
 
   def generate_header(include_warning)
