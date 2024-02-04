@@ -8,14 +8,7 @@ namespace :mastodon do
     reset_previous_env!
 
     begin
-      prompt.say('Your instance is identified by its domain name. Changing it afterward will break things.')
-      env['LOCAL_DOMAIN'] = prompt.ask('Domain name:') do |q|
-        q.required true
-        q.modify :strip
-        q.validate(/\A[a-z0-9.-]+\z/i)
-        q.messages[:valid?] = 'Invalid domain. If you intend to use unicode characters, enter punycode here'
-      end
-
+      configure_instance_domain
       prompt.say "\n"
 
       prompt.say('Single user mode disables registrations and redirects the landing page to your public profile.')
@@ -588,6 +581,16 @@ namespace :mastodon do
 
   def errors
     @errors ||= []
+  end
+
+  def configure_instance_domain
+    prompt.say('Your instance is identified by its domain name. Changing it afterward will break things.')
+    env['LOCAL_DOMAIN'] = prompt.ask('Domain name:') do |q|
+      q.required true
+      q.modify :strip
+      q.validate(/\A[a-z0-9.-]+\z/i)
+      q.messages[:valid?] = 'Invalid domain. If you intend to use unicode characters, enter punycode here'
+    end
   end
 
   def generate_header(include_warning)
