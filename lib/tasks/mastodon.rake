@@ -26,11 +26,7 @@ namespace :mastodon do
         env[key] = SecureRandom.alphanumeric(32)
       end
 
-      vapid_key = Webpush.generate_key
-
-      env['VAPID_PRIVATE_KEY'] = vapid_key.private_key
-      env['VAPID_PUBLIC_KEY']  = vapid_key.public_key
-
+      configure_webpush_key
       prompt.say "\n"
 
       using_docker        = prompt.yes?('Are you using Docker to run Mastodon?')
@@ -595,6 +591,13 @@ namespace :mastodon do
   def configure_single_user_mode
     prompt.say('Single user mode disables registrations and redirects the landing page to your public profile.')
     env['SINGLE_USER_MODE'] = prompt.yes?('Do you want to enable single user mode?', default: false)
+  end
+
+  def configure_webpush_key
+    Webpush.generate_key.tap do |vapid_key|
+      env['VAPID_PRIVATE_KEY'] = vapid_key.private_key
+      env['VAPID_PUBLIC_KEY']  = vapid_key.public_key
+    end
   end
 
   def generate_header(include_warning)
