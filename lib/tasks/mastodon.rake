@@ -13,9 +13,7 @@ namespace :mastodon do
 
       configure_single_user_mode
 
-      %w(SECRET_KEY_BASE OTP_SECRET).each do |key|
-        env[key] = SecureRandom.hex(64)
-      end
+      configure_env_secrets
 
       # Required by ActiveRecord encryption feature
       %w(
@@ -597,6 +595,12 @@ namespace :mastodon do
     Webpush.generate_key.tap do |vapid_key|
       env['VAPID_PRIVATE_KEY'] = vapid_key.private_key
       env['VAPID_PUBLIC_KEY']  = vapid_key.public_key
+    end
+  end
+
+  def configure_env_secrets
+    %w(SECRET_KEY_BASE OTP_SECRET).each do |key|
+      env[key] = SecureRandom.hex(64)
     end
   end
 
