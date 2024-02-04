@@ -33,50 +33,7 @@ namespace :mastodon do
       configure_database_connection
       prompt.say "\n"
 
-      loop do
-        env['REDIS_HOST'] = prompt.ask('Redis host:') do |q|
-          q.required true
-          q.default using_docker ? 'redis' : 'localhost'
-          q.modify :strip
-        end
-
-        env['REDIS_PORT'] = prompt.ask('Redis port:') do |q|
-          q.required true
-          q.default 6379
-          q.convert :int
-        end
-
-        env['REDIS_PASSWORD'] = prompt.ask('Redis password:') do |q|
-          q.required false
-          q.default nil
-          q.modify :strip
-        end
-
-        redis_options = {
-          host: env['REDIS_HOST'],
-          port: env['REDIS_PORT'],
-          password: env['REDIS_PASSWORD'],
-          driver: :hiredis,
-        }
-
-        begin
-          redis = Redis.new(redis_options)
-          redis.ping
-          prompt.ok 'Redis configuration works! 🎆'
-          break
-        rescue => e
-          prompt.error 'Redis connection could not be established with this configuration, try again.'
-          prompt.error e.message
-
-          unless prompt.yes?('Try again?')
-            return prompt.warn 'Nothing saved. Bye!' unless prompt.yes?('Continue anyway?')
-
-            errors << :redis_configuration
-            break
-          end
-        end
-      end
-
+      configure_redis_connection
       prompt.say "\n"
 
       if prompt.yes?('Do you want to store uploaded files on the cloud?', default: false)
@@ -616,6 +573,61 @@ namespace :mastodon do
         end
       end
     end
+  end
+
+  def configure_redis_connection
+    loop do
+      env['REDIS_HOST'] = prompt.ask('Redis host:') do |q|
+        q.required true
+        q.default using_docker ? 'redis' : 'localhost'
+        q.modify :strip
+      end
+
+      env['REDIS_PORT'] = prompt.ask('Redis port:') do |q|
+        q.required true
+        q.default 6379
+        q.convert :int
+      end
+
+      env['REDIS_PASSWORD'] = prompt.ask('Redis password:') do |q|
+        q.required false
+        q.default nil
+        q.modify :strip
+      end
+
+      if redis_connection_works
+        prompt.ok 'Redis configuration works! 🎆'
+        break
+      else
+        unless prompt.yes?('Try again?')
+          return prompt.warn 'Nothing saved. Bye!' unless prompt.yes?('Continue anyway?')
+
+          errors << :redis_configuration
+          break
+        end
+      end
+    end
+  end
+
+  def redis_connection_works
+    begin
+      redis = Redis.new(redis_options)
+      redis.ping
+      true
+    rescue => e
+      prompt.error 'Redis connection could not be established with this configuration, try again.'
+      prompt.error e.message
+      false
+    end
+  end
+
+  def redis_options
+    {
+      host: env['REDIS_HOST'],
+      port: env['REDIS_PORT'],
+      password: env['REDIS_PASSWORD'],
+      driver: :hiredis,
+    }
   end
 
   def generate_header(include_warning)
