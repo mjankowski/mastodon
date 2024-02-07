@@ -27,10 +27,6 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Max: 27
 
-# Configuration parameters: CountAsOne.
-RSpec/ExampleLength:
-  Max: 18
-
 RSpec/MultipleExpectations:
   Max: 7
 
