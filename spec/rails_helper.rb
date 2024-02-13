@@ -132,6 +132,10 @@ RSpec.configure do |config|
     stub_reset_connection_pools
   end
 
+  config.before :each, type: :request do
+    host! ENV.fetch('LOCAL_DOMAIN')
+  end
+
   config.before do |example|
     allow(Resolv::DNS).to receive(:open).and_raise('Real DNS queries are disabled, stub Resolv::DNS as needed') unless example.metadata[:type] == :system
   end
