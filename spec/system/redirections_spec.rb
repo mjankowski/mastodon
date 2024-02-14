@@ -11,7 +11,7 @@ describe 'redirection confirmations' do
       visit "/@#{account.pretty_acct}"
 
       # It explains about the redirect
-      expect(page).to have_content(I18n.t('redirects.title', instance: 'cb6e6126.ngrok.io'))
+      expect(page).to have_content(I18n.t('redirects.title', instance: 'mastodon.example'))
 
       # It features an appropriate link
       expect(page).to have_link(account.url, href: account.url)
@@ -23,7 +23,7 @@ describe 'redirection confirmations' do
       visit "/@#{account.pretty_acct}/#{status.id}"
 
       # It explains about the redirect
-      expect(page).to have_content(I18n.t('redirects.title', instance: 'cb6e6126.ngrok.io'))
+      expect(page).to have_content(I18n.t('redirects.title', instance: 'mastodon.example'))
 
       # It features an appropriate link
       expect(page).to have_link(status.url, href: status.url)
