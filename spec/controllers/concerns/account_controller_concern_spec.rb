@@ -61,8 +61,8 @@ describe AccountControllerConcern do
 
     def expected_link_headers
       [
-        '<http://test.host/.well-known/webfinger?resource=acct%3Ausername%40cb6e6126.ngrok.io>; rel="lrdd"; type="application/jrd+json"',
-        '<https://cb6e6126.ngrok.io/users/username>; rel="alternate"; type="application/activity+json"',
+        '<http://test.host/.well-known/webfinger?resource=acct%3Ausername%40mastodon.example>; rel="lrdd"; type="application/jrd+json"',
+        '<https://mastodon.example/users/username>; rel="alternate"; type="application/activity+json"',
       ].join(', ')
     end
   end

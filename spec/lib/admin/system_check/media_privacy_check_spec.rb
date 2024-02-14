@@ -12,7 +12,7 @@ describe Admin::SystemCheck::MediaPrivacyCheck do
   describe 'pass?' do
     context 'when the media cannot be listed' do
       before do
-        stub_request(:get, /ngrok.io/).to_return(status: 200, body: 'a list of no files')
+        stub_request(:get, /mastodon.example/).to_return(status: 200, body: 'a list of no files')
       end
 
       it 'returns true' do

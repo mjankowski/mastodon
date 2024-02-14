@@ -22,19 +22,19 @@ describe 'Content-Security-Policy' do
   def expected_csp_headers
     <<~CSP.split("\n").map(&:strip)
       base-uri 'none'
-      child-src 'self' blob: https://cb6e6126.ngrok.io
-      connect-src 'self' data: blob: https://cb6e6126.ngrok.io #{Rails.configuration.x.streaming_api_base_url}
+      child-src 'self' blob: https://mastodon.example
+      connect-src 'self' data: blob: https://mastodon.example #{Rails.configuration.x.streaming_api_base_url}
       default-src 'none'
-      font-src 'self' https://cb6e6126.ngrok.io
+      font-src 'self' https://mastodon.example
       form-action 'self'
       frame-ancestors 'none'
       frame-src 'self' https:
-      img-src 'self' data: blob: https://cb6e6126.ngrok.io
-      manifest-src 'self' https://cb6e6126.ngrok.io
-      media-src 'self' data: https://cb6e6126.ngrok.io
-      script-src 'self' https://cb6e6126.ngrok.io 'wasm-unsafe-eval'
-      style-src 'self' https://cb6e6126.ngrok.io 'nonce-ZbA+JmE7+bK8F5qvADZHuQ=='
-      worker-src 'self' blob: https://cb6e6126.ngrok.io
+      img-src 'self' data: blob: https://mastodon.example
+      manifest-src 'self' https://mastodon.example
+      media-src 'self' data: https://mastodon.example
+      script-src 'self' https://mastodon.example 'wasm-unsafe-eval'
+      style-src 'self' https://mastodon.example 'nonce-ZbA+JmE7+bK8F5qvADZHuQ=='
+      worker-src 'self' blob: https://mastodon.example
     CSP
   end
 end

@@ -13,8 +13,8 @@ RSpec.describe NotificationMailer do
       expect(mail)
         .to be_present
         .and(have_header('To', "#{receiver.account.username} <#{receiver.email}>"))
-        .and(have_header('List-ID', "<#{type}.alice.cb6e6126.ngrok.io>"))
-        .and(have_header('List-Unsubscribe', %r{<https://cb6e6126.ngrok.io/unsubscribe\?token=.+>}))
+        .and(have_header('List-ID', "<#{type}.alice.mastodon.example>"))
+        .and(have_header('List-Unsubscribe', %r{<https://mastodon.example/unsubscribe\?token=.+>}))
         .and(have_header('List-Unsubscribe', /&type=#{type}/))
         .and(have_header('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click'))
         .and(deliver_to("#{receiver.account.username} <#{receiver.email}>"))
@@ -24,7 +24,7 @@ RSpec.describe NotificationMailer do
 
   shared_examples 'thread headers' do
     it 'renders the email with conversation thread headers' do
-      conversation_header_regex = /<conversation-\d+.\d\d\d\d-\d\d-\d\d@cb6e6126.ngrok.io>/
+      conversation_header_regex = /<conversation-\d+.\d\d\d\d-\d\d-\d\d@mastodon.example>/
       expect(mail)
         .to be_present
         .and(have_header('In-Reply-To', conversation_header_regex))
