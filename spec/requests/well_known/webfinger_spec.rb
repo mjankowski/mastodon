@@ -26,8 +26,8 @@ describe 'The /.well-known/webfinger endpoint' do
 
       expect(body_as_json)
         .to include(
-          subject: eq('acct:alice@cb6e6126.ngrok.io'),
-          aliases: include('https://cb6e6126.ngrok.io/@alice', 'https://cb6e6126.ngrok.io/users/alice')
+          subject: eq('acct:alice@mastodon.example'),
+          aliases: include('https://mastodon.example/@alice', 'https://mastodon.example/users/alice')
         )
     end
   end
@@ -130,8 +130,8 @@ describe 'The /.well-known/webfinger endpoint' do
 
     it 'returns links for the internal account' do
       json = body_as_json
-      expect(json[:subject]).to eq 'acct:mastodon.internal@cb6e6126.ngrok.io'
-      expect(json[:aliases]).to eq ['https://cb6e6126.ngrok.io/actor']
+      expect(json[:subject]).to eq 'acct:mastodon.internal@mastodon.example'
+      expect(json[:aliases]).to eq ['https://mastodon.example/actor']
     end
   end
 
