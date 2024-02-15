@@ -31,9 +31,6 @@ Metrics/PerceivedComplexity:
 RSpec/ExampleLength:
   Max: 18
 
-RSpec/MultipleExpectations:
-  Max: 7
-
 # Configuration parameters: AllowSubject.
 RSpec/MultipleMemoizedHelpers:
   Max: 17
