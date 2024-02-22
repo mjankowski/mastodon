@@ -37,8 +37,8 @@ RSpec.describe AdminMailer do
         .to be_present
         .and(deliver_to(recipient.user_email))
         .and(deliver_from('notifications@localhost'))
-        .and(have_subject("#{appeal.account.username} is appealing a moderation decision on cb6e6126.ngrok.io"))
-        .and(have_body_text("#{appeal.account.username} is appealing a moderation decision by #{appeal.strike.account.username}"))
+        .and(have_subject("#{appeal.account_username} is appealing a moderation decision on cb6e6126.ngrok.io"))
+        .and(have_body_text("#{appeal.account_username} is appealing a moderation decision by #{appeal.strike.account.username}"))
     end
   end
 

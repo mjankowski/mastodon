@@ -25,7 +25,7 @@ class AdminMailer < ApplicationMailer
     @appeal = appeal
 
     locale_for_account(@me) do
-      mail subject: default_i18n_subject(instance: @instance, username: @appeal.account.username)
+      mail subject: default_i18n_subject(instance: @instance, username: @appeal.account_username)
     end
   end
 
