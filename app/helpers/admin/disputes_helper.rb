@@ -6,7 +6,7 @@ module Admin
       t(key_for_action(appeal),
         scope: 'admin.strikes.actions',
         name: content_tag(:span, appeal.strike.account.username, class: 'username'),
-        target: content_tag(:span, appeal.account.username, class: 'target'))
+        target: content_tag(:span, appeal.account_username, class: 'target'))
         .html_safe
     end
 
