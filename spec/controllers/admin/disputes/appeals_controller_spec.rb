@@ -25,7 +25,7 @@ RSpec.describe Admin::Disputes::AppealsController do
 
       expect(response).to have_http_status(:success)
       expect(response.body).to include("<span class=\"username\">#{strike.account.username}</span>")
-      expect(response.body).to include("<span class=\"target\">#{appeal.account.username}</span>")
+      expect(response.body).to include("<span class=\"target\">#{appeal.account_username}</span>")
     end
   end
 

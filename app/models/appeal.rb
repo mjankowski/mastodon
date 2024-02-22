@@ -37,6 +37,8 @@ class Appeal < ApplicationRecord
   scope :rejected, -> { where.not(rejected_at: nil) }
   scope :pending, -> { where(approved_at: nil, rejected_at: nil) }
 
+  delegate :username, to: :account, prefix: true
+
   def pending?
     !approved? && !rejected?
   end
