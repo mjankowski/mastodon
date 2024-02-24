@@ -3,8 +3,6 @@
 class Trends::Statuses < Trends::Base
   PREFIX = 'trending_statuses'
 
-  BATCH_SIZE = 100
-
   self.default_options = {
     threshold: 5,
     review_threshold: 3,
@@ -60,20 +58,13 @@ class Trends::Statuses < Trends::Base
   end
 
   def refresh(at_time = Time.now.utc)
-    # First, recalculate scores for statuses that were trending previously. We split the queries
-    # to avoid having to load all of the IDs into Ruby just to send them back into Postgres
-    Status.where(id: StatusTrend.select(:status_id)).includes(:status_stat, :account).reorder(nil).find_in_batches(batch_size: BATCH_SIZE) do |statuses|
-      calculate_scores(statuses, at_time)
-    end
+    # Recalculate scores for statuses that were trending previously...
+    recalculate_in_batches previously_trending_statuses, at_time
 
-    # Then, calculate scores for statuses that were used today. There are potentially some
-    # duplicate items here that we might process one more time, but that should be fine
-    Status.where(id: recently_used_ids(at_time)).includes(:status_stat, :account).reorder(nil).find_in_batches(batch_size: BATCH_SIZE) do |statuses|
-      calculate_scores(statuses, at_time)
-    end
+    # Recalculate scores for statuses that were used today (may include duplicates, that's acceptable)...
+    recalculate_in_batches recently_used_statuses(at_time), at_time
 
-    # Now that all trends have up-to-date scores, and all the ones below the threshold have
-    # been removed, we can recalculate their positions
+    # Trends have up-to-date scores, items below threshold are removed, recalculate positions...
     StatusTrend.recalculate_ordered_rank
   end
 
@@ -104,6 +95,18 @@ class Trends::Statuses < Trends::Base
   end
 
   private
+
+  def previously_trending_statuses
+    Status
+      .where(id: StatusTrend.select(:status_id))
+      .includes(:status_stat, :account)
+  end
+
+  def recently_used_statuses(at_time)
+    Status
+      .where(id: recently_used_ids(at_time))
+      .includes(:status_stat, :account)
+  end
 
   def eligible?(status)
     status.public_visibility? && status.account.discoverable? && !status.account.silenced? && !status.account.sensitized? && status.spoiler_text.blank? && !status.sensitive? && !status.reply? && valid_locale?(status.language)
