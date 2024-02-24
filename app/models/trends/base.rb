@@ -4,6 +4,8 @@ class Trends::Base
   include Redisable
   include LanguagesHelper
 
+  BATCH_SIZE = 100
+
   class_attribute :default_options
 
   attr_reader :options
@@ -86,6 +88,12 @@ class Trends::Base
   end
 
   private
+
+  def recalculate_in_batches(scope, at_time)
+    scope.reorder(nil).find_in_batches(batch_size: BATCH_SIZE) do |records|
+      calculate_scores(records, at_time)
+    end
+  end
 
   def used_key(at_time)
     "#{key_prefix}:used:#{at_time.beginning_of_day.to_i}"

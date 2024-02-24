@@ -3,8 +3,6 @@
 class Trends::Links < Trends::Base
   PREFIX = 'trending_links'
 
-  BATCH_SIZE = 100
-
   self.default_options = {
     threshold: 5,
     review_threshold: 3,
@@ -67,20 +65,13 @@ class Trends::Links < Trends::Base
   end
 
   def refresh(at_time = Time.now.utc)
-    # First, recalculate scores for links that were trending previously. We split the queries
-    # to avoid having to load all of the IDs into Ruby just to send them back into Postgres
-    PreviewCard.where(id: PreviewCardTrend.select(:preview_card_id)).find_in_batches(batch_size: BATCH_SIZE) do |preview_cards|
-      calculate_scores(preview_cards, at_time)
-    end
+    # Recalculate scores for links that were trending previously...
+    recalculate_in_batches previously_trending_preview_cards, at_time
 
-    # Then, calculate scores for links that were used today. There are potentially some
-    # duplicate items here that we might process one more time, but that should be fine
-    PreviewCard.where(id: recently_used_ids(at_time)).find_in_batches(batch_size: BATCH_SIZE) do |preview_cards|
-      calculate_scores(preview_cards, at_time)
-    end
+    # Recalculate scores for links that were used today (may include duplicates, that's acceptable)...
+    recalculate_in_batches recently_used_preview_cards(at_time), at_time
 
-    # Now that all trends have up-to-date scores, and all the ones below the threshold have
-    # been removed, we can recalculate their positions
+    # Trends have up-to-date scores, items below threshold are removed, recalculate positions...
     PreviewCardTrend.recalculate_ordered_rank
   end
 
@@ -116,6 +107,16 @@ class Trends::Links < Trends::Base
   end
 
   private
+
+  def previously_trending_preview_cards
+    PreviewCard
+      .where(id: PreviewCardTrend.select(:preview_card_id))
+  end
+
+  def recently_used_preview_cards(at_time)
+    PreviewCard
+      .where(id: recently_used_ids(at_time))
+  end
 
   def calculate_scores(preview_cards, at_time)
     items = preview_cards.map do |preview_card|
