@@ -16,4 +16,4 @@
         - else
           = table_link_to 'toggle-on', t('admin.announcements.publish'), publish_admin_announcement_path(announcement), method: :post, data: { confirm: t('admin.accounts.are_you_sure') }
 
-      = table_link_to 'trash', t('generic.delete'), admin_announcement_path(announcement), method: :delete, data: { confirm: t('admin.accounts.are_you_sure') } if can?(:destroy, announcement)
+      = table_link_to 'trash', t('generic.delete'), admin_announcement_path(announcement), data: { turbo_method: :delete, confirm: t('admin.accounts.are_you_sure') } if can?(:destroy, announcement)
