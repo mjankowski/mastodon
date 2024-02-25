@@ -340,6 +340,10 @@ GEM
     inline_svg (1.9.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
+    importmap-rails (2.0.1)
+      actionpack (>= 6.0.0)
+      activesupport (>= 6.0.0)
+      railties (>= 6.0.0)
     io-console (0.7.2)
     irb (1.13.1)
       rdoc (>= 4.0.0)
@@ -845,6 +849,10 @@ GEM
       tty-screen (~> 0.8)
       wisper (~> 2.0)
     tty-screen (0.8.2)
+    turbo-rails (2.0.4)
+      actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
+      railties (>= 6.0.0)
     twitter-text (3.1.0)
       idn-ruby
       unf (~> 0.1.0)
@@ -949,6 +957,7 @@ DEPENDENCIES
   i18n
   i18n-tasks (~> 1.0)
   idn-ruby
+  importmap-rails
   inline_svg
   irb (~> 1.8)
   json-ld
@@ -1041,6 +1050,7 @@ DEPENDENCIES
   test-prof
   thor (~> 1.2)
   tty-prompt (~> 0.23)
+  turbo-rails
   twitter-text (~> 3.1.0)
   tzinfo-data (~> 1.2023)
   webauthn (~> 3.0)
