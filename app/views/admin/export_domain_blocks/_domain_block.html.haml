@@ -1,8 +1,8 @@
 - existing_relationships ||= false
 
 .batch-table__row{ class: [existing_relationships && 'batch-table__row--attention'] }
-  %label.batch-table__row__select.batch-table__row__select--aligned.batch-checkbox
-    = f.check_box :enabled, checked: !existing_relationships
+  %label.batch-table__row__select.batch-table__row__select--aligned
+    = f.check_box :enabled, checked: !existing_relationships, data: { checkbox_select_all_target: :checkbox }
   .batch-table__row__content.pending-account
     .pending-account__header
       %strong

@@ -32,10 +32,10 @@
   - Trends::PreviewCardFilter::KEYS.each do |key|
     = hidden_field_tag key, params[key] if params[key].present?
 
-  .batch-table
+  .batch-table{ data: { controller: 'checkbox-select-all' } }
     .batch-table__toolbar
-      %label.batch-table__toolbar__select.batch-checkbox-all
-        = check_box_tag :batch_checkbox_all, nil, false
+      %label.batch-table__toolbar__select
+        = check_box_tag :batch_checkbox_all, nil, false, data: { checkbox_select_all_target: :checkboxAll }
       .batch-table__toolbar__actions
         = f.button safe_join([material_symbol('check'), t('admin.trends.links.allow')]),
                    class: 'table-action-link',

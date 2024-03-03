@@ -8,10 +8,10 @@
 = form_with model: @form, url: batch_admin_ip_blocks_path do |f|
   = hidden_field_tag :page, params[:page] || 1
 
-  .batch-table
+  .batch-table{ data: { controller: 'checkbox-select-all' } }
     .batch-table__toolbar
-      %label.batch-table__toolbar__select.batch-checkbox-all
-        = check_box_tag :batch_checkbox_all, nil, false
+      %label.batch-table__toolbar__select
+        = check_box_tag :batch_checkbox_all, nil, false, data: { checkbox_select_all_target: :checkboxAll }
       .batch-table__toolbar__actions
         - if can?(:destroy, :ip_block)
           = f.button safe_join([material_symbol('close'), t('admin.ip_blocks.delete')]),
