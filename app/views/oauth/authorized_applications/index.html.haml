@@ -29,7 +29,7 @@
 
         - unless application.superapp? || current_account.unavailable?
           %div
-            = table_link_to 'times', t('doorkeeper.authorized_applications.buttons.revoke'), oauth_authorized_application_path(application), method: :delete, data: { turbo_confirm: t('doorkeeper.authorized_applications.confirmations.revoke') }
+            = table_link_to 'times', t('doorkeeper.authorized_applications.buttons.revoke'), oauth_authorized_application_path(application), data: { turbo_method: :delete, turbo_confirm: t('doorkeeper.authorized_applications.confirmations.revoke') }
 
       .announcements-list__item__permissions
         %ul.permissions-list

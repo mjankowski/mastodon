@@ -38,4 +38,4 @@
 
     %div
       = table_link_to 'pencil', t('filters.edit.title'), edit_filter_path(filter)
-      = table_link_to 'times', t('filters.index.delete'), filter_path(filter), method: :delete, data: { turbo_confirm: t('admin.accounts.are_you_sure') }
+      = table_link_to 'times', t('filters.index.delete'), filter_path(filter), data: { turbo_method: :delete, turbo_confirm: t('admin.accounts.are_you_sure') }

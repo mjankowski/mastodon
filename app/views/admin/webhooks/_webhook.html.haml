@@ -16,4 +16,4 @@
 
     %div
       = table_link_to 'pencil', t('admin.webhooks.edit'), edit_admin_webhook_path(webhook) if can?(:update, webhook)
-      = table_link_to 'trash', t('admin.webhooks.delete'), admin_webhook_path(webhook), method: :delete, data: { turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:destroy, webhook)
+      = table_link_to 'trash', t('admin.webhooks.delete'), admin_webhook_path(webhook), data: { turbo_method: :delete, turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:destroy, webhook)

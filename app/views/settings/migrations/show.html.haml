@@ -12,7 +12,7 @@
 
         %p.hint= t('migrations.cancel_explanation')
 
-        %p.hint= link_to t('migrations.cancel'), settings_migration_redirect_path, data: { method: :delete }
+        %p.hint= link_to t('migrations.cancel'), settings_migration_redirect_path, data: { turbo_method: :delete }
   - else
     %p.hint
       %span.positive-hint= t('migrations.not_redirecting')
