@@ -1,12 +1,12 @@
 - if account.avatar?
   %tr
     %th= t('admin.accounts.avatar')
-    %td= table_link_to 'trash', t('admin.accounts.remove_avatar'), remove_avatar_admin_account_path(account.id), method: :post, data: { turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:remove_avatar, account)
+    %td= table_link_to 'trash', t('admin.accounts.remove_avatar'), remove_avatar_admin_account_path(account.id), data: { turbo_method: :post, turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:remove_avatar, account)
     %td
 - if account.header?
   %tr
     %th= t('admin.accounts.header')
-    %td= table_link_to 'trash', t('admin.accounts.remove_header'), remove_header_admin_account_path(account.id), method: :post, data: { turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:remove_header, account)
+    %td= table_link_to 'trash', t('admin.accounts.remove_header'), remove_header_admin_account_path(account.id), data: { turbo_method: :post, turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:remove_header, account)
     %td
 %tr
   %th= t('admin.accounts.role')
@@ -38,7 +38,7 @@
       = t('admin.accounts.confirmed')
     - else
       = t('admin.accounts.confirming')
-  %td= table_link_to 'refresh', t('admin.accounts.resend_confirmation.send'), resend_admin_account_confirmation_path(account.id), method: :post if can?(:confirm, account.user)
+  %td= table_link_to 'refresh', t('admin.accounts.resend_confirmation.send'), resend_admin_account_confirmation_path(account.id), data: { turbo_method: :post } if can?(:confirm, account.user)
 %tr
   %th{ rowspan: can?(:reset_password, account.user) ? 2 : 1 }= t('admin.accounts.security')
   %td{ rowspan: can?(:reset_password, account.user) ? 2 : 1 }
@@ -48,11 +48,11 @@
       = t 'admin.accounts.security_measures.only_password'
   %td
     - if account.user&.two_factor_enabled? && can?(:disable_2fa, account.user)
-      = table_link_to 'unlock', t('admin.accounts.disable_two_factor_authentication'), admin_user_two_factor_authentication_path(account.user.id), method: :delete
+      = table_link_to 'unlock', t('admin.accounts.disable_two_factor_authentication'), admin_user_two_factor_authentication_path(account.user.id), data: { turbo_method: :delete }
 - if can?(:reset_password, account.user)
   %tr
     %td
-      = table_link_to 'key', t('admin.accounts.reset_password'), admin_account_reset_path(account.id), method: :create, data: { turbo_confirm: t('admin.accounts.are_you_sure') }
+      = table_link_to 'key', t('admin.accounts.reset_password'), admin_account_reset_path(account.id), data: { turbo_method: :create, turbo_confirm: t('admin.accounts.are_you_sure') }
 %tr
   %th= t('simple_form.labels.defaults.locale')
   %td= standard_locale_name(account.user_locale)

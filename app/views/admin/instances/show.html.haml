@@ -86,9 +86,9 @@
   %p= t('admin.instances.content_policies.limited_federation_mode_description_html')
 
   - if @instance.domain_allow
-    = link_to t('admin.domain_allows.undo'), admin_domain_allow_path(@instance.domain_allow), class: 'button button--destructive', data: { turbo_confirm: t('admin.accounts.are_you_sure'), method: :delete }
+    = link_to t('admin.domain_allows.undo'), admin_domain_allow_path(@instance.domain_allow), class: 'button button--destructive', data: { turbo_confirm: t('admin.accounts.are_you_sure'), turbo_method: :delete }
   - else
-    = link_to t('admin.domain_allows.add_new'), admin_domain_allows_path(domain_allow: { domain: @instance.domain }), class: 'button', method: :post
+    = link_to t('admin.domain_allows.add_new'), admin_domain_allows_path(domain_allow: { domain: @instance.domain }), class: 'button', data: { turbo_method: :post }
 - else
   %p= t('admin.instances.content_policies.description_html')
 
@@ -107,7 +107,7 @@
             %td= @instance.domain_block.policies.map { |policy| t(policy, scope: 'admin.instances.content_policies.policies') }.join(' · ')
 
     = link_to t('admin.domain_blocks.edit'), edit_admin_domain_block_path(@instance.domain_block), class: 'button'
-    = link_to t('admin.domain_blocks.undo'), admin_domain_block_path(@instance.domain_block), class: 'button', data: { turbo_confirm: t('admin.accounts.are_you_sure'), method: :delete }
+    = link_to t('admin.domain_blocks.undo'), admin_domain_block_path(@instance.domain_block), class: 'button', data: { turbo_confirm: t('admin.accounts.are_you_sure'), turbo_method: :delete }
   - else
     = link_to t('admin.domain_blocks.add_new'), new_admin_domain_block_path(_domain: @instance.domain), class: 'button'
 
@@ -137,18 +137,18 @@
       - if @instance.unavailable?
         %span.negative-hint
           = t('admin.instances.availability.failure_threshold_reached', date: l(@instance.unavailable_domain.created_at.to_date))
-          = link_to t('admin.instances.delivery.restart'), restart_delivery_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), method: :post }
+          = link_to t('admin.instances.delivery.restart'), restart_delivery_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), turbo_method: :post }
       - elsif @instance.exhausted_deliveries_days.empty?
         %span.positive-hint
           = t('admin.instances.availability.no_failures_recorded')
-          = link_to t('admin.instances.delivery.stop'), stop_delivery_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), method: :post }
+          = link_to t('admin.instances.delivery.stop'), stop_delivery_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), turbo_method: :post }
       - else
         %span.negative-hint
           = t('admin.instances.availability.failures_recorded', count: @instance.delivery_failure_tracker.days)
-          %span= link_to t('admin.instances.delivery.clear'), clear_delivery_errors_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), method: :post } unless @instance.exhausted_deliveries_days.empty?
-          %span= link_to t('admin.instances.delivery.stop'), stop_delivery_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), method: :post }
+          %span= link_to t('admin.instances.delivery.clear'), clear_delivery_errors_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), turbo_method: :post } unless @instance.exhausted_deliveries_days.empty?
+          %span= link_to t('admin.instances.delivery.stop'), stop_delivery_admin_instance_path(@instance), data: { turbo_confirm: t('admin.accounts.are_you_sure'), turbo_method: :post }
 
   - if @instance.purgeable?
     %p= t('admin.instances.purge_description_html')
 
-    = link_to t('admin.instances.purge'), admin_instance_path(@instance), data: { turbo_confirm: t('admin.instances.confirm_purge'), method: :delete }, class: 'button button--destructive'
+    = link_to t('admin.instances.purge'), admin_instance_path(@instance), data: { turbo_confirm: t('admin.instances.confirm_purge'), turbo_method: :delete }, class: 'button button--destructive'
