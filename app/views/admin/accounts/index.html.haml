@@ -55,19 +55,19 @@
         - if @accounts.any?(&:user_pending?)
           = f.button safe_join([material_symbol('check'), t('admin.accounts.approve')]),
                      class: 'table-action-link',
-                     data: { confirm: t('admin.reports.are_you_sure') },
+                     data: { turbo_confirm: t('admin.reports.are_you_sure') },
                      name: :approve,
                      type: :submit
 
           = f.button safe_join([material_symbol('close'), t('admin.accounts.reject')]),
                      class: 'table-action-link',
-                     data: { confirm: t('admin.reports.are_you_sure') },
+                     data: { turbo_confirm: t('admin.reports.are_you_sure') },
                      name: :reject,
                      type: :submit
 
         = f.button safe_join([material_symbol('lock'), t('admin.accounts.perform_full_suspension')]),
                    class: 'table-action-link',
-                   data: { confirm: t('admin.reports.are_you_sure') },
+                   data: { turbo_confirm: t('admin.reports.are_you_sure') },
                    name: :suspend,
                    type: :submit
     - if @accounts.total_count > @accounts.size

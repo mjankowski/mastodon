@@ -1,12 +1,12 @@
 - if account.avatar?
   %tr
     %th= t('admin.accounts.avatar')
-    %td= table_link_to 'trash', t('admin.accounts.remove_avatar'), remove_avatar_admin_account_path(account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') } if can?(:remove_avatar, account)
+    %td= table_link_to 'trash', t('admin.accounts.remove_avatar'), remove_avatar_admin_account_path(account.id), method: :post, data: { turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:remove_avatar, account)
     %td
 - if account.header?
   %tr
     %th= t('admin.accounts.header')
-    %td= table_link_to 'trash', t('admin.accounts.remove_header'), remove_header_admin_account_path(account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') } if can?(:remove_header, account)
+    %td= table_link_to 'trash', t('admin.accounts.remove_header'), remove_header_admin_account_path(account.id), method: :post, data: { turbo_confirm: t('admin.accounts.are_you_sure') } if can?(:remove_header, account)
     %td
 %tr
   %th= t('admin.accounts.role')
@@ -52,7 +52,7 @@
 - if can?(:reset_password, account.user)
   %tr
     %td
-      = table_link_to 'key', t('admin.accounts.reset_password'), admin_account_reset_path(account.id), method: :create, data: { confirm: t('admin.accounts.are_you_sure') }
+      = table_link_to 'key', t('admin.accounts.reset_password'), admin_account_reset_path(account.id), method: :create, data: { turbo_confirm: t('admin.accounts.are_you_sure') }
 %tr
   %th= t('simple_form.labels.defaults.locale')
   %td= standard_locale_name(account.user_locale)

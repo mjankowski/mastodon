@@ -14,7 +14,7 @@
       .batch-table__toolbar__actions
         = f.button safe_join([material_symbol('content_copy'), t('admin.domain_blocks.import')]),
                    class: 'table-action-link',
-                   data: { confirm: t('admin.reports.are_you_sure') },
+                   data: { turbo_confirm: t('admin.reports.are_you_sure') },
                    name: :save,
                    type: :submit
     .batch-table__body

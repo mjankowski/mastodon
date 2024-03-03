@@ -35,7 +35,7 @@
         - unless @statuses.empty?
           = f.button safe_join([fa_icon('flag'), t('admin.statuses.batch.report')]),
                      class: 'table-action-link',
-                     data: { confirm: t('admin.reports.are_you_sure') },
+                     data: { turbo_confirm: t('admin.reports.are_you_sure') },
                      name: :report,
                      type: :submit
     .batch-table__body

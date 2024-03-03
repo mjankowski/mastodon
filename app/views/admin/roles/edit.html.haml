@@ -2,7 +2,7 @@
   = t('admin.roles.edit', name: @role.everyone? ? t('admin.roles.everyone') : @role.name)
 
 - content_for :heading_actions do
-  = link_to t('admin.roles.delete'), admin_role_path(@role), method: :delete, data: { confirm: t('admin.accounts.are_you_sure') }, class: 'button button--destructive' if can?(:destroy, @role)
+  = link_to t('admin.roles.delete'), admin_role_path(@role), method: :delete, data: { turbo_confirm: t('admin.accounts.are_you_sure') }, class: 'button button--destructive' if can?(:destroy, @role)
 
 = simple_form_for @role, url: admin_role_path(@role) do |form|
   = render partial: 'form', object: form
