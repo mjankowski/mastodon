@@ -14,7 +14,7 @@
       .batch-table__toolbar__actions
         = f.button safe_join([material_symbol('close'), t('admin.email_domain_blocks.delete')]),
                    class: 'table-action-link',
-                   data: { confirm: t('admin.reports.are_you_sure') },
+                   data: { turbo_confirm: t('admin.reports.are_you_sure') },
                    name: :delete,
                    type: :submit
     .batch-table__body

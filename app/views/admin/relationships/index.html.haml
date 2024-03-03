@@ -32,7 +32,7 @@
       .batch-table__toolbar__actions
         = f.button safe_join([material_symbol('lock'), t('admin.accounts.perform_full_suspension')]),
                    class: 'table-action-link',
-                   data: { confirm: t('admin.reports.are_you_sure') },
+                   data: { turbo_confirm: t('admin.reports.are_you_sure') },
                    name: :suspend,
                    type: :submit
     .batch-table__body

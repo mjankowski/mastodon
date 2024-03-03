@@ -33,7 +33,7 @@
         - if params[:status].blank? && can?(:suppress, :follow_recommendation)
           = f.button safe_join([material_symbol('close'), t('admin.follow_recommendations.suppress')]),
                      class: 'table-action-link',
-                     data: { confirm: t('admin.reports.are_you_sure') },
+                     data: { turbo_confirm: t('admin.reports.are_you_sure') },
                      name: :suppress,
                      type: :submit
         - if params[:status] == 'suppressed' && can?(:unsuppress, :follow_recommendation)
