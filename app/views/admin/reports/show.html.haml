@@ -46,10 +46,10 @@
             class: 'table-action-link'
 
 = form_for(@form, url: batch_admin_account_statuses_path(@report.target_account_id, report_id: @report.id)) do |f|
-  .batch-table
+  .batch-table{ data: { controller: 'checkbox-select-all' } }
     .batch-table__toolbar
-      %label.batch-table__toolbar__select.batch-checkbox-all
-        = check_box_tag :batch_checkbox_all, nil, false
+      %label.batch-table__toolbar__select
+        = check_box_tag :batch_checkbox_all, nil, false, data: { checkbox_select_all_target: :checkboxAll }
       .batch-table__toolbar__actions
         - if !@statuses.empty? && @report.unresolved?
           = f.button safe_join([material_symbol('close'), t('admin.statuses.batch.remove_from_report')]), name: :remove_from_report, class: 'table-action-link', type: :submit

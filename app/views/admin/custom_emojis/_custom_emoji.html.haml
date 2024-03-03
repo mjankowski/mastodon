@@ -1,6 +1,6 @@
 .batch-table__row
-  %label.batch-table__row__select.batch-table__row__select--aligned.batch-checkbox
-    = f.check_box :custom_emoji_ids, { multiple: true, include_hidden: false }, custom_emoji.id
+  %label.batch-table__row__select.batch-table__row__select--aligned
+    = f.check_box :custom_emoji_ids, { multiple: true, include_hidden: false, data: { checkbox_select_all_target: :checkbox } }, custom_emoji.id
   .batch-table__row__content.batch-table__row__content--with-image
     .batch-table__row__content__image
       = custom_emoji_tag(custom_emoji)

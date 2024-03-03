@@ -19,10 +19,10 @@
   - if defined?(@resolved_records)
     %p.hint= t('admin.email_domain_blocks.resolved_dns_records_hint_html')
 
-    .batch-table
+    .batch-table{ data: { controller: 'checkbox-select-all' } }
       .batch-table__toolbar
-        %label.batch-table__toolbar__select.batch-checkbox-all
-          = check_box_tag :batch_checkbox_all, nil, false
+        %label.batch-table__toolbar__select
+          = check_box_tag :batch_checkbox_all, nil, false, data: { checkbox_select_all_target: :checkboxAll }
         .batch-table__toolbar__actions
       .batch-table__body
         - @resolved_records.each do |record|
@@ -31,6 +31,7 @@
               = f.input_field :other_domains,
                               as: :boolean,
                               checked_value: record.exchange.to_s,
+                              data: { checkbox_select_all_target: :checkbox },
                               include_hidden: false,
                               multiple: true
             .batch-table__row__content.pending-account

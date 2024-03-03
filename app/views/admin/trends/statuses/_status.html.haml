@@ -1,6 +1,6 @@
 .batch-table__row{ class: [status.requires_review? && 'batch-table__row--attention', !status.requires_review? && !status.trendable? && 'batch-table__row--muted'] }
-  %label.batch-table__row__select.batch-table__row__select--aligned.batch-checkbox
-    = f.check_box :status_ids, { multiple: true, include_hidden: false }, status.id
+  %label.batch-table__row__select.batch-table__row__select--aligned
+    = f.check_box :status_ids, { multiple: true, include_hidden: false, data: { checkbox_select_all_target: :checkbox } }, status.id
 
   .batch-table__row__content.pending-account__header
     .one-liner

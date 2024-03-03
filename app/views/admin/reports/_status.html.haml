@@ -1,6 +1,6 @@
 .batch-table__row
-  %label.batch-table__row__select.batch-checkbox
-    = f.check_box :status_ids, { multiple: true, include_hidden: false }, status.id
+  %label.batch-table__row__select
+    = f.check_box :status_ids, { multiple: true, include_hidden: false, data: { checkbox_select_all_target: :checkbox } }, status.id
   .batch-table__row__content
     .status__content><
       - if status.proper.spoiler_text.blank?

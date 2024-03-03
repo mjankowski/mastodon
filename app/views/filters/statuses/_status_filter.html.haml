@@ -1,8 +1,8 @@
 - status = status_filter.status.proper
 
 .batch-table__row
-  %label.batch-table__row__select.batch-checkbox
-    = f.check_box :status_filter_ids, { multiple: true, include_hidden: false }, status_filter.id
+  %label.batch-table__row__select
+    = f.check_box :status_filter_ids, { multiple: true, include_hidden: false, data: { checkbox_select_all_target: :checkbox } }, status_filter.id
   .batch-table__row__content
     .status__content><
       - if status.spoiler_text.blank?
