@@ -89,6 +89,7 @@ gem 'sidekiq-scheduler', '~> 5.0'
 gem 'sidekiq-unique-jobs', '~> 7.1'
 gem 'simple_form', '~> 5.2'
 gem 'simple-navigation', '~> 4.4'
+gem 'stimulus-rails'
 gem 'stoplight', '~> 4.1'
 gem 'strong_migrations', '1.8.0'
 gem 'tty-prompt', '~> 0.23', require: false
