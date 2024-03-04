@@ -5,17 +5,19 @@
 
 %hr.spacer/
 
-= form_with url: admin_trends_links_path, method: :get, class: :simple_form do |form|
+= form_with url: admin_trends_links_path, method: :get, class: :simple_form, data: { controller: 'select-submit' } do |form|
   - Trends::PreviewCardFilter::KEYS.each do |key|
     = form.hidden_field key, value: params[key] if params[key].present?
 
   .filters
-    .filter-subset.filter-subset--with-select
+    .filter-subset
       %strong= t('admin.follow_recommendations.language')
       .input.select.optional
         = form.select :locale,
                       options_for_select(@locales.map { |key| [standard_locale_name(key), key] }, params[:locale]),
-                      include_blank: true
+                      include_blank: true,
+                      data: { action: 'select-submit#submit' }
+
     .filter-subset
       %strong= t('admin.trends.trending')
       %ul
