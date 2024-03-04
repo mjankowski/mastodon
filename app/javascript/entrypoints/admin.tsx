@@ -34,15 +34,6 @@ Rails.delegate(
   },
 );
 
-Rails.delegate(
-  document,
-  '.filter-subset--with-select select',
-  'change',
-  ({ target }) => {
-    if (target instanceof HTMLSelectElement) target.form?.submit();
-  },
-);
-
 const onDomainBlockSeverityChange = (target: HTMLSelectElement) => {
   const rejectMediaDiv = document.querySelector(
     '.input.with_label.domain_block_reject_media',
