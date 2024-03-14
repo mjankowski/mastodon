@@ -49,14 +49,6 @@ Style/FetchEnvVar:
     - 'lib/tasks/repo.rake'
 
 # This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, MaxUnannotatedPlaceholdersAllowed, AllowedMethods, AllowedPatterns.
-# SupportedStyles: annotated, template, unannotated
-# AllowedMethods: redirect
-Style/FormatStringToken:
-  Exclude:
-    - 'config/initializers/devise.rb'
-
-# This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: MinBodyLength, AllowConsecutiveConditionals.
 Style/GuardClause:
   Enabled: false
