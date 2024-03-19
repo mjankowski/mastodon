@@ -292,22 +292,6 @@ module Mastodon::CLI
       say("Settings:\t#{number_to_human_size(SiteUpload.sum(:file_file_size))}")
     end
 
-    def media_attachment_storage_size
-      MediaAttachment.sum(file_and_thumbnail_size_sql)
-    end
-
-    def local_media_attachment_storage_size
-      MediaAttachment.where(account: Account.local).sum(file_and_thumbnail_size_sql)
-    end
-
-    def file_and_thumbnail_size_sql
-      Arel.sql(
-        <<~SQL.squish
-          COALESCE(file_file_size, 0) + COALESCE(thumbnail_file_size, 0)
-        SQL
-      )
-    end
-
     desc 'lookup URL', 'Lookup where media is displayed by passing a media URL'
     def lookup(url)
       path = Addressable::URI.parse(url).path
