@@ -730,6 +730,10 @@ GEM
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
+    solid_cache (0.6.0)
+      activejob (>= 7)
+      activerecord (>= 7)
+      railties (>= 7)
     stackprof (0.2.26)
     statsd-ruby (1.5.0)
     stoplight (3.0.2)
@@ -939,6 +943,7 @@ DEPENDENCIES
   simple_form (~> 5.2)
   simplecov (~> 0.22)
   simplecov-lcov (~> 0.8)
+  solid_cache
   stackprof
   stoplight (~> 3.0.1)
   strong_migrations (= 1.7.0)
