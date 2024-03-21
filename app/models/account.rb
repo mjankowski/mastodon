@@ -226,7 +226,9 @@ class Account < ApplicationRecord
   def schedule_refresh_if_stale!
     return unless last_webfingered_at.present? && last_webfingered_at <= BACKGROUND_REFRESH_INTERVAL.ago
 
-    AccountRefreshWorker.perform_in(rand(6.hours.to_i), id)
+    AccountRefreshJob
+      .set(wait: rand(6.hours.to_i))
+      .perform_later(id)
   end
 
   def refresh!

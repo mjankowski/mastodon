@@ -2,8 +2,7 @@
 
 require 'rails_helper'
 
-describe AccountRefreshWorker do
-  let(:worker) { described_class.new }
+describe AccountRefreshJob do
   let(:service) { instance_double(ResolveAccountService, call: true) }
 
   describe '#perform' do
@@ -13,7 +12,7 @@ describe AccountRefreshWorker do
 
     context 'when account does not exist' do
       it 'returns immediately without processing' do
-        worker.perform(123_123_123)
+        subject.perform(123_123_123)
 
         expect(service).to_not have_received(:call)
       end
@@ -24,7 +23,7 @@ describe AccountRefreshWorker do
         let(:account) { Fabricate(:account, last_webfingered_at: recent_webfinger_at) }
 
         it 'returns immediately without processing' do
-          worker.perform(account.id)
+          subject.perform(account.id)
 
           expect(service).to_not have_received(:call)
         end
@@ -34,7 +33,7 @@ describe AccountRefreshWorker do
         let(:account) { Fabricate(:account, last_webfingered_at: outdated_webfinger_at) }
 
         it 'schedules an account update' do
-          worker.perform(account.id)
+          subject.perform(account.id)
 
           expect(service).to have_received(:call)
         end
