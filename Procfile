@@ -1,5 +1,5 @@
 web: bin/heroku-web
-worker: bundle exec sidekiq
+worker: bin/rake solid_queue:start
 
 # For the streaming API, you need a separate app that shares Postgres and Redis:
 #
