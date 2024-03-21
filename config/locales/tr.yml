@@ -862,7 +862,7 @@ tr:
       rules_check:
         action: Sunucu kurallarını yönet
         message_html: Herhangi bir sunucu kuralı belirlemediniz.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: "%{value} kuyruk(lar)ı için herhangi bir Solid Queue süreci çalışmıyor. Lütfen Solid Queue yapılandırmanızı gözden geçirin"
       software_version_critical_check:
         action: Mevcut güncellemeleri göster

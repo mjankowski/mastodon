@@ -873,7 +873,7 @@ sr:
       rules_check:
         action: Управљање правилима сервера
         message_html: Нисте дефинисали ниједно правило сервера.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Ниједан Solid Queue процес није покренут за ред(ове) %{value}. Молимо Вас прегледајте своју Solid Queue конфигурацију
       software_version_critical_check:
         action: Погледајте доступна ажурирања

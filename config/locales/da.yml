@@ -862,7 +862,7 @@ da:
       rules_check:
         action: Håndtér serverregler
         message_html: Ingen serverregler defineret.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Ingen Solid Queue-proces kører for %{value}-kø(er). Gennemgå Solid Queue-opsætningen
       software_version_critical_check:
         action: Se tilgængelige opdateringer

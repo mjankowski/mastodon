@@ -862,7 +862,7 @@ it:
       rules_check:
         action: Gestisci regole del server
         message_html: Non hai definito alcuna regola del server.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Nessun processo di Solid Queue in esecuzione per le code di %{value}. Sei pregato di revisionare la tua configurazione di Solid Queue
       software_version_critical_check:
         action: Visualizza gli aggiornamenti disponibili

@@ -835,7 +835,7 @@ eo:
       rules_check:
         action: Administri servilajn regulojn
         message_html: Vi ne difinis iujn servilajn regulojn.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Neniu Solid Queue-procezo por la %{value} vico
       upload_check_privacy_error:
         action: Klaku ĉi tie por pliaj informoj

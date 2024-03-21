@@ -778,7 +778,7 @@ an:
       rules_check:
         action: Administrar reglas d'o servidor
         message_html: No ha definiu garra regla d'o servidor.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: No i hai garra proceso Solid Queue en execución pa la coda (u codas) de %{value}. Per favor, revise la suya configuración de Solid Queue
     tags:
       review: Estau de revisión

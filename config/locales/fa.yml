@@ -752,7 +752,7 @@ fa:
       rules_check:
         action: مدیریت قانون‌های کارساز
         message_html: هیچ قانون کارسازی تعریف نکرده‌اید.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: صف(های) %{value} فاقد هیچونه فرایند Solid Queue هستند. لطفا تنظیمات Solid Queue خود را بازبینی کنید
       software_version_critical_check:
         action: مشاهده به‌روزرسانی‌های موجود

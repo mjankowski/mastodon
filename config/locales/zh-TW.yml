@@ -850,7 +850,7 @@ zh-TW:
       rules_check:
         action: 管理伺服器規則
         message_html: 您尚未定義任何伺服器規則。
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: 沒有佇列 %{value} 的 Solid Queue 行程，請檢查您的 Solid Queue 設定組態
       software_version_critical_check:
         action: 檢視可取得的更新
