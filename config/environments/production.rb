@@ -60,7 +60,7 @@ Rails.application.configure do
   config.cache_store = :redis_cache_store, REDIS_CACHE_PARAMS
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter     = :resque
+  config.active_job.queue_adapter = :solid_queue
   # config.active_job.queue_name_prefix = "mastodon_production"
 
   config.action_mailer.perform_caching = false
