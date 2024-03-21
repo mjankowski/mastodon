@@ -723,7 +723,7 @@ el:
         view_dashboard: Προβολή Ταμπλό
         view_dashboard_description: Επιτρέπει στους χρήστες να έχουν πρόσβαση στον ταμπλό πληροφοριών και σε διάφορες μετρήσεις
         view_devops: DevOps
-        view_devops_description: Επιτρέπει στους χρήστες να έχουν πρόσβαση στα ταμπλό πληροφοριών Sidekiq και pgHero
+        view_devops_description: Επιτρέπει στους χρήστες να έχουν πρόσβαση στα ταμπλό πληροφοριών Solid Queue και pgHero
       title: Ρόλοι
     rules:
       add_new: Προσθήκη κανόνα
@@ -823,7 +823,7 @@ el:
         action: Διαχείριση κανόνων διακομιστή
         message_html: Δεν έχεις ορίσει κανέναν κανόνα διακομιστή.
       sidekiq_process_check:
-        message_html: Καμία διεργασία Sidekiq δεν εκτελείται για την ουρά %{value}. Παρακαλώ έλεγξε τη διαμόρφωση του Sidekiq
+        message_html: Καμία διεργασία Solid Queue δεν εκτελείται για την ουρά %{value}. Παρακαλώ έλεγξε τη διαμόρφωση του Solid Queue
       upload_check_privacy_error:
         action: Δες εδώ για περισσότερες πληροφορίες
         message_html: "<strong>Ο διακομιστής σας δεν έχει ρυθμιστεί σωστά. Το απόρρητο των χρηστών σας κινδυνεύει.</strong>"

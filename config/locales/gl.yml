@@ -726,7 +726,7 @@ gl:
         view_dashboard: Ver Taboleiro
         view_dashboard_description: Permite acceder ao taboleiro e varias métricas do servidor
         view_devops: DevOps
-        view_devops_description: Permite acceder aos taboleiros Sidekiq e phHero
+        view_devops_description: Permite acceder aos taboleiros Solid Queue e phHero
       title: Roles
     rules:
       add_new: Engadir regra
@@ -863,7 +863,7 @@ gl:
         action: Xestionar regras do servidor
         message_html: Non tes definidas regras para o servidor.
       sidekiq_process_check:
-        message_html: Non hai procesos Sidekiq a funcionar para a cola(s) %{value}. Revisa a túa configuración para Sidekiq
+        message_html: Non hai procesos Solid Queue a funcionar para a cola(s) %{value}. Revisa a túa configuración para Solid Queue
       software_version_critical_check:
         action: Mira as actualizacións dispoñibles
         message_html: Hai unha actualización crítica de Mastodon dispoñible, actualiza axiña.

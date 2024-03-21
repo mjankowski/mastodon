@@ -721,7 +721,7 @@ eo:
         view_dashboard: Vidi panelon
         view_dashboard_description: Permesi uzantojn aliri la kontrolpanelon kaj diversajn mezurarojn
         view_devops: Programado kaj Operaciado
-        view_devops_description: Permesi uzantojn aliri Sidekiq kaj pgHero-kontrolpanelojn
+        view_devops_description: Permesi uzantojn aliri Solid Queue kaj pgHero-kontrolpanelojn
       title: Roloj
     rules:
       add_new: Aldoni regulon
@@ -836,7 +836,7 @@ eo:
         action: Administri servilajn regulojn
         message_html: Vi ne difinis iujn servilajn regulojn.
       sidekiq_process_check:
-        message_html: Neniu Sidekiq-procezo por la %{value} vico
+        message_html: Neniu Solid Queue-procezo por la %{value} vico
       upload_check_privacy_error:
         action: Klaku ĉi tie por pliaj informoj
         message_html: "<strong>Via retservilo estas misagordita. La privateco de viaj uzantoj estas en risko.</strong>"

@@ -712,7 +712,7 @@ ja:
         view_dashboard: ダッシュボードの表示
         view_dashboard_description: ユーザーがダッシュボードやさまざまなメトリクスにアクセスできるようにします
         view_devops: 開発者
-        view_devops_description: Sidekiq と pgHero ダッシュボードにアクセスできるようにします
+        view_devops_description: Solid Queue と pgHero ダッシュボードにアクセスできるようにします
       title: ロール
     rules:
       add_new: ルールを追加
@@ -849,7 +849,7 @@ ja:
         action: サーバーのルールを管理
         message_html: サーバーのルールを定義していません。
       sidekiq_process_check:
-        message_html: "%{value}キューに対応するSidekiqプロセスがありません。Sidekiqの設定を確認してください。"
+        message_html: "%{value}キューに対応するSolid Queueプロセスがありません。Solid Queueの設定を確認してください。"
       software_version_critical_check:
         action: 利用可能な更新を見る
         message_html: 緊急のMastodonアップデートがあります。速やかに適用してください。

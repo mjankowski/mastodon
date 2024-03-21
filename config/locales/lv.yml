@@ -736,7 +736,7 @@ lv:
         view_dashboard: Skatīt Informācijas Paneli
         view_dashboard_description: Ļauj lietotājiem piekļūt informācijas panelim un dažādiem rādītājiem
         view_devops: DevOps
-        view_devops_description: Ļauj lietotājiem piekļūt Sidekiq un pgHero informācijas paneļiem
+        view_devops_description: Ļauj lietotājiem piekļūt Solid Queue un pgHero informācijas paneļiem
       title: Lomas
     rules:
       add_new: Pievienot noteikumu
@@ -871,7 +871,7 @@ lv:
         action: Pārvaldīt servera nosacījumus
         message_html: Tu neesi definējis nevienu servera nosacījumu.
       sidekiq_process_check:
-        message_html: Rindā(s) %{value} nedarbojas neviens Sidekiq process. Lūdzu, pārskati savu Sidekiq konfigurāciju
+        message_html: Rindā(s) %{value} nedarbojas neviens Solid Queue process. Lūdzu, pārskati savu Solid Queue konfigurāciju
       software_version_critical_check:
         action: Skatīt pieejamos atjauninājumus
         message_html: Ir pieejams kritisks Mastodon atjauninājums. Lūdzu, atjaunini to pēc iespējas ātrāk.

@@ -726,7 +726,7 @@ nl:
         view_dashboard: Dashboard bekijken
         view_dashboard_description: Geeft gebruikers toegang tot het dashboard en verschillende statistieken
         view_devops: DevOps
-        view_devops_description: Geeft gebruikers toegang tot de dashboards van Sidekiq en pgHero
+        view_devops_description: Geeft gebruikers toegang tot de dashboards van Solid Queue en pgHero
       title: Rollen
     rules:
       add_new: Regel toevoegen
@@ -863,7 +863,7 @@ nl:
         action: Serverregels beheren
         message_html: Je hebt voor deze server geen regels opgesteld.
       sidekiq_process_check:
-        message_html: Er draait geen Sidekiqproces voor de wachtrij(en) %{value}. Controleer je Sidekiqconfiguratie
+        message_html: Er draait geen Solid Queueproces voor de wachtrij(en) %{value}. Controleer je Solid Queueconfiguratie
       software_version_critical_check:
         action: Bekijk de beschikbare updates
         message_html: Er is een kritieke update voor Mastodon beschikbaar. Update zo snel mogelijk.

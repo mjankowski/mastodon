@@ -709,7 +709,7 @@ zh-HK:
         view_dashboard: 查看儀表板
         view_dashboard_description: 允許使用者存取儀表板及各種指標
         view_devops: DevOps
-        view_devops_description: 允許使用者存取 Sidekiq 及 pgHero 儀表板
+        view_devops_description: 允許使用者存取 Solid Queue 及 pgHero 儀表板
       title: 身份
     rules:
       add_new: 新增規則
@@ -846,7 +846,7 @@ zh-HK:
         action: 管理伺服器規則
         message_html: 您尚未定義任何伺服器規則
       sidekiq_process_check:
-        message_html: 沒有 %{value} 佇列的 Sidekiq 處理程序。請檢查 Sidekiq 設定檔案
+        message_html: 沒有 %{value} 佇列的 Solid Queue 處理程序。請檢查 Solid Queue 設定檔案
       software_version_critical_check:
         action: 查看可用的更新
         message_html: 有重要的 Mastodon 更新可用，請盡快更新。

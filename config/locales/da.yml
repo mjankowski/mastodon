@@ -726,7 +726,7 @@ da:
         view_dashboard: Vis Dashboard
         view_dashboard_description: Tillader brugere at tilgå Dashboard'et og forskellige målinger
         view_devops: DevOps
-        view_devops_description: Tillader brugere at tilgå Sidekiq- og pgHero-dashboards
+        view_devops_description: Tillader brugere at tilgå Solid Queue- og pgHero-dashboards
       title: Roller
     rules:
       add_new: Tilføj regel
@@ -863,7 +863,7 @@ da:
         action: Håndtér serverregler
         message_html: Ingen serverregler defineret.
       sidekiq_process_check:
-        message_html: Ingen Sidekiq-proces kører for %{value}-kø(er). Gennemgå Sidekiq-opsætningen
+        message_html: Ingen Solid Queue-proces kører for %{value}-kø(er). Gennemgå Solid Queue-opsætningen
       software_version_critical_check:
         action: Se tilgængelige opdateringer
         message_html: En kritisk Mastodon-opdatering er tilgængelig. Opdatér hurtigst muligt.

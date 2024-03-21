@@ -737,7 +737,7 @@ sr:
         view_dashboard: Погледај контролни панел
         view_dashboard_description: Допушта корисницима да приступе контролном панелу и разним метрикама
         view_devops: DevOps
-        view_devops_description: Допушта корисницима да приступе Sidekiq и pgHero контролним панелима
+        view_devops_description: Допушта корисницима да приступе Solid Queue и pgHero контролним панелима
       title: Улоге
     rules:
       add_new: Додај правило
@@ -874,7 +874,7 @@ sr:
         action: Управљање правилима сервера
         message_html: Нисте дефинисали ниједно правило сервера.
       sidekiq_process_check:
-        message_html: Ниједан Sidekiq процес није покренут за ред(ове) %{value}. Молимо Вас прегледајте своју Sidekiq конфигурацију
+        message_html: Ниједан Solid Queue процес није покренут за ред(ове) %{value}. Молимо Вас прегледајте своју Solid Queue конфигурацију
       software_version_critical_check:
         action: Погледајте доступна ажурирања
         message_html: Доступно је критично ажурирање за Mastodon, ажурирајте га што је пре могуће.

@@ -726,7 +726,7 @@ is:
         view_dashboard: Skoða stjórnborð
         view_dashboard_description: Leyfir notendum að skoða stjórnborðið og sjá ýmsar mælingar
         view_devops: DevOps
-        view_devops_description: Leyfir notendum að skoða Sidekiq og pgHero stjórnborð
+        view_devops_description: Leyfir notendum að skoða Solid Queue og pgHero stjórnborð
       title: Hlutverk
     rules:
       add_new: Skrá reglu
@@ -865,7 +865,7 @@ is:
         action: Sýsla með reglur netþjónsins
         message_html: Þú hefur ekki skilgreint neinar reglur fyrir netþjón.
       sidekiq_process_check:
-        message_html: Ekkert Sidekiq-ferli er í gangi fyrir %{value} biðröð/biðraðir. Endilega athugaðu Sidekiq-uppsetninguna þína
+        message_html: Ekkert Solid Queue-ferli er í gangi fyrir %{value} biðröð/biðraðir. Endilega athugaðu Solid Queue-uppsetninguna þína
       software_version_critical_check:
         action: Skoða tiltækar uppfærslur
         message_html: Áríðandi uppfærsla Mastodon er tiltæk, uppfærðu eins fljótt og auðið er.

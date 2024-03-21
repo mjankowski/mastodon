@@ -723,7 +723,7 @@ et:
         view_dashboard: Vaata töölauda
         view_dashboard_description: Lubab kasutajail pääseda ligi töölauale ja erinevale meetrikale
         view_devops: DevOps
-        view_devops_description: Lubab kasutajail ligipääsu Sidekiq ja pgHero töölaudadele
+        view_devops_description: Lubab kasutajail ligipääsu Solid Queue ja pgHero töölaudadele
       title: Rollid
     rules:
       add_new: Lisa reegel
@@ -860,7 +860,7 @@ et:
         action: Halda serveri reegleid
         message_html: Serverireegleid pole defineeritud.
       sidekiq_process_check:
-        message_html: Ühtegi Sidekiq protsessi pole %{value} järjekorra jaoks. Sidekiq seadistus vajab üle vaatamist
+        message_html: Ühtegi Solid Queue protsessi pole %{value} järjekorra jaoks. Solid Queue seadistus vajab üle vaatamist
       software_version_critical_check:
         action: Vaata saadaolevaid uuendusi
         message_html: Saadaval on Mastodoni kriitiline uuendus, uuenda nii kiiresti kui võimalik.

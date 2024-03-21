@@ -658,7 +658,7 @@ si:
         action: සේවාදායකයේ නීති කළමනාකරණය
         message_html: ඔබ සේවාදායක රීති කිසිවක් නිර්වචනය කර නැත.
       sidekiq_process_check:
-        message_html: "%{value} පෝලිම්(ය) සඳහා Sidekiq ක්‍රියාවලියක් ක්‍රියාත්මක නොවේ. කරුණාකර ඔබේ Sidekiq වින්‍යාසය සමාලෝචනය කරන්න"
+        message_html: "%{value} පෝලිම්(ය) සඳහා Solid Queue ක්‍රියාවලියක් ක්‍රියාත්මක නොවේ. කරුණාකර ඔබේ Solid Queue වින්‍යාසය සමාලෝචනය කරන්න"
       software_version_critical_check:
         action: තිබෙන යාවත්කාල බලන්න
       software_version_patch_check:

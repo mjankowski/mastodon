@@ -664,7 +664,7 @@ id:
         view_dashboard: Lihat Dasbor
         view_dashboard_description: Memungkinkan pengguna untuk mengakses dasbor dan berbagai metrik
         view_devops: DevOps
-        view_devops_description: Memungkinkan pengguna untuk mengakses dasbor Sidekiq dan pgHero
+        view_devops_description: Memungkinkan pengguna untuk mengakses dasbor Solid Queue dan pgHero
       title: Peran
     rules:
       add_new: Tambah aturan
@@ -761,7 +761,7 @@ id:
         action: Kelola aturan server
         message_html: Anda belum menentukan aturan server apapun.
       sidekiq_process_check:
-        message_html: Tidak ada proses Sidekiq yang berjalan untuk %{value} antrian. Silakan tinjau konfigurasi Sidekiq Anda
+        message_html: Tidak ada proses Solid Queue yang berjalan untuk %{value} antrian. Silakan tinjau konfigurasi Solid Queue Anda
     tags:
       review: Tinjau status
       updated_msg: Pembaruan pengaturan tagar berhasil

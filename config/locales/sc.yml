@@ -520,7 +520,7 @@ sc:
         action: Gesti is règulas de su serbidore
         message_html: No as cunfiguradu peruna règula de su serbidore.
       sidekiq_process_check:
-        message_html: Perunu protzessu Sidekiq est in esecutzione pro sa coa(s) %{value}. Revisiona is cunfiguratziones de Sidekiq
+        message_html: Perunu protzessu Solid Queue est in esecutzione pro sa coa(s) %{value}. Revisiona is cunfiguratziones de Solid Queue
     tags:
       review: Revisiona s'istadu
       updated_msg: Cunfiguratzione de etichetas atualizada

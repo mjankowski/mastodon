@@ -712,7 +712,7 @@ zh-CN:
         view_dashboard: 查看仪表板
         view_dashboard_description: 允许用户访问仪表盘和各种指标
         view_devops: 开发运维
-        view_devops_description: 允许用户访问 Sidekiq 和 pgHero 仪表板
+        view_devops_description: 允许用户访问 Solid Queue 和 pgHero 仪表板
       title: 角色
     rules:
       add_new: 添加规则
@@ -849,7 +849,7 @@ zh-CN:
         action: 管理服务器规则
         message_html: 你没有定义任何服务器规则。
       sidekiq_process_check:
-        message_html: "%{value} 队列未运行任何 Sidekiq 进程。请检查你的 Sidekiq 配置"
+        message_html: "%{value} 队列未运行任何 Solid Queue 进程。请检查你的 Solid Queue 配置"
       software_version_critical_check:
         action: 查看可用更新
         message_html: 有一个紧急Mastodon紧急更新可用，请尽快更新。

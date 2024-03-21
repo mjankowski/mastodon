@@ -680,7 +680,7 @@ an:
         view_dashboard: Veyer Panel de Control
         view_dashboard_description: Permite a los usuarios acceder ta lo panel de control y quantas metricas
         view_devops: DevOps
-        view_devops_description: Permite a los usuarios acceder ta los panels de control Sidekiq y pgHero
+        view_devops_description: Permite a los usuarios acceder ta los panels de control Solid Queue y pgHero
       title: Rols
     rules:
       add_new: Anyadir norma
@@ -779,7 +779,7 @@ an:
         action: Administrar reglas d'o servidor
         message_html: No ha definiu garra regla d'o servidor.
       sidekiq_process_check:
-        message_html: No i hai garra proceso Sidekiq en execución pa la coda (u codas) de %{value}. Per favor, revise la suya configuración de Sidekiq
+        message_html: No i hai garra proceso Solid Queue en execución pa la coda (u codas) de %{value}. Per favor, revise la suya configuración de Solid Queue
     tags:
       review: Estau de revisión
       updated_msg: Hashtags actualizaus exitosament

@@ -751,7 +751,7 @@ cs:
         view_dashboard: Zobrazit ovládací panel
         view_dashboard_description: Umožňuje uživatelům přístup k ovládacímu panelu a různým metrikám
         view_devops: DevOps
-        view_devops_description: Umožňuje uživatelům přístup k ovládacím panelům Sidekiq a pgHero
+        view_devops_description: Umožňuje uživatelům přístup k ovládacím panelům Solid Queue a pgHero
       title: Role
     rules:
       add_new: Přidat pravidlo
@@ -888,7 +888,7 @@ cs:
         action: Spravovat pravidla serveru
         message_html: Nedefinovali jste žádná pravidla serveru.
       sidekiq_process_check:
-        message_html: Pro %{value} frontu/fronty neběží žádný Sidekiq proces. Zkontrolujte prosím svou Sidekiq konfiguraci
+        message_html: Pro %{value} frontu/fronty neběží žádný Solid Queue proces. Zkontrolujte prosím svou Solid Queue konfiguraci
       software_version_critical_check:
         action: Zobrazit dostupné aktualizace
         message_html: K dispozici je kritická aktualizace Mastodonu, prosím aktualizujte co nejrychleji.
