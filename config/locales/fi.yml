@@ -866,7 +866,7 @@ fi:
       rules_check:
         action: Hallitse palvelimen sääntöjä
         message_html: Et ole määrittänyt lainkaan palvelimen sääntöjä.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Ei ole Solid Queue-prosessia käynnissä jonossa %{value}. Tarkista Solid Queue-asetukset
       software_version_critical_check:
         action: Näytä saatavilla olevat päivitykset

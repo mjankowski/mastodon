@@ -775,7 +775,7 @@ ku:
       rules_check:
         action: Rêzikên rajekara bi rê ve bibe
         message_html: Te qet rêzikên rajekara diyar nekiriye.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Pêvajoyên Solid Queue ên heyî ji bo %{value} di rêz (an) de tune ne. Ji kerema xwe sazkariyên Solid Queue a xwe binirxîne
     tags:
       review: Binêre rewşê

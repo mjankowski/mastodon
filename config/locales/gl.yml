@@ -867,7 +867,7 @@ gl:
       rules_check:
         action: Xestionar regras do servidor
         message_html: Non tes definidas regras para o servidor.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Non hai procesos Solid Queue a funcionar para a cola(s) %{value}. Revisa a túa configuración para Solid Queue
       software_version_critical_check:
         action: Mira as actualizacións dispoñibles

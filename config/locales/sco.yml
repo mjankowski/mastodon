@@ -768,7 +768,7 @@ sco:
       rules_check:
         action: Manage server rules
         message_html: Ye huvnae definit onie server rules.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Nae Solid Queue process rinnin fir the %{value} queue(s). Please luik ower yer Solid Queue configuration
     tags:
       review: Luik ower status

@@ -892,7 +892,7 @@ be:
       rules_check:
         action: Кіраваць правіламі сервера
         message_html: Вы не вызначылі ніякіх правілаў сервера.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Не працуе працэс Solid Queue для %{value} чаргі. Калі ласка праверце вашу канфігурацыю Solid Queue
       software_version_critical_check:
         action: Прагледзець даступныя абнаўленні

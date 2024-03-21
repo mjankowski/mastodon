@@ -867,7 +867,7 @@ de:
       rules_check:
         action: Serverregeln verwalten
         message_html: Du hast keine Serverregeln festgelegt.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Kein Solid Queue-Prozess läuft für die %{value} Warteschlange(n). Bitte überprüfe deine Solid Queue-Konfiguration
       software_version_critical_check:
         action: Verfügbare Updates ansehen

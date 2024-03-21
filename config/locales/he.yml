@@ -894,7 +894,7 @@ he:
       rules_check:
         action: ניהול כללי שרת
         message_html: לא הוגדרו שום כללי שרת.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: שום הליכי Solid Queue לא רצים עבור %{value} תור(ות). בחנו בבקשה את הגדרות Solid Queue
       software_version_critical_check:
         action: ראו עדכונים זמינים

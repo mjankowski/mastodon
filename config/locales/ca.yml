@@ -867,7 +867,7 @@ ca:
       rules_check:
         action: Gestiona les normes del servidor
         message_html: No has definit cap norma del servidor.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: No hi ha cap procés de Solid Queue executant-se per a la cua (o cues) de %{value}. Reviseu la configuració de Solid Queue
       software_version_critical_check:
         action: Veure actualitzacions disponibles

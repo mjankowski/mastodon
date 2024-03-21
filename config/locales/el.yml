@@ -822,7 +822,7 @@ el:
       rules_check:
         action: Διαχείριση κανόνων διακομιστή
         message_html: Δεν έχεις ορίσει κανέναν κανόνα διακομιστή.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Καμία διεργασία Solid Queue δεν εκτελείται για την ουρά %{value}. Παρακαλώ έλεγξε τη διαμόρφωση του Solid Queue
       upload_check_privacy_error:
         action: Δες εδώ για περισσότερες πληροφορίες

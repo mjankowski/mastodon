@@ -825,7 +825,7 @@ my:
       rules_check:
         action: ဆာဗာစည်းမျဉ်းများကို စီမံရန်
         message_html: သင်သည် မည်သည့်ဆာဗာစည်းမျဉ်းများကိုမျှ မသတ်မှတ်ထားပါ။
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: "%{value} တန်းစီ(s) အတွက် Solid Queue လုပ်ငန်းစဉ် မရှိပါ။ သင်၏ Solid Queue ဖွဲ့စည်းမှုကို ပြန်လည်သုံးသပ်ပါ။"
       software_version_critical_check:
         action: ရရှိနိုင်သော အပ်ဒိတ်များကြည့်ပါ

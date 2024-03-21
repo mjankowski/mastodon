@@ -863,7 +863,7 @@ fy:
       rules_check:
         action: Serverregels beheare
         message_html: Jo hawwe foar dizze server gjin regels opsteld.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Der draait gjin Solid Queue-proses foar de wachtrige(n) %{value}. Kontrolearje jo Solid Queue-konfiguraasje
       software_version_critical_check:
         action: Beskikbere fernijingen besjen

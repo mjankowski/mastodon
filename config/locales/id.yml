@@ -766,7 +766,7 @@ id:
       rules_check:
         action: Kelola aturan server
         message_html: Anda belum menentukan aturan server apapun.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Tidak ada proses Solid Queue yang berjalan untuk %{value} antrian. Silakan tinjau konfigurasi Solid Queue Anda
     tags:
       review: Tinjau status

@@ -867,7 +867,7 @@ hu:
       rules_check:
         action: Kiszolgáló szabályainak kezelése
         message_html: Még nem definiáltál egy szerver szabályt sem.
-      sidekiq_process_check:
+      solid_queue_process_check:
         message_html: Nincs Solid Queue folyamat, mely a %{value} sorhoz van rendelve. Kérlek, nézd át a Solid Queue beállításait
       software_version_critical_check:
         action: Elérhető frissítések megtekintése
