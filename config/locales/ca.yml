@@ -730,7 +730,7 @@ ca:
         view_dashboard: Veure panell
         view_dashboard_description: Permet als usuaris accedir al tauler i a diverses mètriques
         view_devops: Operadors de desenvolupament
-        view_devops_description: Permet als usuaris accedir als taulers de control de Sidekiq i pgHero
+        view_devops_description: Permet als usuaris accedir als taulers de control de Solid Queue i pgHero
       title: Rols
     rules:
       add_new: Afegir norma
@@ -868,7 +868,7 @@ ca:
         action: Gestiona les normes del servidor
         message_html: No has definit cap norma del servidor.
       sidekiq_process_check:
-        message_html: No hi ha cap procés de Sidekiq executant-se per a la cua (o cues) de %{value}. Reviseu la configuració de Sidekiq
+        message_html: No hi ha cap procés de Solid Queue executant-se per a la cua (o cues) de %{value}. Reviseu la configuració de Solid Queue
       software_version_critical_check:
         action: Veure actualitzacions disponibles
         message_html: Hi ha disponible una actualització crítica de Mastodon, si us plau, actualitza-la el més abans possible.

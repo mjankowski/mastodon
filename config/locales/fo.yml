@@ -730,7 +730,7 @@ fo:
         view_dashboard: Vís kunningarbretti
         view_dashboard_description: Gevur brúkarum atgongd til kunningarbrettið og ymisk mát
         view_devops: DevOps
-        view_devops_description: Gevur brúkarum atgongd til Sidekiq- og pgHero-kunningarbretti
+        view_devops_description: Gevur brúkarum atgongd til Solid Queue- og pgHero-kunningarbretti
       title: Leiklutir
     rules:
       add_new: Ger nýggja reglu
@@ -868,7 +868,7 @@ fo:
         action: Stýr ambætarareglum
         message_html: Tú hevur ikki ásett nakrar ambætarareglur.
       sidekiq_process_check:
-        message_html: Eingin Sidekiq gongd koyrir fyri %{value} bíðirøðina(r). Vinarliga eftirkanna Sidekiq uppsetingina
+        message_html: Eingin Solid Queue gongd koyrir fyri %{value} bíðirøðina(r). Vinarliga eftirkanna Solid Queue uppsetingina
       software_version_critical_check:
         action: Sí tøkar dagføringar
         message_html: Ein kritisk Mastodon-dagføring er tøk, vinarliga dagfør sum skjótast.

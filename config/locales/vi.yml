@@ -716,7 +716,7 @@ vi:
         view_dashboard: Xem quản trị
         view_dashboard_description: Cho phép truy cập trang tổng quan và các chỉ số khác
         view_devops: Nhà phát triển
-        view_devops_description: Cho phép truy cập trang tổng quan Sidekiq và pgHero
+        view_devops_description: Cho phép truy cập trang tổng quan Solid Queue và pgHero
       title: Danh sách vai trò
     rules:
       add_new: Thêm nội quy
@@ -854,7 +854,7 @@ vi:
         action: Sửa nội quy máy chủ
         message_html: Bạn chưa cập nhật nội quy máy chủ.
       sidekiq_process_check:
-        message_html: Sidekiq không hoạt động khi truy vấn %{value}. Hãy kiểm tra lại cấu hình Sidekiq
+        message_html: Solid Queue không hoạt động khi truy vấn %{value}. Hãy kiểm tra lại cấu hình Solid Queue
       software_version_critical_check:
         action: Bản cập nhật mới
         message_html: Có bản cập nhật quan trọng của Mastodon, vui lòng cập nhật nhanh nhất có thể.

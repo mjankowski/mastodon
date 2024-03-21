@@ -723,7 +723,7 @@
         view_dashboard: Vis dashbord
         view_dashboard_description: Gir brukere tilgang til dashbordet og ulike metrikker
         view_devops: DevOps
-        view_devops_description: Gir brukere tilgang til Sidekiq og pgHero-dashbord
+        view_devops_description: Gir brukere tilgang til Solid Queue og pgHero-dashbord
       title: Roller
     rules:
       add_new: Legg til et filter
@@ -858,7 +858,7 @@
         action: Behandle serverregler
         message_html: Du har ikke definert noen serverregler.
       sidekiq_process_check:
-        message_html: Ingen Sidekiq-prosess kjører for %{value} køen(e). Vennligst se gjennom Sidekiq-konfigurasjonen din
+        message_html: Ingen Solid Queue-prosess kjører for %{value} køen(e). Vennligst se gjennom Solid Queue-konfigurasjonen din
       software_version_critical_check:
         action: Se tilgjengelige oppdateringer
         message_html: En kritisk oppdatering av Mastodon er tilgjengelig. Vennligst oppdater så raskt som mulig.

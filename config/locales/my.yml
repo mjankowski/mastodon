@@ -707,7 +707,7 @@ my:
         view_dashboard: ဒက်ရှ်ဘုတ်မြင်ကွင်းကို ကြည့်ရန်
         view_dashboard_description: အသုံးပြုသူများကို ဒက်ရှ်ဘုတ်မြင်ကွင်းနှင့် အမျိုးမျိုးသော ဆိုဒ်နှင့်ဆိုင်သောဂဏန်းများအား ဝင်ရောက်ကြည့်ရှုခွင့်ပြုသည်
         view_devops: DevOps
-        view_devops_description: အသုံးပြုသူများကို Sidekiq နှင့် pgHero ဒက်ရှ်ဘုတ်မြင်ကွင်းများသို့ ဝင်ရောက်ခွင့်ပြုသည်
+        view_devops_description: အသုံးပြုသူများကို Solid Queue နှင့် pgHero ဒက်ရှ်ဘုတ်မြင်ကွင်းများသို့ ဝင်ရောက်ခွင့်ပြုသည်
       title: အခန်းကဏ္ဍများ
     rules:
       add_new: စည်းမျဉ်းထည့်ပါ
@@ -826,7 +826,7 @@ my:
         action: ဆာဗာစည်းမျဉ်းများကို စီမံရန်
         message_html: သင်သည် မည်သည့်ဆာဗာစည်းမျဉ်းများကိုမျှ မသတ်မှတ်ထားပါ။
       sidekiq_process_check:
-        message_html: "%{value} တန်းစီ(s) အတွက် Sidekiq လုပ်ငန်းစဉ် မရှိပါ။ သင်၏ Sidekiq ဖွဲ့စည်းမှုကို ပြန်လည်သုံးသပ်ပါ။"
+        message_html: "%{value} တန်းစီ(s) အတွက် Solid Queue လုပ်ငန်းစဉ် မရှိပါ။ သင်၏ Solid Queue ဖွဲ့စည်းမှုကို ပြန်လည်သုံးသပ်ပါ။"
       software_version_critical_check:
         action: ရရှိနိုင်သော အပ်ဒိတ်များကြည့်ပါ
         message_html: Mastodon အပ်ဒိတ်ရနိုင်သည်၊ ကျေးဇူးပြု၍ မြန်မြန် အပ်ဒိတ်လုပ်ပါ။

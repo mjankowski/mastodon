@@ -707,7 +707,7 @@ ms:
         view_dashboard: Melihat papan pemuka
         view_dashboard_description: Membenarkan pengguna mencapai papan pemuka dan pelbagai metrik
         view_devops: DevOps
-        view_devops_description: Membenarkan pengguna mencapai papan pemuka Sidekiq dan pgHero
+        view_devops_description: Membenarkan pengguna mencapai papan pemuka Solid Queue dan pgHero
       title: Peranan
     rules:
       add_new: Tambah peraturan
@@ -841,7 +841,7 @@ ms:
         action: Urus peraturan server
         message_html: Anda belum menentukan sebarang peraturan server.
       sidekiq_process_check:
-        message_html: Tiada proses Sidekiq berjalan untuk baris gilir %{value}. Sila semak konfigurasi Sidekiq anda
+        message_html: Tiada proses Solid Queue berjalan untuk baris gilir %{value}. Sila semak konfigurasi Solid Queue anda
       software_version_critical_check:
         action: Lihat kemas kini yang tersedia
         message_html: Kemas kini kritikal Mastodon telah tersedia, sila kemas kini secepat yang mungkin.

@@ -730,7 +730,7 @@ en:
         view_dashboard: View Dashboard
         view_dashboard_description: Allows users to access the dashboard and various metrics
         view_devops: DevOps
-        view_devops_description: Allows users to access Sidekiq and pgHero dashboards
+        view_devops_description: Allows users to access Solid Queue and pgHero dashboards
       title: Roles
     rules:
       add_new: Add rule
@@ -868,7 +868,7 @@ en:
         action: Manage server rules
         message_html: You haven't defined any server rules.
       sidekiq_process_check:
-        message_html: No Sidekiq process running for the %{value} queue(s). Please review your Sidekiq configuration
+        message_html: No Solid Queue process running for the %{value} queue(s). Please review your Solid Queue configuration
       software_version_critical_check:
         action: See available updates
         message_html: A critical Mastodon update is available, please update as quickly as possible.

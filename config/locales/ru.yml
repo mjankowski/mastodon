@@ -752,7 +752,7 @@ ru:
         view_dashboard: Открыть панель управления
         view_dashboard_description: Разрешает пользователям просматривать статистику сервера
         view_devops: DevOps
-        view_devops_description: Разрешить пользователям доступ к панелям Sidekiq и pgHero
+        view_devops_description: Разрешить пользователям доступ к панелям Solid Queue и pgHero
       title: Роли
     rules:
       add_new: Добавить правило
@@ -887,7 +887,7 @@ ru:
         action: Управление правилами сервера
         message_html: Вы не определили правила сервера.
       sidekiq_process_check:
-        message_html: Ни один Sidekiq не запущен для %{value} очереди(-ей). Пожалуйста, просмотрите настройки Sidekiq
+        message_html: Ни один Solid Queue не запущен для %{value} очереди(-ей). Пожалуйста, просмотрите настройки Solid Queue
       software_version_critical_check:
         action: Посмотреть доступные обновления
         message_html: Доступно критическое обновление Mastodon, пожалуйста, обновитесь как можно скорее.

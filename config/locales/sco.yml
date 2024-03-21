@@ -675,7 +675,7 @@ sco:
         view_dashboard: View Dashboord
         view_dashboard_description: Alloos uisers fir tae access the dashboord an a hantle o metrics
         view_devops: DevOps
-        view_devops_description: Alloos uisers fir tae access Sidekiq an pgHero dashboords
+        view_devops_description: Alloos uisers fir tae access Solid Queue an pgHero dashboords
       title: Roles
     rules:
       add_new: Add rule
@@ -769,7 +769,7 @@ sco:
         action: Manage server rules
         message_html: Ye huvnae definit onie server rules.
       sidekiq_process_check:
-        message_html: Nae Sidekiq process rinnin fir the %{value} queue(s). Please luik ower yer Sidekiq configuration
+        message_html: Nae Solid Queue process rinnin fir the %{value} queue(s). Please luik ower yer Solid Queue configuration
     tags:
       review: Luik ower status
       updated_msg: Hashtag settins updatit successfully

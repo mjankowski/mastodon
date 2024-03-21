@@ -727,7 +727,7 @@ lad:
         view_dashboard: Ve pano
         view_dashboard_description: Permete a los utilizadores akseder al panel de kontrolo i varias metrikas
         view_devops: DevOps
-        view_devops_description: Permete a los utilizadores akseder a los paneles de kontrolo Sidekiq i pgHero
+        view_devops_description: Permete a los utilizadores akseder a los paneles de kontrolo Solid Queue i pgHero
       title: Rolos
     rules:
       add_new: Adjusta regla
@@ -864,7 +864,7 @@ lad:
         action: Administra reglas del sirvidor
         message_html: No tienes definido dinguna regla del sirvidor.
       sidekiq_process_check:
-        message_html: No ay dingun prosedura Sidekiq en egzekusion para la(s) kola(s) %{value}. Por favor, reviza tu konfigurasyon de Sidekiq
+        message_html: No ay dingun prosedura Solid Queue en egzekusion para la(s) kola(s) %{value}. Por favor, reviza tu konfigurasyon de Solid Queue
       software_version_critical_check:
         action: Amostra aktualizasyones desponivles
         message_html: Una aktualizasyon kritika de Mastodon esta desponivle. Por favor aktualiza pishin.

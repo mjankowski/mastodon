@@ -779,7 +779,7 @@ ar:
         view_dashboard: عرض لوحة التحكم
         view_dashboard_description: يسمح للمستخدمين بالوصول إلى لوحة التحكم وعدة مقاييس
         view_devops: DevOps
-        view_devops_description: السماح للمستخدمين بالوصول إلى لوحة Sidekiq و pgHero
+        view_devops_description: السماح للمستخدمين بالوصول إلى لوحة Solid Queue و pgHero
       title: الأدوار
     rules:
       add_new: إضافة قاعدة
@@ -915,7 +915,7 @@ ar:
         action: إدارة قواعد الخادم
         message_html: لم تقم بتحديد أي قواعد خادم.
       sidekiq_process_check:
-        message_html: لا توجد عملية Sidekiq قيد التشغيل لقائمة الانتظار %{value}. يرجى مراجعة إعدادات Sidekiq الخاصة بك
+        message_html: لا توجد عملية Solid Queue قيد التشغيل لقائمة الانتظار %{value}. يرجى مراجعة إعدادات Solid Queue الخاصة بك
       software_version_critical_check:
         action: الاطلاع على التحديثات المتوفرة
         message_html: هناك تحديث هام لماستدون، يرجى التحديث في أسرع وقت ممكن.

@@ -726,7 +726,7 @@ ie:
         view_dashboard: Vider Panel de Control
         view_dashboard_description: Permisse que usatores usa li panel de control e varie metricas
         view_devops: DevOps
-        view_devops_description: Permise que usatores usa paneles de control de Sidekiq e pgHero
+        view_devops_description: Permise que usatores usa paneles de control de Solid Queue e pgHero
       title: Roles
     rules:
       add_new: Adjunter un regule
@@ -864,7 +864,7 @@ ie:
         action: Gerer regules de servitor
         message_html: Tu ancor ne ha definit quelcunc regules de servitor.
       sidekiq_process_check:
-        message_html: Null processe Sidekiq executet por li caude %{value}(s). Ples reviser tui configuration Sidekiq
+        message_html: Null processe Solid Queue executet por li caude %{value}(s). Ples reviser tui configuration Solid Queue
       software_version_critical_check:
         action: Vider actualisationes disponibil
         message_html: Un critical actualisation por Mastodon es disposibil, ples actualisar tam rapidmen possibil.

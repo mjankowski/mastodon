@@ -728,7 +728,7 @@ eu:
         view_dashboard: Ikusi aginte-panela
         view_dashboard_description: Baimendu erabiltzaileek aginte-panela eta hainbat estatistika ikustea
         view_devops: DevOps
-        view_devops_description: Baimendu erabiltzaileek Sidekiq eta pgHero aginte-paneletara sarbidea izatea
+        view_devops_description: Baimendu erabiltzaileek Solid Queue eta pgHero aginte-paneletara sarbidea izatea
       title: Rolak
     rules:
       add_new: Gehitu araua
@@ -866,7 +866,7 @@ eu:
         action: Kudeatu zerbitzariaren arauak
         message_html: Ez duzu zerbitzariaren araurik definitu.
       sidekiq_process_check:
-        message_html: Ez da ari Sidekiq prozesurik exekutatzen %{value} ilad(et)an. Egiaztatu Sidekiq konfigurazioa
+        message_html: Ez da ari Solid Queue prozesurik exekutatzen %{value} ilad(et)an. Egiaztatu Solid Queue konfigurazioa
       software_version_critical_check:
         action: Ikusi eguneraketa eskuragarriak
         message_html: Mastodon eguneraketa kritikoa eskuragarri, mesedez eguneratu ahal bezain azkar.

@@ -758,7 +758,7 @@ sl:
         view_dashboard: Pokaži nadzorno ploščo
         view_dashboard_description: Omogoča uporabnikom, da dostopajo do nadzorne plošče in različnih meritev
         view_devops: DevOps
-        view_devops_description: Omogoča uporabnikom, da dostopajo do nadzornih plošč Sidekiq in phHero
+        view_devops_description: Omogoča uporabnikom, da dostopajo do nadzornih plošč Solid Queue in phHero
       title: Vloge
     rules:
       add_new: Dodaj pravilo
@@ -896,7 +896,7 @@ sl:
         action: Upravljaj pravila strežnika
         message_html: Nobenih pravil strežnika niste določili.
       sidekiq_process_check:
-        message_html: Noben proces Sidekiq ne poteka za %{value} vrst. Preglejte svojo prilagoditev Sidekiq
+        message_html: Noben proces Solid Queue ne poteka za %{value} vrst. Preglejte svojo prilagoditev Solid Queue
       software_version_critical_check:
         action: Glejte razpoložljive posodobitve
         message_html: Na voljo je kritična posodobitev Mastodona. Posodobite čim prej.

@@ -730,7 +730,7 @@ hu:
         view_dashboard: Irányítópult megtekintése
         view_dashboard_description: Lehetővé teszi, hogy a felhasználó elérje az irányítópultot és vele számos metrikát
         view_devops: DevOps
-        view_devops_description: Lehetővé teszi, hogy a felhasználó elérje a Sidekiq és pgHero irányítópultjait
+        view_devops_description: Lehetővé teszi, hogy a felhasználó elérje a Solid Queue és pgHero irányítópultjait
       title: Szerepek
     rules:
       add_new: Szabály hozzáadása
@@ -868,7 +868,7 @@ hu:
         action: Kiszolgáló szabályainak kezelése
         message_html: Még nem definiáltál egy szerver szabályt sem.
       sidekiq_process_check:
-        message_html: Nincs Sidekiq folyamat, mely a %{value} sorhoz van rendelve. Kérlek, nézd át a Sidekiq beállításait
+        message_html: Nincs Solid Queue folyamat, mely a %{value} sorhoz van rendelve. Kérlek, nézd át a Solid Queue beállításait
       software_version_critical_check:
         action: Elérhető frissítések megtekintése
         message_html: Kritikus Mastodon frissítés érhető el, frissíts a lehető leggyorsabban.

@@ -742,7 +742,7 @@ sr-Latn:
         view_dashboard: Pogledaj kontrolni panel
         view_dashboard_description: Dopušta korisnicima da pristupe kontrolnom panelu i raznim metrikama
         view_devops: DevOps
-        view_devops_description: Dopušta korisnicima da pristupe Sidekiq i pgHero kontrolnim panelima
+        view_devops_description: Dopušta korisnicima da pristupe Solid Queue i pgHero kontrolnim panelima
       title: Uloge
     rules:
       add_new: Dodaj pravilo
@@ -880,7 +880,7 @@ sr-Latn:
         action: Upravljanje pravilima servera
         message_html: Niste definisali nijedno pravilo servera.
       sidekiq_process_check:
-        message_html: Nijedan Sidekiq proces nije pokrenut za red(ove) %{value}. Molimo Vas pregledajte svoju Sidekiq konfiguraciju
+        message_html: Nijedan Solid Queue proces nije pokrenut za red(ove) %{value}. Molimo Vas pregledajte svoju Solid Queue konfiguraciju
       software_version_critical_check:
         action: Pogledajte dostupna ažuriranja
         message_html: Dostupno je kritično ažuriranje za Mastodon, ažurirajte ga što je pre moguće.

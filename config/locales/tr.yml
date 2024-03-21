@@ -730,7 +730,7 @@ tr:
         view_dashboard: Ana Paneli Görüntüleme
         view_dashboard_description: Kullanıcıların ana panele ve çeşitli ölçütlere erişmesine izin verir
         view_devops: DevOps
-        view_devops_description: Kullanıcıların Sidekiq ve pgHero panellerine erişmesine izin verir
+        view_devops_description: Kullanıcıların Solid Queue ve pgHero panellerine erişmesine izin verir
       title: Roller
     rules:
       add_new: Kural ekle
@@ -868,7 +868,7 @@ tr:
         action: Sunucu kurallarını yönet
         message_html: Herhangi bir sunucu kuralı belirlemediniz.
       sidekiq_process_check:
-        message_html: "%{value} kuyruk(lar)ı için herhangi bir Sidekiq süreci çalışmıyor. Lütfen Sidekiq yapılandırmanızı gözden geçirin"
+        message_html: "%{value} kuyruk(lar)ı için herhangi bir Solid Queue süreci çalışmıyor. Lütfen Solid Queue yapılandırmanızı gözden geçirin"
       software_version_critical_check:
         action: Mevcut güncellemeleri göster
         message_html: Kritik bir Mastodon güncellemesi var, lütfen en kısa sürede güncelleyin.

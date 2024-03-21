@@ -730,7 +730,7 @@ de:
         view_dashboard: Dashboard anzeigen
         view_dashboard_description: Gewährt Benutzer*innen den Zugriff auf das Dashboard und verschiedene Metriken
         view_devops: DevOps
-        view_devops_description: Erlaubt es Benutzer*innen, auf die Sidekiq- und pgHero-Dashboards zuzugreifen
+        view_devops_description: Erlaubt es Benutzer*innen, auf die Solid Queue- und pgHero-Dashboards zuzugreifen
       title: Rollen
     rules:
       add_new: Regel hinzufügen
@@ -868,7 +868,7 @@ de:
         action: Serverregeln verwalten
         message_html: Du hast keine Serverregeln festgelegt.
       sidekiq_process_check:
-        message_html: Kein Sidekiq-Prozess läuft für die %{value} Warteschlange(n). Bitte überprüfe deine Sidekiq-Konfiguration
+        message_html: Kein Solid Queue-Prozess läuft für die %{value} Warteschlange(n). Bitte überprüfe deine Solid Queue-Konfiguration
       software_version_critical_check:
         action: Verfügbare Updates ansehen
         message_html: Ein kritisches Mastodon-Update ist verfügbar – bitte aktualisiere so schnell wie möglich.

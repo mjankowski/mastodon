@@ -754,7 +754,7 @@ gd:
         view_dashboard: Coimhead air an deas-bhòrd
         view_dashboard_description: Leigidh seo le cleachdaichean an deas-bhòrd agus meatrachdan inntrigeadh
         view_devops: DevOps
-        view_devops_description: Leigidh seo le cleachdaichean na deas-bhùird aig Sidekiq is pgHero inntrigeadh
+        view_devops_description: Leigidh seo le cleachdaichean na deas-bhùird aig Solid Queue is pgHero inntrigeadh
       title: Dreuchdan
     rules:
       add_new: Cuir riaghailt ris
@@ -891,7 +891,7 @@ gd:
         action: Stiùirich riaghailtean an fhrithealaiche
         message_html: Cha do mhìnich thu riaghailtean an fhrithealaiche fhathast.
       sidekiq_process_check:
-        message_html: Chan eil pròiseas Sidekiq sam bith a ruith dhan chiutha/dha na ciuthan %{value}. Thoir sùil air an rèiteachadh Sidekiq agad
+        message_html: Chan eil pròiseas Solid Queue sam bith a ruith dhan chiutha/dha na ciuthan %{value}. Thoir sùil air an rèiteachadh Solid Queue agad
       software_version_critical_check:
         action: Faic na h-ùrachaidhean a tha ri fhaighinn
         message_html: Tha ùrachadh èiginneach air Mastodon ri fhaighinn, ùraich cho luath ’s a ghabhas.

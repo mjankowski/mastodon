@@ -730,7 +730,7 @@ pt-PT:
         view_dashboard: Ver Painel de Controlo
         view_dashboard_description: Permite aos utilizadores acederem ao painel de controlo e a várias estatísticas
         view_devops: DevOps
-        view_devops_description: Permite aos utilizadores aceder aos painéis de controlo do Sidekiq e pgHero
+        view_devops_description: Permite aos utilizadores aceder aos painéis de controlo do Solid Queue e pgHero
       title: Funções
     rules:
       add_new: Adicionar regra
@@ -868,7 +868,7 @@ pt-PT:
         action: Gerir regras da instância
         message_html: Não definiu nenhuma regra para a instância.
       sidekiq_process_check:
-        message_html: Nenhum processo Sidekiq em execução para a(s) fila(s) %{value}. Reveja a configuração do seu Sidekiq
+        message_html: Nenhum processo Solid Queue em execução para a(s) fila(s) %{value}. Reveja a configuração do seu Solid Queue
       software_version_critical_check:
         action: Ver atualizações disponíveis
         message_html: Está disponível uma atualização crítica do Mastodon. Por favor, atualize assim que possível.

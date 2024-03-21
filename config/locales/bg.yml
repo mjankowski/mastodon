@@ -730,7 +730,7 @@ bg:
         view_dashboard: Преглед на таблото
         view_dashboard_description: Даване на потребителите достъп до таблото и различни метрики
         view_devops: Развитие и операции
-        view_devops_description: Позволява на потребителите да имат достъп до таблото за управл. на Sidekiq и pgHero
+        view_devops_description: Позволява на потребителите да имат достъп до таблото за управл. на Solid Queue и pgHero
       title: Роли
     rules:
       add_new: Добавяне на правило
@@ -868,7 +868,7 @@ bg:
         action: Управление на правилата на сървъра
         message_html: Не сте определили никакви правила на сървъра.
       sidekiq_process_check:
-        message_html: Не работи процес Sidekiq за %{value} опашка/и. Прегледайте настройките си за Sidekiq
+        message_html: Не работи процес Solid Queue за %{value} опашка/и. Прегледайте настройките си за Solid Queue
       software_version_critical_check:
         action: Преглед на наличните обновявания
         message_html: Налично e критично обновяване на Mastodon. Обновете възможно най-бързо.

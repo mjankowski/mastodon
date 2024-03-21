@@ -714,7 +714,7 @@ th:
         view_dashboard: ดูแดชบอร์ด
         view_dashboard_description: อนุญาตให้ผู้ใช้เข้าถึงแดชบอร์ดและเมตริกต่าง ๆ
         view_devops: DevOps
-        view_devops_description: อนุญาตให้ผู้ใช้เข้าถึงแดชบอร์ด Sidekiq และ pgHero
+        view_devops_description: อนุญาตให้ผู้ใช้เข้าถึงแดชบอร์ด Solid Queue และ pgHero
       title: บทบาท
     rules:
       add_new: เพิ่มกฎ
@@ -852,7 +852,7 @@ th:
         action: จัดการกฎของเซิร์ฟเวอร์
         message_html: คุณไม่ได้กำหนดกฎของเซิร์ฟเวอร์ใด ๆ
       sidekiq_process_check:
-        message_html: ไม่มีกระบวนการ Sidekiq ที่กำลังทำงานสำหรับคิว %{value} โปรดตรวจทานการกำหนดค่า Sidekiq ของคุณ
+        message_html: ไม่มีกระบวนการ Solid Queue ที่กำลังทำงานสำหรับคิว %{value} โปรดตรวจทานการกำหนดค่า Solid Queue ของคุณ
       software_version_critical_check:
         action: ดูการอัปเดตที่พร้อมใช้งาน
         message_html: มีการอัปเดต Mastodon สำคัญพร้อมใช้งาน โปรดอัปเดตโดยเร็วที่สุดเท่าที่จะเป็นไปได้

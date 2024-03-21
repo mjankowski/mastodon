@@ -784,7 +784,7 @@ cy:
         view_dashboard: Gweld Bwrdd Gwaith
         view_dashboard_description: Yn galluogi defnyddwyr i gael mynediad i'r bwrdd gwaith a metrigau amrywiol
         view_devops: DevOps
-        view_devops_description: Yn caniatáu i ddefnyddwyr gael mynediad i fyrddau gwaith Sidekiq a pgHero
+        view_devops_description: Yn caniatáu i ddefnyddwyr gael mynediad i fyrddau gwaith Solid Queue a pgHero
       title: Rolau
     rules:
       add_new: Ychwanegu rheol
@@ -922,7 +922,7 @@ cy:
         action: Rheoli rheolau gweinydd
         message_html: Nid ydych wedi diffinio unrhyw reolau gweinydd.
       sidekiq_process_check:
-        message_html: Does dim proses Sidekiq yn rhedeg ar gyfer y ciw(iau) %{value}. Adolygwch eich ffurfweddiad Sidekiq
+        message_html: Does dim proses Solid Queue yn rhedeg ar gyfer y ciw(iau) %{value}. Adolygwch eich ffurfweddiad Solid Queue
       software_version_critical_check:
         action: Gweld y diweddariadau sydd ar gael
         message_html: Mae diweddariad hanfodol Mastodon ar gael, diweddarwch cyn gynted â phosibl.

@@ -757,7 +757,7 @@ he:
         view_dashboard: הצג לוח מחוונים
         view_dashboard_description: אפשר למשתמשים לגשת ללוח המחוונים
         view_devops: DevOps
-        view_devops_description: מאפשר למשתמשים לגשת ללוחות המחוונים של Sidekiq ושל pgHero
+        view_devops_description: מאפשר למשתמשים לגשת ללוחות המחוונים של Solid Queue ושל pgHero
       title: תפקידים
     rules:
       add_new: הוספת כלל
@@ -895,7 +895,7 @@ he:
         action: ניהול כללי שרת
         message_html: לא הוגדרו שום כללי שרת.
       sidekiq_process_check:
-        message_html: שום הליכי Sidekiq לא רצים עבור %{value} תור(ות). בחנו בבקשה את הגדרות Sidekiq
+        message_html: שום הליכי Solid Queue לא רצים עבור %{value} תור(ות). בחנו בבקשה את הגדרות Solid Queue
       software_version_critical_check:
         action: ראו עדכונים זמינים
         message_html: יצא עדכון קריטי למסטודון, נא לעדכן את תוכנת מסטודון בהקדם האפשרי.

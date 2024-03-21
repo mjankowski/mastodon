@@ -727,7 +727,7 @@ fy:
         view_dashboard: Dashboard besjen
         view_dashboard_description: Jout brûkers tagong ta it dashboard en ferskate statistiken
         view_devops: DevOps
-        view_devops_description: Jout brûkers tagong ta de dashboarden fan Sidekiq en pgHero
+        view_devops_description: Jout brûkers tagong ta de dashboarden fan Solid Queue en pgHero
       title: Rollen
     rules:
       add_new: Rigel tafoegje
@@ -864,7 +864,7 @@ fy:
         action: Serverregels beheare
         message_html: Jo hawwe foar dizze server gjin regels opsteld.
       sidekiq_process_check:
-        message_html: Der draait gjin Sidekiq-proses foar de wachtrige(n) %{value}. Kontrolearje jo Sidekiq-konfiguraasje
+        message_html: Der draait gjin Solid Queue-proses foar de wachtrige(n) %{value}. Kontrolearje jo Solid Queue-konfiguraasje
       software_version_critical_check:
         action: Beskikbere fernijingen besjen
         message_html: Der is in kritike fernijing foar Mastodon beskikber. Wurkje sa gau as mooglik by.

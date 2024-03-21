@@ -729,7 +729,7 @@ fi:
         view_dashboard: Katsoa koontinäyttöä
         view_dashboard_description: Sallii käyttäjien käyttää kojelautaa ja erilaisia mittareita
         view_devops: DevOps
-        view_devops_description: Sallii käyttäjille pääsyn Sidekiq- ja pgHero-hallintapaneeleihin
+        view_devops_description: Sallii käyttäjille pääsyn Solid Queue- ja pgHero-hallintapaneeleihin
       title: Roolit
     rules:
       add_new: Lisää sääntö
@@ -867,7 +867,7 @@ fi:
         action: Hallitse palvelimen sääntöjä
         message_html: Et ole määrittänyt lainkaan palvelimen sääntöjä.
       sidekiq_process_check:
-        message_html: Ei ole Sidekiq-prosessia käynnissä jonossa %{value}. Tarkista Sidekiq-asetukset
+        message_html: Ei ole Solid Queue-prosessia käynnissä jonossa %{value}. Tarkista Solid Queue-asetukset
       software_version_critical_check:
         action: Näytä saatavilla olevat päivitykset
         message_html: Kriittinen Mastodon-päivitys on saatavilla. Tee päivitys mahdollisimman ripeästi.

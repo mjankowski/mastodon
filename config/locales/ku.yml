@@ -679,7 +679,7 @@ ku:
         view_dashboard: Destgehê nîşan bide
         view_dashboard_description: Mafê dide bikarhêneran ku bigihîjin destgehê û pîvanên cuda
         view_devops: DevOps
-        view_devops_description: Mafê dide bikarhêneran ku bigihîjin destgehên Sidekiq û pgHero
+        view_devops_description: Mafê dide bikarhêneran ku bigihîjin destgehên Solid Queue û pgHero
       title: Rol
     rules:
       add_new: Rêbazekê tevlî bike
@@ -776,7 +776,7 @@ ku:
         action: Rêzikên rajekara bi rê ve bibe
         message_html: Te qet rêzikên rajekara diyar nekiriye.
       sidekiq_process_check:
-        message_html: Pêvajoyên Sidekiq ên heyî ji bo %{value} di rêz (an) de tune ne. Ji kerema xwe sazkariyên Sidekiq a xwe binirxîne
+        message_html: Pêvajoyên Solid Queue ên heyî ji bo %{value} di rêz (an) de tune ne. Ji kerema xwe sazkariyên Solid Queue a xwe binirxîne
     tags:
       review: Binêre rewşê
       updated_msg: Sazkariyên hashtag bi awayekî serkeftî hate rojanekirin

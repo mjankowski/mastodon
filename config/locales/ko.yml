@@ -717,7 +717,7 @@ ko:
         view_dashboard: 대시보드 보기
         view_dashboard_description: 사용자가 여러 통계정보를 볼 수 있는 대시보드에 접근할 수 있도록 허용
         view_devops: 데브옵스
-        view_devops_description: Sidekiq과 pgHero 대시보드에 접근할 수 있도록 허용
+        view_devops_description: Solid Queue과 pgHero 대시보드에 접근할 수 있도록 허용
       title: 역할
     rules:
       add_new: 규칙 추가

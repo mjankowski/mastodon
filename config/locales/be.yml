@@ -755,7 +755,7 @@ be:
         view_dashboard: Прагляд панэлі кіравання
         view_dashboard_description: Дазваляе праглядаць панэль кіравання і розныя метрыкі
         view_devops: DevOps
-        view_devops_description: Дае доступ да панэляў кіравання Sidekiq і pgHero
+        view_devops_description: Дае доступ да панэляў кіравання Solid Queue і pgHero
       title: Ролі
     rules:
       add_new: Дадаць правіла
@@ -893,7 +893,7 @@ be:
         action: Кіраваць правіламі сервера
         message_html: Вы не вызначылі ніякіх правілаў сервера.
       sidekiq_process_check:
-        message_html: Не працуе працэс Sidekiq для %{value} чаргі. Калі ласка праверце вашу канфігурацыю Sidekiq
+        message_html: Не працуе працэс Solid Queue для %{value} чаргі. Калі ласка праверце вашу канфігурацыю Solid Queue
       software_version_critical_check:
         action: Прагледзець даступныя абнаўленні
         message_html: Даступна крытычнае абнаўленне Mastodon, калі ласка, зрабіце абнаўленне як мага хутчэй.
