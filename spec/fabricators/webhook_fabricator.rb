@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Fabricator(:webhook) do
-  url { 'https://example.com/webhook' }
+  url { sequence(:url) { |i| "https://host.example/hook/#{i}" } }
   secret { SecureRandom.hex }
   events { Webhook::EVENTS }
 end
