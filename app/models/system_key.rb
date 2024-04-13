@@ -1,14 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: system_keys
-#
-#  id         :bigint(8)        not null, primary key
-#  key        :binary
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
 class SystemKey < ApplicationRecord
   ROTATION_PERIOD = 1.week.freeze
 
