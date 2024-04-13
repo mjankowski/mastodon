@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: encrypted_messages
-#
-#  id               :bigint(8)        not null, primary key
-#  device_id        :bigint(8)
-#  from_account_id  :bigint(8)
-#  from_device_id   :string           default(""), not null
-#  type             :integer          default(0), not null
-#  body             :text             default(""), not null
-#  digest           :text             default(""), not null
-#  message_franking :text             default(""), not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
-
 class EncryptedMessage < ApplicationRecord
   self.inheritance_column = nil
 
