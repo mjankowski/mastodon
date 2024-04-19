@@ -40,21 +40,19 @@ class Admin::Metrics::Measure::InstanceMediaAttachmentsMeasure < Admin::Metrics:
     [sql_query_string, { start_at: @start_at, end_at: @end_at, domain: params[:domain] }]
   end
 
-  def sql_query_string
+  def data_source_query
     <<~SQL.squish
-      SELECT axis.*, (
-        WITH new_media_attachments AS (
-          SELECT #{media_size_total} AS size
-          FROM media_attachments
-          INNER JOIN accounts ON accounts.id = media_attachments.account_id
-          WHERE date_trunc('day', media_attachments.created_at)::date = axis.period
-            AND #{account_domain_sql(params[:include_subdomains])}
-        )
-        SELECT COALESCE(SUM(size), 0) FROM new_media_attachments
-      ) AS value
-      FROM (
-        #{generated_series_days}
-      ) AS axis
+      SELECT #{media_size_total} AS size
+      FROM media_attachments
+      INNER JOIN accounts ON accounts.id = media_attachments.account_id
+      WHERE date_trunc('day', media_attachments.created_at)::date = axis.period
+        AND #{account_domain_sql(params[:include_subdomains])}
+    SQL
+  end
+
+  def select_target
+    <<~SQL.squish
+      COALESCE(SUM(size), 0)
     SQL
   end
 
