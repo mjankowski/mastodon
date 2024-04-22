@@ -15,15 +15,6 @@ namespace :mastodon do
 
       configure_env_secrets
 
-      # Required by ActiveRecord encryption feature
-      %w(
-        ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
-        ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
-        ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
-      ).each do |key|
-        env[key] = SecureRandom.alphanumeric(32)
-      end
-
       configure_webpush_key
       prompt.say "\n"
 
@@ -308,6 +299,15 @@ namespace :mastodon do
   def configure_env_secrets
     %w(SECRET_KEY_BASE OTP_SECRET).each do |key|
       env[key] = SecureRandom.hex(64)
+    end
+
+    # Required by ActiveRecord encryption feature
+    %w(
+      ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+      ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+      ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+    ).each do |key|
+      env[key] = SecureRandom.alphanumeric(32)
     end
   end
 
