@@ -11,10 +11,11 @@
 #
 class SystemKey < ApplicationRecord
   ROTATION_PERIOD = 1.week.freeze
+  EXPIRATION_PERIODS = 3
 
   before_validation :set_key
 
-  scope :expired, ->(now = Time.now.utc) { where(arel_table[:created_at].lt(now - (ROTATION_PERIOD * 3))) }
+  scope :expired, ->(now = Time.now.utc) { where(arel_table[:created_at].lt(now - (ROTATION_PERIOD * EXPIRATION_PERIODS))) }
 
   class << self
     def current_key
