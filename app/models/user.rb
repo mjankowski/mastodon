@@ -15,9 +15,6 @@
 #  current_sign_in_at        :datetime
 #  disabled                  :boolean          default(FALSE), not null
 #  email                     :string           default(""), not null
-#  encrypted_otp_secret      :string
-#  encrypted_otp_secret_iv   :string
-#  encrypted_otp_secret_salt :string
 #  encrypted_password        :string           default(""), not null
 #  last_emailed_at           :datetime
 #  last_sign_in_at           :datetime
