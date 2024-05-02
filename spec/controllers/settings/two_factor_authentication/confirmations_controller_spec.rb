@@ -10,7 +10,7 @@ describe Settings::TwoFactorAuthentication::ConfirmationsController do
       subject
 
       expect(assigns(:confirmation)).to be_instance_of Form::TwoFactorConfirmation
-      expect(assigns(:provision_url)).to eq 'otpauth://totp/cb6e6126.ngrok.io:local-part%40domain?secret=thisisasecretforthespecofnewview&issuer=cb6e6126.ngrok.io'
+      expect(assigns(:provision_url)).to eq 'otpauth://totp/localhost_3000:local-part%40domain?secret=thisisasecretforthespecofnewview&issuer=localhost_3000'
       expect(assigns(:qrcode)).to be_instance_of RQRCode::QRCode
       expect(response).to have_http_status(200)
       expect(response).to render_template(:new)
