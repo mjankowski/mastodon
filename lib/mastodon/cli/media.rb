@@ -284,7 +284,6 @@ module Mastodon::CLI
       say("Avatars:\t#{number_to_human_size(avatar_storage_size)} (#{number_to_human_size(local_avatar_storage_size)} local)")
       say("Headers:\t#{number_to_human_size(header_storage_size)} (#{number_to_human_size(local_header_storage_size)} local)")
       say("Backups:\t#{number_to_human_size(backups_storage_size)}")
-      say("Imports:\t#{number_to_human_size(imports_storage_size)}")
       say("Settings:\t#{number_to_human_size(settings_storage_size)}")
     end
 
@@ -366,10 +365,6 @@ module Mastodon::CLI
       Backup.sum(:dump_file_size)
     end
 
-    def imports_storage_size
-      Import.sum(:data_file_size)
-    end
-
     def settings_storage_size
       SiteUpload.sum(:file_file_size)
     end
@@ -382,7 +377,6 @@ module Mastodon::CLI
       Account
       Backup
       CustomEmoji
-      Import
       MediaAttachment
       PreviewCard
       SiteUpload
