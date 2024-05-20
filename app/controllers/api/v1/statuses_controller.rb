@@ -149,29 +149,43 @@ class Api::V1::StatusesController < Api::BaseController
   end
 
   def status_params
-    params.permit(
-      :status,
-      :in_reply_to_id,
-      :sensitive,
-      :spoiler_text,
-      :visibility,
-      :language,
-      :scheduled_at,
-      allowed_mentions: [],
-      media_ids: [],
-      media_attributes: [
-        :id,
-        :thumbnail,
-        :description,
-        :focus,
-      ],
-      poll: [
-        :multiple,
-        :hide_totals,
-        :expires_in,
-        options: [],
-      ]
-    )
+    params
+      .slice(
+        :in_reply_to_id,
+        :language,
+        :scheduled_at,
+        :sensitive,
+        :spoiler_text,
+        :status,
+        :visibility,
+        :allowed_mentions,
+        :media_attributes,
+        :media_ids,
+        :poll
+      )
+      .permit(
+        :in_reply_to_id,
+        :language,
+        :scheduled_at,
+        :sensitive,
+        :spoiler_text,
+        :status,
+        :visibility,
+        allowed_mentions: [],
+        media_attributes: [
+          :id,
+          :thumbnail,
+          :description,
+          :focus,
+        ],
+        media_ids: [],
+        poll: [
+          :multiple,
+          :hide_totals,
+          :expires_in,
+          options: [],
+        ]
+      )
   end
 
   def serializer_for_status
