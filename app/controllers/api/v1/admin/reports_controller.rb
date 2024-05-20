@@ -22,6 +22,11 @@ class Api::V1::Admin::ReportsController < Api::BaseController
 
   PAGINATION_PARAMS = (%i(limit) + FILTER_PARAMS).freeze
 
+  PERMITTED_PARAMS = [
+    :category,
+    rule_ids: [],
+  ].freeze
+
   def index
     authorize :report, :index?
     render json: @reports, each_serializer: REST::Admin::ReportSerializer
@@ -82,11 +87,15 @@ class Api::V1::Admin::ReportsController < Api::BaseController
   end
 
   def report_params
-    params.permit(:category, rule_ids: [])
+    params
+      .slice(*PERMITTED_PARAMS)
+      .permit(*PERMITTED_PARAMS)
   end
 
   def filter_params
-    params.permit(*FILTER_PARAMS)
+    params
+      .slice(*FILTER_PARAMS)
+      .permit(*FILTER_PARAMS)
   end
 
   def next_path
