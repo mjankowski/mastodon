@@ -7,6 +7,14 @@ class Api::V2::FiltersController < Api::BaseController
   before_action :set_filters, only: :index
   before_action :set_filter, only: [:show, :update, :destroy]
 
+  PERMITTED_PARAMS = [
+    :expires_in,
+    :filter_action,
+    :title,
+    context: [],
+    keywords_attributes: [:id, :keyword, :whole_word, :_destroy],
+  ].freeze
+
   def index
     render json: @filters, each_serializer: REST::FilterSerializer, rules_requested: true
   end
@@ -43,6 +51,8 @@ class Api::V2::FiltersController < Api::BaseController
   end
 
   def resource_params
-    params.permit(:title, :expires_in, :filter_action, context: [], keywords_attributes: [:id, :keyword, :whole_word, :_destroy])
+    params
+      .slice(:expires_in, :filter_action, :title, :context, :keywords_attributes)
+      .permit(*PERMITTED_PARAMS)
   end
 end
