@@ -48,6 +48,8 @@ module Admin::FilterHelper
   end
 
   def controller_request_params
-    params.permit(FILTERS)
+    params
+      .slice(FILTERS)
+      .permit(FILTERS)
   end
 end
