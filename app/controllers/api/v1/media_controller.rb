@@ -6,6 +6,15 @@ class Api::V1::MediaController < Api::BaseController
   before_action :set_media_attachment, except: [:create]
   before_action :check_processing, except: [:create]
 
+  PERMITTED_PARAMS = %i(
+    description
+    file
+    focus
+    thumbnail
+  ).freeze
+
+  PERMITTED_UPDATE_PARAMS = PERMITTED_PARAMS.without(:file).freeze
+
   def show
     render json: @media_attachment, serializer: REST::MediaAttachmentSerializer, status: status_code_for_media_attachment
   end
@@ -40,11 +49,15 @@ class Api::V1::MediaController < Api::BaseController
   end
 
   def media_attachment_params
-    params.permit(:file, :thumbnail, :description, :focus)
+    params
+      .slice(*PERMITTED_PARAMS)
+      .permit(*PERMITTED_PARAMS)
   end
 
   def updateable_media_attachment_params
-    params.permit(:thumbnail, :description, :focus)
+    params
+      .slice(*PERMITTED_UPDATE_PARAMS)
+      .permit(*PERMITTED_UPDATE_PARAMS)
   end
 
   def file_type_error
