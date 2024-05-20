@@ -38,9 +38,9 @@ module Mastodon
   end
 
   HTTP_CONNECTION_ERRORS = [
-    HTTP::ConnectionError,
-    HTTP::Error,
-    HTTP::TimeoutError,
+    HTTPX::ConnectionError,
+    HTTPX::Error,
+    HTTPX::TimeoutError,
     OpenSSL::SSL::SSLError,
   ].freeze
 end

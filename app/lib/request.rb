@@ -41,8 +41,8 @@ class PerOperationWithDeadline < HTTP::Timeout::PerOperation
       return :eof if result.nil?
 
       remaining_time = @deadline - Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      raise HTTP::TimeoutError, "Read timed out after #{@read_timeout} seconds" if timeout
-      raise HTTP::TimeoutError, "Read timed out after a total of #{@read_deadline} seconds" if remaining_time <= 0
+      raise HTTPX::TimeoutError, "Read timed out after #{@read_timeout} seconds" if timeout
+      raise HTTPX::TimeoutError, "Read timed out after a total of #{@read_deadline} seconds" if remaining_time <= 0
       return result if result != :wait_readable
 
       # marking the socket for timeout. Why is this not being raised immediately?
@@ -301,7 +301,7 @@ class Request
 
           if available_socks.nil?
             socks.each(&:close)
-            raise HTTP::TimeoutError, "Connect timed out after #{Request::TIMEOUT[:connect_timeout]} seconds"
+            raise HTTPX::TimeoutError, "Connect timed out after #{Request::TIMEOUT[:connect_timeout]} seconds"
           end
 
           available_socks.each do |sock|

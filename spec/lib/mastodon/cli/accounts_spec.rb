@@ -1167,7 +1167,7 @@ RSpec.describe Mastodon::CLI::Accounts do
 
       context 'when a connection error occurs' do
         before do
-          stub_request(:head, 'https://example.net/users/tales').to_raise(HTTP::ConnectionError)
+          stub_request(:head, 'https://example.net/users/tales').to_raise(HTTPX::ConnectionError)
         end
 
         it_behaves_like 'an unavailable domain'

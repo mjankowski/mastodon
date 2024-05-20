@@ -52,7 +52,7 @@ class RequestPool
 
       begin
         yield @http_client
-      rescue HTTP::ConnectionError
+      rescue HTTPX::ConnectionError
         # It's possible the connection was closed, so let's
         # try re-opening it once
 

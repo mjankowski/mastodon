@@ -193,8 +193,8 @@ RSpec.describe Remotable do
         end
 
         error_classes = [
-          HTTP::TimeoutError,
-          HTTP::ConnectionError,
+          HTTPX::TimeoutError,
+          HTTPX::ConnectionError,
           OpenSSL::SSL::SSLError,
           Paperclip::Errors::NotIdentifiedByImageMagickError,
           Addressable::URI::InvalidURIError,
