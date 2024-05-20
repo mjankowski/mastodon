@@ -22,9 +22,10 @@ RSpec.describe Admin::Settings::BrandingController do
       it 'cannot create a setting value for a non-admin key' do
         expect(Setting.new_setting_key).to be_blank
 
-        patch :update, params: { form_admin_settings: { new_setting_key: 'New key value' } }
+        expect do
+          patch :update, params: { form_admin_settings: { new_setting_key: 'New key value' } }
+        end.to raise_error(ActionController::UnpermittedParameters)
 
-        expect(response).to redirect_to(admin_settings_branding_path)
         expect(Setting.new_setting_key).to be_nil
       end
 
