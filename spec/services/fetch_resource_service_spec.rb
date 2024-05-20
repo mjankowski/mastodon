@@ -34,13 +34,13 @@ RSpec.describe FetchResourceService do
       it { is_expected.to be_nil }
     end
 
-    context 'when HTTP::ConnectionError is raised' do
+    context 'when HTTPX::ConnectionError is raised' do
       before do
         request = instance_double(Request)
         allow(Request).to receive(:new).and_return(request)
         allow(request).to receive(:add_headers)
         allow(request).to receive(:on_behalf_of)
-        allow(request).to receive(:perform).and_raise(HTTP::ConnectionError)
+        allow(request).to receive(:perform).and_raise(HTTPX::ConnectionError)
       end
 
       it { is_expected.to be_nil }
