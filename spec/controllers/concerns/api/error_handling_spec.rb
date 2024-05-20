@@ -23,7 +23,7 @@ describe Api::ErrorHandling do
       ActiveRecord::RecordNotFound => 404,
       ActiveRecord::RecordNotUnique => 422,
       Date::Error => 422,
-      HTTP::Error => 503,
+      HTTPX::Error => 503,
       Mastodon::InvalidParameterError => 400,
       Mastodon::NotPermittedError => 403,
       Mastodon::RaceConditionError => 503,

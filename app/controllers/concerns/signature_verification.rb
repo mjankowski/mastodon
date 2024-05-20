@@ -80,7 +80,7 @@ module SignatureVerification
     fail_with! "Verification failed for #{actor.to_log_human_identifier} #{actor.uri} using rsa-sha256 (RSASSA-PKCS1-v1_5 with SHA-256)", signed_string: compare_signed_string, signature: signature_params['signature']
   rescue SignatureVerificationError => e
     fail_with! e.message
-  rescue HTTP::Error, OpenSSL::SSL::SSLError => e
+  rescue HTTPX::Error, OpenSSL::SSL::SSLError => e
     fail_with! "Failed to fetch remote data: #{e.message}"
   rescue Mastodon::UnexpectedResponseError
     fail_with! 'Failed to fetch remote data (got unexpected reply from server)'
@@ -242,7 +242,7 @@ module SignatureVerification
     Stoplight("source:#{request.remote_ip}")
       .with_threshold(1)
       .with_cool_off_time(5.minutes.seconds)
-      .with_error_handler { |error, handle| error.is_a?(HTTP::Error) || error.is_a?(OpenSSL::SSL::SSLError) ? handle.call(error) : raise(error) }
+      .with_error_handler { |error, handle| error.is_a?(HTTPX::Error) || error.is_a?(OpenSSL::SSL::SSLError) ? handle.call(error) : raise(error) }
   end
 
   def actor_refresh_key!(actor)
