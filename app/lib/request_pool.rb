@@ -89,7 +89,7 @@ class RequestPool
     private
 
     def http_client
-      Request.http_client.persistent(@site, timeout: MAX_IDLE_TIME)
+      Request.http_client # .persistent(@site, timeout: MAX_IDLE_TIME)
     end
 
     def current_time
