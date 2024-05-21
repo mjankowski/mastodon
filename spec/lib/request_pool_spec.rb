@@ -8,7 +8,7 @@ describe RequestPool do
   describe '#with' do
     it 'returns a HTTP client for a host' do
       subject.with('http://example.com') do |http_client|
-        expect(http_client).to be_a HTTP::Client
+        expect(http_client).to be_a HTTPX::Session
       end
     end
 
