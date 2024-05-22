@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Block < ApplicationRecord
-  include ActivityPubPayloadGeneration
+  include ActivityPub::Identifier
   include Paginable
   include RelationshipCacheable
 
