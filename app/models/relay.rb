@@ -14,7 +14,7 @@ class Relay < ApplicationRecord
   alias enabled? accepted?
 
   def enable!
-    activity_id = ActivityPub::TagManager.instance.generate_uri_for(nil)
+    activity_id = ActivityPub::TagManager.instance.generate_activity_uri
     payload     = Oj.dump(follow_activity(activity_id))
 
     update!(state: :pending, follow_activity_id: activity_id)
@@ -23,7 +23,7 @@ class Relay < ApplicationRecord
   end
 
   def disable!
-    activity_id = ActivityPub::TagManager.instance.generate_uri_for(nil)
+    activity_id = ActivityPub::TagManager.instance.generate_activity_uri
     payload     = Oj.dump(unfollow_activity(activity_id))
 
     update!(state: :idle, follow_activity_id: nil)
