@@ -135,6 +135,7 @@ class Status < ApplicationRecord
 
   after_create_commit :store_uri, if: :local?
   after_create_commit :update_statistics, if: :local?
+  after_create_commit :verify_reblog_soft_delete
 
   before_validation :prepare_contents, if: :local?
   before_validation :set_reblog
@@ -470,5 +471,9 @@ class Status < ApplicationRecord
 
   def trigger_update_webhooks
     TriggerWebhookWorker.perform_async('status.updated', 'Status', id) if local?
+  end
+
+  def verify_reblog_soft_delete
+    discard if reblog? && reblog.reload.discarded?
   end
 end
