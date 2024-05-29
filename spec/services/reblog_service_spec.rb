@@ -56,8 +56,10 @@ RSpec.describe ReblogService do
       Status._save_callbacks.delete(:discard_status)
     end
 
-    it 'raises an exception' do
-      expect { subject.call(alice, status) }.to raise_error ActiveRecord::ActiveRecordError
+    it 'soft deletes the new record' do
+      expect { subject.call(alice, status) }
+        .to not_change(Status, :count)
+        .and(change { Status.unscoped.discarded.count }) # Soft-delete the reblog based on changed target
     end
   end
 
