@@ -113,6 +113,7 @@ module Mastodon
     end
 
     # Load defaults from config/*
+    config.omniauth = config_for(:omniauth)
     config.x.captcha = config_for(:captcha)
     config.x.mastodon = config_for(:mastodon)
 
