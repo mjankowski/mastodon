@@ -112,7 +112,9 @@ module Mastodon
       end
     end
 
+    # Load defaults from config/*
     config.x.captcha = config_for(:captcha)
+    config.x.mastodon = config_for(:mastodon)
 
     config.to_prepare do
       Doorkeeper::AuthorizationsController.layout 'modal'
