@@ -111,30 +111,12 @@ module Account::Interactions
     has_many :announcement_mutes, dependent: :destroy
   end
 
-  def follow!(other_account, reblogs: nil, notify: nil, languages: nil, uri: nil, rate_limit: false, bypass_limit: false)
-    rel = active_relationships.create_with(show_reblogs: reblogs.nil? ? true : reblogs, notify: notify.nil? ? false : notify, languages: languages, uri: uri, rate_limit: rate_limit, bypass_follow_limit: bypass_limit)
-                              .find_or_create_by!(target_account: other_account)
-
-    rel.show_reblogs = reblogs   unless reblogs.nil?
-    rel.notify       = notify    unless notify.nil?
-    rel.languages    = languages unless languages.nil?
-
-    rel.save! if rel.changed?
-
-    rel
+  def follow!(other_account, **options)
+    initialize_follow(active_relationships, other_account, **options)
   end
 
-  def request_follow!(other_account, reblogs: nil, notify: nil, languages: nil, uri: nil, rate_limit: false, bypass_limit: false)
-    rel = follow_requests.create_with(show_reblogs: reblogs.nil? ? true : reblogs, notify: notify.nil? ? false : notify, uri: uri, languages: languages, rate_limit: rate_limit, bypass_follow_limit: bypass_limit)
-                         .find_or_create_by!(target_account: other_account)
-
-    rel.show_reblogs = reblogs   unless reblogs.nil?
-    rel.notify       = notify    unless notify.nil?
-    rel.languages    = languages unless languages.nil?
-
-    rel.save! if rel.changed?
-
-    rel
+  def request_follow!(other_account, **options)
+    initialize_follow(follow_requests, other_account, **options)
   end
 
   def block!(other_account, uri: nil)
@@ -304,5 +286,27 @@ module Account::Interactions
 
   def normalized_domain(domain)
     TagManager.instance.normalize_domain(domain)
+  end
+
+  def initialize_follow(follow_scope, target_account, **options)
+    follow_scope
+      .create_with(
+        bypass_follow_limit: options[:bypass_limit] || false,
+        languages: options[:languages],
+        notify: options[:notify] || false,
+        rate_limit: options[:rate_limit] || false,
+        show_reblogs: options[:reblogs] || true,
+        uri: options[:uri]
+      )
+      .find_or_create_by!(
+        target_account: target_account
+      )
+      .tap do |relationship|
+        relationship.show_reblogs = options[:reblogs] unless options[:reblogs].nil?
+        relationship.notify = options[:notify] unless options[:notify].nil?
+        relationship.languages = options[:languages] unless options[:languages].nil?
+
+        relationship.save! if relationship.changed?
+      end
   end
 end
