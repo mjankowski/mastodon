@@ -293,9 +293,9 @@ module Account::Interactions
       .create_with(
         bypass_follow_limit: options[:bypass_limit] || false,
         languages: options[:languages],
-        notify: options[:notify] || false,
+        notify: options[:notify].nil? ? false : options[:notify],
         rate_limit: options[:rate_limit] || false,
-        show_reblogs: options[:reblogs] || true,
+        show_reblogs: options[:reblogs].nil? ? true : options[:reblogs],
         uri: options[:uri]
       )
       .find_or_create_by!(
