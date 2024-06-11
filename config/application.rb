@@ -118,6 +118,7 @@ module Mastodon
     config.x.omniauth = config_for(:omniauth)
     config.x.search = config_for(:search)
     config.x.storage = config_for(:storage)
+    config.x.translation = config_for(:translation)
 
     config.to_prepare do
       Doorkeeper::AuthorizationsController.layout 'modal'
