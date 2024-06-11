@@ -36,15 +36,11 @@ class Admin::Metrics::Measure::InstanceMediaAttachmentsMeasure < Admin::Metrics:
     nil
   end
 
-  def sql_array
-    [sql_query_string, { start_at: @start_at, end_at: @end_at, domain: params[:domain] }]
-  end
-
   def data_source_query
     MediaAttachment
       .select(media_size_total.as('size'))
       .joins(:account)
-      .where(account_domain_sql)
+      .where(account_domain_sql, domain: params[:domain])
       .where(daily_period(:media_attachments))
   end
 
