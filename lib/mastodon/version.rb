@@ -65,7 +65,15 @@ module Mastodon
     end
 
     def user_agent
-      @user_agent ||= "#{HTTP::Request::USER_AGENT} (Mastodon/#{Version}; +http#{Rails.configuration.x.use_https ? 's' : ''}://#{Rails.configuration.x.web_domain}/)"
+      @user_agent ||= "#{HTTP::Request::USER_AGENT} (Mastodon/#{Version}; +#{instance_url}"
+    end
+
+    def instance_url
+      Addressable::URI.new(
+        path: '/',
+        scheme: Rails.configuration.x.use_https ? 'https' : 'http',
+        host: Rails.configuration.x.web_domain
+      )
     end
   end
 end
