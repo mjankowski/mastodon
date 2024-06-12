@@ -116,6 +116,7 @@ module Mastodon
     config.x.captcha = config_for(:captcha)
     config.x.mastodon = config_for(:mastodon)
     config.x.omniauth = config_for(:omniauth)
+    config.x.search = config_for(:search)
 
     config.to_prepare do
       Doorkeeper::AuthorizationsController.layout 'modal'
