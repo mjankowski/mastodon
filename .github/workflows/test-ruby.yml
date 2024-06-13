@@ -144,6 +144,11 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Run brakeman scan
+        if: always()
+        run: |
+          bin/brakeman -q
+
   test-libvips:
     name: Libvips tests
     runs-on: ubuntu-24.04

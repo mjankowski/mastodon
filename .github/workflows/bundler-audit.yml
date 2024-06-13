@@ -28,10 +28,11 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
+      - name: Set up Ruby environment
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
       - name: Run bundler-audit
-        run: bundle exec bundler-audit check --update
+        run: |
+          bundle exec bundler-audit check --update

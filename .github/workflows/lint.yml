@@ -1,0 +1,51 @@
+name: Linters
+
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+      - 'renovate/**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    env:
+      BUNDLE_ONLY: development
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby environment
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Set up JavaScript environment
+        uses: ./.github/actions/setup-javascript
+
+      - name: Set up RuboCop Problem Matcher
+        uses: r7kamura/rubocop-problem-matchers-action@v1
+
+      - name: Run linter on CSS
+        run: |
+          yarn lint:css -f github
+
+      - name: Run linter on Ruby code
+        run: |
+          bin/rubocop
+
+      - name: Run linter on HAML views
+        run: |
+          echo "::add-matcher::.github/workflows/haml-lint-problem-matcher.json"
+          bundle exec haml-lint --reporter github
+
+      - name: Run linter on JavaScript code
+        run: |
+          yarn lint:js --max-warnings 0
+          yarn typecheck
+
+      - name: Run prettier code format check
+        run: |
+          yarn format:check
