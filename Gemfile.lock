@@ -7,6 +7,16 @@ GIT
       hkdf (~> 0.2)
       jwt (~> 2.0)
 
+GIT
+  remote: https://github.com/devise-two-factor/devise-two-factor.git
+  revision: e47f0ede533e40d8009062f89f024ce979615961
+  specs:
+    devise-two-factor (5.0.0)
+      activesupport (~> 7.0)
+      devise (~> 4.0)
+      railties (~> 7.0)
+      rotp (~> 6.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -920,7 +930,7 @@ DEPENDENCIES
   database_cleaner-active_record
   debug (~> 1.8)
   devise (~> 4.9)
-  devise-two-factor
+  devise-two-factor!
   devise_pam_authenticatable2 (~> 9.2)
   discard (~> 1.2)
   doorkeeper (~> 5.6)
