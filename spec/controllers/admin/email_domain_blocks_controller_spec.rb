@@ -11,10 +11,10 @@ RSpec.describe Admin::EmailDomainBlocksController do
 
   describe 'GET #index' do
     around do |example|
-      default_per_page = EmailDomainBlock.default_per_page
-      EmailDomainBlock.paginates_per 2
+      default_per_page = Pagy::DEFAULT[:items]
+      Pagy::DEFAULT[:items] = 2
       example.run
-      EmailDomainBlock.paginates_per default_per_page
+      Pagy::DEFAULT[:items] = default_per_page
     end
 
     it 'returns http success' do
