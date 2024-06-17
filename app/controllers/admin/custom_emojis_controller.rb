@@ -5,8 +5,8 @@ module Admin
     def index
       authorize :custom_emoji, :index?
 
-      @custom_emojis = filtered_custom_emojis.eager_load(:local_counterpart).page(params[:page])
-      @form          = Form::CustomEmojiBatch.new
+      @pagy, @custom_emojis = pagy(filtered_custom_emojis.eager_load(:local_counterpart))
+      @form = Form::CustomEmojiBatch.new
     end
 
     def new

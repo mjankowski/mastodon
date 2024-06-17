@@ -5,7 +5,7 @@ class Admin::Trends::Links::PreviewCardProvidersController < Admin::BaseControll
     authorize :preview_card_provider, :review?
 
     @pending_preview_card_providers_count = PreviewCardProvider.unreviewed.async_count
-    @preview_card_providers = filtered_preview_card_providers.page(params[:page])
+    @pagy, @preview_card_providers = pagy(filtered_preview_card_providers)
     @form = Trends::PreviewCardProviderBatch.new
   end
 
