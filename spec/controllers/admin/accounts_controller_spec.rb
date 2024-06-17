@@ -22,10 +22,10 @@ RSpec.describe Admin::AccountsController do
     end
 
     around do |example|
-      default_per_page = Account.default_per_page
-      Account.paginates_per 1
+      default_per_page = Pagy::DEFAULT[:items]
+      Pagy::DEFAULT[:items] = 1
       example.run
-      Account.paginates_per default_per_page
+      Pagy::DEFAULT[:items] = default_per_page
     end
 
     before do
