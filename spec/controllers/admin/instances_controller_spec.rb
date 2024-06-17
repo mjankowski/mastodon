@@ -19,10 +19,10 @@ RSpec.describe Admin::InstancesController do
 
   describe 'GET #index' do
     around do |example|
-      default_per_page = Instance.default_per_page
-      Instance.paginates_per 1
+      default_per_page = Pagy::DEFAULT[:items]
+      Pagy::DEFAULT[:items] = 1
       example.run
-      Instance.paginates_per default_per_page
+      Pagy::DEFAULT[:items] = default_per_page
     end
 
     it 'renders instances' do
