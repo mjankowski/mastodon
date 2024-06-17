@@ -73,13 +73,13 @@
                    data: { confirm: t('admin.reports.are_you_sure') },
                    name: :suspend,
                    type: :submit
-    - if @accounts.total_count > @accounts.size
+    - if @pagy.count > @accounts.size
       .batch-table__select-all
         .not-selected.active
           %span= t('generic.all_items_on_page_selected_html', count: @accounts.size)
-          %button{ type: 'button' }= t('generic.select_all_matching_items', count: @accounts.total_count)
+          %button{ type: 'button' }= t('generic.select_all_matching_items', count: @pagy.count)
         .selected
-          %span= t('generic.all_matching_items_selected_html', count: @accounts.total_count)
+          %span= t('generic.all_matching_items_selected_html', count: @pagy.count)
           %button{ type: 'button' }= t('generic.deselect')
     .batch-table__body
       - if @accounts.empty?
@@ -87,4 +87,4 @@
       - else
         = render partial: 'account', collection: @accounts, locals: { f: f }
 
-= paginate @accounts
+= pagy_nav @pagy
