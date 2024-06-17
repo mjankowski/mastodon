@@ -16,4 +16,4 @@
   .announcements-list
     = render partial: 'appeal', collection: @appeals
 
-= paginate @appeals
+= pagy_nav @pagy

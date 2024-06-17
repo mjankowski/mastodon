@@ -26,4 +26,4 @@
   .report-notes
     = render partial: 'action_log', collection: @action_logs
 
-= paginate @action_logs
+= pagy_nav @pagy
