@@ -72,7 +72,7 @@ class Admin::AnnouncementsController < Admin::BaseController
   private
 
   def set_announcements
-    @announcements = AnnouncementFilter.new(filter_params).results.reverse_chronological.page(params[:page])
+    @pagy, @announcements = pagy(AnnouncementFilter.new(filter_params).results.reverse_chronological)
   end
 
   def set_announcement
