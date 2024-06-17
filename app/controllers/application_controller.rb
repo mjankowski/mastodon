@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   include DatabaseHelper
   include AuthorizedFetchHelper
   include SelfDestructHelper
+  include Pagy::Backend
 
   helper_method :current_account
   helper_method :current_session
