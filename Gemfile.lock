@@ -373,18 +373,6 @@ GEM
       addressable (~> 2.8)
     jsonapi-renderer (0.2.2)
     jwt (2.7.1)
-    kaminari (1.2.2)
-      activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.2.2)
-      kaminari-activerecord (= 1.2.2)
-      kaminari-core (= 1.2.2)
-    kaminari-actionview (1.2.2)
-      actionview
-      kaminari-core (= 1.2.2)
-    kaminari-activerecord (1.2.2)
-      activerecord
-      kaminari-core (= 1.2.2)
-    kaminari-core (1.2.2)
     kt-paperclip (7.2.2)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -961,7 +949,6 @@ DEPENDENCIES
   json-ld
   json-ld-preloaded (~> 3.2)
   json-schema (~> 5.0)
-  kaminari (~> 1.2)
   kt-paperclip (~> 7.2)
   letter_opener (~> 1.8)
   letter_opener_web (~> 3.0)
