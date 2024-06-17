@@ -5,7 +5,7 @@ class Settings::ApplicationsController < Settings::BaseController
   before_action :prepare_scopes, only: [:create, :update]
 
   def index
-    @applications = current_user.applications.order(id: :desc).page(params[:page])
+    @pagy, @applications = pagy(current_user.applications.order(id: :desc))
   end
 
   def show; end
