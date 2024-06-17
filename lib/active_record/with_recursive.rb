@@ -60,6 +60,6 @@ module ActiveRecord
   end
 end
 
-ActiveSupport.on_load(:active_record) do
-  ActiveRecord::QueryMethods.prepend(ActiveRecord::QueryMethodsExtensions)
-end
+# ActiveSupport.on_load(:active_record) do
+#   ActiveRecord::QueryMethods.prepend(ActiveRecord::QueryMethodsExtensions)
+# end
