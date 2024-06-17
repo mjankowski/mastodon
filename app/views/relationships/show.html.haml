@@ -75,4 +75,4 @@
       - else
         = render partial: 'account', collection: @accounts, locals: { f: f, relationships: @relationships }
 
-= paginate @accounts
+= pagy_nav @pagy
