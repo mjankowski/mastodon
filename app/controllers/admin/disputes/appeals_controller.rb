@@ -7,7 +7,7 @@ class Admin::Disputes::AppealsController < Admin::BaseController
     authorize :appeal, :index?
 
     @pending_appeals_count = Appeal.pending.async_count
-    @appeals = filtered_appeals.page(params[:page])
+    @pagy, @appeals = pagy(filtered_appeals)
   end
 
   def approve
