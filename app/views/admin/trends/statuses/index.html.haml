@@ -59,4 +59,4 @@
       - else
         = render partial: 'status', collection: @statuses, locals: { f: f }
 
-= paginate @statuses
+= pagy_nav @pagy

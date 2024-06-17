@@ -63,4 +63,4 @@
       - else
         = render partial: 'preview_card', collection: @preview_cards, locals: { f: f }
 
-= paginate @preview_cards
+= pagy_nav @pagy

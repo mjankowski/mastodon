@@ -22,4 +22,4 @@
             %td
               = table_link_to 'times', t('doorkeeper.applications.index.delete'), settings_application_path(application), method: :delete, data: { confirm: t('doorkeeper.applications.confirmations.destroy') }
 
-= paginate @applications
+= pagy_nav @pagy
