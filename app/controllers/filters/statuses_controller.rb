@@ -31,7 +31,7 @@ class Filters::StatusesController < ApplicationController
   end
 
   def set_status_filters
-    @status_filters = @filter.statuses.preload(:status).page(params[:page]).per(PER_PAGE)
+    @pagy, @status_filters = pagy(@filter.statuses.preload(:status), items: PER_PAGE)
   end
 
   def status_filter_batch_action_params

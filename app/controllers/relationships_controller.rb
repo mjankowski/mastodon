@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class RelationshipsController < ApplicationController
+  PER_PAGE = 40
+
   layout 'admin'
 
   before_action :authenticate_user!
@@ -29,7 +31,10 @@ class RelationshipsController < ApplicationController
   private
 
   def set_accounts
-    @accounts = RelationshipFilter.new(current_account, filter_params).results.page(params[:page]).per(40)
+    @pagy, @accounts = pagy(
+      RelationshipFilter.new(current_account, filter_params).results,
+      items: PER_PAGE
+    )
   end
 
   def set_relationships

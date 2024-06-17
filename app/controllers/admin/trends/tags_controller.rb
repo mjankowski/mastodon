@@ -4,7 +4,7 @@ class Admin::Trends::TagsController < Admin::BaseController
   def index
     authorize :tag, :review?
 
-    @tags = filtered_tags.page(params[:page])
+    @pagy, @tags = pagy(filtered_tags)
     @form = Trends::TagBatch.new
   end
 
