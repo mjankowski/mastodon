@@ -6,7 +6,7 @@ module Admin
 
     def index
       authorize :report, :index?
-      @reports = filtered_reports.page(params[:page])
+      @pagy, @reports = pagy(filtered_reports)
     end
 
     def show
