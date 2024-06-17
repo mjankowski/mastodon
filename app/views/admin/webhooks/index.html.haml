@@ -15,4 +15,4 @@
   .applications-list
     = render partial: 'webhook', collection: @webhooks
 
-  = paginate @webhooks
+  = pagy_nav @pagy

@@ -42,4 +42,4 @@
       - else
         = render partial: 'tag', collection: @tags, locals: { f: f }
 
-= paginate @tags
+= pagy_nav @pagy
