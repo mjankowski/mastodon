@@ -11,7 +11,7 @@ RSpec.describe RelationshipsController do
     context 'when signed in' do
       before do
         sign_in user, scope: :user
-        get :show, params: { page: 2, relationship: 'followed_by' }
+        get :show, params: { page: 1, relationship: 'followed_by' }
       end
 
       it 'returns http success' do
@@ -25,7 +25,7 @@ RSpec.describe RelationshipsController do
 
     context 'when not signed in' do
       before do
-        get :show, params: { page: 2, relationship: 'followed_by' }
+        get :show, params: { page: 1, relationship: 'followed_by' }
       end
 
       it 'redirects when not signed in' do
