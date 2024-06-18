@@ -87,7 +87,7 @@ class TranslateStatusService < BaseService
       when MediaAttachment
         status_translation.media_attachments << Translation::MediaAttachment.new(
           id: source.id,
-          description: html_entities.decode(translation.text)
+          description: Nokogiri::HTML.parse(translation.text).text
         )
       end
     end
@@ -106,9 +106,5 @@ class TranslateStatusService < BaseService
       element.replace(element.children) if element.attributes.empty?
     end
     fragment
-  end
-
-  def html_entities
-    HTMLEntities.new
   end
 end

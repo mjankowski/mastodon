@@ -156,11 +156,16 @@ class LinkDetailsExtractor
   end
 
   def title
-    html_entities.decode(structured_data&.headline || opengraph_tag('og:title') || document.xpath('//title').map(&:content).first).strip
+    Nokogiri::HTML
+      .parse(structured_data&.headline || opengraph_tag('og:title') || document.xpath('//title').map(&:content).first)
+      .text
+      .strip
   end
 
   def description
-    html_entities.decode(structured_data&.description || opengraph_tag('og:description') || meta_tag('description'))
+    Nokogiri::HTML
+      .parse(structured_data&.description || opengraph_tag('og:description') || meta_tag('description'))
+      .text
   end
 
   def published_at
@@ -180,7 +185,9 @@ class LinkDetailsExtractor
   end
 
   def provider_name
-    html_entities.decode(structured_data&.publisher_name || opengraph_tag('og:site_name'))
+    Nokogiri::HTML
+      .parse(structured_data&.publisher_name || opengraph_tag('og:site_name'))
+      .text
   end
 
   def provider_url
@@ -188,7 +195,9 @@ class LinkDetailsExtractor
   end
 
   def author_name
-    html_entities.decode(structured_data&.author_name || opengraph_tag('og:author') || opengraph_tag('og:author:username'))
+    Nokogiri::HTML
+      .parse(structured_data&.author_name || opengraph_tag('og:author') || opengraph_tag('og:author:username'))
+      .text
   end
 
   def author_url
@@ -257,7 +266,9 @@ class LinkDetailsExtractor
 
       next if json_ld.blank?
 
-      structured_data = StructuredData.new(html_entities.decode(json_ld))
+      structured_data = StructuredData.new(
+        Nokogiri::HTML.parse(json_ld).text
+      )
 
       next unless structured_data.valid?
 
@@ -283,9 +294,5 @@ class LinkDetailsExtractor
     @detector ||= CharlockHolmes::EncodingDetector.new.tap do |detector|
       detector.strip_tags = true
     end
-  end
-
-  def html_entities
-    @html_entities ||= HTMLEntities.new(:expanded)
   end
 end
