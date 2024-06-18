@@ -274,14 +274,7 @@ class LinkDetailsExtractor
 
   def encoding
     @encoding ||= begin
-      guess = detector.detect(@html, @html_charset)
-      guess&.fetch(:confidence, 0).to_i > 60 ? guess&.fetch(:encoding, nil) : nil
-    end
-  end
-
-  def detector
-    @detector ||= CharlockHolmes::EncodingDetector.new.tap do |detector|
-      detector.strip_tags = true
+      @html.encoding.name || nil
     end
   end
 
