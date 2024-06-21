@@ -125,7 +125,6 @@ module Paperclip
       end.flatten.reverse.uniq
     end
 
-    # rubocop:disable Naming/MethodParameterName
     def rgb_from_xyv(image, x, y, v)
       pixel = image.getpoint(x, y)
 
@@ -223,7 +222,6 @@ module Paperclip
 
       [(r * 255).round, (g * 255).round, (b * 255).round]
     end
-    # rubocop:enable Naming/MethodParameterName
 
     def lighten_or_darken(color, by)
       hue, saturation, light = rgb_to_hsl(color.r, color.g, color.b)
