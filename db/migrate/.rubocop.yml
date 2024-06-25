@@ -6,3 +6,7 @@ Naming/VariableNumber:
 Rails/CreateTableWithTimestamps:
   Include:
     - '*.rb'
+
+Rails/ThreeStateBooleanColumn:
+  Include:
+    - '*.rb'
