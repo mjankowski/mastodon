@@ -60,94 +60,6 @@ jobs:
           retention-days: 0
 
   test:
-    runs-on: ubuntu-latest
-
-    needs:
-      - build
-
-    services:
-      postgres:
-        image: postgres:14-alpine
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10ms
-          --health-timeout 3s
-          --health-retries 50
-        ports:
-          - 5432:5432
-
-      redis:
-        image: redis:7-alpine
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10ms
-          --health-timeout 3s
-          --health-retries 50
-        ports:
-          - 6379:6379
-
-    env:
-      DB_HOST: localhost
-      DB_USER: postgres
-      DB_PASS: postgres
-      DISABLE_SIMPLECOV: ${{ matrix.ruby-version != '.ruby-version' }}
-      RAILS_ENV: test
-      ALLOW_NOPAM: true
-      PAM_ENABLED: true
-      PAM_DEFAULT_SERVICE: pam_test
-      PAM_CONTROLLED_SERVICE: pam_test_controlled
-      OIDC_ENABLED: true
-      OIDC_SCOPE: read
-      SAML_ENABLED: true
-      CAS_ENABLED: true
-      BUNDLE_WITH: 'pam_authentication test'
-      GITHUB_RSPEC: ${{ matrix.ruby-version == '.ruby-version' && github.event.pull_request && 'true' }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby-version:
-          - '3.1'
-          - '3.2'
-          - '.ruby-version'
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          path: './'
-          name: ${{ github.sha }}
-
-      - name: Expand archived asset artifacts
-        run: |
-          tar xvzf artifacts.tar.gz
-
-      - name: Set up Ruby environment
-        uses: ./.github/actions/setup-ruby
-        with:
-          ruby-version: ${{ matrix.ruby-version}}
-          additional-system-dependencies: ffmpeg libpam-dev
-
-      - name: Load database schema
-        run: |
-          bin/rails db:setup
-          bin/flatware fan bin/rails db:test:prepare
-
-      - run: bin/flatware rspec -r ./spec/flatware_helper.rb
-
-      - name: Upload coverage reports to Codecov
-        if: matrix.ruby-version == '.ruby-version'
-        uses: codecov/codecov-action@v4
-        with:
-          files: coverage/lcov/*.lcov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  test-libvips:
-    name: Libvips tests
     runs-on: ubuntu-24.04
 
     needs:
@@ -218,104 +130,49 @@ jobs:
         uses: ./.github/actions/setup-ruby
         with:
           ruby-version: ${{ matrix.ruby-version}}
-          additional-system-dependencies: ffmpeg libpam-dev libyaml-dev
+          additional-system-dependencies: ffmpeg libpam-dev
+
+      - name: Set up JavaScript environment
+        uses: ./.github/actions/setup-javascript
 
       - name: Load database schema
-        run: './bin/rails db:create db:schema:load db:seed'
+        run: |
+          bin/rails db:setup
+          bin/flatware fan bin/rails db:test:prepare
 
-      - run: bin/rspec --tag paperclip_processing
+      - name: Run RSpec suite
+        run: |
+          bin/flatware rspec -r ./spec/flatware_helper.rb
 
       - name: Upload coverage reports to Codecov
         if: matrix.ruby-version == '.ruby-version'
         uses: codecov/codecov-action@v4
         with:
-          files: coverage/lcov/mastodon.lcov
+          files: coverage/lcov/*.lcov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  test-e2e:
-    name: End to End testing
-    runs-on: ubuntu-latest
-
-    needs:
-      - build
-
-    services:
-      postgres:
-        image: postgres:14-alpine
+      - name: Run media processing specs in legacy imagemagick mode
         env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_USER: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10ms
-          --health-timeout 3s
-          --health-retries 50
-        ports:
-          - 5432:5432
-
-      redis:
-        image: redis:7-alpine
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10ms
-          --health-timeout 3s
-          --health-retries 50
-        ports:
-          - 6379:6379
-
-    env:
-      DB_HOST: localhost
-      DB_USER: postgres
-      DB_PASS: postgres
-      DISABLE_SIMPLECOV: true
-      RAILS_ENV: test
-      BUNDLE_WITH: test
-      LOCAL_DOMAIN: localhost:3000
-      LOCAL_HTTPS: false
-
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby-version:
-          - '3.1'
-          - '3.2'
-          - '.ruby-version'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          path: './'
-          name: ${{ github.sha }}
-
-      - name: Expand archived asset artifacts
+          MASTODON_USE_LIBVIPS: false
         run: |
-          tar xvzf artifacts.tar.gz
+          bin/rspec --tag paperclip_processing
 
-      - name: Set up Ruby environment
-        uses: ./.github/actions/setup-ruby
-        with:
-          ruby-version: ${{ matrix.ruby-version}}
-          additional-system-dependencies: ffmpeg
+      - name: Run "end-to-end" (JS + Streaming) specs
+        env:
+          LOCAL_DOMAIN: localhost:3000
+          LOCAL_HTTPS: false
+        run: |
+          bin/rspec spec/system --tag streaming --tag js
 
-      - name: Set up Javascript environment
-        uses: ./.github/actions/setup-javascript
-
-      - name: Load database schema
-        run: './bin/rails db:create db:schema:load db:seed'
-
-      - run: bin/rspec spec/system --tag streaming --tag js
-
-      - name: Archive logs
+      - name: Archive logs from end-to-end run
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: e2e-logs-${{ matrix.ruby-version }}
           path: log/
 
-      - name: Archive test screenshots
+      - name: Archive test screenshots from end-to-end run
         uses: actions/upload-artifact@v4
         if: failure()
         with:
