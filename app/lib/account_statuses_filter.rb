@@ -48,7 +48,7 @@ class AccountStatusesFilter
   def filtered_scope
     scope = account.statuses.left_outer_joins(:mentions)
 
-    visibility_scope = follower? ? scope.home_feed_visibility : scope.distributable_visibility
+    visibility_scope = follower? ? scope.list_eligible_visibility : scope.distributable_visibility
 
     scope.merge!(visibility_scope.or(scope.where(mentions: { account_id: current_account.id })).group(Status.arel_table[:id]))
     scope.merge!(filtered_reblogs_scope) if reblogs_may_occur?
