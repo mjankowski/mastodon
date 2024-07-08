@@ -21,130 +21,15 @@ namespace :tests do
 
     desc 'Check that database state is consistent with a successful migration from populated data'
     task check_database: :environment do
-      unless Account.find_by(username: 'admin', domain: nil)&.hide_collections? == false
-        puts 'Unexpected value for Account#hide_collections? for user @admin'
-        exit(1)
-      end
+      if database_integrity?
+        puts 'No errors found. Database state is consistent with a successful migration process.'
+      else
+        abort <<~ERROR
+          Errors found during database check:
 
-      unless Account.find_by(username: 'user', domain: nil)&.hide_collections? == true
-        puts 'Unexpected value for Account#hide_collections? for user @user'
-        exit(1)
+          #{database_integrity_errors.join("\n")}
+        ERROR
       end
-
-      unless Account.find_by(username: 'evil', domain: 'activitypub.com')&.suspended?
-        puts 'Unexpected value for Account#suspended? for user @evil@activitypub.com'
-        exit(1)
-      end
-
-      unless Status.find(6).account_id == Status.find(7).account_id
-        puts 'Users @remote@remote.com and @Remote@remote.com not properly merged'
-        exit(1)
-      end
-
-      if Account.exists?(domain: Rails.configuration.x.local_domain)
-        puts 'Faux remote accounts not properly cleaned up'
-        exit(1)
-      end
-
-      unless AccountConversation.first&.last_status_id == 11
-        puts 'AccountConversation records not created as expected'
-        exit(1)
-      end
-
-      if Account.find(Account::INSTANCE_ACTOR_ID).private_key.blank?
-        puts 'Instance actor does not have a private key'
-        exit(1)
-      end
-
-      unless Account.find_by(username: 'user', domain: nil).custom_filters.map { |filter| filter.keywords.pluck(:keyword) } == [['test'], ['take']]
-        puts 'CustomFilterKeyword records not created as expected'
-        exit(1)
-      end
-
-      unless Admin::ActionLog.find_by(target_type: 'DomainBlock', target_id: 1).human_identifier == 'example.org'
-        puts 'Admin::ActionLog domain block records not updated as expected'
-        exit(1)
-      end
-
-      unless Admin::ActionLog.find_by(target_type: 'EmailDomainBlock', target_id: 1).human_identifier == 'example.org'
-        puts 'Admin::ActionLog email domain block records not updated as expected'
-        exit(1)
-      end
-
-      unless User.find(1).settings['notification_emails.favourite'] == true && User.find(1).settings['notification_emails.mention'] == false
-        puts 'User settings not kept as expected'
-        exit(1)
-      end
-
-      unless User.find(1).settings['web.trends'] == false
-        puts 'User settings not kept as expected'
-        exit(1)
-      end
-
-      unless Account.find_remote('bob', 'ActivityPub.com').domain == 'activitypub.com'
-        puts 'Account domains not properly normalized'
-        exit(1)
-      end
-
-      unless PreviewCard.where(id: PreviewCardsStatus.where(status_id: 12).select(:preview_card_id)).pluck(:url) == ['https://joinmastodon.org/']
-        puts 'Preview cards not deduplicated as expected'
-        exit(1)
-      end
-
-      unless Account.find_local('kmruser').user.chosen_languages == %w(en ku ckb)
-        puts 'Chosen languages not migrated as expected for kmr users'
-        exit(1)
-      end
-
-      unless Account.find_local('kmruser').user.settings['default_language'] == 'ku'
-        puts 'Default posting language not migrated as expected for kmr users'
-        exit(1)
-      end
-
-      unless Account.find_local('qcuser').user.locale == 'fr-CA'
-        puts 'Locale for fr-QC users not updated to fr-CA as expected'
-        exit(1)
-      end
-
-      policy = NotificationPolicy.find_by(account: User.find(1).account)
-      unless policy.filter_private_mentions == false && policy.filter_not_following == true
-        puts 'Notification policy not migrated as expected'
-        exit(1)
-      end
-
-      unless Identity.where(provider: 'foo', uid: 0).count == 1
-        puts 'Identities not deduplicated as expected'
-        exit(1)
-      end
-
-      unless WebauthnCredential.where(user_id: 1, nickname: 'foo').count == 1
-        puts 'Webauthn credentials not deduplicated as expected'
-        exit(1)
-      end
-
-      unless AccountAlias.where(account_id: 1, uri: 'https://example.com/users/foobar').count == 1
-        puts 'Account aliases not deduplicated as expected'
-        exit(1)
-      end
-
-      # This is checking the attribute rather than the method, to avoid the legacy fallback
-      # and ensure the data has been migrated
-      unless Account.find_local('qcuser').user[:otp_secret] == 'anotpsecretthatshouldbeencrypted'
-        puts 'OTP secret for user not preserved as expected'
-        exit(1)
-      end
-
-      unless Doorkeeper::Application.find(2)[:scopes] == 'write:accounts profile'
-        puts 'Application OAuth scopes not rewritten as expected'
-        exit(1)
-      end
-
-      unless Doorkeeper::Application.find(2).access_tokens.first[:scopes] == 'write:accounts profile'
-        puts 'OAuth access token scopes not rewritten as expected'
-        exit(1)
-      end
-
-      puts 'No errors found. Database state is consistent with a successful migration process.'
     end
 
     desc 'Populate the database with test data for 3.3.0'
@@ -502,6 +387,118 @@ namespace :tests do
           (12, 1),
           (12, 1);
       SQL
+    end
+
+    private
+
+    def database_integrity?
+      database_integrity_checks.pluck(:result).all?
+    end
+
+    def database_integrity_errors
+      database_integrity_checks.select { |check| check[:result] == false }.pluck(:error)
+    end
+
+    def database_integrity_checks
+      [
+        {
+          result: !Account.find_by(username: 'admin', domain: nil)&.hide_collections?,
+          error: 'Unexpected value for Account#hide_collections? for user @admin',
+        },
+        {
+          result: Account.find_by(username: 'user', domain: nil)&.hide_collections?,
+          error: 'Unexpected value for Account#hide_collections? for user @user',
+        },
+        {
+          result: Account.find_by(username: 'evil', domain: 'activitypub.com')&.suspended?,
+          error: 'Unexpected value for Account#suspended? for user @evil@activitypub.com',
+        },
+        {
+          result: Status.find(6).account_id == Status.find(7).account_id,
+          error: 'Users @remote@remote.com and @Remote@remote.com not properly merged',
+        },
+        {
+          result: !Account.exists?(domain: Rails.configuration.x.local_domain),
+          error: 'Faux remote accounts not properly cleaned up',
+        },
+        {
+          result: AccountConversation.first&.last_status_id == 11,
+          error: 'AccountConversation records not created as expected',
+        },
+        {
+          result: Account.find(Account::INSTANCE_ACTOR_ID).private_key.present?,
+          error: 'Instance actor does not have a private key',
+        },
+        {
+          result: Account.find_by(username: 'user', domain: nil).custom_filters.map { |filter| filter.keywords.pluck(:keyword) } == [['test'], ['take']],
+          error: 'CustomFilterKeyword records not created as expected',
+        },
+        {
+          result: Admin::ActionLog.find_by(target_type: 'DomainBlock', target_id: 1).human_identifier == 'example.org',
+          error: 'Admin::ActionLog domain block records not updated as expected',
+        },
+        {
+          result: Admin::ActionLog.find_by(target_type: 'EmailDomainBlock', target_id: 1).human_identifier == 'example.org',
+          error: 'Admin::ActionLog email domain block records not updated as expected',
+        },
+        {
+          result: User.find(1).settings['notification_emails.favourite'] == true && User.find(1).settings['notification_emails.mention'] == false,
+          error: 'User settings not kept as expected',
+        },
+        {
+          result: User.find(1).settings['web.trends'] == false,
+          error: 'User settings not kept as expected',
+        },
+        {
+          result: Account.find_remote('bob', 'ActivityPub.com').domain == 'activitypub.com',
+          error: 'Account domains not properly normalized',
+        },
+        {
+          result: PreviewCard.where(id: PreviewCardsStatus.where(status_id: 12).select(:preview_card_id)).pluck(:url) == ['https://joinmastodon.org/'],
+          error: 'Preview cards not deduplicated as expected',
+        },
+        {
+          result: Account.find_local('kmruser').user.chosen_languages == %w(en ku ckb),
+          error: 'Chosen languages not migrated as expected for kmr users',
+        },
+        {
+          result: Account.find_local('kmruser').user.settings['default_language'] == 'ku',
+          error: 'Default posting language not migrated as expected for kmr users',
+        },
+        {
+          result: Account.find_local('qcuser').user.locale == 'fr-CA',
+          error: 'Locale for fr-QC users not updated to fr-CA as expected',
+        },
+        {
+          result: NotificationPolicy.exists?(account: User.find(1).account, filter_private_mentions: false, filter_not_following: true),
+          error: 'Notification policy not migrated as expected',
+        },
+        {
+          result: Identity.where(provider: 'foo', uid: 0).count == 1,
+          error: 'Identities not deduplicated as expected',
+        },
+        {
+          result: WebauthnCredential.where(user_id: 1, nickname: 'foo').count == 1,
+          error: 'Webauthn credentials not deduplicated as expected',
+        },
+        {
+          result: AccountAlias.where(account_id: 1, uri: 'https://example.com/users/foobar').count == 1,
+          error: 'Account aliases not deduplicated as expected',
+        },
+        {
+          # Check attribute rather than method to avoid legacy fallback and ensure data is migrated
+          result: Account.find_local('qcuser').user[:otp_secret] == 'anotpsecretthatshouldbeencrypted',
+          error: 'OTP secret for user not preserved as expected',
+        },
+        {
+          result: Doorkeeper::Application.find(2)[:scopes] == 'write:accounts profile',
+          error: 'Application OAuth scopes not rewritten as expected',
+        },
+        {
+          result: Doorkeeper::Application.find(2).access_tokens.first[:scopes] == 'write:accounts profile',
+          error: 'OAuth access token scopes not rewritten as expected',
+        },
+      ]
     end
   end
 end
