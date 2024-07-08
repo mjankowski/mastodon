@@ -16,10 +16,10 @@ services:
       DB_USER: postgres
       DB_PASS: postgres
       DB_PORT: '5432'
-      ES_ENABLED: 'true'
+      # ES_ENABLED: 'true'
       ES_HOST: es
       ES_PORT: '9200'
-      LIBRE_TRANSLATE_ENDPOINT: http://libretranslate:5000
+      # LIBRE_TRANSLATE_ENDPOINT: http://libretranslate:5000
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
     ports:
