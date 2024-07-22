@@ -21,12 +21,16 @@ RSpec.describe User do
   end
 
   describe 'validations' do
+    subject { Fabricate.build(:user) }
+
     it { is_expected.to belong_to(:account) }
 
     it 'is invalid without a valid email' do
-      user = Fabricate.build(:user, email: 'john@')
-      user.valid?
-      expect(user).to model_have_error_on_field(:email)
+      expect(subject)
+        .to_not allow_values(
+          'john@'
+        )
+        .for(:email)
     end
 
     it 'is valid with an invalid e-mail that has already been saved' do
@@ -36,9 +40,11 @@ RSpec.describe User do
     end
 
     it 'is valid with a localhost e-mail address' do
-      user = Fabricate.build(:user, email: 'admin@localhost')
-      user.valid?
-      expect(user.valid?).to be true
+      expect(subject)
+        .to allow_values(
+          'admin@localhost'
+        )
+        .for(:email)
     end
   end
 
