@@ -31,7 +31,7 @@ class SessionActivation < ApplicationRecord
     end
 
     def purge_old
-      order('created_at desc').offset(Rails.configuration.x.max_session_activations).destroy_all
+      order(created_at: :desc).offset(Rails.configuration.x.max_session_activations).destroy_all
     end
 
     def exclusive(id)
