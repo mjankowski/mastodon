@@ -4,15 +4,11 @@ require 'rails_helper'
 
 describe Appeal do
   describe 'Validations' do
-    it 'validates text length is under limit' do
-      appeal = Fabricate.build(
-        :appeal,
-        strike: Fabricate(:account_warning),
-        text: 'a' * described_class::TEXT_LENGTH_LIMIT * 2
-      )
+    subject { Fabricate.build :appeal, strike: Fabricate(:account_warning) }
 
-      expect(appeal).to_not be_valid
-      expect(appeal).to model_have_error_on_field(:text)
+    it 'validates text length is under limit' do
+      expect(subject)
+        .to validate_length_of(:text).is_at_most(described_class::TEXT_LENGTH_LIMIT)
     end
   end
 
