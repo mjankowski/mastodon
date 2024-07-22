@@ -7,18 +7,13 @@ RSpec.describe CustomFilter do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:context) }
 
-    it 'requires non-empty of context' do
-      record = described_class.new(context: [])
-      record.valid?
-
-      expect(record).to model_have_error_on_field(:context)
-    end
-
-    it 'requires valid context value' do
-      record = described_class.new(context: ['invalid'])
-      record.valid?
-
-      expect(record).to model_have_error_on_field(:context)
+    it 'requires non-empty and valid value for context' do
+      expect(subject)
+        .to_not allow_values(
+          [],
+          ['invalid']
+        )
+        .for(:context)
     end
   end
 
