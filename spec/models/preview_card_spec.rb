@@ -18,10 +18,11 @@ describe PreviewCard do
       end
 
       it 'does not allow javascript: schemes' do
-        record = described_class.new(url: 'javascript:alert()')
-
-        expect(record).to_not be_valid
-        expect(record).to model_have_error_on_field(:url)
+        expect(subject)
+          .to_not allow_values(
+            'javascript:alert()'
+          )
+          .for(:url)
       end
     end
   end
