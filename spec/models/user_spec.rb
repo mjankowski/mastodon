@@ -20,10 +20,12 @@ RSpec.describe User do
     end
   end
 
+  describe 'Associations' do
+    it { is_expected.to belong_to(:account) }
+  end
+
   describe 'validations' do
     subject { Fabricate.build(:user) }
-
-    it { is_expected.to belong_to(:account) }
 
     it 'is invalid without a valid email' do
       expect(subject)

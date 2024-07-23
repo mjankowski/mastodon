@@ -6,11 +6,13 @@ RSpec.describe Follow do
   let(:alice) { Fabricate(:account, username: 'alice') }
   let(:bob)   { Fabricate(:account, username: 'bob') }
 
-  describe 'validations' do
-    subject { described_class.new(account: alice, target_account: bob, rate_limit: true) }
-
+  describe 'Associations' do
     it { is_expected.to belong_to(:account) }
     it { is_expected.to belong_to(:target_account) }
+  end
+
+  describe 'validations' do
+    subject { described_class.new(account: alice, target_account: bob, rate_limit: true) }
 
     it 'is invalid if account already follows too many people' do
       alice.update(following_count: FollowLimitValidator::LIMIT)
