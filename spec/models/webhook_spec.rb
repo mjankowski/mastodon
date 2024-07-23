@@ -8,18 +8,13 @@ RSpec.describe Webhook do
   describe 'Validations' do
     it { is_expected.to validate_presence_of(:events) }
 
-    it 'requires non-empty events value' do
-      record = described_class.new(events: [])
-      record.valid?
-
-      expect(record).to model_have_error_on_field(:events)
-    end
-
-    it 'requires valid events value from EVENTS' do
-      record = described_class.new(events: ['account.invalid'])
-      record.valid?
-
-      expect(record).to model_have_error_on_field(:events)
+    it 'requires valid value for events' do
+      expect(subject)
+        .to_not allow_values(
+          [],
+          ['account.invalid']
+        )
+        .for(:events)
     end
   end
 
