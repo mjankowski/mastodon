@@ -28,8 +28,11 @@ describe Settings::ApplicationsController do
   describe 'GET #show' do
     it 'returns http success' do
       get :show, params: { id: app.id }
-      expect(response).to have_http_status(200)
-      expect(assigns[:application]).to eql(app)
+
+      expect(response)
+        .to have_http_status(200)
+      expect(response.body)
+        .to include(app.name)
     end
 
     it 'returns 404 if you dont own app' do
