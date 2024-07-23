@@ -125,26 +125,39 @@ describe Report do
 
     it 'is invalid if comment is longer than character limit and reporter is local' do
       report = Fabricate.build(:report, comment: comment_over_limit)
-      expect(report.valid?).to be false
-      expect(report).to model_have_error_on_field(:comment)
+      expect(report)
+        .to_not allow_values(
+          comment_over_limit
+        )
+        .for(:comment)
     end
 
     it 'is valid if comment is longer than character limit and reporter is not local' do
       report = Fabricate.build(:report, account: remote_account, comment: comment_over_limit)
-      expect(report.valid?).to be true
+      expect(report)
+        .to allow_values(
+          comment_over_limit
+        )
+        .for(:comment)
     end
 
     it 'is invalid if it references invalid rules' do
-      report = Fabricate.build(:report, category: :violation, rule_ids: [-1])
-      expect(report.valid?).to be false
-      expect(report).to model_have_error_on_field(:rule_ids)
+      report = Fabricate.build(:report, category: :violation)
+      expect(report)
+        .to_not allow_values(
+          [-1]
+        )
+        .for(:rule_ids)
     end
 
     it 'is invalid if it references rules but category is not "violation"' do
       rule = Fabricate(:rule)
-      report = Fabricate.build(:report, category: :spam, rule_ids: rule.id)
-      expect(report.valid?).to be false
-      expect(report).to model_have_error_on_field(:rule_ids)
+      report = Fabricate.build(:report, category: :spam)
+      expect(report)
+        .to_not allow_values(
+          rule.id
+        )
+        .for(:rule_ids)
     end
 
     def comment_over_limit
