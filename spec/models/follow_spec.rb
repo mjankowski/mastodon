@@ -15,15 +15,19 @@ RSpec.describe Follow do
     it 'is invalid if account already follows too many people' do
       alice.update(following_count: FollowLimitValidator::LIMIT)
 
-      expect(subject).to_not be_valid
-      expect(subject).to model_have_error_on_field(:base)
+      expect(subject)
+        .to_not be_valid
+      expect(subject.errors)
+        .to be_key(:base)
     end
 
     it 'is valid if account is only on the brink of following too many people' do
       alice.update(following_count: FollowLimitValidator::LIMIT - 1)
 
-      expect(subject).to be_valid
-      expect(subject).to_not model_have_error_on_field(:base)
+      expect(subject)
+        .to be_valid
+      expect(subject.errors)
+        .to_not be_key(:base)
     end
   end
 
