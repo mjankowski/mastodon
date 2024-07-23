@@ -2,7 +2,7 @@
 
 RSpec::Matchers.define :have_http_header do |header, values|
   match do |response|
-    response.headers[header].match?(values)
+    expect(response.headers[header]).to include(values)
   end
 
   failure_message do |response|
