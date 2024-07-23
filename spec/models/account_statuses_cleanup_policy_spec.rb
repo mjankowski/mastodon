@@ -8,9 +8,11 @@ RSpec.describe AccountStatusesCleanupPolicy do
   describe 'validation' do
     it 'disallow remote accounts' do
       account.update(domain: 'example.com')
-      account_statuses_cleanup_policy = Fabricate.build(:account_statuses_cleanup_policy, account: account)
-      account_statuses_cleanup_policy.valid?
-      expect(account_statuses_cleanup_policy).to model_have_error_on_field(:account)
+      expect(subject)
+        .to_not allow_values(
+          account
+        )
+        .for(:account)
     end
   end
 
