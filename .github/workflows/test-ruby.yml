@@ -139,14 +139,6 @@ jobs:
 
       - run: bin/flatware rspec -r ./spec/flatware_helper.rb
 
-      - name: Upload coverage reports to Codecov
-        if: matrix.ruby-version == '.ruby-version'
-        uses: codecov/codecov-action@v4
-        with:
-          files: coverage/lcov/*.lcov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
   test-libvips:
     name: Libvips tests
     runs-on: ubuntu-24.04
@@ -225,14 +217,6 @@ jobs:
         run: './bin/rails db:create db:schema:load db:seed'
 
       - run: bin/rspec --tag attachment_processing
-
-      - name: Upload coverage reports to Codecov
-        if: matrix.ruby-version == '.ruby-version'
-        uses: codecov/codecov-action@v4
-        with:
-          files: coverage/lcov/mastodon.lcov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   test-e2e:
     name: End to End testing
