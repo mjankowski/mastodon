@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe AccountMigration do
   describe 'validations' do
-    subject { described_class.new(account: source_account, acct: target_acct) }
+    subject { described_class.new(account: source_account) }
 
     let(:source_account) { Fabricate(:account) }
     let(:target_acct)    { target_account.acct }
@@ -21,7 +21,11 @@ RSpec.describe AccountMigration do
       end
 
       it 'passes validations' do
-        expect(subject).to be_valid
+        expect(subject)
+          .to allow_values(
+            target_acct
+          )
+          .for(:acct)
       end
     end
 
@@ -35,7 +39,11 @@ RSpec.describe AccountMigration do
       end
 
       it 'has errors on acct field' do
-        expect(subject).to model_have_error_on_field(:acct)
+        expect(subject)
+          .to_not allow_values(
+            target_acct
+          )
+          .for(:acct)
       end
     end
 
@@ -43,7 +51,11 @@ RSpec.describe AccountMigration do
       let(:target_acct) { 'target@remote. org' }
 
       it 'has errors on acct field' do
-        expect(subject).to model_have_error_on_field(:acct)
+        expect(subject)
+          .to_not allow_values(
+            target_acct
+          )
+          .for(:acct)
       end
     end
   end
