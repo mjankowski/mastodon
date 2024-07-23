@@ -730,17 +730,14 @@ RSpec.describe Account do
     end
 
     context 'when is local' do
-      it 'is invalid if the username is not unique in case-insensitive comparison among local accounts' do
-        _account = Fabricate(:account, username: 'the_doctor')
-        non_unique_account = Fabricate.build(:account, username: 'the_Doctor')
-        non_unique_account.valid?
-        expect(non_unique_account).to model_have_error_on_field(:username)
-      end
+      it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
 
       it 'is invalid if the username is reserved' do
-        account = Fabricate.build(:account, username: 'support')
-        account.valid?
-        expect(account).to model_have_error_on_field(:username)
+        expect(subject)
+          .to_not allow_values(
+            'support'
+          )
+          .for(:username)
       end
 
       it 'is valid when username is reserved but record has already been created' do
@@ -760,80 +757,73 @@ RSpec.describe Account do
         expect(instance_account.valid?).to be true
       end
 
-      it 'is invalid if the username doesn\'t only contains letters, numbers and underscores' do
-        account = Fabricate.build(:account, username: 'the-doctor')
-        account.valid?
-        expect(account).to model_have_error_on_field(:username)
+      it 'is invalid if the username does not only contains letters, numbers and underscores' do
+        expect(subject)
+          .to_not allow_values(
+            'the-doctor',
+            'the.doctor',
+            'the$doctor'
+          )
+          .for(:username)
       end
 
-      it 'is invalid if the username contains a period' do
-        account = Fabricate.build(:account, username: 'the.doctor')
-        account.valid?
-        expect(account).to model_have_error_on_field(:username)
-      end
-
-      it 'is invalid if the username is longer than the character limit' do
-        account = Fabricate.build(:account, username: username_over_limit)
-        account.valid?
-        expect(account).to model_have_error_on_field(:username)
-      end
-
-      it 'is invalid if the display name is longer than the character limit' do
-        account = Fabricate.build(:account, display_name: display_name_over_limit)
-        account.valid?
-        expect(account).to model_have_error_on_field(:display_name)
-      end
+      it { is_expected.to validate_length_of(:username).is_at_most(described_class::USERNAME_LENGTH_LIMIT) }
+      it { is_expected.to validate_length_of(:display_name).is_at_most(described_class::DISPLAY_NAME_LENGTH_LIMIT) }
 
       it 'is invalid if the note is longer than the character limit' do
-        account = Fabricate.build(:account, note: account_note_over_limit)
-        account.valid?
-        expect(account).to model_have_error_on_field(:note)
+        expect(subject)
+          .to_not allow_values(
+            account_note_over_limit
+          )
+          .for(:note)
       end
     end
 
     context 'when is remote' do
+      subject { Fabricate.build(:account, domain: 'domain') }
+
       it 'is invalid if the username is same among accounts in the same normalized domain' do
         Fabricate(:account, domain: 'にゃん', username: 'username')
         account = Fabricate.build(:account, domain: 'xn--r9j5b5b', username: 'username')
-        account.valid?
-        expect(account).to model_have_error_on_field(:username)
+        expect(account)
+          .to_not allow_values(
+            'username',
+            'Username'
+          )
+          .for(:username)
       end
 
-      it 'is invalid if the username is not unique in case-insensitive comparison among accounts in the same normalized domain' do
-        Fabricate(:account, domain: 'にゃん', username: 'username')
-        account = Fabricate.build(:account, domain: 'xn--r9j5b5b', username: 'Username')
-        account.valid?
-        expect(account).to model_have_error_on_field(:username)
-      end
-
-      it 'is valid even if the username contains hyphens' do
-        account = Fabricate.build(:account, domain: 'domain', username: 'the-doctor')
-        account.valid?
-        expect(account).to_not model_have_error_on_field(:username)
+      it 'is valid even if the username contains hyphens or exceeds local limit' do
+        expect(subject)
+          .to allow_values(
+            'the-doctor',
+            username_over_limit
+          )
+          .for(:username)
       end
 
       it 'is invalid if the username doesn\'t only contains letters, numbers, underscores and hyphens' do
-        account = Fabricate.build(:account, domain: 'domain', username: 'the doctor')
-        account.valid?
-        expect(account).to model_have_error_on_field(:username)
-      end
-
-      it 'is valid even if the username is longer than the character limit' do
-        account = Fabricate.build(:account, domain: 'domain', username: username_over_limit)
-        account.valid?
-        expect(account).to_not model_have_error_on_field(:username)
+        expect(subject)
+          .to_not allow_values(
+            'the doctor'
+          )
+          .for(:username)
       end
 
       it 'is valid even if the display name is longer than the character limit' do
-        account = Fabricate.build(:account, domain: 'domain', display_name: display_name_over_limit)
-        account.valid?
-        expect(account).to_not model_have_error_on_field(:display_name)
+        expect(subject)
+          .to allow_values(
+            display_name_over_limit
+          )
+          .for(:display_name)
       end
 
       it 'is valid even if the note is longer than the character limit' do
-        account = Fabricate.build(:account, domain: 'domain', note: account_note_over_limit)
-        account.valid?
-        expect(account).to_not model_have_error_on_field(:note)
+        expect(subject)
+          .to allow_values(
+            account_note_over_limit
+          )
+          .for(:note)
       end
     end
 
