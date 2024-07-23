@@ -62,8 +62,11 @@ RSpec.describe Form::Import do
       let(:import_file) { 'boop.ogg' }
 
       it 'has errors' do
-        # NOTE: not testing more specific error because we don't know the string to match
-        expect(subject).to model_have_error_on_field(:data)
+        expect(subject)
+          .to_not allow_values(
+            fixture_file_upload(import_file)
+          )
+          .for(:data)
       end
     end
 
