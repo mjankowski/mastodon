@@ -76,16 +76,6 @@ The repository includes deployment configurations for **Docker and docker-compos
 
 ## Development
 
-### Vagrant
-
-A **Vagrant** configuration is included for development purposes. To use it, complete the following steps:
-
-- Install Vagrant and Virtualbox
-- Install the `vagrant-hostsupdater` plugin: `vagrant plugin install vagrant-hostsupdater`
-- Run `vagrant up`
-- Run `vagrant ssh -c "cd /vagrant && bin/dev"`
-- Open `http://mastodon.local` in your browser
-
 ### macOS
 
 To set up **macOS** for native development, complete the following steps:
