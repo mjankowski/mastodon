@@ -2,7 +2,7 @@
 
 namespace :api, format: false do
   # OEmbed
-  get '/oembed', to: 'oembed#show', as: :oembed
+  resource :oembed, only: :show, controller: :oembed
 
   # JSON / REST API
   namespace :v1 do
