@@ -151,7 +151,7 @@ describe 'Caching behavior' do
 
   shared_examples 'language-dependent' do
     it 'has a Vary on Accept-Language' do
-      expect(response_vary_headers).to include('accept-language')
+      expect(response).to have_http_header('Vary', 'Accept-Language')
     end
   end
 
@@ -187,8 +187,9 @@ describe 'Caching behavior' do
       it 'redirects with proper cache header', :aggregate_failures do
         get '/users/alice'
 
-        expect(response).to redirect_to('/@alice')
-        expect(response_vary_headers).to include('accept')
+        expect(response)
+          .to redirect_to('/@alice')
+          .and have_http_header('Vary', 'Accept')
       end
     end
 
@@ -208,7 +209,7 @@ describe 'Caching behavior' do
         it_behaves_like 'cachable response'
 
         it 'has a Vary on Cookie' do
-          expect(response_vary_headers).to include('cookie')
+          expect(response).to have_http_header('Vary', 'Cookie')
         end
 
         it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
@@ -222,7 +223,7 @@ describe 'Caching behavior' do
         it_behaves_like 'cachable response'
 
         it 'has a Vary on Authorization' do
-          expect(response_vary_headers).to include('authorization')
+          expect(response).to have_http_header('Vary', 'Authorization')
         end
 
         it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
@@ -302,7 +303,7 @@ describe 'Caching behavior' do
         it_behaves_like 'non-cacheable response'
 
         it 'has a Vary on Cookie' do
-          expect(response_vary_headers).to include('cookie')
+          expect(response).to have_http_header('Vary', 'Cookie')
         end
       end
     end
@@ -345,7 +346,7 @@ describe 'Caching behavior' do
         it_behaves_like 'non-cacheable response'
 
         it 'has a Vary on Authorization' do
-          expect(response_vary_headers).to include('authorization')
+          expect(response).to have_http_header('Vary', 'Authorization')
         end
       end
     end
@@ -607,7 +608,7 @@ describe 'Caching behavior' do
           it_behaves_like 'non-cacheable response'
 
           it 'has a Vary on Authorization' do
-            expect(response_vary_headers).to include('authorization')
+            expect(response).to have_http_header('Vary', 'Authorization')
           end
         end
       end
@@ -622,11 +623,5 @@ describe 'Caching behavior' do
         end
       end
     end
-  end
-
-  private
-
-  def response_vary_headers
-    response.headers['Vary']&.split(',')&.map { |x| x.strip.downcase }
   end
 end
