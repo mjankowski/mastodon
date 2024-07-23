@@ -138,9 +138,10 @@ describe '/api/v1/statuses' do
         it 'returns rate limit headers', :aggregate_failures do
           subject
 
-          expect(response).to have_http_status(200)
-          expect(response.headers['X-RateLimit-Limit']).to eq RateLimiter::FAMILIES[:statuses][:limit].to_s
-          expect(response.headers['X-RateLimit-Remaining']).to eq (RateLimiter::FAMILIES[:statuses][:limit] - 1).to_s
+          expect(response)
+            .to have_http_status(200)
+            .and have_http_header('X-RateLimit-Limit', RateLimiter::FAMILIES[:statuses][:limit].to_s)
+            .and have_http_header('X-RateLimit-Remaining', (RateLimiter::FAMILIES[:statuses][:limit] - 1).to_s)
         end
       end
 
@@ -164,8 +165,9 @@ describe '/api/v1/statuses' do
         it 'returns rate limit headers', :aggregate_failures do
           subject
 
-          expect(response).to have_http_status(422)
-          expect(response.headers['X-RateLimit-Limit']).to eq RateLimiter::FAMILIES[:statuses][:limit].to_s
+          expect(response)
+            .to have_http_status(422)
+            .and have_http_header('X-RateLimit-Limit', RateLimiter::FAMILIES[:statuses][:limit].to_s)
         end
       end
 
@@ -178,9 +180,10 @@ describe '/api/v1/statuses' do
         it 'returns rate limit headers', :aggregate_failures do
           subject
 
-          expect(response).to have_http_status(429)
-          expect(response.headers['X-RateLimit-Limit']).to eq RateLimiter::FAMILIES[:statuses][:limit].to_s
-          expect(response.headers['X-RateLimit-Remaining']).to eq '0'
+          expect(response)
+            .to have_http_status(429)
+            .and have_http_header('X-RateLimit-Limit', RateLimiter::FAMILIES[:statuses][:limit].to_s)
+            .and have_http_header('X-RateLimit-Remaining', '0')
         end
       end
 
