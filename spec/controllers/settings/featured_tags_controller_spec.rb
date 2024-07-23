@@ -37,7 +37,9 @@ describe Settings::FeaturedTagsController do
         let(:params) { { name: 'test, #foo !bleh' } }
 
         it 'renders new' do
-          expect(subject).to render_template :index
+          expect { subject }
+            .to_not(change { user.account.featured_tags.count })
+          expect(response).to have_http_status(:success)
         end
       end
     end

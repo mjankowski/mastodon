@@ -6,11 +6,10 @@ describe Settings::TwoFactorAuthentication::ConfirmationsController do
   render_views
 
   shared_examples 'renders :new' do
-    it 'renders the new view' do
+    it 'renders the QR Code view' do
       subject
 
       expect(response).to have_http_status(200)
-      expect(response).to render_template(:new)
       expect(response.body)
         .to include(qr_code_markup)
     end
@@ -67,9 +66,11 @@ describe Settings::TwoFactorAuthentication::ConfirmationsController do
               .to change { user.reload.otp_secret }.to 'thisisasecretforthespecofnewview'
 
             expect(flash[:notice]).to eq 'Two-factor authentication successfully enabled'
-            expect(response).to have_http_status(200)
-            expect(response).to render_template('settings/two_factor_authentication/recovery_codes/index')
-            expect(response.body).to include(*otp_backup_codes)
+            expect(response)
+              .to have_http_status(200)
+            expect(response.body)
+              .to include(I18n.t('two_factor_authentication.recovery_instructions_html'))
+              .and include(*otp_backup_codes)
           end
         end
 

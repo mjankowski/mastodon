@@ -30,15 +30,8 @@ describe Auth::ChallengesController do
     context 'with incorrect password' do
       before { post :create, params: { form_challenge: { return_to: return_to, current_password: 'hhfggjjd562' } } }
 
-      it 'renders challenge' do
-        expect(response).to render_template('auth/challenges/new')
-      end
-
-      it 'displays error' do
+      it 'displays error and does not set session' do
         expect(response.body).to include 'Invalid password'
-      end
-
-      it 'does not set session' do
         expect(session[:challenge_passed_at]).to be_nil
       end
     end

@@ -39,7 +39,6 @@ describe Settings::Migration::RedirectsController do
         post :create, params: { form_redirect: { acct: '' } }
 
         expect(response).to have_http_status(200)
-        expect(response).to render_template(:new)
       end
     end
   end

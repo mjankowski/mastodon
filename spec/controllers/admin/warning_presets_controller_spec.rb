@@ -26,7 +26,6 @@ describe Admin::WarningPresetsController do
       get :edit, params: { id: account_warning_preset.id }
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:edit)
     end
   end
 
@@ -47,7 +46,7 @@ describe Admin::WarningPresetsController do
           post :create, params: { account_warning_preset: { text: '' } }
         end.to_not change(AccountWarningPreset, :count)
 
-        expect(response).to render_template(:index)
+        expect(response).to have_http_status(:success)
       end
     end
   end
@@ -64,10 +63,13 @@ describe Admin::WarningPresetsController do
     end
 
     context 'with invalid data' do
-      it 'does not update the account_warning_preset and renders index' do
-        put :update, params: { id: account_warning_preset.id, account_warning_preset: { text: '' } }
+      subject { put :update, params: { id: account_warning_preset.id, account_warning_preset: { text: '' } } }
 
-        expect(response).to render_template(:edit)
+      it 'does not update the account_warning_preset and renders index' do
+        expect { subject }
+          .to_not(change { account_warning_preset.reload.text })
+
+        expect(response).to have_http_status(:success)
       end
     end
   end

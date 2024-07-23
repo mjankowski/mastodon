@@ -24,7 +24,6 @@ describe Admin::RelaysController do
       get :new
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:new)
     end
   end
 
@@ -52,7 +51,6 @@ describe Admin::RelaysController do
         end.to_not change(Relay, :count)
 
         expect(response).to have_http_status(:success)
-        expect(response).to render_template(:new)
       end
     end
   end

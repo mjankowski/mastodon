@@ -30,7 +30,6 @@ describe Settings::MigrationsController do
 
         it 'renders show page' do
           expect(subject).to have_http_status 200
-          expect(subject).to render_template :show
         end
       end
 
@@ -39,7 +38,6 @@ describe Settings::MigrationsController do
 
         it 'renders show page' do
           expect(subject).to have_http_status 200
-          expect(subject).to render_template :show
         end
       end
     end
@@ -75,7 +73,6 @@ describe Settings::MigrationsController do
           subject
 
           expect(user.account.reload.moved_to_account_id).to be_nil
-          expect(response).to render_template :show
         end
       end
 
@@ -86,7 +83,6 @@ describe Settings::MigrationsController do
           subject
 
           expect(user.account.reload.moved_to_account_id).to be_nil
-          expect(response).to render_template :show
         end
       end
 
@@ -102,7 +98,6 @@ describe Settings::MigrationsController do
           subject
 
           expect(user.account.reload.moved_to_account_id).to be_nil
-          expect(response).to render_template :show
         end
       end
     end

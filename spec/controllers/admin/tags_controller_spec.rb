@@ -74,8 +74,7 @@ RSpec.describe Admin::TagsController do
       it 'does not update the tag' do
         put :update, params: { id: tag.id, tag: { name: 'cant-change-name' } }
 
-        expect(response).to have_http_status(200)
-        expect(response).to render_template(:show)
+        expect(response).to have_http_status(:success)
       end
     end
   end

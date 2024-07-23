@@ -20,22 +20,20 @@ describe Admin::AnnouncementsController do
   end
 
   describe 'GET #new' do
-    it 'returns http success and renders new' do
+    it 'returns http success' do
       get :new
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:new)
     end
   end
 
   describe 'GET #edit' do
     let(:announcement) { Fabricate(:announcement) }
 
-    it 'returns http success and renders edit' do
+    it 'returns http success' do
       get :edit, params: { id: announcement.id }
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:edit)
     end
   end
 

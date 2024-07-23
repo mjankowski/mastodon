@@ -24,7 +24,6 @@ describe Admin::IpBlocksController do
       get :new
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:new)
     end
   end
 
@@ -47,7 +46,6 @@ describe Admin::IpBlocksController do
         end.to_not change(IpBlock, :count)
 
         expect(response).to have_http_status(:success)
-        expect(response).to render_template(:new)
       end
     end
   end

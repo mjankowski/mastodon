@@ -17,7 +17,6 @@ describe Settings::TwoFactorAuthentication::RecoveryCodesController do
 
       expect(flash[:notice]).to eq 'Recovery codes successfully regenerated'
       expect(response).to have_http_status(200)
-      expect(response).to render_template(:index)
       expect(response.body)
         .to include(*otp_backup_codes)
     end

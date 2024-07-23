@@ -3,10 +3,12 @@
 require 'rails_helper'
 
 describe Admin::BaseController do
+  render_views
+
   controller do
     def success
       authorize :dashboard, :index?
-      render 'admin/reports/show'
+      render html: 'ok', layout: true
     end
   end
 
@@ -30,13 +32,13 @@ describe Admin::BaseController do
     routes.draw { get 'success' => 'admin/base#success' }
     sign_in(Fabricate(:user, role: UserRole.find_by(name: 'Moderator')))
     get :success
-    expect(response).to render_template layout: 'admin'
+    expect(response.body).to include('admin-wrapper')
   end
 
   it 'renders admin layout as an admin' do
     routes.draw { get 'success' => 'admin/base#success' }
     sign_in(Fabricate(:user, role: UserRole.find_by(name: 'Admin')))
     get :success
-    expect(response).to render_template layout: 'admin'
+    expect(response.body).to include('admin-wrapper')
   end
 end

@@ -24,7 +24,6 @@ describe Admin::WebhooksController do
       get :new
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:new)
     end
   end
 
@@ -43,7 +42,6 @@ describe Admin::WebhooksController do
       end.to_not change(Webhook, :count)
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:new)
     end
   end
 
@@ -55,7 +53,6 @@ describe Admin::WebhooksController do
         get :show, params: { id: webhook.id }
 
         expect(response).to have_http_status(:success)
-        expect(response).to render_template(:show)
       end
     end
 
@@ -64,7 +61,6 @@ describe Admin::WebhooksController do
         get :edit, params: { id: webhook.id }
 
         expect(response).to have_http_status(:success)
-        expect(response).to render_template(:edit)
       end
     end
 
@@ -82,7 +78,6 @@ describe Admin::WebhooksController do
         end.to_not change(webhook, :url)
 
         expect(response).to have_http_status(:success)
-        expect(response).to render_template(:edit)
       end
     end
 

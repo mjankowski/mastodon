@@ -17,7 +17,8 @@ describe Admin::InvitesController do
     let!(:invite) { Fabricate(:invite) }
 
     it 'renders index page' do
-      expect(subject).to render_template :index
+      subject
+
       expect(response.body)
         .to include(invite.code)
     end

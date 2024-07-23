@@ -85,7 +85,7 @@ describe Settings::ApplicationsController do
     end
 
     context 'with failure request' do
-      before do
+      subject do
         post :create, params: {
           doorkeeper_application: {
             name: '',
@@ -97,8 +97,9 @@ describe Settings::ApplicationsController do
       end
 
       it 'returns http success and renders form', :aggregate_failures do
+        expect { subject }
+          .to_not change(Doorkeeper::Application, :count)
         expect(response).to have_http_status(200)
-        expect(response).to render_template(:new)
       end
     end
   end
@@ -128,7 +129,7 @@ describe Settings::ApplicationsController do
     end
 
     context 'with failure request' do
-      before do
+      subject do
         patch :update, params: {
           id: app.id,
           doorkeeper_application: {
@@ -141,8 +142,10 @@ describe Settings::ApplicationsController do
       end
 
       it 'returns http success and renders form', :aggregate_failures do
-        expect(response).to have_http_status(200)
-        expect(response).to render_template(:show)
+        expect { subject }
+          .to_not(change { app.reload.name })
+        expect(response)
+          .to have_http_status(200)
       end
     end
   end

@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ChallengableConcern do
+  render_views
+
   controller(ApplicationController) do
     include ChallengableConcern
 
@@ -85,7 +87,7 @@ RSpec.describe ChallengableConcern do
       before { get :foo }
 
       it 'renders challenge' do
-        expect(response).to render_template('auth/challenges/new', layout: :auth)
+        expect(response.body).to include I18n.t('challenge.prompt')
       end
 
       # See Auth::ChallengesControllerSpec
@@ -95,7 +97,7 @@ RSpec.describe ChallengableConcern do
       before { post :bar }
 
       it 'renders challenge' do
-        expect(response).to render_template('auth/challenges/new', layout: :auth)
+        expect(response.body).to include I18n.t('challenge.prompt')
       end
 
       it 'accepts correct password' do
@@ -106,7 +108,7 @@ RSpec.describe ChallengableConcern do
 
       it 'rejects wrong password' do
         post :bar, params: { form_challenge: { current_password: 'dddfff888123' } }
-        expect(response.body).to render_template('auth/challenges/new', layout: :auth)
+        expect(response.body).to include I18n.t('challenge.prompt')
         expect(session[:challenge_passed_at]).to be_nil
       end
     end

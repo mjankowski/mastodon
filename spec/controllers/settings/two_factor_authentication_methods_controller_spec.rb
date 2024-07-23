@@ -58,7 +58,7 @@ describe Settings::TwoFactorAuthenticationMethodsController do
           post :disable
 
           expect(response).to have_http_status(200)
-          expect(response).to render_template('auth/challenges/new')
+          expect(response.body).to include I18n.t('challenge.prompt')
         end
       end
 

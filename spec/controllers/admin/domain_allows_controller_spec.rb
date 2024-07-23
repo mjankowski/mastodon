@@ -28,9 +28,9 @@ RSpec.describe Admin::DomainAllowsController do
     it 'renders new when failed to save' do
       Fabricate(:domain_allow, domain: 'example.com')
 
-      post :create, params: { domain_allow: { domain: 'example.com' } }
-
-      expect(response).to render_template :new
+      expect do
+        post :create, params: { domain_allow: { domain: 'example.com' } }
+      end.to_not change(DomainAllow, :count)
     end
   end
 

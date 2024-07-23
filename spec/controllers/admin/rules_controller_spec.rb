@@ -26,7 +26,6 @@ describe Admin::RulesController do
       get :edit, params: { id: rule.id }
 
       expect(response).to have_http_status(:success)
-      expect(response).to render_template(:edit)
     end
   end
 
@@ -47,7 +46,7 @@ describe Admin::RulesController do
           post :create, params: { rule: { text: '' } }
         end.to_not change(Rule, :count)
 
-        expect(response).to render_template(:index)
+        expect(response).to have_http_status(:success)
       end
     end
   end
@@ -64,10 +63,13 @@ describe Admin::RulesController do
     end
 
     context 'with invalid data' do
-      it 'does not update the rule and renders index' do
-        put :update, params: { id: rule.id, rule: { text: '' } }
+      subject { put :update, params: { id: rule.id, rule: { text: '' } } }
 
-        expect(response).to render_template(:edit)
+      it 'does not update the rule and renders index' do
+        expect { subject }
+          .to_not(change { rule.reload.text })
+
+        expect(response).to have_http_status(:success)
       end
     end
   end

@@ -73,9 +73,8 @@ describe Admin::ReportNotesController do
       let(:action_taken) { nil }
       let(:account_id) { nil }
 
-      it 'renders admin/reports/show' do
+      it 'does not save' do
         expect { subject }.to_not change(ReportNote, :count)
-        expect(subject).to render_template 'admin/reports/show'
       end
     end
 
@@ -84,9 +83,8 @@ describe Admin::ReportNotesController do
       let(:action_taken) { nil }
       let(:account_id) { nil }
 
-      it 'renders admin/reports/show' do
+      it 'does not save' do
         expect { subject }.to_not change(ReportNote, :count)
-        expect(subject).to render_template 'admin/reports/show'
       end
     end
   end

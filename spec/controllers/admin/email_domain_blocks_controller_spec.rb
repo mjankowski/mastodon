@@ -48,8 +48,8 @@ RSpec.describe Admin::EmailDomainBlocksController do
         post :create, params: { email_domain_block: { domain: 'example.com' } }
       end
 
-      it 'renders new template' do
-        expect(response).to render_template(:new)
+      it 'renders new template with save button' do
+        expect(response.body).to include(I18n.t('admin.email_domain_blocks.new.create'))
       end
     end
 
@@ -58,12 +58,11 @@ RSpec.describe Admin::EmailDomainBlocksController do
         post :create, params: { email_domain_block: { domain: 'example.com' }, save: '' }
       end
 
-      it 'blocks the domain' do
-        expect(EmailDomainBlock.find_by(domain: 'example.com')).to_not be_nil
-      end
-
-      it 'redirects to e-mail domain blocks' do
-        expect(response).to redirect_to(admin_email_domain_blocks_path)
+      it 'blocks the domain and redirects' do
+        expect(EmailDomainBlock.find_by(domain: 'example.com'))
+          .to_not be_nil
+        expect(response)
+          .to redirect_to(admin_email_domain_blocks_path)
       end
     end
   end

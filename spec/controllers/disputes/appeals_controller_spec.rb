@@ -40,7 +40,7 @@ RSpec.describe Disputes::AppealsController do
         emails = capture_emails { subject }
 
         expect(emails).to be_empty
-        expect(response).to render_template('disputes/strikes/show')
+        expect(response).to have_http_status(:success)
       end
     end
   end

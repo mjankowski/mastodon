@@ -223,8 +223,8 @@ RSpec.describe Auth::SessionsController do
           end
 
           it 'renders two factor authentication page' do
-            expect(controller).to render_template('two_factor')
-            expect(controller).to render_template(partial: '_otp_authentication_form')
+            expect(response.body)
+              .to include('id="otp-authentication-form"')
           end
         end
 
@@ -239,8 +239,8 @@ RSpec.describe Auth::SessionsController do
           end
 
           it 'renders two factor authentication page' do
-            expect(controller).to render_template('two_factor')
-            expect(controller).to render_template(partial: '_otp_authentication_form')
+            expect(response.body)
+              .to include('id="otp-authentication-form"')
           end
         end
 
@@ -250,8 +250,8 @@ RSpec.describe Auth::SessionsController do
           end
 
           it 'renders two factor authentication page' do
-            expect(controller).to render_template('two_factor')
-            expect(controller).to render_template(partial: '_otp_authentication_form')
+            expect(response.body)
+              .to include('id="otp-authentication-form"')
           end
         end
 
@@ -377,9 +377,9 @@ RSpec.describe Auth::SessionsController do
             post :create, params: { user: { email: user.email, password: user.password } }
           end
 
-          it 'renders webauthn authentication page' do
-            expect(controller).to render_template('two_factor')
-            expect(controller).to render_template(partial: '_webauthn_form')
+          it 'renders webauthn form' do
+            expect(response.body)
+              .to include('id="webauthn-form"')
           end
         end
 
@@ -388,9 +388,9 @@ RSpec.describe Auth::SessionsController do
             post :create, params: { user: { email: user.email.upcase, password: user.password } }
           end
 
-          it 'renders webauthn authentication page' do
-            expect(controller).to render_template('two_factor')
-            expect(controller).to render_template(partial: '_webauthn_form')
+          it 'renders webauthn form' do
+            expect(response.body)
+              .to include('id="webauthn-form"')
           end
         end
 

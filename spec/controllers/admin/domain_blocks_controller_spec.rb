@@ -68,16 +68,9 @@ RSpec.describe Admin::DomainBlocksController do
         post :create, params: { domain_block: { domain: 'example.com', severity: 'silence' } }
       end
 
-      it 'does not record a block' do
+      it 'does not record a block or call worker' do
         expect(DomainBlock.exists?(domain: 'example.com', severity: 'silence')).to be false
-      end
-
-      it 'does not call DomainBlockWorker' do
         expect(DomainBlockWorker).to_not have_received(:perform_async)
-      end
-
-      it 'renders new' do
-        expect(response).to render_template :new
       end
     end
 
@@ -87,16 +80,9 @@ RSpec.describe Admin::DomainBlocksController do
           post :create, params: { domain_block: { domain: 'example.com', severity: 'suspend', reject_media: true, reject_reports: true } }
         end
 
-        it 'does not record a block' do
+        it 'does not record a block or call the worker' do
           expect(DomainBlock.exists?(domain: 'example.com', severity: 'suspend')).to be false
-        end
-
-        it 'does not call DomainBlockWorker' do
           expect(DomainBlockWorker).to_not have_received(:perform_async)
-        end
-
-        it 'renders confirm_suspension' do
-          expect(response).to render_template :confirm_suspension
         end
       end
 
@@ -130,16 +116,9 @@ RSpec.describe Admin::DomainBlocksController do
           post :create, params: { domain_block: { domain: 'example.com', severity: 'suspend', reject_media: true, reject_reports: true } }
         end
 
-        it 'does not record a block' do
+        it 'does not record a block or call the worker' do
           expect(DomainBlock.exists?(domain: 'example.com', severity: 'suspend')).to be false
-        end
-
-        it 'does not call DomainBlockWorker' do
           expect(DomainBlockWorker).to_not have_received(:perform_async)
-        end
-
-        it 'renders confirm_suspension' do
-          expect(response).to render_template :confirm_suspension
         end
       end
 

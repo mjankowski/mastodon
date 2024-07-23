@@ -81,11 +81,8 @@ describe Admin::RolesController do
         let(:selected_position) { 100 }
         let(:selected_permissions_as_keys) { %w(manage_roles) }
 
-        it 'renders new template' do
-          expect(response).to render_template(:new)
-        end
-
         it 'does not create new role' do
+          expect(response).to have_http_status(:success)
           expect(UserRole.find_by(name: 'Bar')).to be_nil
         end
       end
@@ -94,11 +91,8 @@ describe Admin::RolesController do
         let(:selected_position) { 1 }
         let(:selected_permissions_as_keys) { %w(manage_roles manage_users manage_reports) }
 
-        it 'renders new template' do
-          expect(response).to render_template(:new)
-        end
-
         it 'does not create new role' do
+          expect(response).to have_http_status(:success)
           expect(UserRole.find_by(name: 'Bar')).to be_nil
         end
       end
@@ -179,11 +173,8 @@ describe Admin::RolesController do
       let(:permissions) { UserRole::FLAGS[:manage_roles] }
 
       context 'when role has permissions the user doesn\'t' do
-        it 'renders edit template' do
-          expect(response).to render_template(:edit)
-        end
-
         it 'does not update the role' do
+          expect(response).to have_http_status(:success)
           expect(role.reload.name).to eq 'Bar'
         end
       end

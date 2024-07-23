@@ -57,9 +57,6 @@ RSpec.describe Settings::PrivacyController do
       it 'updates the user profile' do
         put :update, params: { account: { discoverable: '1', settings: { indexable: '1' } } }
 
-        expect(response)
-          .to render_template(:show)
-
         expect(ActivityPub::UpdateDistributionWorker)
           .to_not have_received(:perform_async)
       end

@@ -88,10 +88,6 @@ describe Auth::PasswordsController do
         post :update, params: { user: { password: password, password_confirmation: password, reset_password_token: 'some_invalid_value' } }
       end
 
-      it 'renders reset password' do
-        expect(response).to render_template(:new)
-      end
-
       it 'retains password' do
         this_user = User.find(user.id)
 

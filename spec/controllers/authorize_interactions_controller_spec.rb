@@ -21,7 +21,7 @@ describe AuthorizeInteractionsController do
         sign_in(user)
       end
 
-      it 'renders error without acct param' do
+      it 'renders not found without acct param' do
         get :show
 
         expect(response).to have_http_status(404)

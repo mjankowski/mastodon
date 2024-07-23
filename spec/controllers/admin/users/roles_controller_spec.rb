@@ -59,10 +59,7 @@ describe Admin::Users::RolesController do
 
       it 'does not update user role' do
         expect(user.reload.role_id).to eq previous_role&.id
-      end
-
-      it 'renders edit form' do
-        expect(response).to render_template(:show)
+        expect(response).to have_http_status(:success)
       end
     end
 

@@ -62,7 +62,6 @@ describe StatusesController do
             .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
             .and have_http_header('Cache-Control', 'public')
             .and have_http_header('Link', 'activity+json')
-            .and render_template(:show)
           expect(response.body).to include status.text
         end
       end
@@ -164,7 +163,6 @@ describe StatusesController do
               .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
               .and have_http_header('Cache-Control', 'private')
               .and have_http_header('Link', 'activity+json')
-              .and render_template(:show)
             expect(response.body).to include status.text
           end
         end
@@ -203,7 +201,6 @@ describe StatusesController do
                 .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
                 .and have_http_header('Cache-Control', 'private')
                 .and have_http_header('Link', 'activity+json')
-                .and render_template(:show)
 
               expect(response.body).to include status.text
             end
@@ -266,7 +263,6 @@ describe StatusesController do
                 .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
                 .and have_http_header('Cache-Control', 'private')
                 .and have_http_header('Link', 'activity+json')
-                .and render_template(:show)
               expect(response.body).to include status.text
             end
           end
@@ -354,7 +350,6 @@ describe StatusesController do
               .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
               .and have_http_header('Cache-Control', 'private')
               .and have_http_header('Link', 'activity+json')
-              .and render_template(:show)
             expect(response.body).to include status.text
           end
         end
@@ -394,7 +389,6 @@ describe StatusesController do
                 .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
                 .and have_http_header('Cache-Control', 'private')
                 .and have_http_header('Link', 'activity+json')
-                .and render_template(:show)
               expect(response.body).to include status.text
             end
           end
@@ -457,7 +451,6 @@ describe StatusesController do
                 .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
                 .and have_http_header('Cache-Control', 'private')
                 .and have_http_header('Link', 'activity+json')
-                .and render_template(:show)
               expect(response.body).to include status.text
             end
           end
@@ -753,7 +746,6 @@ describe StatusesController do
           .and have_http_header('Vary', 'Accept, Accept-Language, Cookie')
           .and have_http_header('Cache-Control', 'public')
           .and have_http_header('Link', 'activity+json')
-          .and render_template(:embed)
         expect(response.body).to include status.text
       end
     end

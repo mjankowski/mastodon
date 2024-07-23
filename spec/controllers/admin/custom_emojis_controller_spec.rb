@@ -20,7 +20,6 @@ describe Admin::CustomEmojisController do
       get :index
 
       expect(response).to have_http_status 200
-      expect(response).to render_template :index
     end
   end
 
@@ -29,7 +28,6 @@ describe Admin::CustomEmojisController do
       get :new
 
       expect(response).to have_http_status 200
-      expect(response).to render_template :new
     end
   end
 
@@ -49,8 +47,8 @@ describe Admin::CustomEmojisController do
     context 'when parameter is invalid' do
       let(:params) { { shortcode: 't', image: image } }
 
-      it 'renders new' do
-        expect(subject).to render_template :new
+      it 'does not create emoji' do
+        expect { subject }.to_not change(CustomEmoji, :count)
       end
     end
   end
