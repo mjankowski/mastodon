@@ -7,10 +7,11 @@ describe Form::AdminSettings do
     describe 'site_contact_username' do
       context 'with no accounts' do
         it 'is not valid' do
-          setting = described_class.new(site_contact_username: 'Test')
-          setting.valid?
-
-          expect(setting).to model_have_error_on_field(:site_contact_username)
+          expect(subject)
+            .to_not allow_values(
+              'Test'
+            )
+            .for(:site_contact_username)
         end
       end
 
@@ -18,17 +19,19 @@ describe Form::AdminSettings do
         before { Fabricate(:account, username: 'Glorp') }
 
         it 'is not valid when account doesnt match' do
-          setting = described_class.new(site_contact_username: 'Test')
-          setting.valid?
-
-          expect(setting).to model_have_error_on_field(:site_contact_username)
+          expect(subject)
+            .to_not allow_values(
+              'Test'
+            )
+            .for(:site_contact_username)
         end
 
         it 'is valid when account matches' do
-          setting = described_class.new(site_contact_username: 'Glorp')
-          setting.valid?
-
-          expect(setting).to_not model_have_error_on_field(:site_contact_username)
+          expect(subject)
+            .to allow_values(
+              'Glorp'
+            )
+            .for(:site_contact_username)
         end
       end
     end
