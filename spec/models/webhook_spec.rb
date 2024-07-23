@@ -20,9 +20,10 @@ RSpec.describe Webhook do
 
   describe 'Normalizations' do
     it 'cleans up events values' do
-      record = described_class.new(events: ['account.approved', 'account.created     ', ''])
-
-      expect(record.events).to eq(%w(account.approved account.created))
+      expect(subject)
+        .to normalize(:events)
+        .from(['account.approved', 'account.created     ', ''])
+        .to(%w(account.approved account.created))
     end
   end
 

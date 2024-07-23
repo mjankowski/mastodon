@@ -53,15 +53,17 @@ RSpec.describe User do
   describe 'Normalizations' do
     describe 'locale' do
       it 'preserves valid locale' do
-        user = Fabricate.build(:user, locale: 'en')
-
-        expect(user.locale).to eq('en')
+        expect(subject)
+          .to normalize(:locale)
+          .from('en')
+          .to('en')
       end
 
       it 'cleans out invalid locale' do
-        user = Fabricate.build(:user, locale: 'toto')
-
-        expect(user.locale).to be_nil
+        expect(subject)
+          .to normalize(:locale)
+          .from('toto')
+          .to(nil)
       end
     end
 
