@@ -67,7 +67,6 @@ RSpec.describe ActivityPub::OutboxesController do
             .and have_http_header('Vary', 'Signature')
 
           expect(response.media_type).to eq 'application/activity+json'
-          expect(response.headers['Vary']).to include 'Signature'
 
           expect(body[:orderedItems]).to be_an Array
           expect(body[:orderedItems].size).to eq 2
