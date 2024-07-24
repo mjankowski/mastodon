@@ -11,7 +11,3 @@ Rails/EnvironmentVariableAccess:
 
 Rails/FilePath:
   EnforcedStyle: arguments
-
-Rails/ReversibleMigration:
-  Exclude:
-    - db/*migrate/* # TODO: Work through these in old migrations
