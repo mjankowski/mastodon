@@ -28,7 +28,7 @@ namespace :api, format: false do
         resource :history, only: :show
         resource :source, only: :show
 
-        post :translate, to: 'translations#create'
+        resource :translate, only: :create, controller: :translations
       end
 
       member do
