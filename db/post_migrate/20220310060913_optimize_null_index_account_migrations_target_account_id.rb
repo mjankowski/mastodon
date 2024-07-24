@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require Rails.root.join('lib', 'mastodon', 'migration_helpers')
+require Rails.root.join('lib/mastodon/migration_helpers')
 
 class OptimizeNullIndexAccountMigrationsTargetAccountId < ActiveRecord::Migration[5.2]
   include Mastodon::MigrationHelpers

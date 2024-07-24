@@ -42,7 +42,7 @@ require 'chewy/rspec'
 require 'email_spec/rspec'
 require 'test_prof/recipes/rspec/before_all'
 
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 WebMock.disable_net_connect!(
@@ -80,7 +80,7 @@ RSpec.configure do |config|
   config.filter_run_excluding :streaming
 
   config.fixture_paths = [
-    Rails.root.join('spec', 'fixtures'),
+    Rails.root.join('spec/fixtures'),
   ]
   config.use_transactional_fixtures = true
   config.order = 'random'

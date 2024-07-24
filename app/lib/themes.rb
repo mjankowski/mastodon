@@ -12,7 +12,7 @@ class Themes
   }.freeze
 
   def initialize
-    @conf = YAML.load_file(Rails.root.join('config', 'themes.yml'))
+    @conf = YAML.load_file(Rails.root.join('config/themes.yml'))
   end
 
   def names

@@ -7,7 +7,7 @@ class MigrateRoles < ActiveRecord::Migration[5.2]
   class User < ApplicationRecord; end
 
   def up
-    load Rails.root.join('db', 'seeds', '03_roles.rb')
+    load Rails.root.join('db/seeds/03_roles.rb')
 
     owner_role     = UserRole.find_by(name: 'Owner')
     moderator_role = UserRole.find_by(name: 'Moderator')

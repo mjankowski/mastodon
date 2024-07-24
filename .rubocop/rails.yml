@@ -8,6 +8,3 @@ Rails/CreateTableWithTimestamps:
 
 Rails/EnvironmentVariableAccess:
   Enabled: false
-
-Rails/FilePath:
-  EnforcedStyle: arguments

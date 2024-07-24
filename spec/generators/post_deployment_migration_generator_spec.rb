@@ -12,7 +12,7 @@ describe PostDeploymentMigrationGenerator, type: :generator do
   include FileUtils
 
   tests described_class
-  destination Rails.root.join('tmp', 'generator-test')
+  destination Rails.root.join('tmp/generator-test')
   before { prepare_destination }
   after { rm_rf(destination_root) }
 

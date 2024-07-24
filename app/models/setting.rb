@@ -79,7 +79,7 @@ class Setting < ApplicationRecord
     def default_settings
       return @default_settings if defined?(@default_settings)
 
-      content = Rails.root.join('config', 'settings.yml').read
+      content = Rails.root.join('config/settings.yml').read
       hash = content.empty? ? {} : YAML.safe_load(ERB.new(content).result, aliases: true).to_hash
       @default_settings = (hash[Rails.env] || {}).freeze
     end

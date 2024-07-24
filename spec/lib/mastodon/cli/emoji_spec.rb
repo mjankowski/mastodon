@@ -27,7 +27,7 @@ describe Mastodon::CLI::Emoji do
 
   describe '#import' do
     context 'with existing custom emoji' do
-      let(:import_path) { Rails.root.join('spec', 'fixtures', 'files', 'elite-assets.tar.gz') }
+      let(:import_path) { Rails.root.join('spec/fixtures/files/elite-assets.tar.gz') }
       let(:action) { :import }
       let(:arguments) { [import_path] }
 
@@ -50,7 +50,7 @@ describe Mastodon::CLI::Emoji do
 
       after { FileUtils.rm_rf(export_path.dirname) }
 
-      let(:export_path) { Rails.root.join('tmp', 'cli-tests', 'export.tar.gz') }
+      let(:export_path) { Rails.root.join('tmp/cli-tests/export.tar.gz') }
       let(:arguments) { [export_path.dirname.to_s] }
       let(:action) { :export }
 

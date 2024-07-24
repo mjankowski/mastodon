@@ -34,7 +34,7 @@ describe Admin::CustomEmojisController do
   describe 'POST #create' do
     subject { post :create, params: { custom_emoji: params } }
 
-    let(:image) { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'emojo.png'), 'image/png') }
+    let(:image) { fixture_file_upload(Rails.root.join('spec/fixtures/files/emojo.png'), 'image/png') }
 
     context 'when parameter is valid' do
       let(:params) { { shortcode: 'test', image: image } }
