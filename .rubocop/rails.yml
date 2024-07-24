@@ -15,7 +15,3 @@ Rails/FilePath:
 Rails/ReversibleMigration:
   Exclude:
     - db/*migrate/* # TODO: Work through these in old migrations
-
-Rails/ThreeStateBooleanColumn:
-  Exclude:
-    - db/*migrate/* # TODO: Work through these in old migrations
