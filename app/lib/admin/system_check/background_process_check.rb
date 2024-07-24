@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::SystemCheck::SidekiqProcessCheck < Admin::SystemCheck::BaseCheck
+class Admin::SystemCheck::BackgroundProcessCheck < Admin::SystemCheck::BaseCheck
   SIDEKIQ_QUEUES = %w(
     default
     push
@@ -19,7 +19,7 @@ class Admin::SystemCheck::SidekiqProcessCheck < Admin::SystemCheck::BaseCheck
   end
 
   def message
-    Admin::SystemCheck::Message.new(:sidekiq_process_check, missing_queues.join(', '))
+    Admin::SystemCheck::Message.new(:background_process_check, missing_queues.join(', '))
   end
 
   private

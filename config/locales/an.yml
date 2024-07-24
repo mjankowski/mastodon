@@ -768,6 +768,8 @@ an:
       appeal_approved: Apelado
       appeal_pending: Apelación pendient
     system_checks:
+      background_process_check:
+        message_html: No i hai garra proceso Sidekiq en execución pa la coda (u codas) de %{value}. Per favor, revise la suya configuración de Sidekiq
       database_schema_check:
         message_html: I hai migracions pendients d'a base de datos. Per favor, executa-las pa asegurar-te que l'aplicación funciona como debería
       elasticsearch_running_check:
@@ -778,8 +780,6 @@ an:
       rules_check:
         action: Administrar reglas d'o servidor
         message_html: No ha definiu garra regla d'o servidor.
-      sidekiq_process_check:
-        message_html: No i hai garra proceso Sidekiq en execución pa la coda (u codas) de %{value}. Per favor, revise la suya configuración de Sidekiq
     tags:
       review: Estau de revisión
       updated_msg: Hashtags actualizaus exitosament

@@ -758,6 +758,8 @@ sco:
       appeal_approved: Appealt
       appeal_pending: Appeal pendin
     system_checks:
+      background_process_check:
+        message_html: Nae Sidekiq process rinnin fir the %{value} queue(s). Please luik ower yer Sidekiq configuration
       database_schema_check:
         message_html: There pendin database migrations. Please rin them fir tae mak siccar the application behaves as expectit
       elasticsearch_running_check:
@@ -768,8 +770,6 @@ sco:
       rules_check:
         action: Manage server rules
         message_html: Ye huvnae definit onie server rules.
-      sidekiq_process_check:
-        message_html: Nae Sidekiq process rinnin fir the %{value} queue(s). Please luik ower yer Sidekiq configuration
     tags:
       review: Luik ower status
       updated_msg: Hashtag settins updatit successfully

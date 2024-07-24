@@ -848,6 +848,8 @@ is:
       appeal_pending: Áfrýjun í bið
       appeal_rejected: Áfrýjun hafnað
     system_checks:
+      background_process_check:
+        message_html: Ekkert Sidekiq-ferli er í gangi fyrir %{value} biðröð/biðraðir. Endilega athugaðu Sidekiq-uppsetninguna þína
       database_schema_check:
         message_html: Það eru fyrirliggjandi yfirfærslur á gagnagrunnum. Keyrðu þær til að tryggja að forritið hegði sér eins og skyldi
       elasticsearch_health_red:
@@ -872,8 +874,6 @@ is:
       rules_check:
         action: Sýsla með reglur netþjónsins
         message_html: Þú hefur ekki skilgreint neinar reglur fyrir netþjón.
-      sidekiq_process_check:
-        message_html: Ekkert Sidekiq-ferli er í gangi fyrir %{value} biðröð/biðraðir. Endilega athugaðu Sidekiq-uppsetninguna þína
       software_version_critical_check:
         action: Skoða tiltækar uppfærslur
         message_html: Áríðandi uppfærsla Mastodon er tiltæk, uppfærðu eins fljótt og auðið er.

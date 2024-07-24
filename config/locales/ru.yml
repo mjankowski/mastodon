@@ -862,6 +862,8 @@ ru:
       appeal_pending: Обжалование в обработке
       appeal_rejected: Апелляция отклонена
     system_checks:
+      background_process_check:
+        message_html: Ни один Sidekiq не запущен для %{value} очереди(-ей). Пожалуйста, просмотрите настройки Sidekiq
       database_schema_check:
         message_html: Есть отложенные миграции базы данных. Запустите их, чтобы убедиться, что приложение работает должным образом
       elasticsearch_health_red:
@@ -886,8 +888,6 @@ ru:
       rules_check:
         action: Управление правилами сервера
         message_html: Вы не определили правила сервера.
-      sidekiq_process_check:
-        message_html: Ни один Sidekiq не запущен для %{value} очереди(-ей). Пожалуйста, просмотрите настройки Sidekiq
       software_version_critical_check:
         action: Посмотреть доступные обновления
         message_html: Доступно критическое обновление Mastodon, пожалуйста, обновитесь как можно скорее.

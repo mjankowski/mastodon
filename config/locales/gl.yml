@@ -846,6 +846,8 @@ gl:
       appeal_pending: Apelación pendente
       appeal_rejected: Apelación rexeitada
     system_checks:
+      background_process_check:
+        message_html: Non hai procesos Sidekiq a funcionar para a cola(s) %{value}. Revisa a túa configuración para Sidekiq
       database_schema_check:
         message_html: Existen migracións pendentes na base de datos. Bota man desta tarefa para facer que a aplicación funcione como se agarda dela
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ gl:
       rules_check:
         action: Xestionar regras do servidor
         message_html: Non tes definidas regras para o servidor.
-      sidekiq_process_check:
-        message_html: Non hai procesos Sidekiq a funcionar para a cola(s) %{value}. Revisa a túa configuración para Sidekiq
       software_version_critical_check:
         action: Mira as actualizacións dispoñibles
         message_html: Hai unha actualización crítica de Mastodon dispoñible, actualiza axiña.

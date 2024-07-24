@@ -846,6 +846,8 @@ hu:
       appeal_pending: Fellebbezés folyamatban
       appeal_rejected: Fellebbezés visszautasítva
     system_checks:
+      background_process_check:
+        message_html: Nincs Sidekiq folyamat, mely a %{value} sorhoz van rendelve. Kérlek, nézd át a Sidekiq beállításait
       database_schema_check:
         message_html: Vannak esedékes adatbázis migrációink. Kérlek, futtasd őket, hogy biztosítsd, hogy az alkalmazás megfelelően működjön
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ hu:
       rules_check:
         action: Kiszolgáló szabályainak kezelése
         message_html: Még nem definiáltál egy szerver szabályt sem.
-      sidekiq_process_check:
-        message_html: Nincs Sidekiq folyamat, mely a %{value} sorhoz van rendelve. Kérlek, nézd át a Sidekiq beállításait
       software_version_critical_check:
         action: Elérhető frissítések megtekintése
         message_html: Kritikus Mastodon frissítés érhető el, frissíts a lehető leggyorsabban.

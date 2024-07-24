@@ -816,6 +816,8 @@ ms:
       appeal_pending: Rayuan yang belum selesai
       appeal_rejected: Rayuan ditolak
     system_checks:
+      background_process_check:
+        message_html: Tiada proses Sidekiq berjalan untuk baris gilir %{value}. Sila semak konfigurasi Sidekiq anda
       database_schema_check:
         message_html: Terdapat migrasi pangkalan data yang belum selesai. Sila jalankannya untuk memastikan aplikasi berfungsi seperti yang diharapkan
       elasticsearch_health_red:
@@ -840,8 +842,6 @@ ms:
       rules_check:
         action: Urus peraturan server
         message_html: Anda belum menentukan sebarang peraturan server.
-      sidekiq_process_check:
-        message_html: Tiada proses Sidekiq berjalan untuk baris gilir %{value}. Sila semak konfigurasi Sidekiq anda
       software_version_critical_check:
         action: Lihat kemas kini yang tersedia
         message_html: Kemas kini kritikal Mastodon telah tersedia, sila kemas kini secepat yang mungkin.

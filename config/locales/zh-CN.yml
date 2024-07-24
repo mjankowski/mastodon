@@ -832,6 +832,8 @@ zh-CN:
       appeal_pending: 申诉待处理
       appeal_rejected: 申诉已驳回
     system_checks:
+      background_process_check:
+        message_html: "%{value} 队列未运行任何 Sidekiq 进程。请检查你的 Sidekiq 配置"
       database_schema_check:
         message_html: 有待处理的数据库迁移。请运行它们以确保应用程序正常运行。
       elasticsearch_health_red:
@@ -856,8 +858,6 @@ zh-CN:
       rules_check:
         action: 管理服务器规则
         message_html: 你没有定义任何服务器规则。
-      sidekiq_process_check:
-        message_html: "%{value} 队列未运行任何 Sidekiq 进程。请检查你的 Sidekiq 配置"
       software_version_critical_check:
         action: 查看可用更新
         message_html: 有一个紧急Mastodon紧急更新可用，请尽快更新。

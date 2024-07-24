@@ -846,6 +846,8 @@ fo:
       appeal_pending: Kæra bíðar eftir avgerð
       appeal_rejected: Kæra vrakað
     system_checks:
+      background_process_check:
+        message_html: Eingin Sidekiq gongd koyrir fyri %{value} bíðirøðina(r). Vinarliga eftirkanna Sidekiq uppsetingina
       database_schema_check:
         message_html: Dátugrunnaflytingar bíða. Vinarliga koyr flytingarnar fyri at tryggja at skipanin skikkar sær sum hon skal
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ fo:
       rules_check:
         action: Stýr ambætarareglum
         message_html: Tú hevur ikki ásett nakrar ambætarareglur.
-      sidekiq_process_check:
-        message_html: Eingin Sidekiq gongd koyrir fyri %{value} bíðirøðina(r). Vinarliga eftirkanna Sidekiq uppsetingina
       software_version_critical_check:
         action: Sí tøkar dagføringar
         message_html: Ein kritisk Mastodon-dagføring er tøk, vinarliga dagfør sum skjótast.

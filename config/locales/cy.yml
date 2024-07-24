@@ -902,6 +902,8 @@ cy:
       appeal_pending: Apêl yn aros
       appeal_rejected: Mae'r apêl wedi'i gwrthod
     system_checks:
+      background_process_check:
+        message_html: Does dim proses Sidekiq yn rhedeg ar gyfer y ciw(iau) %{value}. Adolygwch eich ffurfweddiad Sidekiq
       database_schema_check:
         message_html: Mae mudo cronfa ddata ar fin digwydd. Rhedwch nhw i sicrhau bod y rhaglen yn ymddwyn yn ôl y disgwyl
       elasticsearch_health_red:
@@ -926,8 +928,6 @@ cy:
       rules_check:
         action: Rheoli rheolau gweinydd
         message_html: Nid ydych wedi diffinio unrhyw reolau gweinydd.
-      sidekiq_process_check:
-        message_html: Does dim proses Sidekiq yn rhedeg ar gyfer y ciw(iau) %{value}. Adolygwch eich ffurfweddiad Sidekiq
       software_version_critical_check:
         action: Gweld y diweddariadau sydd ar gael
         message_html: Mae diweddariad hanfodol Mastodon ar gael, diweddarwch cyn gynted â phosibl.

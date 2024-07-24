@@ -846,6 +846,8 @@ fy:
       appeal_pending: Beswier yn behanneling
       appeal_rejected: Beswier ôfwêzen
     system_checks:
+      background_process_check:
+        message_html: Der draait gjin Sidekiq-proses foar de wachtrige(n) %{value}. Kontrolearje jo Sidekiq-konfiguraasje
       database_schema_check:
         message_html: Der binne database migraasjes yn ôfwachting. Jo moatte dizze útfiere om der foar te soargjen dat de applikaasje wurkjen bliuwt sa as it heard
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ fy:
       rules_check:
         action: Serverregels beheare
         message_html: Jo hawwe foar dizze server gjin regels opsteld.
-      sidekiq_process_check:
-        message_html: Der draait gjin Sidekiq-proses foar de wachtrige(n) %{value}. Kontrolearje jo Sidekiq-konfiguraasje
       software_version_critical_check:
         action: Beskikbere fernijingen besjen
         message_html: Der is in kritike fernijing foar Mastodon beskikber. Wurkje sa gau as mooglik by.

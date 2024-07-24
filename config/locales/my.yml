@@ -811,6 +811,8 @@ my:
       appeal_pending: အတည်ပြုမှုဆိုင်းငံ့ထားခြင်း
       appeal_rejected: တင်ပြခြင်းကို ပယ်ချခဲ့သည်
     system_checks:
+      background_process_check:
+        message_html: "%{value} တန်းစီ(s) အတွက် Sidekiq လုပ်ငန်းစဉ် မရှိပါ။ သင်၏ Sidekiq ဖွဲ့စည်းမှုကို ပြန်လည်သုံးသပ်ပါ။"
       database_schema_check:
         message_html: ဆိုင်းငံ့ထားသော ဒေတာဘေ့စ် ပြောင်းရွှေ့မှုများ ရှိပါသည်။ အပလီကေးရှင်းသည် မျှော်လင့်ထားသည့်အတိုင်း လုပ်ဆောင်ကြောင်း သေချာစေရန် ၎င်းတို့ကို လုပ်ဆောင်ပါ။
       elasticsearch_preset:
@@ -825,8 +827,6 @@ my:
       rules_check:
         action: ဆာဗာစည်းမျဉ်းများကို စီမံရန်
         message_html: သင်သည် မည်သည့်ဆာဗာစည်းမျဉ်းများကိုမျှ မသတ်မှတ်ထားပါ။
-      sidekiq_process_check:
-        message_html: "%{value} တန်းစီ(s) အတွက် Sidekiq လုပ်ငန်းစဉ် မရှိပါ။ သင်၏ Sidekiq ဖွဲ့စည်းမှုကို ပြန်လည်သုံးသပ်ပါ။"
       software_version_critical_check:
         action: ရရှိနိုင်သော အပ်ဒိတ်များကြည့်ပါ
         message_html: Mastodon အပ်ဒိတ်ရနိုင်သည်၊ ကျေးဇူးပြု၍ မြန်မြန် အပ်ဒိတ်လုပ်ပါ။

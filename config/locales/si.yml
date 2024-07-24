@@ -643,6 +643,8 @@ si:
       appeal_approved: අභියාචනා කළා
       appeal_pending: අභියාචනය පොරොත්තුවෙන්
     system_checks:
+      background_process_check:
+        message_html: "%{value} පෝලිම්(ය) සඳහා Sidekiq ක්‍රියාවලියක් ක්‍රියාත්මක නොවේ. කරුණාකර ඔබේ Sidekiq වින්‍යාසය සමාලෝචනය කරන්න"
       database_schema_check:
         message_html: පොරොත්තු දත්ත සමුදා සංක්‍රමණයන් ඇත. යෙදුම අපේක්ෂිත පරිදි ක්‍රියා කරන බව සහතික කිරීමට කරුණාකර ඒවා ධාවනය කරන්න
       elasticsearch_preset:
@@ -657,8 +659,6 @@ si:
       rules_check:
         action: සේවාදායකයේ නීති කළමනාකරණය
         message_html: ඔබ සේවාදායක රීති කිසිවක් නිර්වචනය කර නැත.
-      sidekiq_process_check:
-        message_html: "%{value} පෝලිම්(ය) සඳහා Sidekiq ක්‍රියාවලියක් ක්‍රියාත්මක නොවේ. කරුණාකර ඔබේ Sidekiq වින්‍යාසය සමාලෝචනය කරන්න"
       software_version_critical_check:
         action: තිබෙන යාවත්කාල බලන්න
       software_version_patch_check:

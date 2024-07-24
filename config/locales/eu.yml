@@ -841,6 +841,8 @@ eu:
       appeal_pending: Apelazioa zain
       appeal_rejected: Apelazioa baztertuta
     system_checks:
+      background_process_check:
+        message_html: Ez da ari Sidekiq prozesurik exekutatzen %{value} ilad(et)an. Egiaztatu Sidekiq konfigurazioa
       database_schema_check:
         message_html: Aplikatu gabeko datu-basearen migrazioak daude. Exekutatu aplikazioak esperotako portaera izan dezan
       elasticsearch_health_red:
@@ -865,8 +867,6 @@ eu:
       rules_check:
         action: Kudeatu zerbitzariaren arauak
         message_html: Ez duzu zerbitzariaren araurik definitu.
-      sidekiq_process_check:
-        message_html: Ez da ari Sidekiq prozesurik exekutatzen %{value} ilad(et)an. Egiaztatu Sidekiq konfigurazioa
       software_version_critical_check:
         action: Ikusi eguneraketa eskuragarriak
         message_html: Mastodon eguneraketa kritikoa eskuragarri, mesedez eguneratu ahal bezain azkar.

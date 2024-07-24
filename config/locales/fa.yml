@@ -740,6 +740,8 @@ fa:
       appeal_pending: منتظر تجدیدنظر
       appeal_rejected: درخواست تجدیدنظر رد شد
     system_checks:
+      background_process_check:
+        message_html: صف(های) %{value} فاقد هیچونه فرایند Sidekiq هستند. لطفا تنظیمات Sidekiq خود را بازبینی کنید
       database_schema_check:
         message_html: تعداد مهاجرت پایگاه داده در انتظار انجام هستند. لطفا آن‌ها را اجرا کنید تا اطمینان یابید که برنامه مطابق انتظار رفتار خواهد کرد
       elasticsearch_preset:
@@ -752,8 +754,6 @@ fa:
       rules_check:
         action: مدیریت قانون‌های کارساز
         message_html: هیچ قانون کارسازی تعریف نکرده‌اید.
-      sidekiq_process_check:
-        message_html: صف(های) %{value} فاقد هیچونه فرایند Sidekiq هستند. لطفا تنظیمات Sidekiq خود را بازبینی کنید
       software_version_critical_check:
         action: مشاهده به‌روزرسانی‌های موجود
         message_html: یک به‌روزرسانی حیاتی ماستودون موجود است، لطفا در اسرع وقت به‌روزرسانی کنید.

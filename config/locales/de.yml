@@ -846,6 +846,8 @@ de:
       appeal_pending: Einspruch ausstehend
       appeal_rejected: Einspruch abgelehnt
     system_checks:
+      background_process_check:
+        message_html: Kein Sidekiq-Prozess läuft für die %{value} Warteschlange(n). Bitte überprüfe deine Sidekiq-Konfiguration
       database_schema_check:
         message_html: Es gibt ausstehende Datenbankmigrationen. Bitte führe sie aus, um sicherzustellen, dass sich die Anwendung wie erwartet verhält
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ de:
       rules_check:
         action: Serverregeln verwalten
         message_html: Du hast keine Serverregeln festgelegt.
-      sidekiq_process_check:
-        message_html: Kein Sidekiq-Prozess läuft für die %{value} Warteschlange(n). Bitte überprüfe deine Sidekiq-Konfiguration
       software_version_critical_check:
         action: Verfügbare Updates ansehen
         message_html: Ein kritisches Mastodon-Update ist verfügbar – bitte aktualisiere so schnell wie möglich.

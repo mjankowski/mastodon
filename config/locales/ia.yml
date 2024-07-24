@@ -843,6 +843,8 @@ ia:
       appeal_pending: Appello pendente
       appeal_rejected: Appello rejectate
     system_checks:
+      background_process_check:
+        message_html: Necun processo Sidekiq es active pro le cauda(s) %{value}. Per favor verifica tu configuration de Sidekiq
       database_schema_check:
         message_html: Il ha migrationes de base de datos pendente. Per favor exeque los pro assecurar que le application se comporta como expectate
       elasticsearch_health_red:
@@ -867,8 +869,6 @@ ia:
       rules_check:
         action: Gerer le regulas del servitor
         message_html: Tu non ha definite alcun regula de servitor.
-      sidekiq_process_check:
-        message_html: Necun processo Sidekiq es active pro le cauda(s) %{value}. Per favor verifica tu configuration de Sidekiq
       software_version_critical_check:
         action: Vider le actualisationes disponibile
         message_html: Un actualisation critic de Mastodon es disponibile. Per favor actualisa lo le plus tosto possibile.

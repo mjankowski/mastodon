@@ -847,6 +847,8 @@ lv:
       appeal_pending: Apelācija tiek izskatīta
       appeal_rejected: Apelācija noraidīta
     system_checks:
+      background_process_check:
+        message_html: Rindā(s) %{value} nedarbojas neviens Sidekiq process. Lūdzu, pārskati savu Sidekiq konfigurāciju
       database_schema_check:
         message_html: Notiek datubāzu migrācijas. Lūdzu, palaid tās, lai nodrošinātu, ka lietojumprogramma darbojas, kā paredzēts
       elasticsearch_health_red:
@@ -871,8 +873,6 @@ lv:
       rules_check:
         action: Pārvaldīt servera nosacījumus
         message_html: Tu neesi definējis nevienu servera nosacījumu.
-      sidekiq_process_check:
-        message_html: Rindā(s) %{value} nedarbojas neviens Sidekiq process. Lūdzu, pārskati savu Sidekiq konfigurāciju
       software_version_critical_check:
         action: Skatīt pieejamos atjauninājumus
         message_html: Ir pieejams kritisks Mastodon atjauninājums. Lūdzu, atjaunini to pēc iespējas ātrāk.

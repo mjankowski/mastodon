@@ -841,6 +841,8 @@ pt-BR:
       appeal_pending: Revisão pendente
       appeal_rejected: Revisão rejeitada
     system_checks:
+      background_process_check:
+        message_html: Nenhum processo Sidekiq rodando para a(s) fila(s) %{value}. Por favor, revise a sua configuração para Sidekiq
       database_schema_check:
         message_html: Existem migrações de banco de dados pendentes. Execute-as para garantir que o aplicativo se comporte como esperado
       elasticsearch_health_red:
@@ -865,8 +867,6 @@ pt-BR:
       rules_check:
         action: Gerenciar regras do servidor
         message_html: Você não definiu nenhuma regra de servidor.
-      sidekiq_process_check:
-        message_html: Nenhum processo Sidekiq rodando para a(s) fila(s) %{value}. Por favor, revise a sua configuração para Sidekiq
       software_version_critical_check:
         action: Ver atualizações disponíveis
         message_html: Uma atualização crítica do Mastodon está disponível. Por favor, atualize o mais rápido possível.

@@ -874,6 +874,8 @@ be:
       appeal_pending: Апеляцыя разглядаецца
       appeal_rejected: Абскарджанне адхілена
     system_checks:
+      background_process_check:
+        message_html: Не працуе працэс Sidekiq для %{value} чаргі. Калі ласка праверце вашу канфігурацыю Sidekiq
       database_schema_check:
         message_html: Ёсць незавершаныя міграцыі базы дадзеных. Калі ласка, запусціце іх, каб пераканацца, што дадатак паводзіць сябе належным чынам
       elasticsearch_health_red:
@@ -898,8 +900,6 @@ be:
       rules_check:
         action: Кіраваць правіламі сервера
         message_html: Вы не вызначылі ніякіх правілаў сервера.
-      sidekiq_process_check:
-        message_html: Не працуе працэс Sidekiq для %{value} чаргі. Калі ласка праверце вашу канфігурацыю Sidekiq
       software_version_critical_check:
         action: Прагледзець даступныя абнаўленні
         message_html: Даступна крытычнае абнаўленне Mastodon, калі ласка, зрабіце абнаўленне як мага хутчэй.

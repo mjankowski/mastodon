@@ -813,6 +813,8 @@ el:
       appeal_pending: Έφεση σε εκκρεμότητα
       appeal_rejected: Η έφεση απορρίφθηκε
     system_checks:
+      background_process_check:
+        message_html: Καμία διεργασία Sidekiq δεν εκτελείται για την ουρά %{value}. Παρακαλώ έλεγξε τη διαμόρφωση του Sidekiq
       database_schema_check:
         message_html: Υπάρχουν μετακινήσεις βάσεων δεδομένων που εκκρεμούν. Παρακαλώ εκτέλεσέ τες για να βεβαιωθείς ότι η εφαρμογή συμπεριφέρεται όπως αναμένεται
       elasticsearch_running_check:
@@ -823,8 +825,6 @@ el:
       rules_check:
         action: Διαχείριση κανόνων διακομιστή
         message_html: Δεν έχεις ορίσει κανέναν κανόνα διακομιστή.
-      sidekiq_process_check:
-        message_html: Καμία διεργασία Sidekiq δεν εκτελείται για την ουρά %{value}. Παρακαλώ έλεγξε τη διαμόρφωση του Sidekiq
       upload_check_privacy_error:
         action: Δες εδώ για περισσότερες πληροφορίες
         message_html: "<strong>Ο διακομιστής σας δεν έχει ρυθμιστεί σωστά. Το απόρρητο των χρηστών σας κινδυνεύει.</strong>"

@@ -826,6 +826,8 @@ eo:
       appeal_pending: Apelacio pritraktiĝos
       appeal_rejected: Apelacio malakceptita
     system_checks:
+      background_process_check:
+        message_html: Neniu Sidekiq-procezo por la %{value} vico
       database_schema_check:
         message_html: Estas pritraktataj datumbazaj migradoj. Bonvolu ekzekuti ilin por certigi, ke la apliko kondutas kiel atendite
       elasticsearch_preset:
@@ -838,8 +840,6 @@ eo:
       rules_check:
         action: Administri servilajn regulojn
         message_html: Vi ne difinis iujn servilajn regulojn.
-      sidekiq_process_check:
-        message_html: Neniu Sidekiq-procezo por la %{value} vico
       upload_check_privacy_error:
         action: Klaku ĉi tie por pliaj informoj
         message_html: "<strong>Via retservilo estas misagordita. La privateco de viaj uzantoj estas en risko.</strong>"

@@ -846,6 +846,8 @@ sv:
       appeal_pending: Överklagande väntar
       appeal_rejected: Överklagan avslagen
     system_checks:
+      background_process_check:
+        message_html: Ingen Sidekiq-process körs för kön/köerna %{value}. Vänligen kontrollera din Sidekiq-konfiguration
       database_schema_check:
         message_html: Det finns väntande databasmigreringar. Vänligen kör dem för att säkerställa att programmet beter sig som förväntat
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ sv:
       rules_check:
         action: Hantera serverregler
         message_html: Du har inte definierat några serverregler.
-      sidekiq_process_check:
-        message_html: Ingen Sidekiq-process körs för kön/köerna %{value}. Vänligen kontrollera din Sidekiq-konfiguration
       software_version_critical_check:
         action: Se tillgängliga uppdateringar
         message_html: En kritisk uppdatering för Mastodon är tillgänglig. Uppdatera så snart som möjligt.

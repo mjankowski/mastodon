@@ -871,6 +871,8 @@ sl:
       appeal_pending: Čakajoč na ugovor
       appeal_rejected: Pritožba zavrnjena
     system_checks:
+      background_process_check:
+        message_html: Noben proces Sidekiq ne poteka za %{value} vrst. Preglejte svojo prilagoditev Sidekiq
       database_schema_check:
         message_html: Na čakanju so migracije zbirke podatkov. Prosimo, izvedite jih, da zagotovite, da se program vede pričakovano
       elasticsearch_health_red:
@@ -895,8 +897,6 @@ sl:
       rules_check:
         action: Upravljaj pravila strežnika
         message_html: Nobenih pravil strežnika niste določili.
-      sidekiq_process_check:
-        message_html: Noben proces Sidekiq ne poteka za %{value} vrst. Preglejte svojo prilagoditev Sidekiq
       software_version_critical_check:
         action: Glejte razpoložljive posodobitve
         message_html: Na voljo je kritična posodobitev Mastodona. Posodobite čim prej.

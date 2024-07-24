@@ -839,6 +839,8 @@ ie:
       appeal_pending: Apelle pendent
       appeal_rejected: Apelle rejectet
     system_checks:
+      background_process_check:
+        message_html: Null processe Sidekiq executet por li caude %{value}(s). Ples reviser tui configuration Sidekiq
       database_schema_check:
         message_html: Hay pendent migrationes de database. Ples far les por far cert que li aplication functiona quam expectat
       elasticsearch_health_red:
@@ -863,8 +865,6 @@ ie:
       rules_check:
         action: Gerer regules de servitor
         message_html: Tu ancor ne ha definit quelcunc regules de servitor.
-      sidekiq_process_check:
-        message_html: Null processe Sidekiq executet por li caude %{value}(s). Ples reviser tui configuration Sidekiq
       software_version_critical_check:
         action: Vider actualisationes disponibil
         message_html: Un critical actualisation por Mastodon es disposibil, ples actualisar tam rapidmen possibil.

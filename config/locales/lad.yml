@@ -839,6 +839,8 @@ lad:
       appeal_pending: Apelasyon asperando
       appeal_rejected: Apelasyon refuzada
     system_checks:
+      background_process_check:
+        message_html: No ay dingun prosedura Sidekiq en egzekusion para la(s) kola(s) %{value}. Por favor, reviza tu konfigurasyon de Sidekiq
       database_schema_check:
         message_html: Ay migrasyones asperando de la baza de datos. Por favor, egzekutalas para asigurarte de ke la aplikasyon fonksiona komo deveria
       elasticsearch_health_red:
@@ -863,8 +865,6 @@ lad:
       rules_check:
         action: Administra reglas del sirvidor
         message_html: No tienes definido dinguna regla del sirvidor.
-      sidekiq_process_check:
-        message_html: No ay dingun prosedura Sidekiq en egzekusion para la(s) kola(s) %{value}. Por favor, reviza tu konfigurasyon de Sidekiq
       software_version_critical_check:
         action: Amostra aktualizasyones desponivles
         message_html: Una aktualizasyon kritika de Mastodon esta desponivle. Por favor aktualiza pishin.

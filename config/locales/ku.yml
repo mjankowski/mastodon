@@ -765,6 +765,8 @@ ku:
       appeal_approved: Îtîraz
       appeal_pending: Îtîraz li benda nirxandinê ye
     system_checks:
+      background_process_check:
+        message_html: Pêvajoyên Sidekiq ên heyî ji bo %{value} di rêz (an) de tune ne. Ji kerema xwe sazkariyên Sidekiq a xwe binirxîne
       database_schema_check:
         message_html: Koçberiyên databasê yên li bendê hene. Ji kerema xwe wan bişopîne da ku bicîh bikî ku sepan wekî ku tê hêvî kirin tevbigere
       elasticsearch_running_check:
@@ -775,8 +777,6 @@ ku:
       rules_check:
         action: Rêzikên rajekara bi rê ve bibe
         message_html: Te qet rêzikên rajekara diyar nekiriye.
-      sidekiq_process_check:
-        message_html: Pêvajoyên Sidekiq ên heyî ji bo %{value} di rêz (an) de tune ne. Ji kerema xwe sazkariyên Sidekiq a xwe binirxîne
     tags:
       review: Binêre rewşê
       updated_msg: Sazkariyên hashtag bi awayekî serkeftî hate rojanekirin

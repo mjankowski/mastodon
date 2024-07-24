@@ -874,6 +874,8 @@ gd:
       appeal_pending: "’Ga ath-thagradh"
       appeal_rejected: Chaidh ath-thagradh a dhiùltadh
     system_checks:
+      background_process_check:
+        message_html: Chan eil pròiseas Sidekiq sam bith a ruith dhan chiutha/dha na ciuthan %{value}. Thoir sùil air an rèiteachadh Sidekiq agad
       database_schema_check:
         message_html: Tha imrichean stòir-dhàta ri dhèiligeadh ann. Ruith iad a dhèanamh cinnteach gum bi giùlan na h-aplacaid mar a bhiodhte ’n dùil
       elasticsearch_health_red:
@@ -898,8 +900,6 @@ gd:
       rules_check:
         action: Stiùirich riaghailtean an fhrithealaiche
         message_html: Cha do mhìnich thu riaghailtean an fhrithealaiche fhathast.
-      sidekiq_process_check:
-        message_html: Chan eil pròiseas Sidekiq sam bith a ruith dhan chiutha/dha na ciuthan %{value}. Thoir sùil air an rèiteachadh Sidekiq agad
       software_version_critical_check:
         action: Faic na h-ùrachaidhean a tha ri fhaighinn
         message_html: Tha ùrachadh èiginneach air Mastodon ri fhaighinn, ùraich cho luath ’s a ghabhas.

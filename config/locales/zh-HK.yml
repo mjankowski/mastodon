@@ -825,6 +825,8 @@ zh-HK:
       appeal_pending: 申訴待審中
       appeal_rejected: 申訴被駁回
     system_checks:
+      background_process_check:
+        message_html: 沒有 %{value} 佇列的 Sidekiq 處理程序。請檢查 Sidekiq 設定檔案
       database_schema_check:
         message_html: 有待處理的資料庫轉移 (database migration) 。請執行以確保應用程式行為合乎預期
       elasticsearch_health_red:
@@ -849,8 +851,6 @@ zh-HK:
       rules_check:
         action: 管理伺服器規則
         message_html: 您尚未定義任何伺服器規則
-      sidekiq_process_check:
-        message_html: 沒有 %{value} 佇列的 Sidekiq 處理程序。請檢查 Sidekiq 設定檔案
       software_version_critical_check:
         action: 查看可用的更新
         message_html: 有重要的 Mastodon 更新可用，請盡快更新。

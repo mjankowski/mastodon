@@ -874,6 +874,8 @@ he:
       appeal_pending: בהמתנה לערעור
       appeal_rejected: הערעור נדחה
     system_checks:
+      background_process_check:
+        message_html: שום הליכי Sidekiq לא רצים עבור %{value} תור(ות). בחנו בבקשה את הגדרות Sidekiq
       database_schema_check:
         message_html: נדרשות הגירות מבני נתונים. אנא הריצו אותן כדי להבטיח שהיישום מתנהג כצפוי
       elasticsearch_health_red:
@@ -898,8 +900,6 @@ he:
       rules_check:
         action: ניהול כללי שרת
         message_html: לא הוגדרו שום כללי שרת.
-      sidekiq_process_check:
-        message_html: שום הליכי Sidekiq לא רצים עבור %{value} תור(ות). בחנו בבקשה את הגדרות Sidekiq
       software_version_critical_check:
         action: ראו עדכונים זמינים
         message_html: יצא עדכון קריטי למסטודון, נא לעדכן את תוכנת מסטודון בהקדם האפשרי.

@@ -829,6 +829,8 @@ ja:
       appeal_pending: 保留中の抗議
       appeal_rejected: 却下済みの抗議
     system_checks:
+      background_process_check:
+        message_html: "%{value}キューに対応するSidekiqプロセスがありません。Sidekiqの設定を確認してください。"
       database_schema_check:
         message_html: 未実行のデータベースマイグレーションがあります。実行して正常に動作するようにしてください。
       elasticsearch_health_red:
@@ -853,8 +855,6 @@ ja:
       rules_check:
         action: サーバーのルールを管理
         message_html: サーバーのルールを定義していません。
-      sidekiq_process_check:
-        message_html: "%{value}キューに対応するSidekiqプロセスがありません。Sidekiqの設定を確認してください。"
       software_version_critical_check:
         action: 利用可能な更新を見る
         message_html: 緊急のMastodonアップデートがあります。速やかに適用してください。

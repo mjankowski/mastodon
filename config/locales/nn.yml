@@ -843,6 +843,8 @@ nn:
       appeal_pending: Klage behandles
       appeal_rejected: Anken er avvist
     system_checks:
+      background_process_check:
+        message_html: Ingen Sidekiq-prosess kjører for %{value} køen(e). Vennligst se gjennom Sidekiq-konfigurasjonen din
       database_schema_check:
         message_html: Det venter på databaseoverføringer. Vennligst kjør disse for å sikre at applikasjonen oppfører seg som forventet
       elasticsearch_health_red:
@@ -867,8 +869,6 @@ nn:
       rules_check:
         action: Behandle serverregler
         message_html: Du har ikke definert noen serverregler.
-      sidekiq_process_check:
-        message_html: Ingen Sidekiq-prosess kjører for %{value} køen(e). Vennligst se gjennom Sidekiq-konfigurasjonen din
       software_version_critical_check:
         action: Sjå tilgjengelege oppdateringar
         message_html: Ei kritisk oppdatering til Mastodon er tilgjengeleg. Oppdater så snart som mogleg.

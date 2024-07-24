@@ -846,6 +846,8 @@ tr:
       appeal_pending: İtiraz bekliyor
       appeal_rejected: İtiraz reddedildi
     system_checks:
+      background_process_check:
+        message_html: "%{value} kuyruk(lar)ı için herhangi bir Sidekiq süreci çalışmıyor. Lütfen Sidekiq yapılandırmanızı gözden geçirin"
       database_schema_check:
         message_html: Beklemede olan veritabanı güncellemeleri mevcut. Uygulamanın beklenildiği gibi çalışması için lütfen onları çalıştırın
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ tr:
       rules_check:
         action: Sunucu kurallarını yönet
         message_html: Herhangi bir sunucu kuralı belirlemediniz.
-      sidekiq_process_check:
-        message_html: "%{value} kuyruk(lar)ı için herhangi bir Sidekiq süreci çalışmıyor. Lütfen Sidekiq yapılandırmanızı gözden geçirin"
       software_version_critical_check:
         action: Mevcut güncellemeleri göster
         message_html: Kritik bir Mastodon güncellemesi var, lütfen en kısa sürede güncelleyin.

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Admin::SystemCheck::SidekiqProcessCheck do
+describe Admin::SystemCheck::BackgroundProcessCheck do
   subject(:check) { described_class.new(user) }
 
   let(:user) { Fabricate(:user) }
@@ -35,11 +35,11 @@ describe Admin::SystemCheck::SidekiqProcessCheck do
 
   describe 'message' do
     it 'sends values to message instance' do
-      allow(Admin::SystemCheck::Message).to receive(:new).with(:sidekiq_process_check, 'default, push, mailers, pull, scheduler, ingress')
+      allow(Admin::SystemCheck::Message).to receive(:new).with(:background_process_check, 'default, push, mailers, pull, scheduler, ingress')
 
       check.message
 
-      expect(Admin::SystemCheck::Message).to have_received(:new).with(:sidekiq_process_check, 'default, push, mailers, pull, scheduler, ingress')
+      expect(Admin::SystemCheck::Message).to have_received(:new).with(:background_process_check, 'default, push, mailers, pull, scheduler, ingress')
     end
   end
 end

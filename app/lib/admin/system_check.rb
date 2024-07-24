@@ -5,7 +5,7 @@ class Admin::SystemCheck
     Admin::SystemCheck::SoftwareVersionCheck,
     Admin::SystemCheck::MediaPrivacyCheck,
     Admin::SystemCheck::DatabaseSchemaCheck,
-    Admin::SystemCheck::SidekiqProcessCheck,
+    Admin::SystemCheck::BackgroundProcessCheck,
     Admin::SystemCheck::RulesCheck,
     Admin::SystemCheck::ElasticsearchCheck,
   ].freeze

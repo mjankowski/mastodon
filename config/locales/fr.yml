@@ -838,6 +838,8 @@ fr:
       appeal_pending: Appel en attente
       appeal_rejected: Appel rejeté
     system_checks:
+      background_process_check:
+        message_html: Aucun processus Sidekiq en cours d'exécution pour la/les file(s) d'attente %{value}. Veuillez vérifier votre configuration de Sidekiq
       database_schema_check:
         message_html: Vous avez des migrations de base de données en attente. Veuillez les exécuter pour vous assurer que l'application se comporte comme prévu
       elasticsearch_health_red:
@@ -862,8 +864,6 @@ fr:
       rules_check:
         action: Gérer les règles du serveur
         message_html: Vous n'avez pas défini de règles pour le serveur.
-      sidekiq_process_check:
-        message_html: Aucun processus Sidekiq en cours d'exécution pour la/les file(s) d'attente %{value}. Veuillez vérifier votre configuration de Sidekiq
       software_version_critical_check:
         action: Voir les mises à jour disponibles
         message_html: Une mise à jour critique de Mastodon est disponible, veuillez mettre à jour le plus rapidement possible.

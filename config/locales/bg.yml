@@ -846,6 +846,8 @@ bg:
       appeal_pending: Чака се обжалването
       appeal_rejected: Отхвърлено обжалване
     system_checks:
+      background_process_check:
+        message_html: Не работи процес Sidekiq за %{value} опашка/и. Прегледайте настройките си за Sidekiq
       database_schema_check:
         message_html: Има миграции на базата данни, които чакат да бъдат изпълнени. Моля, изпълнете ги, за да осигурите изправността на приложението
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ bg:
       rules_check:
         action: Управление на правилата на сървъра
         message_html: Не сте определили никакви правила на сървъра.
-      sidekiq_process_check:
-        message_html: Не работи процес Sidekiq за %{value} опашка/и. Прегледайте настройките си за Sidekiq
       software_version_critical_check:
         action: Преглед на наличните обновявания
         message_html: Налично e критично обновяване на Mastodon. Обновете възможно най-бързо.

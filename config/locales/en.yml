@@ -846,6 +846,8 @@ en:
       appeal_pending: Appeal pending
       appeal_rejected: Appeal rejected
     system_checks:
+      background_process_check:
+        message_html: No Sidekiq process running for the %{value} queue(s). Please review your Sidekiq configuration
       database_schema_check:
         message_html: There are pending database migrations. Please run them to ensure the application behaves as expected
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ en:
       rules_check:
         action: Manage server rules
         message_html: You haven't defined any server rules.
-      sidekiq_process_check:
-        message_html: No Sidekiq process running for the %{value} queue(s). Please review your Sidekiq configuration
       software_version_critical_check:
         action: See available updates
         message_html: A critical Mastodon update is available, please update as quickly as possible.

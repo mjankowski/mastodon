@@ -855,6 +855,8 @@ sr-Latn:
       appeal_pending: Žalba u razmatranju
       appeal_rejected: Žalba odbijena
     system_checks:
+      background_process_check:
+        message_html: Nijedan Sidekiq proces nije pokrenut za red(ove) %{value}. Molimo Vas pregledajte svoju Sidekiq konfiguraciju
       database_schema_check:
         message_html: Selidbe bazâ podataka su na čekanju. Molimo Vas obavite ih da bi se aplikacija ponašala kako treba
       elasticsearch_health_red:
@@ -879,8 +881,6 @@ sr-Latn:
       rules_check:
         action: Upravljanje pravilima servera
         message_html: Niste definisali nijedno pravilo servera.
-      sidekiq_process_check:
-        message_html: Nijedan Sidekiq proces nije pokrenut za red(ove) %{value}. Molimo Vas pregledajte svoju Sidekiq konfiguraciju
       software_version_critical_check:
         action: Pogledajte dostupna ažuriranja
         message_html: Dostupno je kritično ažuriranje za Mastodon, ažurirajte ga što je pre moguće.

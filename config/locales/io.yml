@@ -827,6 +827,8 @@ io:
       appeal_pending: Vartata apelo
       appeal_rejected: Apelo refuzita
     system_checks:
+      background_process_check:
+        message_html: Sidekiq procedo ne funcionas ye %{value} fask(o). Kontrolez vua opciono di Sidekiq
       database_schema_check:
         message_html: Existas vartanta datamaturmigri. Startez por certigar ke la softwaro kondutar quale expektita
       elasticsearch_preset:
@@ -841,8 +843,6 @@ io:
       rules_check:
         action: Jerez servilreguli
         message_html: Vu ne fixis irga servilreguli.
-      sidekiq_process_check:
-        message_html: Sidekiq procedo ne funcionas ye %{value} fask(o). Kontrolez vua opciono di Sidekiq
       software_version_critical_check:
         action: Videz la aktualigi disponebla
         message_html: Urjanta Mastodon-aktualigo es disponebla, voluntez aktualigar la servilo tam rapide kam es posibla.

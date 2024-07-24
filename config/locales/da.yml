@@ -846,6 +846,8 @@ da:
       appeal_pending: Appel afventer
       appeal_rejected: Appel afvist
     system_checks:
+      background_process_check:
+        message_html: Ingen Sidekiq-proces kører for %{value}-kø(er). Gennemgå Sidekiq-opsætningen
       database_schema_check:
         message_html: Databasemigreringer afventer. Kør dem for at sikre den forventede adfærd fra applikationen
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ da:
       rules_check:
         action: Håndtér serverregler
         message_html: Ingen serverregler defineret.
-      sidekiq_process_check:
-        message_html: Ingen Sidekiq-proces kører for %{value}-kø(er). Gennemgå Sidekiq-opsætningen
       software_version_critical_check:
         action: Se tilgængelige opdateringer
         message_html: En kritisk Mastodon-opdatering er tilgængelig. Opdatér hurtigst muligt.

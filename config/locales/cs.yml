@@ -874,6 +874,8 @@ cs:
       appeal_pending: Čekající odvolání
       appeal_rejected: Odvolání zamítnuto
     system_checks:
+      background_process_check:
+        message_html: Pro %{value} frontu/fronty neběží žádný Sidekiq proces. Zkontrolujte prosím svou Sidekiq konfiguraci
       database_schema_check:
         message_html: Na spuštění čekají databázové migrace. Nechte je prosím proběhnout pro zajištění očekávaného chování aplikace
       elasticsearch_health_red:
@@ -898,8 +900,6 @@ cs:
       rules_check:
         action: Spravovat pravidla serveru
         message_html: Nedefinovali jste žádná pravidla serveru.
-      sidekiq_process_check:
-        message_html: Pro %{value} frontu/fronty neběží žádný Sidekiq proces. Zkontrolujte prosím svou Sidekiq konfiguraci
       software_version_critical_check:
         action: Zobrazit dostupné aktualizace
         message_html: K dispozici je kritická aktualizace Mastodonu, prosím aktualizujte co nejrychleji.

@@ -846,6 +846,8 @@ ca:
       appeal_pending: Apel·lació pendent
       appeal_rejected: Apel·lació rebutjada
     system_checks:
+      background_process_check:
+        message_html: No hi ha cap procés de Sidekiq executant-se per a la cua (o cues) de %{value}. Reviseu la configuració de Sidekiq
       database_schema_check:
         message_html: Hi ha pendents migracions de la base de dades. Executeu-les per a assegurar que l'aplicació es comporta com s'espera
       elasticsearch_health_red:
@@ -870,8 +872,6 @@ ca:
       rules_check:
         action: Gestiona les normes del servidor
         message_html: No has definit cap norma del servidor.
-      sidekiq_process_check:
-        message_html: No hi ha cap procés de Sidekiq executant-se per a la cua (o cues) de %{value}. Reviseu la configuració de Sidekiq
       software_version_critical_check:
         action: Veure actualitzacions disponibles
         message_html: Hi ha disponible una actualització crítica de Mastodon, si us plau, actualitza-la el més abans possible.

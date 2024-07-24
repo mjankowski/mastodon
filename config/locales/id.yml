@@ -756,6 +756,8 @@ id:
       appeal_approved: Banding disetujui
       appeal_pending: Banding ditunda
     system_checks:
+      background_process_check:
+        message_html: Tidak ada proses Sidekiq yang berjalan untuk %{value} antrian. Silakan tinjau konfigurasi Sidekiq Anda
       database_schema_check:
         message_html: Ada proses migrasi basis data tertunda. Silakan jalankan untuk memastikan aplikasi bekerja seperti yang diharapkan
       elasticsearch_running_check:
@@ -766,8 +768,6 @@ id:
       rules_check:
         action: Kelola aturan server
         message_html: Anda belum menentukan aturan server apapun.
-      sidekiq_process_check:
-        message_html: Tidak ada proses Sidekiq yang berjalan untuk %{value} antrian. Silakan tinjau konfigurasi Sidekiq Anda
     tags:
       review: Tinjau status
       updated_msg: Pembaruan pengaturan tagar berhasil

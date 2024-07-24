@@ -874,6 +874,8 @@ uk:
       appeal_pending: Оскарження в очікуванні
       appeal_rejected: Апеляцію відхилено
     system_checks:
+      background_process_check:
+        message_html: Не працює процес Sidekiq для %{value} черги. Перегляньте конфігурації вашого Sidekiq
       database_schema_check:
         message_html: Існують відкладені перенесення бази даних. Запустіть їх, щоб забезпечити очікувану роботу програми
       elasticsearch_health_red:
@@ -898,8 +900,6 @@ uk:
       rules_check:
         action: Керування правилами сервера
         message_html: Ви не визначили будь-які правила сервера.
-      sidekiq_process_check:
-        message_html: Не працює процес Sidekiq для %{value} черги. Перегляньте конфігурації вашого Sidekiq
       software_version_critical_check:
         action: Переглянути доступні оновлення
         message_html: Виявлено критичне оновлення Mastodon. Оновіться якнайшвидше.

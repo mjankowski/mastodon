@@ -834,6 +834,8 @@ ko:
       appeal_pending: 이의제기 대기중
       appeal_rejected: 이의 제기 거절됨
     system_checks:
+      background_process_check:
+        message_html: "%{value} 큐에 대한 사이드킥 프로세스가 발견되지 않았습니다. 사이드킥 설정을 검토해주세요"
       database_schema_check:
         message_html: 대기 중인 데이터베이스 마이그레이션이 있습니다. 애플리케이션이 예상대로 동작할 수 있도록 마이그레이션을 실행해 주세요
       elasticsearch_health_red:
@@ -858,8 +860,6 @@ ko:
       rules_check:
         action: 서버 규칙 관리
         message_html: 아직 서버 규칙을 정하지 않았습니다.
-      sidekiq_process_check:
-        message_html: "%{value} 큐에 대한 사이드킥 프로세스가 발견되지 않았습니다. 사이드킥 설정을 검토해주세요"
       software_version_critical_check:
         action: 사용 가능한 업데이트 보기
         message_html: 긴급 마스토돈 업데이트가 있으니, 가능한 서둘러 업데이트 해주세요.
