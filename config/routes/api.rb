@@ -88,7 +88,7 @@ namespace :api, format: false do
     end
 
     namespace :apps do
-      get :verify_credentials, to: 'credentials#show'
+      resource :verify_credentials, only: :show, controller: :credentials
     end
 
     resources :apps, only: [:create]
