@@ -2,9 +2,5 @@
 Rails/BulkChangeTable:
   Enabled: false # Conflicts with strong_migrations features
 
-Rails/CreateTableWithTimestamps:
-  Exclude:
-    - db/*migrate/* # TODO: Work through these in old migrations
-
 Rails/EnvironmentVariableAccess:
   Enabled: false
