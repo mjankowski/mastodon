@@ -5,7 +5,7 @@ module Admin
     def index
       authorize :invite, :index?
 
-      @pagy, @invites = pagy(filtered_invites.includes(user: :account))
+      @page, @invites = pagy(filtered_invites.includes(user: :account))
       @invite = Invite.new
     end
 
@@ -18,7 +18,7 @@ module Admin
       if @invite.save
         redirect_to admin_invites_path
       else
-        @pagy, @invites = pagy(Invite)
+        @page, @invites = pagy(Invite)
         render :index
       end
     end

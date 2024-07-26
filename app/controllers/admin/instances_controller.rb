@@ -56,7 +56,7 @@ module Admin
     end
 
     def set_instances
-      @pagy, @instances = pagy(filtered_instances)
+      @page, @instances = pagy(filtered_instances)
     end
 
     def preload_delivery_failures!

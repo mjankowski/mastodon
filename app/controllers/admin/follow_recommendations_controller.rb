@@ -8,7 +8,7 @@ module Admin
       authorize :follow_recommendation, :show?
 
       @form = Form::AccountBatch.new
-      @pagy, @accounts = pagy(filtered_follow_recommendations)
+      @page, @accounts = pagy(filtered_follow_recommendations)
     end
 
     def update

@@ -7,7 +7,7 @@ module Admin
     def index
       authorize :webhook, :index?
 
-      @pagy, @webhooks = pagy(Webhook)
+      @page, @webhooks = pagy(Webhook)
     end
 
     def show

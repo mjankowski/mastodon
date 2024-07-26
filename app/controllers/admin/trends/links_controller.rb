@@ -5,7 +5,7 @@ class Admin::Trends::LinksController < Admin::BaseController
     authorize :preview_card, :review?
 
     @locales = PreviewCardTrend.locales
-    @pagy, @preview_cards = pagy(filtered_preview_cards)
+    @page, @preview_cards = pagy(filtered_preview_cards)
     @form = Trends::PreviewCardBatch.new
   end
 
