@@ -12,7 +12,7 @@ module Admin
     private
 
     def set_action_logs
-      @pagy, @action_logs = pagy(Admin::ActionLogFilter.new(filter_params).results)
+      @page, @action_logs = pagy(Admin::ActionLogFilter.new(filter_params).results)
     end
 
     def filter_params
