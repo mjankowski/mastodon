@@ -5,7 +5,7 @@ module Admin
     def index
       authorize :email_domain_block, :index?
 
-      @pagy, @email_domain_blocks = pagy(EmailDomainBlock.where(parent_id: nil).includes(:children).order(id: :desc))
+      @page, @email_domain_blocks = pagy(EmailDomainBlock.where(parent_id: nil).includes(:children).order(id: :desc))
       @form = Form::EmailDomainBlockBatch.new
     end
 

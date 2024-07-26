@@ -59,7 +59,7 @@ module Admin
     end
 
     def set_statuses
-      @pagy, @statuses = pagy(
+      @page, @statuses = pagy(
         Admin::StatusFilter.new(@account, filter_params).results.preload(:application, :preloadable_poll, :media_attachments, active_mentions: :account, reblog: [:account, :application, :preloadable_poll, :media_attachments, active_mentions: :account]),
         items: PER_PAGE
       )

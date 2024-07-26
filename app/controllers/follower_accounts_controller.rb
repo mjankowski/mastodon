@@ -38,7 +38,7 @@ class FollowerAccountsController < ApplicationController
 
     scope = Follow.where(target_account: @account)
     scope = scope.where.not(account_id: current_account.excluded_from_timeline_account_ids) if user_signed_in?
-    @pagy, @follows = pagy(
+    @page, @follows = pagy(
       scope.recent.preload(:account),
       items: FOLLOW_PER_PAGE
     )

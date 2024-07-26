@@ -5,7 +5,7 @@ class Admin::Trends::StatusesController < Admin::BaseController
     authorize [:admin, :status], :review?
 
     @locales = StatusTrend.pluck('distinct language')
-    @pagy, @statuses = pagy(filtered_statuses)
+    @page, @statuses = pagy(filtered_statuses)
     @form = Trends::StatusBatch.new
   end
 

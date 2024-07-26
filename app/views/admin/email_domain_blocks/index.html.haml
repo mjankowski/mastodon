@@ -23,4 +23,4 @@
       - else
         = render partial: 'email_domain_block', collection: @email_domain_blocks.flat_map { |x| [x, x.children.to_a].flatten }, locals: { f: f }
 
-= pagy_nav @pagy
+= pagy_nav @page
