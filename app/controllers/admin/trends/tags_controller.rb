@@ -5,7 +5,7 @@ class Admin::Trends::TagsController < Admin::BaseController
     authorize :tag, :review?
 
     @pending_tags_count = Tag.pending_review.async_count
-    @pagy, @tags = pagy(filtered_tags)
+    @page, @tags = pagy(filtered_tags)
     @form = Trends::TagBatch.new
   end
 
