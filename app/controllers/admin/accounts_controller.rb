@@ -9,7 +9,7 @@ module Admin
     def index
       authorize :account, :index?
 
-      @pagy, @accounts = pagy(filtered_accounts)
+      @page, @accounts = pagy(filtered_accounts)
       @form     = Form::AccountBatch.new
     end
 
