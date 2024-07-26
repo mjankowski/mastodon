@@ -262,6 +262,10 @@ module ApplicationHelper
     instance_presenter.app_icon.blank?
   end
 
+  def paginate(page)
+    pagy_nav(page)
+  end
+
   private
 
   def storage_host_var
