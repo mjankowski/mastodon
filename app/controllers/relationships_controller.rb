@@ -31,7 +31,7 @@ class RelationshipsController < ApplicationController
   private
 
   def set_accounts
-    @pagy, @accounts = pagy(
+    @page, @accounts = pagy(
       RelationshipFilter.new(current_account, filter_params).results,
       items: PER_PAGE
     )

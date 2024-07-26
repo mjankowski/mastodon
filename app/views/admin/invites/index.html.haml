@@ -31,7 +31,7 @@
     %tbody
       = render @invites
 
-= pagy_nav @pagy
+= pagy_nav @page
 
 - if policy(:invite).deactivate_all?
   = link_to t('admin.invites.deactivate_all'), deactivate_all_admin_invites_path, method: :post, data: { confirm: t('admin.accounts.are_you_sure') }, class: 'button'

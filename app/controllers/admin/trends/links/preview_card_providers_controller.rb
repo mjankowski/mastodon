@@ -4,7 +4,7 @@ class Admin::Trends::Links::PreviewCardProvidersController < Admin::BaseControll
   def index
     authorize :preview_card_provider, :review?
 
-    @pagy, @preview_card_providers = pagy(filtered_preview_card_providers)
+    @page, @preview_card_providers = pagy(filtered_preview_card_providers)
     @form = Trends::PreviewCardProviderBatch.new
   end
 

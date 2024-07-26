@@ -5,6 +5,6 @@ class Settings::LoginActivitiesController < Settings::BaseController
   skip_before_action :require_functional!
 
   def index
-    @pagy, @login_activities = pagy(LoginActivity.where(user: current_user).order(id: :desc))
+    @page, @login_activities = pagy(LoginActivity.where(user: current_user).order(id: :desc))
   end
 end

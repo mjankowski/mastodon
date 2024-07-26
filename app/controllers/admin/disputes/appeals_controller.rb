@@ -6,7 +6,7 @@ class Admin::Disputes::AppealsController < Admin::BaseController
   def index
     authorize :appeal, :index?
 
-    @pagy, @appeals = pagy(filtered_appeals)
+    @page, @appeals = pagy(filtered_appeals)
   end
 
   def approve
