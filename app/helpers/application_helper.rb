@@ -251,6 +251,10 @@ module ApplicationHelper
     I18n.t 'user_mailer.welcome.hashtags_recent_count', people: number_with_delimiter(people), count: people
   end
 
+  def paginate(page)
+    pagy_nav(page)
+  end
+
   private
 
   def storage_host_var
