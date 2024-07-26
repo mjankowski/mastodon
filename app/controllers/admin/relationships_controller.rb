@@ -9,7 +9,7 @@ module Admin
     def index
       authorize @account, :show?
 
-      @pagy, @accounts = pagy(
+      @page, @accounts = pagy(
         RelationshipFilter.new(@account, filter_params).results.includes(:account_stat, user: [:ips, :invite_request]),
         items: PER_PAGE
       )
