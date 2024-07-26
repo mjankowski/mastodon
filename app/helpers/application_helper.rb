@@ -246,6 +246,10 @@ module ApplicationHelper
     tag.input(type: :text, maxlength: 999, spellcheck: false, readonly: true, **options)
   end
 
+  def paginate(page)
+    pagy_nav(page)
+  end
+
   private
 
   def storage_host_var
