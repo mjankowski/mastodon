@@ -228,4 +228,4 @@ gem 'hcaptcha', '~> 7.1'
 
 gem 'mail', '~> 2.8'
 
-gem 'pagy', '~> 8.4'
+gem 'pagy'
