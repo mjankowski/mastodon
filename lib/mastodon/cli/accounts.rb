@@ -503,14 +503,14 @@ module Mastodon::CLI
     LONG_DESC
     def prune
       query = Account.remote.where.not(actor_type: %i(Application Service))
-      query = query.where('NOT EXISTS (SELECT 1 FROM mentions WHERE account_id = accounts.id)')
-      query = query.where('NOT EXISTS (SELECT 1 FROM favourites WHERE account_id = accounts.id)')
-      query = query.where('NOT EXISTS (SELECT 1 FROM statuses WHERE account_id = accounts.id)')
-      query = query.where('NOT EXISTS (SELECT 1 FROM follows WHERE account_id = accounts.id OR target_account_id = accounts.id)')
-      query = query.where('NOT EXISTS (SELECT 1 FROM blocks WHERE account_id = accounts.id OR target_account_id = accounts.id)')
-      query = query.where('NOT EXISTS (SELECT 1 FROM mutes WHERE target_account_id = accounts.id)')
-      query = query.where('NOT EXISTS (SELECT 1 FROM reports WHERE target_account_id = accounts.id)')
-      query = query.where('NOT EXISTS (SELECT 1 FROM follow_requests WHERE account_id = accounts.id OR target_account_id = accounts.id)')
+      query = query.where.not(account_or_target_account_reference_exists(Block))
+      query = query.where.not(account_or_target_account_reference_exists(Follow))
+      query = query.where.not(account_or_target_account_reference_exists(FollowRequest))
+      query = query.where.not(account_reference_exists(Favourite))
+      query = query.where.not(account_reference_exists(Mention))
+      query = query.where.not(account_reference_exists(Status))
+      query = query.where.not(target_account_reference_exists(Mute))
+      query = query.where.not(target_account_reference_exists(Report))
 
       _, deleted = parallelize_with_progress(query) do |account|
         next if account.bot? || account.group?
@@ -576,6 +576,33 @@ module Mastodon::CLI
     end
 
     private
+
+    def account_or_target_account_reference_exists(model)
+      model
+        .where(model.arel_table[:account_id].eq Account.arel_table[:id])
+        .or(
+          model.where(model.arel_table[:target_account_id].eq Account.arel_table[:id])
+        )
+        .select(1)
+        .arel
+        .exists
+    end
+
+    def account_reference_exists(model)
+      model
+        .where(model.arel_table[:account_id].eq Account.arel_table[:id])
+        .select(1)
+        .arel
+        .exists
+    end
+
+    def target_account_reference_exists(model)
+      model
+        .where(model.arel_table[:target_account_id].eq Account.arel_table[:id])
+        .select(1)
+        .arel
+        .exists
+    end
 
     def report_errors(errors)
       message = errors.map do |error|
