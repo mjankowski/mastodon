@@ -50,13 +50,6 @@ class MediaAttachment < ApplicationRecord
   VIDEO_FILE_EXTENSIONS = %w(.webm .mp4 .m4v .mov).freeze
   AUDIO_FILE_EXTENSIONS = %w(.ogg .oga .mp3 .wav .flac .opus .aac .m4a .3gp .wma).freeze
 
-  META_KEYS = %i(
-    focus
-    colors
-    original
-    small
-  ).freeze
-
   IMAGE_MIME_TYPES             = %w(image/jpeg image/png image/gif image/heic image/heif image/webp image/avif).freeze
   IMAGE_CONVERTIBLE_MIME_TYPES = %w(image/heic image/heif image/avif).freeze
   VIDEO_MIME_TYPES             = %w(video/webm video/mp4 video/quicktime video/ogg).freeze
@@ -213,6 +206,8 @@ class MediaAttachment < ApplicationRecord
   scope :unattached, -> { where(status_id: nil, scheduled_status_id: nil) }
   scope :updated_before, ->(value) { where(arel_table[:updated_at].lt(value)) }
 
+  include MediaAttachment::Metadata # Loads after file declarations
+
   attr_accessor :skip_download
 
   def local?
@@ -278,8 +273,6 @@ class MediaAttachment < ApplicationRecord
 
   after_commit :enqueue_processing, on: :create
   after_commit :reset_parent_cache, on: :update
-
-  after_post_process :set_meta
 
   class << self
     def supported_mime_types
@@ -351,49 +344,6 @@ class MediaAttachment < ApplicationRecord
     raise Mastodon::StreamValidationError, 'Video has no video stream' if movie.width.nil? || movie.frame_rate.nil?
     raise Mastodon::DimensionsValidationError, "#{movie.width}x#{movie.height} videos are not supported" if movie.width * movie.height > MAX_VIDEO_MATRIX_LIMIT
     raise Mastodon::DimensionsValidationError, "#{movie.frame_rate.floor}fps videos are not supported" if movie.frame_rate.floor > MAX_VIDEO_FRAME_RATE
-  end
-
-  def set_meta
-    file.instance_write :meta, populate_meta
-  end
-
-  def populate_meta
-    meta = (file.instance_read(:meta) || {}).with_indifferent_access.slice(*META_KEYS)
-
-    file.queued_for_write.each do |style, file|
-      meta[style] = style == :small || image? ? image_geometry(file) : video_metadata(file)
-    end
-
-    meta[:small] = image_geometry(thumbnail.queued_for_write[:original]) if thumbnail.queued_for_write.key?(:original)
-
-    meta
-  end
-
-  def image_geometry(file)
-    width, height = FastImage.size(file.path)
-
-    return {} if width.nil?
-
-    {
-      width: width,
-      height: height,
-      size: "#{width}x#{height}",
-      aspect: width.to_f / height,
-    }
-  end
-
-  def video_metadata(file)
-    movie = ffmpeg_data(file.path)
-
-    return {} unless movie.valid?
-
-    {
-      width: movie.width,
-      height: movie.height,
-      frame_rate: movie.frame_rate,
-      duration: movie.duration,
-      bitrate: movie.bitrate,
-    }.compact
   end
 
   # We call this method about 3 different times on potentially different
