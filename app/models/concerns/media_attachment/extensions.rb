@@ -4,9 +4,34 @@ module MediaAttachment::Extensions
   extend ActiveSupport::Concern
 
   FILES = {
-    audio: %w(ogg oga mp3 wav flac opus aac m4a 3gp wma),
-    image: %w(jpg jpeg png gif webp heic heif avif),
-    video: %w(webm mp4 m4v mov),
+    audio: %w(
+      3gp
+      aac
+      flac
+      m4a
+      mp3
+      oga
+      ogg
+      opus
+      wav
+      wma
+    ),
+    image: %w(
+      avif
+      gif
+      heic
+      heif
+      jpeg
+      jpg
+      png
+      webp
+    ),
+    video: %w(
+      m4v
+      mov
+      mp4
+      webm
+    ),
   }.freeze
 
   class_methods do
