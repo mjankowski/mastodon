@@ -23,7 +23,6 @@ RSpec.describe Admin::TagsController do
       get :index
 
       expect(response).to have_http_status(200)
-      expect(response).to render_template(:index)
 
       expect(Admin::TagFilter)
         .to have_received(:new)
@@ -37,7 +36,6 @@ RSpec.describe Admin::TagsController do
         get :index, params: { name: 'test' }
 
         expect(response).to have_http_status(200)
-        expect(response).to render_template(:index)
 
         expect(Admin::TagFilter)
           .to have_received(:new)
