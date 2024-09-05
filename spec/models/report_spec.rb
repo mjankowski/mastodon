@@ -157,34 +157,45 @@ RSpec.describe Report do
   end
 
   describe 'Validations' do
-    let(:remote_account) { Fabricate(:account, domain: 'example.com', protocol: :activitypub, inbox_url: 'http://example.com/inbox') }
+    subject { Fabricate.build :report }
 
-    it 'is invalid if comment is longer than character limit and reporter is local' do
-      report = Fabricate.build(:report)
+    it { is_expected.to_not allow_value([-1]).for(:rule_ids) }
 
-      expect(report).to_not allow_value(comment_over_limit).for(:comment)
+    describe 'Comment size limits' do
+      subject { Fabricate.build :report, account: account }
+
+      context 'with a local reporter' do
+        let(:account) { Fabricate(:account, domain: nil) }
+
+        it { is_expected.to_not allow_value(comment_over_limit).for(:comment) }
+      end
+
+      context 'with a remote reporter' do
+        let(:account) { Fabricate(:account, domain: 'example.com', protocol: :activitypub, inbox_url: 'http://example.com/inbox') }
+
+        it { is_expected.to allow_value(comment_over_limit).for(:comment) }
+      end
+
+      def comment_over_limit
+        'a' * described_class::COMMENT_SIZE_LIMIT * 2
+      end
     end
 
-    it 'is valid if comment is longer than character limit and reporter is not local' do
-      report = Fabricate.build(:report, account: remote_account, comment: comment_over_limit)
-      expect(report.valid?).to be true
-    end
+    describe 'Rule requirements dependent on category' do
+      subject { Fabricate.build :report, category: category }
 
-    it 'is invalid if it references invalid rules' do
-      report = Fabricate.build(:report, category: :violation)
+      context 'with a category that is not "violation"' do
+        let(:category) { :spam }
+        let(:rule) { Fabricate :rule }
 
-      expect(report).to_not allow_value([-1]).for(:rule_ids)
-    end
+        it { is_expected.to_not allow_value(rule.id).for(:rule_ids) }
+      end
 
-    it 'is invalid if it references rules but category is not "violation"' do
-      rule = Fabricate(:rule)
-      report = Fabricate.build(:report, category: :spam)
+      context 'with extra rule ids on a violation category report' do
+        let(:category) { :violation }
 
-      expect(report).to_not allow_value(rule.id).for(:rule_ids)
-    end
-
-    def comment_over_limit
-      'a' * described_class::COMMENT_SIZE_LIMIT * 2
+        it { is_expected.to_not allow_value([nil, Fabricate(:rule).id]).for(:rule_ids) }
+      end
     end
   end
 end
