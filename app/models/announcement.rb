@@ -22,6 +22,8 @@ class Announcement < ApplicationRecord
   scope :published, -> { where(published: true) }
   scope :chronological, -> { order(coalesced_chronology_timestamps.asc) }
   scope :reverse_chronological, -> { order(coalesced_chronology_timestamps.desc) }
+  scope :ending_before, ->(date) { where.not(ends_at: nil).where(ends_at: ..date) }
+  scope :scheduled_before, ->(date) { where.not(scheduled_at: nil).where(scheduled_at: ..date) }
 
   has_many :announcement_mutes, dependent: :destroy
   has_many :announcement_reactions, dependent: :destroy
