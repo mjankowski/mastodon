@@ -425,13 +425,13 @@ RSpec.describe Account do
       stub_const('Account::Search::DEFAULT_LIMIT', 1)
       2.times.each { Fabricate(:account, display_name: 'Display Name') }
       results = described_class.search_for('display')
-      expect(results.size).to eq 1
+      expect(results.to_a.size).to eq 1
     end
 
     it 'accepts arbitrary limits' do
       2.times.each { Fabricate(:account, display_name: 'Display Name') }
       results = described_class.search_for('display', limit: 1)
-      expect(results.size).to eq 1
+      expect(results.to_a.size).to eq 1
     end
 
     it 'ranks multiple matches higher' do
