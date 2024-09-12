@@ -24,16 +24,4 @@ class AccountStat < ApplicationRecord
   scope :without_recent_activity, -> { where(last_status_at: [nil, ...1.month.ago]) }
 
   update_index('accounts', :account)
-
-  def following_count
-    [attributes['following_count'], 0].max
-  end
-
-  def followers_count
-    [attributes['followers_count'], 0].max
-  end
-
-  def statuses_count
-    [attributes['statuses_count'], 0].max
-  end
 end
