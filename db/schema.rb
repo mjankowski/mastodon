@@ -113,6 +113,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_07_071624) do
     t.datetime "last_status_at", precision: nil
     t.index ["account_id"], name: "index_account_stats_on_account_id", unique: true
     t.index ["last_status_at", "account_id"], name: "index_account_stats_on_last_status_at_and_account_id", order: { last_status_at: "DESC NULLS LAST" }
+    t.check_constraint "followers_count >= 0", name: "followers_count_check"
+    t.check_constraint "following_count >= 0", name: "following_count_check"
+    t.check_constraint "statuses_count >= 0", name: "statuses_count_check"
   end
 
   create_table "account_statuses_cleanup_policies", force: :cascade do |t|
@@ -1012,6 +1015,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_07_071624) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["status_id"], name: "index_status_stats_on_status_id", unique: true
+    t.check_constraint "favourites_count >= 0", name: "favourites_count_check"
+    t.check_constraint "reblogs_count >= 0", name: "reblogs_count_check"
+    t.check_constraint "replies_count >= 0", name: "replies_count_check"
   end
 
   create_table "status_trends", force: :cascade do |t|
