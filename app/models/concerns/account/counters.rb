@@ -67,7 +67,7 @@ module Account::Counters
   end
 
   def duplicate_values(key, value)
-    ["#{key} = (account_stats.#{key} + #{value})", 'updated_at = CURRENT_TIMESTAMP'].tap do |values|
+    ["#{key} = #{[public_send(key) + value, 0].max}", 'updated_at = CURRENT_TIMESTAMP'].tap do |values|
       values << 'last_status_at = CURRENT_TIMESTAMP' if key == :statuses_count && value.positive?
     end
   end
