@@ -15,4 +15,6 @@
 
 class StatusStat < ApplicationRecord
   belongs_to :status, inverse_of: :status_stat
+
+  normalizes :replies_count, :reblogs_count, :favourites_count, with: ->(value) { [value, 0].max }
 end

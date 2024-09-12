@@ -23,5 +23,7 @@ class AccountStat < ApplicationRecord
   scope :by_recent_status, -> { order(arel_table[:last_status_at].desc.nulls_last) }
   scope :without_recent_activity, -> { where(last_status_at: [nil, ...1.month.ago]) }
 
+  normalizes :following_count, :followers_count, :statuses_count, with: ->(value) { [value, 0].max }
+
   update_index('accounts', :account)
 end
