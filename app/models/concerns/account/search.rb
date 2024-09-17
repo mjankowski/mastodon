@@ -49,48 +49,6 @@ module Account::Search
     )
   SQL
 
-  ADVANCED_SEARCH_WITH_FOLLOWING = <<~SQL.squish
-    WITH first_degree AS (
-      SELECT target_account_id
-      FROM follows
-      WHERE account_id = :id
-      UNION ALL
-      SELECT :id
-    )
-    SELECT
-      accounts.*,
-      (count(f.id) + 1) * #{BOOST} * ts_rank_cd(#{TEXT_SEARCH_RANKS}, to_tsquery('simple', :tsquery), 32) AS rank
-    FROM accounts
-    LEFT OUTER JOIN follows AS f ON (accounts.id = f.account_id AND f.target_account_id = :id)
-    LEFT JOIN account_stats ON accounts.id = account_stats.account_id
-    WHERE accounts.id IN (SELECT * FROM first_degree)
-      AND to_tsquery('simple', :tsquery) @@ #{TEXT_SEARCH_RANKS}
-      AND accounts.suspended_at IS NULL
-      AND accounts.moved_to_account_id IS NULL
-    GROUP BY accounts.id, account_stats.id
-    ORDER BY rank DESC
-    LIMIT :limit OFFSET :offset
-  SQL
-
-  ADVANCED_SEARCH_WITHOUT_FOLLOWING = <<~SQL.squish
-    SELECT
-      accounts.*,
-      #{BOOST} * ts_rank_cd(#{TEXT_SEARCH_RANKS}, to_tsquery('simple', :tsquery), 32) AS rank,
-      count(f.id) AS followed
-    FROM accounts
-    LEFT OUTER JOIN follows AS f ON
-      (accounts.id = f.account_id AND f.target_account_id = :id) OR (accounts.id = f.target_account_id AND f.account_id = :id)
-    LEFT JOIN users ON accounts.id = users.account_id
-    LEFT JOIN account_stats ON accounts.id = account_stats.account_id
-    WHERE to_tsquery('simple', :tsquery) @@ #{TEXT_SEARCH_RANKS}
-      AND accounts.suspended_at IS NULL
-      AND accounts.moved_to_account_id IS NULL
-      AND (accounts.domain IS NOT NULL OR (users.approved = TRUE AND users.confirmed_at IS NOT NULL))
-    GROUP BY accounts.id, account_stats.id
-    ORDER BY followed DESC, rank DESC
-    LIMIT :limit OFFSET :offset
-  SQL
-
   DEFAULT_LIMIT = 10
 
   def searchable_text
@@ -122,28 +80,96 @@ module Account::Search
     end
 
     def terms_rank(terms)
-      Arel.sql(
-        sanitize_sql([<<~SQL.squish, tsquery: generate_query_for_search(terms)])
-          #{BOOST} * TS_RANK_CD(#{TEXT_SEARCH_RANKS}, TO_TSQUERY('simple', :tsquery), 32)
-        SQL
-      )
+      Arel.sql(<<~SQL.squish)
+        #{BOOST} * TS_RANK_CD(#{TEXT_SEARCH_RANKS}, #{simple_tsquery(terms)}, 32)
+      SQL
+    end
+
+    def following_terms_rank(terms)
+      Arel.sql(<<~SQL.squish)
+        (COUNT(follows.id) + 1) * #{terms_rank(terms)}
+      SQL
     end
 
     def terms_query(terms)
+      Arel.sql(<<~SQL.squish)
+        #{simple_tsquery(terms)} @@ #{TEXT_SEARCH_RANKS}
+      SQL
+    end
+
+    def simple_tsquery(terms)
       Arel.sql(
         sanitize_sql([<<~SQL.squish, tsquery: generate_query_for_search(terms)])
-          TO_TSQUERY('simple', :tsquery) @@ #{TEXT_SEARCH_RANKS}
+          TO_TSQUERY('simple', :tsquery)
         SQL
       )
     end
 
     def advanced_search_for(terms, account, limit: DEFAULT_LIMIT, following: false, offset: 0)
-      tsquery = generate_query_for_search(terms)
-      sql_template = following ? ADVANCED_SEARCH_WITH_FOLLOWING : ADVANCED_SEARCH_WITHOUT_FOLLOWING
+      result = if following
+                 advanced_search_with_following(terms, account, limit, offset)
+               else
+                 advanced_search_without_following(terms, account, limit, offset)
+               end
 
-      find_by_sql([sql_template, { id: account.id, limit: limit, offset: offset, tsquery: tsquery }]).tap do |records|
-        ActiveRecord::Associations::Preloader.new(records: records, associations: [:account_stat, { user: :role }]).call
+      result.tap do |records|
+        ActiveRecord::Associations::Preloader.new(
+          records: records,
+          associations: [:account_stat, { user: :role }]
+        ).call
       end
+    end
+
+    def first_degree(account)
+      Arel.sql(<<~SQL.squish)
+        SELECT target_account_id
+        FROM follows
+        WHERE account_id = #{account.id}
+        UNION ALL
+        SELECT #{account.id}
+      SQL
+    end
+
+    def advanced_search_with_following(terms, account, limit, offset)
+      with(first_degree: first_degree(account))
+        .left_joins(:account_stat)
+        .joins(<<~SQL.squish)
+          LEFT OUTER JOIN follows ON (accounts.id = follows.account_id AND follows.target_account_id = #{account.id})
+        SQL
+        .where('accounts.id IN (SELECT * FROM first_degree)')
+        .where(terms_query(terms))
+        .without_suspended
+        .where(moved_to_account_id: nil)
+        .select(
+          Account.arel_table[Arel.star],
+          following_terms_rank(terms).as('rank')
+        )
+        .group(Account.arel_table[:id], AccountStat.arel_table[:id])
+        .limit(limit)
+        .order(rank: :desc)
+        .offset(offset)
+    end
+
+    def advanced_search_without_following(terms, account, limit, offset)
+      left_joins(:user, :account_stat)
+        .joins(<<~SQL.squish)
+          LEFT OUTER JOIN follows ON
+          (follows.account_id = accounts.id AND follows.target_account_id = #{account.id}) OR
+          (follows.target_account_id = accounts.id AND follows.account_id = #{account.id})
+        SQL
+        .without_suspended
+        .where(moved_to_account_id: nil)
+        .remote.or(User.approved.confirmed)
+        .where(terms_query(terms))
+        .select(
+          Account.arel_table[Arel.star],
+          terms_rank(terms).as('rank'),
+          Follow.arel_table[:id].count.as('follows_count')
+        )
+        .group(Account.arel_table[:id], AccountStat.arel_table[:id])
+        .limit(limit)
+        .order(follows_count: :desc, rank: :desc)
+        .offset(offset)
     end
 
     private
