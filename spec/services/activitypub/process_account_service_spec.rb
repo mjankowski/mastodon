@@ -9,7 +9,7 @@ RSpec.describe ActivityPub::ProcessAccountService do
     let(:payload) do
       {
         id: 'https://foo.test',
-        type: 'Actor',
+        type: 'Person',
         inbox: 'https://foo.test/inbox',
         attachment: [
           { type: 'PropertyValue', name: 'Pronouns', value: 'They/them' },
@@ -67,7 +67,7 @@ RSpec.describe ActivityPub::ProcessAccountService do
     let(:payload) do
       {
         id: 'https://foo.test',
-        type: 'Actor',
+        type: 'Person',
         inbox: 'https://foo.test/inbox',
         attributionDomains: [
           'example.com',
@@ -91,7 +91,7 @@ RSpec.describe ActivityPub::ProcessAccountService do
     let(:payload) do
       {
         id: 'https://foo.test',
-        type: 'Actor',
+        type: 'Person',
         inbox: 'https://foo.test/inbox',
         suspended: true,
       }.with_indifferent_access
@@ -120,7 +120,7 @@ RSpec.describe ActivityPub::ProcessAccountService do
     let(:payload) do
       {
         id: 'https://foo.test',
-        type: 'Actor',
+        type: 'Person',
         inbox: 'https://foo.test/inbox',
         suspended: false,
         name: 'Hoge',
@@ -169,7 +169,7 @@ RSpec.describe ActivityPub::ProcessAccountService do
         domain = "test#{i}.testdomain.com"
         json = {
           id: "https://#{domain}/users/1",
-          type: 'Actor',
+          type: 'Person',
           inbox: "https://#{domain}/inbox",
         }.with_indifferent_access
         described_class.new.call('alice', domain, json)

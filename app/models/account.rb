@@ -77,6 +77,7 @@ class Account < ApplicationRecord
   NOTE_LENGTH_LIMIT = 500
 
   AUTOMATED_ACTOR_TYPES = %w(Application Service).freeze
+  VALID_ACTOR_TYPES = %w(Application Group Organization Person Service).freeze
 
   include Attachmentable # Load prior to Avatar & Header concerns
 
@@ -98,19 +99,20 @@ class Account < ApplicationRecord
 
   enum :protocol, { ostatus: 0, activitypub: 1 }
   enum :suspension_origin, { local: 0, remote: 1 }, prefix: true
+  enum :actor_type, VALID_ACTOR_TYPES.index_by { |value| value.downcase.to_sym }, prefix: true
 
   validates :username, presence: true
   validates_with UniqueUsernameValidator, if: -> { will_save_change_to_username? }
 
   # Remote user validations, also applies to internal actors
-  validates :username, format: { with: USERNAME_ONLY_RE }, if: -> { (!local? || actor_type == 'Application') && will_save_change_to_username? }
+  validates :username, format: { with: USERNAME_ONLY_RE }, if: -> { (!local? || actor_type_application?) && will_save_change_to_username? }
 
   # Remote user validations
   validates :uri, presence: true, unless: :local?, on: :create
 
   # Local user validations
-  validates :username, format: { with: /\A[a-z0-9_]+\z/i }, length: { maximum: USERNAME_LENGTH_LIMIT }, if: -> { local? && will_save_change_to_username? && actor_type != 'Application' }
-  validates_with UnreservedUsernameValidator, if: -> { local? && will_save_change_to_username? && actor_type != 'Application' }
+  validates :username, format: { with: /\A[a-z0-9_]+\z/i }, length: { maximum: USERNAME_LENGTH_LIMIT }, if: -> { local? && will_save_change_to_username? && !actor_type_application? }
+  validates_with UnreservedUsernameValidator, if: -> { local? && will_save_change_to_username? && !actor_type_application? }
   validates :display_name, length: { maximum: DISPLAY_NAME_LENGTH_LIMIT }, if: -> { local? && will_save_change_to_display_name? }
   validates :note, note_length: { maximum: NOTE_LENGTH_LIMIT }, if: -> { local? && will_save_change_to_note? }
   validates :fields, length: { maximum: DEFAULT_FIELDS_SIZE }, if: -> { local? && will_save_change_to_fields? }
@@ -134,7 +136,6 @@ class Account < ApplicationRecord
   scope :recent, -> { reorder(id: :desc) }
   scope :bots, -> { where(actor_type: AUTOMATED_ACTOR_TYPES) }
   scope :non_automated, -> { where.not(actor_type: AUTOMATED_ACTOR_TYPES) }
-  scope :groups, -> { where(actor_type: 'Group') }
   scope :alphabetic, -> { order(domain: :asc, username: :asc) }
   scope :matches_uri_prefix, ->(value) { where(arel_table[:uri].matches("#{sanitize_sql_like(value)}/%", false, true)).or(where(uri: value)) }
   scope :matches_username, ->(value) { where('lower((username)::text) LIKE lower(?)', "#{value}%") }
@@ -192,21 +193,13 @@ class Account < ApplicationRecord
     AUTOMATED_ACTOR_TYPES.include?(actor_type)
   end
 
+  alias bot bot?
+
   def instance_actor?
     id == INSTANCE_ACTOR_ID
   end
 
-  alias bot bot?
-
-  def bot=(val)
-    self.actor_type = ActiveModel::Type::Boolean.new.cast(val) ? 'Service' : 'Person'
-  end
-
-  def group?
-    actor_type == 'Group'
-  end
-
-  alias group group?
+  alias group actor_type_group?
 
   def acct
     local? ? username : "#{username}@#{domain}"
