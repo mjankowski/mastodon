@@ -46,7 +46,7 @@ RSpec.describe ActivityPub::TagManager do
 
     it "returns URIs of mentioned group's followers for direct statuses to groups" do
       status    = Fabricate(:status, visibility: :direct)
-      mentioned = Fabricate(:account, domain: 'remote.org', uri: 'https://remote.org/group', followers_url: 'https://remote.org/group/followers', actor_type: 'Group')
+      mentioned = Fabricate(:account, domain: 'remote.org', uri: 'https://remote.org/group', followers_url: 'https://remote.org/group/followers', actor_type: :group)
       status.mentions.create(account: mentioned)
       expect(subject.to(status)).to include(subject.uri_for(mentioned))
       expect(subject.to(status)).to include(subject.followers_uri_for(mentioned))

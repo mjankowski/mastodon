@@ -186,9 +186,9 @@ RSpec.describe ResolveAccountService do
           .to have_attributes(
             activitypub?: true,
             domain: 'ap.example.com',
-            inbox_url: 'https://ap.example.com/users/foo/inbox',
-            actor_type: 'Person'
+            inbox_url: 'https://ap.example.com/users/foo/inbox'
           )
+          .and be_actor_type_person
       end
     end
   end

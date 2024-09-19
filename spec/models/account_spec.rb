@@ -805,14 +805,14 @@ RSpec.describe Account do
       end
 
       context 'with the instance actor' do
-        subject { Fabricate.build :account, id: described_class::INSTANCE_ACTOR_ID, actor_type: 'Application', locked: true }
+        subject { Fabricate.build :account, id: described_class::INSTANCE_ACTOR_ID, actor_type: :application, locked: true }
 
         it { is_expected.to allow_value('example.com').for(:username) }
       end
 
       it 'is valid if we are creating a possibly-conflicting instance actor account' do
         _account = Fabricate(:account, username: 'examplecom')
-        instance_account = Fabricate.build(:account, id: described_class::INSTANCE_ACTOR_ID, actor_type: 'Application', locked: true, username: 'example.com')
+        instance_account = Fabricate.build(:account, id: described_class::INSTANCE_ACTOR_ID, actor_type: :application, locked: true, username: 'example.com')
         expect(instance_account.valid?).to be true
       end
 

@@ -106,16 +106,16 @@ class ActivityPub::TagManager
         account_ids = status.active_mentions.pluck(:account_id)
         to = status.account.followers.where(id: account_ids).each_with_object([]) do |account, result|
           result << uri_for(account)
-          result << followers_uri_for(account) if account.group?
+          result << followers_uri_for(account) if account.actor_type_group?
         end
         to.concat(FollowRequest.where(target_account_id: status.account_id, account_id: account_ids).each_with_object([]) do |request, result|
           result << uri_for(request.account)
-          result << followers_uri_for(request.account) if request.account.group?
+          result << followers_uri_for(request.account) if request.account.actor_type_group?
         end).compact
       else
         status.active_mentions.each_with_object([]) do |mention, result|
           result << uri_for(mention.account)
-          result << followers_uri_for(mention.account) if mention.account.group?
+          result << followers_uri_for(mention.account) if mention.account.actor_type_group?
         end.compact
       end
     end
@@ -144,16 +144,16 @@ class ActivityPub::TagManager
         account_ids = status.active_mentions.pluck(:account_id)
         cc.concat(status.account.followers.where(id: account_ids).each_with_object([]) do |account, result|
           result << uri_for(account)
-          result << followers_uri_for(account) if account.group?
+          result << followers_uri_for(account) if account.actor_type_group?
         end.compact)
         cc.concat(FollowRequest.where(target_account_id: status.account_id, account_id: account_ids).each_with_object([]) do |request, result|
           result << uri_for(request.account)
-          result << followers_uri_for(request.account) if request.account.group?
+          result << followers_uri_for(request.account) if request.account.actor_type_group?
         end.compact)
       else
         cc.concat(status.active_mentions.each_with_object([]) do |mention, result|
           result << uri_for(mention.account)
-          result << followers_uri_for(mention.account) if mention.account.group?
+          result << followers_uri_for(mention.account) if mention.account.actor_type_group?
         end.compact)
       end
     end

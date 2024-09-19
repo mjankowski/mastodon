@@ -46,7 +46,7 @@ class ActivityPub::Activity::Announce < ActivityPub::Activity
   end
 
   def reblog_by_following_group_account?(status)
-    status.reblog? && status.account.group? && status.reblog.account.following?(status.account)
+    status.reblog? && status.account.actor_type_group? && status.reblog.account.following?(status.account)
   end
 
   def audience_to

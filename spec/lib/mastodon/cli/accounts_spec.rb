@@ -1270,11 +1270,11 @@ RSpec.describe Mastodon::CLI::Accounts do
   describe '#prune' do
     let(:action) { :prune }
     let!(:local_account)     { Fabricate(:account) }
-    let!(:bot_account)       { Fabricate(:account, bot: true, domain: 'example.com') }
-    let!(:group_account)     { Fabricate(:account, actor_type: 'Group', domain: 'example.com') }
+    let!(:bot_account)       { Fabricate(:account, actor_type: :service, domain: 'example.com') }
+    let!(:group_account)     { Fabricate(:account, actor_type: :group, domain: 'example.com') }
     let!(:mentioned_account) { Fabricate(:account, domain: 'example.com') }
     let!(:prunable_accounts) do
-      Fabricate.times(2, :account, domain: 'example.com', bot: false, suspended_at: nil, silenced_at: nil)
+      Fabricate.times(2, :account, domain: 'example.com', actor_type: :person, suspended_at: nil, silenced_at: nil)
     end
 
     before do
