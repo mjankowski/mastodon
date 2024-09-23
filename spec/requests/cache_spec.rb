@@ -118,43 +118,62 @@ module TestEndpoints
   end
 end
 
+RSpec::Matchers.define :have_non_cacheable_error do
+  match(notify_expectation_failures: true) do |response|
+    expect(response)
+      .to_not have_http_status(200)
+    expect(response.cache_control[:public])
+      .to be_falsy
+  end
+end
+
+RSpec::Matchers.define :have_non_cacheable_response do |http_success: false|
+  match(notify_expectation_failures: true) do |response|
+    expect(response.cache_control[:private])
+      .to be_truthy
+    expect(response.cache_control[:no_store])
+      .to be_truthy
+
+    if http_success
+      expect(response).to have_http_status(200)
+    else
+      expect(response).to be_present
+    end
+  end
+end
+RSpec::Matchers.define :be_language_dependent do
+  match(notify_expectation_failures: true) do |response|
+    response_vary_headers = response.headers['Vary']&.split(',')&.map { |x| x.strip.downcase }
+
+    expect(response_vary_headers)
+      .to include('accept-language')
+  end
+end
+
+RSpec::Matchers.define :have_cacheable_response do |http_success: false|
+  match(notify_expectation_failures: true) do |response|
+    expect(response.cookies)
+      .to be_empty
+
+    # expect(response.cache_control[:max_age]&.to_i).to be_positive
+    expect(response.cache_control[:public])
+      .to be_truthy
+    expect(response.cache_control[:private])
+      .to be_falsy
+    expect(response.cache_control[:no_store])
+      .to be_falsy
+    expect(response.cache_control[:no_cache])
+      .to be_falsy
+
+    if http_success
+      expect(response).to have_http_status(200)
+    else
+      expect(response).to be_present
+    end
+  end
+end
+
 RSpec.describe 'Caching behavior' do
-  shared_examples 'cachable response' do |http_success: false|
-    it 'does not set cookies or set public cache control', :aggregate_failures do
-      expect(response.cookies).to be_empty
-
-      # expect(response.cache_control[:max_age]&.to_i).to be_positive
-      expect(response.cache_control[:public]).to be_truthy
-      expect(response.cache_control[:private]).to be_falsy
-      expect(response.cache_control[:no_store]).to be_falsy
-      expect(response.cache_control[:no_cache]).to be_falsy
-
-      expect(response).to have_http_status(200) if http_success
-    end
-  end
-
-  shared_examples 'non-cacheable response' do |http_success: false|
-    it 'sets private cache control' do
-      expect(response.cache_control[:private]).to be_truthy
-      expect(response.cache_control[:no_store]).to be_truthy
-
-      expect(response).to have_http_status(200) if http_success
-    end
-  end
-
-  shared_examples 'non-cacheable error' do
-    it 'does not return HTTP success and does not have cache headers', :aggregate_failures do
-      expect(response).to_not have_http_status(200)
-      expect(response.cache_control[:public]).to be_falsy
-    end
-  end
-
-  shared_examples 'language-dependent' do
-    it 'has a Vary on Accept-Language' do
-      expect(response_vary_headers).to include('accept-language')
-    end
-  end
-
   # Enable CSRF protection like it is in production, as it can cause cookies
   # to be set and thus mess with cache.
   around do |example|
@@ -196,8 +215,11 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'cachable response'
-        it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response
+
+          expect(response).to be_language_dependent if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+        end
       end
     end
 
@@ -205,13 +227,11 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'cachable response'
-
-        it 'has a Vary on Cookie' do
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response
+          expect(response).to be_language_dependent if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
           expect(response_vary_headers).to include('cookie')
         end
-
-        it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
       end
     end
 
@@ -219,13 +239,12 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'cachable response'
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response
+          expect(response).to be_language_dependent if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
 
-        it 'has a Vary on Authorization' do
           expect(response_vary_headers).to include('authorization')
         end
-
-        it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
       end
     end
 
@@ -233,7 +252,9 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'non-cacheable response'
+        it 'has a non cacheable response' do
+          expect(response).to have_non_cacheable_response
+        end
       end
     end
 
@@ -241,7 +262,9 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'non-cacheable error'
+        it 'responds with non cacheable error' do
+          expect(response).to have_non_cacheable_error
+        end
       end
     end
 
@@ -254,19 +277,25 @@ RSpec.describe 'Caching behavior' do
       context 'when set to be publicly-available' do
         let(:show_domain_blocks) { 'all' }
 
-        it_behaves_like 'cachable response'
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response
+        end
       end
 
       context 'when allowed for local users only' do
         let(:show_domain_blocks) { 'users' }
 
-        it_behaves_like 'non-cacheable error'
+        it 'responds with non cacheable error' do
+          expect(response).to have_non_cacheable_error
+        end
       end
 
       context 'when disabled' do
         let(:show_domain_blocks) { 'disabled' }
 
-        it_behaves_like 'non-cacheable error'
+        it 'responds with non cacheable error' do
+          expect(response).to have_non_cacheable_error
+        end
       end
     end
   end
@@ -290,8 +319,10 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'cachable response'
-        it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response
+          expect(response).to be_language_dependent if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+        end
       end
     end
 
@@ -299,9 +330,9 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'non-cacheable response'
+        it 'has a non cacheable response' do
+          expect(response).to have_non_cacheable_response
 
-        it 'has a Vary on Cookie' do
           expect(response_vary_headers).to include('cookie')
         end
       end
@@ -311,7 +342,9 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'non-cacheable response', http_success: true
+        it 'has a non cacheable response' do
+          expect(response).to have_non_cacheable_response(http_success: true)
+        end
       end
     end
 
@@ -319,7 +352,9 @@ RSpec.describe 'Caching behavior' do
       describe endpoint do
         before { get endpoint }
 
-        it_behaves_like 'non-cacheable error'
+        it 'responds with non cacheable error' do
+          expect(response).to have_non_cacheable_error
+        end
       end
     end
   end
@@ -331,8 +366,10 @@ RSpec.describe 'Caching behavior' do
           get endpoint, headers: { 'Authorization' => "Bearer #{token.token}" }
         end
 
-        it_behaves_like 'cachable response'
-        it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response
+          expect(response).to be_language_dependent if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+        end
       end
     end
 
@@ -342,9 +379,9 @@ RSpec.describe 'Caching behavior' do
           get endpoint, headers: { 'Authorization' => "Bearer #{token.token}" }
         end
 
-        it_behaves_like 'non-cacheable response'
+        it 'has a non cacheable response' do
+          expect(response).to have_non_cacheable_response
 
-        it 'has a Vary on Authorization' do
           expect(response_vary_headers).to include('authorization')
         end
       end
@@ -356,7 +393,9 @@ RSpec.describe 'Caching behavior' do
           get endpoint, headers: { 'Authorization' => "Bearer #{token.token}" }
         end
 
-        it_behaves_like 'non-cacheable response', http_success: true
+        it 'has a non cacheable response' do
+          expect(response).to have_non_cacheable_response(http_success: true)
+        end
       end
     end
 
@@ -369,19 +408,25 @@ RSpec.describe 'Caching behavior' do
       context 'when set to be publicly-available' do
         let(:show_domain_blocks) { 'all' }
 
-        it_behaves_like 'cachable response'
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response
+        end
       end
 
       context 'when allowed for local users only' do
         let(:show_domain_blocks) { 'users' }
 
-        it_behaves_like 'non-cacheable response', http_success: true
+        it 'has a non cacheable response' do
+          expect(response).to have_non_cacheable_response(http_success: true)
+        end
       end
 
       context 'when disabled' do
         let(:show_domain_blocks) { 'disabled' }
 
-        it_behaves_like 'non-cacheable error'
+        it 'responds with non cacheable error' do
+          expect(response).to have_non_cacheable_error
+        end
       end
     end
   end
@@ -399,7 +444,9 @@ RSpec.describe 'Caching behavior' do
         get '/actor', sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
       end
 
-      it_behaves_like 'cachable response', http_success: true
+      it 'has a cacheable response' do
+        expect(response).to have_cacheable_response(http_success: true)
+      end
     end
 
     TestEndpoints::REQUIRE_SIGNATURE.each do |endpoint|
@@ -408,7 +455,9 @@ RSpec.describe 'Caching behavior' do
           get endpoint, sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
         end
 
-        it_behaves_like 'non-cacheable response', http_success: true
+        it 'has a non cacheable response' do
+          expect(response).to have_non_cacheable_response(http_success: true)
+        end
       end
     end
   end
@@ -426,7 +475,9 @@ RSpec.describe 'Caching behavior' do
           get '/actor', headers: { 'Accept' => 'application/activity+json' }
         end
 
-        it_behaves_like 'cachable response', http_success: true
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response(http_success: true)
+        end
       end
 
       (TestEndpoints::REQUIRE_SIGNATURE + TestEndpoints::AuthorizedFetch::REQUIRE_SIGNATURE).each do |endpoint|
@@ -435,7 +486,9 @@ RSpec.describe 'Caching behavior' do
             get endpoint, headers: { 'Accept' => 'application/activity+json' }
           end
 
-          it_behaves_like 'non-cacheable error'
+          it 'responds with non cacheable error' do
+            expect(response).to have_non_cacheable_error
+          end
         end
       end
     end
@@ -453,7 +506,9 @@ RSpec.describe 'Caching behavior' do
           get '/actor', sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
         end
 
-        it_behaves_like 'cachable response', http_success: true
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response(http_success: true)
+        end
       end
 
       (TestEndpoints::REQUIRE_SIGNATURE + TestEndpoints::AuthorizedFetch::REQUIRE_SIGNATURE).each do |endpoint|
@@ -462,7 +517,9 @@ RSpec.describe 'Caching behavior' do
             get endpoint, sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
           end
 
-          it_behaves_like 'non-cacheable response', http_success: true
+          it 'has a non cacheable response' do
+            expect(response).to have_non_cacheable_response(http_success: true)
+          end
         end
       end
     end
@@ -486,7 +543,9 @@ RSpec.describe 'Caching behavior' do
           get '/actor', headers: { 'Accept' => 'application/activity+json' }
         end
 
-        it_behaves_like 'cachable response', http_success: true
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response(http_success: true)
+        end
       end
 
       (TestEndpoints::REQUIRE_SIGNATURE + TestEndpoints::AuthorizedFetch::REQUIRE_SIGNATURE).each do |endpoint|
@@ -495,7 +554,9 @@ RSpec.describe 'Caching behavior' do
             get endpoint, headers: { 'Accept' => 'application/activity+json' }
           end
 
-          it_behaves_like 'non-cacheable error'
+          it 'responds with non cacheable error' do
+            expect(response).to have_non_cacheable_error
+          end
         end
       end
     end
@@ -514,7 +575,9 @@ RSpec.describe 'Caching behavior' do
           get '/actor', sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
         end
 
-        it_behaves_like 'cachable response', http_success: true
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response(http_success: true)
+        end
       end
 
       (TestEndpoints::REQUIRE_SIGNATURE + TestEndpoints::AuthorizedFetch::REQUIRE_SIGNATURE).each do |endpoint|
@@ -523,7 +586,9 @@ RSpec.describe 'Caching behavior' do
             get endpoint, sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
           end
 
-          it_behaves_like 'non-cacheable response', http_success: true
+          it 'has a non cacheable response' do
+            expect(response).to have_non_cacheable_response(http_success: true)
+          end
         end
       end
     end
@@ -537,7 +602,9 @@ RSpec.describe 'Caching behavior' do
           get '/actor', sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
         end
 
-        it_behaves_like 'cachable response', http_success: true
+        it 'has a cacheable response' do
+          expect(response).to have_cacheable_response(http_success: true)
+        end
       end
 
       (TestEndpoints::REQUIRE_SIGNATURE + TestEndpoints::AuthorizedFetch::REQUIRE_SIGNATURE).each do |endpoint|
@@ -546,7 +613,9 @@ RSpec.describe 'Caching behavior' do
             get endpoint, sign_with: remote_actor, headers: { 'Accept' => 'application/activity+json' }
           end
 
-          it_behaves_like 'non-cacheable error'
+          it 'responds with non cacheable error' do
+            expect(response).to have_non_cacheable_error
+          end
         end
       end
     end
@@ -564,8 +633,10 @@ RSpec.describe 'Caching behavior' do
         describe endpoint do
           before { get endpoint }
 
-          it_behaves_like 'cachable response'
-          it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+          it 'has a cacheable response' do
+            expect(response).to have_cacheable_response
+            expect(response).to be_language_dependent if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+          end
         end
       end
 
@@ -573,7 +644,9 @@ RSpec.describe 'Caching behavior' do
         describe endpoint do
           before { get endpoint }
 
-          it_behaves_like 'non-cacheable response'
+          it 'has a non cacheable response' do
+            expect(response).to have_non_cacheable_response
+          end
         end
       end
 
@@ -581,7 +654,9 @@ RSpec.describe 'Caching behavior' do
         describe endpoint do
           before { get endpoint }
 
-          it_behaves_like 'non-cacheable error'
+          it 'responds with non cacheable error' do
+            expect(response).to have_non_cacheable_error
+          end
         end
       end
     end
@@ -593,8 +668,10 @@ RSpec.describe 'Caching behavior' do
             get endpoint, headers: { 'Authorization' => "Bearer #{token.token}" }
           end
 
-          it_behaves_like 'cachable response'
-          it_behaves_like 'language-dependent' if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+          it 'has a cacheable response' do
+            expect(response).to have_cacheable_response
+            expect(response).to be_language_dependent if TestEndpoints::LANGUAGE_DEPENDENT.include?(endpoint)
+          end
         end
       end
 
@@ -604,9 +681,9 @@ RSpec.describe 'Caching behavior' do
             get endpoint, headers: { 'Authorization' => "Bearer #{token.token}" }
           end
 
-          it_behaves_like 'non-cacheable response'
+          it 'has a non cacheable response' do
+            expect(response).to have_non_cacheable_response
 
-          it 'has a Vary on Authorization' do
             expect(response_vary_headers).to include('authorization')
           end
         end
@@ -618,7 +695,9 @@ RSpec.describe 'Caching behavior' do
             get endpoint, headers: { 'Authorization' => "Bearer #{token.token}" }
           end
 
-          it_behaves_like 'non-cacheable response', http_success: true
+          it 'has a non cacheable response' do
+            expect(response).to have_non_cacheable_response(http_success: true)
+          end
         end
       end
     end
