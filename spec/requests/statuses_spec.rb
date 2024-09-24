@@ -54,7 +54,7 @@ RSpec.describe 'Statuses' do
         context 'with HTML' do
           let(:format) { 'html' }
 
-          it 'renders status successfully', :aggregate_failures do
+          it 'renders status successfully' do
             subject
 
             expect(response)
@@ -72,7 +72,7 @@ RSpec.describe 'Statuses' do
         context 'with JSON' do
           let(:format) { 'json' }
 
-          it 'renders ActivityPub Note object successfully', :aggregate_failures do
+          it 'renders ActivityPub Note object successfully' do
             subject
 
             expect(response)
@@ -134,7 +134,7 @@ RSpec.describe 'Statuses' do
         context 'with HTML' do
           let(:format) { 'html' }
 
-          it 'renders status successfully', :aggregate_failures do
+          it 'renders status successfully' do
             subject
 
             expect(response)
@@ -152,7 +152,7 @@ RSpec.describe 'Statuses' do
         context 'with JSON' do
           let(:format) { 'json' }
 
-          it 'renders ActivityPub Note object successfully', :aggregate_failures do
+          it 'renders ActivityPub Note object successfully' do
             subject
 
             expect(response)
@@ -178,7 +178,7 @@ RSpec.describe 'Statuses' do
           context 'with HTML' do
             let(:format) { 'html' }
 
-            it 'renders status successfully', :aggregate_failures do
+            it 'renders status successfully' do
               subject
 
               expect(response)
@@ -197,7 +197,7 @@ RSpec.describe 'Statuses' do
           context 'with JSON' do
             let(:format) { 'json' }
 
-            it 'renders ActivityPub Note object successfully', :aggregate_failures do
+            it 'renders ActivityPub Note object successfully' do
               subject
 
               expect(response)
@@ -235,7 +235,7 @@ RSpec.describe 'Statuses' do
           context 'with HTML' do
             let(:format) { 'html' }
 
-            it 'renders status successfully', :aggregate_failures do
+            it 'renders status successfully' do
               subject
 
               expect(response)
@@ -328,7 +328,7 @@ RSpec.describe 'Statuses' do
         context 'with HTML' do
           let(:format) { 'html' }
 
-          it 'renders status successfully', :aggregate_failures do
+          it 'renders status successfully' do
             subject
 
             expect(response)
@@ -346,7 +346,7 @@ RSpec.describe 'Statuses' do
         context 'with JSON' do
           let(:format) { 'json' }
 
-          it 'renders ActivityPub Note object successfully', :aggregate_failures do
+          it 'renders ActivityPub Note object successfully' do
             subject
 
             expect(response)
@@ -371,7 +371,7 @@ RSpec.describe 'Statuses' do
           context 'with HTML' do
             let(:format) { 'html' }
 
-            it 'renders status successfully', :aggregate_failures do
+            it 'renders status successfully' do
               subject
 
               expect(response)
@@ -426,7 +426,7 @@ RSpec.describe 'Statuses' do
           context 'with HTML' do
             let(:format) { 'html' }
 
-            it 'renders status successfully', :aggregate_failures do
+            it 'renders status successfully' do
               subject
 
               expect(response)
@@ -444,7 +444,7 @@ RSpec.describe 'Statuses' do
           context 'with JSON' do
             let(:format) { 'json' }
 
-            it 'renders ActivityPub Note object', :aggregate_failures do
+            it 'renders ActivityPub Note object' do
               subject
 
               expect(response)
