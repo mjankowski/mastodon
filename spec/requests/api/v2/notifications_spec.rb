@@ -193,7 +193,7 @@ RSpec.describe 'Notifications' do
     end
 
     context 'with no options' do
-      it 'returns expected notification types', :aggregate_failures do
+      it 'returns expected notification types' do
         subject
 
         expect(response).to have_http_status(200)
@@ -240,7 +240,7 @@ RSpec.describe 'Notifications' do
     context 'with exclude_types param' do
       let(:params) { { exclude_types: %w(mention) } }
 
-      it 'returns everything but excluded type', :aggregate_failures do
+      it 'returns everything but excluded type' do
         subject
 
         expect(response).to have_http_status(200)
@@ -254,7 +254,7 @@ RSpec.describe 'Notifications' do
     context 'with types param' do
       let(:params) { { types: %w(mention) } }
 
-      it 'returns only requested type', :aggregate_failures do
+      it 'returns only requested type' do
         subject
 
         expect(response).to have_http_status(200)
@@ -269,7 +269,7 @@ RSpec.describe 'Notifications' do
       let(:params) { { limit: 3 } }
       let(:notifications) { user.account.notifications.reorder(id: :desc) }
 
-      it 'returns the requested number of notifications paginated', :aggregate_failures do
+      it 'returns the requested number of notifications paginated' do
         subject
 
         expect(response.parsed_body[:notification_groups].size)
@@ -291,7 +291,7 @@ RSpec.describe 'Notifications' do
       let(:params) { { since_id: notifications[2].id } }
       let(:notifications) { user.account.notifications.reorder(id: :desc) }
 
-      it 'returns the requested number of notifications paginated', :aggregate_failures do
+      it 'returns the requested number of notifications paginated' do
         subject
 
         expect(response.parsed_body[:notification_groups].size)
@@ -318,7 +318,7 @@ RSpec.describe 'Notifications' do
         FavouriteService.new.call(recent_account, user.account.statuses.first)
       end
 
-      it 'returns an account in "partial_accounts", with the expected keys', :aggregate_failures do
+      it 'returns an account in "partial_accounts", with the expected keys' do
         subject
 
         expect(response).to have_http_status(200)
