@@ -53,7 +53,7 @@ RSpec.describe 'Settings Migrations' do
     context 'when acct is the current account' do
       let(:acct) { user.account }
 
-      it 'does not update the moved account', :aggregate_failures do
+      it 'does not update the moved account' do
         visit settings_migration_path
 
         expect { fill_in_and_submit }
@@ -66,7 +66,7 @@ RSpec.describe 'Settings Migrations' do
     context 'when target account does not reference the account being moved from' do
       let(:acct) { Fabricate(:account, also_known_as: []) }
 
-      it 'does not update the moved account', :aggregate_failures do
+      it 'does not update the moved account' do
         visit settings_migration_path
 
         expect { fill_in_and_submit }
@@ -82,7 +82,7 @@ RSpec.describe 'Settings Migrations' do
 
       before { user.account.migrations.create!(acct: moved_to.acct) }
 
-      it 'can not update the moved account', :aggregate_failures do
+      it 'can not update the moved account' do
         visit settings_migration_path
 
         expect(find_by_id('account_migration_acct'))
