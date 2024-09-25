@@ -9,6 +9,7 @@ class NotificationMailer < ApplicationMailer
   with_options only: %i(mention favourite reblog) do
     before_action :set_status
     after_action :thread_by_conversation!
+    before_action :verify_status_presence
   end
   before_action :set_account, only: [:follow, :favourite, :reblog, :follow_request]
   after_action :set_list_headers!
@@ -20,8 +21,6 @@ class NotificationMailer < ApplicationMailer
   layout 'mailer'
 
   def mention
-    return if @status.blank?
-
     locale_for_account(@me) do
       mail subject: default_i18n_subject(name: @status.account.acct)
     end
@@ -34,16 +33,12 @@ class NotificationMailer < ApplicationMailer
   end
 
   def favourite
-    return if @status.blank?
-
     locale_for_account(@me) do
       mail subject: default_i18n_subject(name: @account.acct)
     end
   end
 
   def reblog
-    return if @status.blank?
-
     locale_for_account(@me) do
       mail subject: default_i18n_subject(name: @account.acct)
     end
@@ -75,6 +70,13 @@ class NotificationMailer < ApplicationMailer
 
   def verify_functional_user
     throw(:abort) unless @user.functional?
+  end
+
+  def verify_status_presence
+    if @status.blank?
+      self.perform_deliveries = false
+      self.response_body = :do_not_deliver
+    end
   end
 
   def set_list_headers!
