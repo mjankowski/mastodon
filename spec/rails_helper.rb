@@ -149,6 +149,14 @@ RSpec.configure do |config|
     stub_reset_connection_pools
   end
 
+  config.after :each, type: :system do
+    File.write(File.join('tmp', 'html', "#{SecureRandom.hex}.html"), page.body)
+  end
+
+  config.after :each, type: :controller do
+    File.write(File.join('tmp', 'html', "#{SecureRandom.hex}.html"), response.body)
+  end
+
   config.before do |example|
     allow(Resolv::DNS).to receive(:open).and_raise('Real DNS queries are disabled, stub Resolv::DNS as needed') unless example.metadata[:type] == :system
   end
