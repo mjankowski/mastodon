@@ -2,7 +2,7 @@
   = t('auth.captcha_confirmation.title')
 
 = form_with url: auth_captcha_confirmation_url, class: :simple_form do |form|
-  = render 'auth/shared/progress', stage: 'confirm'
+  = render progress_tracker('confirm')
 
   = form.hidden_field :confirmation_token,
                       value: params[:confirmation_token]

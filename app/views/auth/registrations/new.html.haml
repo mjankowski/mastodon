@@ -5,7 +5,7 @@
   = render partial: 'shared/og', locals: { description: description_for_sign_up(@invite) }
 
 = simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { novalidate: false }) do |f|
-  = render 'auth/shared/progress', stage: 'details'
+  = render progress_tracker('details')
 
   %h1.title= t('auth.sign_up.title', domain: site_hostname)
   %p.lead= t('auth.sign_up.preamble')

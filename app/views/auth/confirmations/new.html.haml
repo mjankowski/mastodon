@@ -3,7 +3,7 @@
 
 - if resource.errors.of_kind?(:email, :already_confirmed)
   .simple_form
-    = render 'auth/shared/progress', stage: resource.approved? ? 'completed' : 'confirmed'
+    = render progress_tracker(resource.approved? ? 'completed' : 'confirmed')
 
     - if resource.approved?
       %h1.title= t('auth.confirmations.welcome_title', name: resource.account.username)

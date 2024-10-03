@@ -1,27 +1,27 @@
-- progress_index = { rules: 0, details: 1, confirm: 2, confirmed: 3, completed: 4 }[stage.to_sym]
+-# locals: (progress:)
 
 %ol.progress-tracker
-  %li{ class: progress_index.positive? ? 'completed' : 'active' }
+  %li{ class: class_names(completed: progress.completed?(:rules), active: progress.stage_rules?) }
     .circle
-      - if progress_index.positive?
+      - if progress.completed?(:rules)
         = check_icon
     .label= t('auth.progress.rules')
-  %li.separator{ class: progress_index.positive? ? 'completed' : nil }
-  %li{ class: [progress_index > 1 && 'completed', progress_index == 1 && 'active'] }
+  %li.separator{ class: class_names(completed: progress.completed?(:rules)) }
+  %li{ class: class_names(completed: progress.completed?(:details), active: progress.stage_details?) }
     .circle
-      - if progress_index > 1
+      - if progress.completed?(:details)
         = check_icon
     .label= t('auth.progress.details')
-  %li.separator{ class: progress_index > 1 ? 'completed' : nil }
-  %li{ class: [progress_index > 2 && 'completed', progress_index == 2 && 'active'] }
+  %li.separator{ class: class_names(completed: progress.completed?(:details)) }
+  %li{ class: class_names(completed: progress.completed?(:confirm), active: progress.stage_confirm?) }
     .circle
-      - if progress_index > 2
+      - if progress.completed?(:confirm)
         = check_icon
     .label= t('auth.progress.confirm')
   - if approved_registrations?
-    %li.separator{ class: progress_index > 2 ? 'completed' : nil }
-    %li{ class: [progress_index > 3 && 'completed', progress_index == 3 && 'active'] }
+    %li.separator{ class: class_names(completed: progress.completed?(:confirm)) }
+    %li{ class: class_names(completed: progress.completed?(:confirmed), active: progress.stage_confirmed?) }
       .circle
-        - if progress_index > 3
+        - if progress.completed?(:confirmed)
           = check_icon
       .label= t('auth.progress.review')

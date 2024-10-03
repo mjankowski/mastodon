@@ -5,7 +5,7 @@
   = render partial: 'shared/og', locals: { description: description_for_sign_up(@invite) }
 
 .simple_form
-  = render 'auth/shared/progress', stage: 'rules'
+  = render progress_tracker('rules')
 
   - if @invite.present? && @invite.autofollow?
     %h1.title= t('auth.rules.title_invited')

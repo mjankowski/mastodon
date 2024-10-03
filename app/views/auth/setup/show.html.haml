@@ -4,7 +4,7 @@
 = javascript_pack_tag 'sign_up', crossorigin: 'anonymous'
 
 = simple_form_for(@user, url: auth_setup_path) do |f|
-  = render 'auth/shared/progress', stage: 'confirm'
+  = render progress_tracker('confirm')
 
   %h1.title= t('auth.setup.title')
   %p.lead= t('auth.setup.email_settings_hint_html', email: content_tag(:strong, @user.email))
