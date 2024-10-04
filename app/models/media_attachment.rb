@@ -293,6 +293,12 @@ class MediaAttachment < ApplicationRecord
       IMAGE_FILE_EXTENSIONS + VIDEO_FILE_EXTENSIONS + AUDIO_FILE_EXTENSIONS
     end
 
+    def combined_storage_size
+      Arel.sql(<<~SQL.squish)
+        COALESCE(file_file_size, 0) + COALESCE(thumbnail_file_size, 0)
+      SQL
+    end
+
     private
 
     def file_styles(attachment)
