@@ -33,7 +33,7 @@ class RemoteInteractionHelperController < ApplicationController
   end
 
   def index
-    expires_in(5.minutes, public: true, stale_while_revalidate: 30.seconds, stale_if_error: 1.day)
+    public_cache_control(expires: 5.minutes)
 
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['Referrer-Policy'] = 'no-referrer'

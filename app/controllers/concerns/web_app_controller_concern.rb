@@ -34,7 +34,7 @@ module WebAppControllerConcern
     permalink_redirector = PermalinkRedirector.new(request.original_fullpath)
     return if permalink_redirector.redirect_path.blank?
 
-    expires_in(15.seconds, public: true, stale_while_revalidate: 30.seconds, stale_if_error: 1.day) unless user_signed_in?
+    public_cache_control unless user_signed_in?
 
     respond_to do |format|
       format.html do

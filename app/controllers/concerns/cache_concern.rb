@@ -3,6 +3,10 @@
 module CacheConcern
   extend ActiveSupport::Concern
 
+  DEFAULT_CACHE_EXPIRES = 15.seconds
+  DEFAULT_STALE_ERROR = 1.day
+  DEFAULT_STALE_REVALIDATE = 30.seconds
+
   class_methods do
     def vary_by(value, **kwargs)
       before_action(**kwargs) do |controller|
@@ -13,6 +17,15 @@ module CacheConcern
 
   included do
     after_action :enforce_cache_control!
+  end
+
+  def public_cache_control(options = {})
+    expires_in(
+      options[:expires] || DEFAULT_CACHE_EXPIRES,
+      public: true,
+      stale_if_error: options[:error] || DEFAULT_STALE_ERROR,
+      stale_while_revalidate: options[:revalidate] || DEFAULT_STALE_REVALIDATE
+    )
   end
 
   # Prevents high-entropy headers such as `Cookie`, `Signature` or `Authorization`
