@@ -216,6 +216,10 @@ class Account < ApplicationRecord
     local? ? username : "#{username}@#{Addressable::IDNA.to_unicode(domain)}"
   end
 
+  def prefixed_pretty_acct
+    ['@', pretty_acct].join
+  end
+
   def local_username_and_domain
     "#{username}@#{Rails.configuration.x.local_domain}"
   end
