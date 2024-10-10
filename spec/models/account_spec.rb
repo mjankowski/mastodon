@@ -155,6 +155,24 @@ RSpec.describe Account do
     end
   end
 
+  describe '#pretty_acct' do
+    context 'with a local account' do
+      let(:account) { Fabricate.build :account, username: 'username' }
+
+      it 'returns the username' do
+        expect(account.pretty_acct).to eq('username')
+      end
+    end
+
+    context 'with a remote account' do
+      let(:account) { Fabricate.build :account, username: 'username', domain: 'host.example' }
+
+      it 'returns the username and domain' do
+        expect(account.pretty_acct).to eq('username@host.example')
+      end
+    end
+  end
+
   describe '#save_with_optional_media!' do
     before do
       stub_request(:get, 'https://remote.test/valid_avatar').to_return(request_fixture('avatar.txt'))
