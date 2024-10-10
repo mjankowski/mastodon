@@ -1,7 +1,7 @@
 .log-entry
   .log-entry__header
     .log-entry__avatar
-      = image_tag action_log.account.avatar.url(:original), alt: '', width: 40, height: 40, class: 'avatar'
+      = image_tag action_log.account.avatar.url(:original), alt: '', size: 40, class: 'avatar'
     .log-entry__content
       .log-entry__title
         = action_log_title(action_log)

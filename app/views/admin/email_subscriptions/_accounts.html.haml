@@ -27,7 +27,7 @@
         - accounts.each do |account|
           %tr
             %td.valign-middle.avatar-column
-              = image_tag(full_asset_url(account.avatar_original_url), width: 24, height: 24, alt: '', class: 'avatar')
+              = image_tag(full_asset_url(account.avatar_original_url), size: 24, alt: '', class: 'avatar')
             %td.valign-middle
               %strong
                 %bdi= display_name(account)
