@@ -10,31 +10,7 @@ module HomeHelper
   def account_link_to(account, button = '', path: nil)
     tag.div(class: 'account account--minimal') do
       tag.div(class: 'account__wrapper') do
-        section = if account.nil?
-                    tag.div(class: 'account__display-name') do
-                      tag.div(class: 'account__avatar-wrapper') do
-                        image_tag(full_asset_url('avatars/original/missing.png', skip_pipeline: true), class: 'account__avatar')
-                      end +
-                        tag.span(class: 'display-name') do
-                          tag.strong(t('about.contact_missing')) +
-                            tag.span(t('about.contact_unavailable'), class: 'display-name__account')
-                        end
-                    end
-                  else
-                    link_to(path || ActivityPub::TagManager.instance.url_for(account), class: 'account__display-name') do
-                      tag.div(class: 'account__avatar-wrapper') do
-                        image_tag(full_asset_url(current_account&.user&.setting_auto_play_gif ? account.avatar_original_url : account.avatar_static_url), class: 'account__avatar', width: 46, height: 46)
-                      end +
-                        tag.span(class: 'display-name') do
-                          tag.bdi do
-                            tag(:strong, display_name(account, custom_emojify: true), class: 'display-name__html emojify')
-                          end +
-                            tag(:span, "@#{account.acct}", class: 'display-name__account')
-                        end
-                    end
-                  end
-
-        section + button
+        account_link_section(account, path) + button
       end
     end
   end
@@ -64,6 +40,32 @@ module HomeHelper
       t('auth.register')
     elsif approved_registrations?
       t('auth.apply_for_account')
+    end
+  end
+
+  def account_link_section(account, path)
+    if account.nil?
+      tag.div(class: 'account__display-name') do
+        tag.div(class: 'account__avatar-wrapper') do
+          image_tag(full_asset_url('avatars/original/missing.png', skip_pipeline: true), class: 'account__avatar')
+        end +
+          tag.span(class: 'display-name') do
+            tag.strong(t('about.contact_missing')) +
+              tag.span(t('about.contact_unavailable'), class: 'display-name__account')
+          end
+      end
+    else
+      link_to(path || ActivityPub::TagManager.instance.url_for(account), class: 'account__display-name') do
+        tag.div(class: 'account__avatar-wrapper') do
+          image_tag(full_asset_url(current_account&.user&.setting_auto_play_gif ? account.avatar_original_url : account.avatar_static_url), class: 'account__avatar', width: 46, height: 46)
+        end +
+          tag.span(class: 'display-name') do
+            tag.bdi do
+              tag(:strong, display_name(account, custom_emojify: true), class: 'display-name__html emojify')
+            end +
+              tag(:span, "@#{account.acct}", class: 'display-name__account')
+          end
+      end
     end
   end
 end
