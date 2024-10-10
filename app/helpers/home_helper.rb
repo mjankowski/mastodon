@@ -46,21 +46,11 @@ module HomeHelper
   def account_link_section(account, path)
     if account.nil?
       tag.div(class: 'account__display-name') do
-        avatar_wrapper_missing +
-          tag.span(class: 'display-name') do
-            tag.strong(t('about.contact_missing')) +
-              tag.span(t('about.contact_unavailable'), class: 'display-name__account')
-          end
+        avatar_wrapper_missing + display_name_missing
       end
     else
       link_to(path || ActivityPub::TagManager.instance.url_for(account), class: 'account__display-name') do
-        avatar_wrapper_account(account) +
-          tag.span(class: 'display-name') do
-            tag.bdi do
-              tag(:strong, display_name(account, custom_emojify: true), class: 'display-name__html emojify')
-            end +
-              tag(:span, "@#{account.acct}", class: 'display-name__account')
-          end
+        avatar_wrapper_account(account) + display_name_account(account)
       end
     end
   end
@@ -82,6 +72,24 @@ module HomeHelper
         width: 46,
         height: 46
       )
+    end
+  end
+
+  def display_name_missing
+    tag.span(class: 'display-name') do
+      safe_join [
+        tag.strong(t('about.contact_missing')),
+        tag.span(t('about.contact_unavailable'), class: 'display-name__account'),
+      ]
+    end
+  end
+
+  def display_name_account(account)
+    tag.span(class: 'display-name') do
+      safe_join [
+        tag.bdi { tag(:strong, display_name(account, custom_emojify: true), class: 'display-name__html emojify') },
+        tag.span("@#{account.acct}", class: 'display-name__account'),
+      ]
     end
   end
 end
