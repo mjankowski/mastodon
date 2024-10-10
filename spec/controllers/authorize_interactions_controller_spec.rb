@@ -48,7 +48,7 @@ RSpec.describe AuthorizeInteractionsController do
 
         expect(response)
           .to have_http_status(302)
-          .and redirect_to(web_url("@#{account.pretty_acct}"))
+          .and redirect_to(web_url(account.prefixed_pretty_acct))
       end
 
       it 'sets resource from acct uri' do
@@ -61,7 +61,7 @@ RSpec.describe AuthorizeInteractionsController do
 
         expect(response)
           .to have_http_status(302)
-          .and redirect_to(web_url("@#{account.pretty_acct}"))
+          .and redirect_to(web_url(account.prefixed_pretty_acct))
       end
     end
   end

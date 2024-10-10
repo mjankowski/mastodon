@@ -9,7 +9,7 @@ RSpec.describe 'redirection confirmations' do
   context 'when logged out' do
     describe 'a local page for a remote account' do
       it 'shows a confirmation page with relevant content' do
-        visit "/@#{account.pretty_acct}"
+        visit "/#{account.prefixed_pretty_acct}"
 
         expect(page)
           .to have_content(redirect_title) # Redirect explanation
@@ -20,7 +20,7 @@ RSpec.describe 'redirection confirmations' do
 
     describe 'a local page for a remote status' do
       it 'shows a confirmation page with relevant content' do
-        visit "/@#{account.pretty_acct}/#{status.id}"
+        visit "/#{account.prefixed_pretty_acct}/#{status.id}"
 
         expect(page)
           .to have_content(redirect_title) # Redirect explanation

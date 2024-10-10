@@ -6,7 +6,7 @@
       %h2.email-status-header-name
         = display_name(status.account)
       %p.email-status-header-handle
-        @#{status.account.pretty_acct}
+        = status.account.prefixed_pretty_acct
 
 %table.email-w-full{ cellspacing: 0, cellpadding: 0, border: 0, role: 'presentation' }
   %tr
@@ -28,4 +28,4 @@
                 = link_to a.remote_url, a.remote_url
 
       %p.email-status-footer
-        = link_to l(status.created_at.in_time_zone(time_zone.presence), format: :with_time_zone), web_url("@#{status.account.pretty_acct}/#{status.id}")
+        = link_to l(status.created_at.in_time_zone(time_zone.presence), format: :with_time_zone), web_url("#{status.account.prefixed_pretty_acct}/#{status.id}")

@@ -8,9 +8,9 @@ class AuthorizeInteractionsController < ApplicationController
 
   def show
     if @resource.is_a?(Account)
-      redirect_to web_url("@#{@resource.pretty_acct}")
+      redirect_to web_url(@resource.prefixed_pretty_acct)
     elsif @resource.is_a?(Status)
-      redirect_to web_url("@#{@resource.account.pretty_acct}/#{@resource.id}")
+      redirect_to web_url("#{@resource.account.prefixed_pretty_acct}/#{@resource.id}")
     else
       not_found
     end

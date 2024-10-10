@@ -15,7 +15,7 @@ module AccountsHelper
     if account.local?
       "@#{account.acct}@#{site_hostname}"
     else
-      "@#{account.pretty_acct}"
+      account.prefixed_pretty_acct
     end
   end
 
