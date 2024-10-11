@@ -55,7 +55,7 @@ gem 'http', '~> 5.2.0'
 gem 'http_accept_language', '~> 2.1'
 gem 'httplog', '~> 1.7.0'
 gem 'i18n'
-gem 'idn-ruby', require: 'idn'
+gem 'idn-ruby', require: false
 gem 'inline_svg'
 gem 'irb', '~> 1.8'
 gem 'kaminari', '~> 1.2'
