@@ -8,6 +8,7 @@ RSpec.describe CustomFilter do
     it { is_expected.to validate_presence_of(:context) }
 
     it { is_expected.to_not allow_values([], %w(invalid)).for(:context) }
+    it { is_expected.to allow_values(%w(home)).for(:context) }
   end
 
   describe 'Normalizations' do
