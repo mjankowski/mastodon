@@ -42,7 +42,7 @@
               %td.email-column-td
                 %h2.email-h2= t('user_mailer.welcome.follows_title')
                 %p.email-h-sub= t('user_mailer.welcome.follows_subtitle')
-                = render partial: 'application/mailer/follow', collection: @suggestions
+                = render partial: 'application/mailer/follow', collection: @onboarding.suggestions
                 %table.email-w-full{ cellspacing: 0, cellpadding: 0, border: 0, role: 'presentation' }
                   %tr
                     %td.email-column-action-td
