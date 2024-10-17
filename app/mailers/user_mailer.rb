@@ -136,7 +136,6 @@ class UserMailer < Devise::Mailer
     return unless @resource.active_for_authentication?
 
     @onboarding = OnboardingPresenter.new(@resource.account)
-    @has_account_fields = @resource.account.display_name.present? || @resource.account.note.present? || @resource.account.avatar.present?
     @has_active_relationships = @resource.account.active_relationships.exists?
     @has_statuses = @resource.account.statuses.exists?
 
