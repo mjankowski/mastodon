@@ -23,4 +23,8 @@ class OnboardingPresenter
       .allowed
       .limit(SUGGESTED_TAGS)
   end
+
+  def account_fields_present?
+    account.display_name.present? || account.note.present? || account.avatar.present?
+  end
 end
