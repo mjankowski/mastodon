@@ -13,20 +13,20 @@
 <%= t('user_mailer.welcome.checklist_subtitle') %>
 
 1. <%= t('user_mailer.welcome.edit_profile_title') %>
-   <%= t('user_mailer.welcome.edit_profile_step') %>
-   * <%= web_url('start/profile') %>
+<%= t('user_mailer.welcome.edit_profile_step') %>
+* <%= web_url('start/profile') %>
 
 2. <%= t('user_mailer.welcome.follow_title') %>
-   <%= t('user_mailer.welcome.follow_step') %>
-   * <%= web_url('start/follows') %>
+<%= t('user_mailer.welcome.follow_step') %>
+* <%= web_url('start/follows') %>
 
 3. <%= t('user_mailer.welcome.post_title') %>
-   <%= t('user_mailer.welcome.post_step') %>
-   * <%= web_url %>
+<%= t('user_mailer.welcome.post_step') %>
+* <%= web_url %>
 
 4. <%= t('user_mailer.welcome.share_title') %>
-   <%= t('user_mailer.welcome.share_step') %>
-   * <%= web_url('start/share') %>
+<%= t('user_mailer.welcome.share_step') %>
+* <%= web_url('start/share') %>
 
 5. <%= t('user_mailer.welcome.apps_title') %>
    <%= t('user_mailer.welcome.apps_step') %>
@@ -40,7 +40,7 @@
 <%= t('user_mailer.welcome.follows_subtitle') %>
 
 <%- @onboarding.suggestions.each do |suggestion| %>
-* <%= suggestion.account.display_name.presence || suggestion.account.username %> · @<%= suggestion.account.pretty_acct %>
+  * <%= suggestion.account.display_name.presence || suggestion.account.username %> · @<%= suggestion.account.pretty_acct %>
   <%= web_url("@#{suggestion.account.acct}") %>
 <%- end %>
 
@@ -52,8 +52,8 @@
 ===
 <%= t('user_mailer.welcome.hashtags_subtitle') %>
 
-<%- @tags.each do |tag| %>
-* #<%= tag.display_name %> · <%= recent_tag_usage(tag) %>
+<%- @onboarding.tags.each do |tag| %>
+  * #<%= tag.display_name %> · <%= recent_tag_usage(tag) %>
   <%= tag_url(tag) %>
 <%- end %>
 
