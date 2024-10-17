@@ -3,8 +3,7 @@
 class OnboardingPresenter
   attr_reader :account
 
-  SUGGESTED_ACCOUNTS = 5
-  SUGGESTED_TAGS = 5
+  SUGGESTIONS = 5
 
   def initialize(account)
     @account = account
@@ -13,7 +12,7 @@ class OnboardingPresenter
   def suggestions
     AccountSuggestions
       .new(account)
-      .get(SUGGESTED_ACCOUNTS)
+      .get(SUGGESTIONS)
   end
 
   def tags
@@ -21,7 +20,7 @@ class OnboardingPresenter
       .tags
       .query
       .allowed
-      .limit(SUGGESTED_TAGS)
+      .limit(SUGGESTIONS)
   end
 
   def account_fields_present?
