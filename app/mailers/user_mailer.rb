@@ -136,7 +136,6 @@ class UserMailer < Devise::Mailer
     return unless @resource.active_for_authentication?
 
     @onboarding = OnboardingPresenter.new(@resource.account)
-    @has_active_relationships = @resource.account.active_relationships.exists?
     @has_statuses = @resource.account.statuses.exists?
 
     I18n.with_locale(locale) do
