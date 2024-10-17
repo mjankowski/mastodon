@@ -10,16 +10,12 @@ class OnboardingPresenter
   end
 
   def suggestions
-    AccountSuggestions
-      .new(account)
+    suggested_accounts
       .get(SUGGESTIONS)
   end
 
   def tags
-    Trends
-      .tags
-      .query
-      .allowed
+    trending_tags
       .limit(SUGGESTIONS)
   end
 
@@ -33,5 +29,19 @@ class OnboardingPresenter
 
   def statuses_exist?
     account.statuses.exists?
+  end
+
+  private
+
+  def suggested_accounts
+    AccountSuggestions
+      .new(account)
+  end
+
+  def trending_tags
+    Trends
+      .tags
+      .query
+      .allowed
   end
 end
