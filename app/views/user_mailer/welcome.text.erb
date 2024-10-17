@@ -39,7 +39,7 @@
 ===
 <%= t('user_mailer.welcome.follows_subtitle') %>
 
-<%- @suggestions.each do |suggestion| %>
+<%- @onboarding.suggestions.each do |suggestion| %>
 * <%= suggestion.account.display_name.presence || suggestion.account.username %> · @<%= suggestion.account.pretty_acct %>
   <%= web_url("@#{suggestion.account.acct}") %>
 <%- end %>
