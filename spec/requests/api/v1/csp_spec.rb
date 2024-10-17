@@ -5,7 +5,12 @@ require 'rails_helper'
 RSpec.describe 'API namespace minimal Content-Security-Policy' do
   before { stub_tests_controller }
 
-  after { Rails.application.reload_routes! }
+  around do |example|
+    with_routing do |set|
+      set.draw { get '/api/v1/tests', to: 'api/v1/tests#index' }
+      example.run
+    end
+  end
 
   it 'returns the correct CSP headers' do
     get '/api/v1/tests'
@@ -18,10 +23,6 @@ RSpec.describe 'API namespace minimal Content-Security-Policy' do
 
   def stub_tests_controller
     stub_const('Api::V1::TestsController', api_tests_controller)
-
-    Rails.application.routes.draw do
-      get '/api/v1/tests', to: 'api/v1/tests#index'
-    end
   end
 
   def api_tests_controller
