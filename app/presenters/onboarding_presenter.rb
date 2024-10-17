@@ -31,4 +31,8 @@ class OnboardingPresenter
   def active_relationships?
     account.active_relationships.exists?
   end
+
+  def statuses_exist?
+    account.statuses.exists?
+  end
 end
