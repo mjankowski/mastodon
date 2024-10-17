@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+resolve('Form::AccountBatch') { [:batch_admin_accounts] }
+
 namespace :admin do
   get '/dashboard', to: 'dashboard#index'
 
