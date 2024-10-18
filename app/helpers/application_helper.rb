@@ -239,14 +239,18 @@ module ApplicationHelper
   end
 
   def app_store_url_ios
-    'https://apps.apple.com/app/mastodon-for-iphone-and-ipad/id1571998974'
+    mastodon_configuration.apps[:itunes][:url]
   end
 
   def app_store_url_android
-    'https://play.google.com/store/apps/details?id=org.joinmastodon.android'
+    mastodon_configuration.apps[:play][:url]
   end
 
   private
+
+  def mastodon_configuration
+    Rails.configuration.x.mastodon
+  end
 
   def storage_host_var
     ENV.fetch('S3_ALIAS_HOST', nil) || ENV.fetch('S3_CLOUDFRONT_HOST', nil) || ENV.fetch('AZURE_ALIAS_HOST', nil)
