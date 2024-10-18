@@ -12,4 +12,4 @@ linters:
   LineLength:
     max: 300
   ViewLength:
-    max: 200 # Override default value of 100 inherited from rubocop
+    max: 128 # Override default value of 100 inherited from rubocop
