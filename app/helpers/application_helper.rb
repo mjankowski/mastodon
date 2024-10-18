@@ -237,6 +237,14 @@ module ApplicationHelper
     I18n.t 'user_mailer.welcome.hashtags_recent_count', people: number_with_delimiter(people), count: people
   end
 
+  def app_store_urls
+    # TODO: Extract to a `config_for` somewhere whenever we do that
+    {
+      android: 'https://play.google.com/store/apps/details?id=org.joinmastodon.android',
+      ios: 'https://apps.apple.com/app/mastodon-for-iphone-and-ipad/id1571998974',
+    }
+  end
+
   private
 
   def storage_host_var
