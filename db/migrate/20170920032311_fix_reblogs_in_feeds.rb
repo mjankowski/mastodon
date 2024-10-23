@@ -53,6 +53,7 @@ class FixReblogsInFeeds < ActiveRecord::Migration[5.1]
     LUA
     script_hash = redis.script(:load, script)
 
+    User.reset_column_information
     # find_each is batched on the database side.
     User.includes(:account).find_each do |user|
       account = user.account
