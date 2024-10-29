@@ -3,6 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe ListAccount do
+  describe 'Validations' do
+    subject { Fabricate.build :list_account }
+
+    it { is_expected.to_not allow_values(nil).for(:follow_id).against(:account_id).with_message('follow relationship missing') }
+  end
+
   describe 'Callbacks to set follows' do
     context 'when list owner follows account' do
       let!(:follow) { Fabricate :follow }
@@ -33,8 +39,10 @@ RSpec.describe ListAccount do
     end
 
     context 'when list owner is the account' do
+      let(:list) { Fabricate :list }
+
       it 'does not set follow or follow request' do
-        list_account = Fabricate :list_account
+        list_account = Fabricate :list_account, account: list.account, list: list
         expect(list_account)
           .to have_attributes(
             follow: be_nil,
