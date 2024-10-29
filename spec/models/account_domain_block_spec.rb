@@ -5,6 +5,12 @@ require 'rails_helper'
 RSpec.describe AccountDomainBlock do
   let(:account) { Fabricate(:account) }
 
+  describe 'Validations' do
+    subject { Fabricate.build :account_domain_block }
+
+    include_examples 'Domain Validation'
+  end
+
   it 'removes blocking cache after creation' do
     Rails.cache.write("exclude_domains_for:#{account.id}", 'a.domain.already.blocked')
 

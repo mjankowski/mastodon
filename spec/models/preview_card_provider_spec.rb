@@ -5,6 +5,12 @@ require 'rails_helper'
 RSpec.describe PreviewCardProvider do
   include_examples 'Reviewable'
 
+  describe 'Validations' do
+    subject { Fabricate.build :preview_card_provider }
+
+    include_examples 'Domain Validation'
+  end
+
   describe 'scopes' do
     let(:trendable_and_reviewed) { Fabricate(:preview_card_provider, trendable: true, reviewed_at: 5.days.ago) }
     let(:not_trendable_and_not_reviewed) { Fabricate(:preview_card_provider, trendable: false, reviewed_at: nil) }

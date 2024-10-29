@@ -3,6 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe EmailDomainBlock do
+  describe 'Validations' do
+    subject { Fabricate.build :email_domain_block }
+
+    include_examples 'Domain Validation'
+  end
+
   describe 'block?' do
     let(:input) { nil }
 

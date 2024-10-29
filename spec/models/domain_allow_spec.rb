@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe DomainAllow do
   describe 'Validations' do
+    subject { Fabricate.build :domain_allow }
+
+    include_examples 'Domain Validation'
+
     it { is_expected.to validate_presence_of(:domain) }
 
     context 'when a normalized domain exists' do
