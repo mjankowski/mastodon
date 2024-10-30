@@ -65,7 +65,7 @@ RSpec.describe ActivityPub::Activity::QuoteRequest, feature: :outgoing_quotes do
         expect { subject.perform }
           .to enqueue_sidekiq_job(ActivityPub::DeliveryWorker)
           .with(satisfying do |body|
-            outgoing_json = Oj.load(body)
+            outgoing_json = JSON.parse(body)
             outgoing_json['type'] == 'Reject' && %w(type id actor object instrument).all? { |key| json[key] == outgoing_json['object'][key] }
           end, recipient.id, sender.inbox_url)
       end
@@ -78,7 +78,7 @@ RSpec.describe ActivityPub::Activity::QuoteRequest, feature: :outgoing_quotes do
         expect { subject.perform }
           .to enqueue_sidekiq_job(ActivityPub::DeliveryWorker)
           .with(satisfying do |body|
-            outgoing_json = Oj.load(body)
+            outgoing_json = JSON.parse(body)
             outgoing_json['type'] == 'Reject' && json['instrument']['id'] == outgoing_json['object']['instrument'] && %w(type id actor object).all? { |key| json[key] == outgoing_json['object'][key] }
           end, recipient.id, sender.inbox_url)
       end
@@ -86,7 +86,7 @@ RSpec.describe ActivityPub::Activity::QuoteRequest, feature: :outgoing_quotes do
 
     context 'when trying to quote a quotable local status' do
       before do
-        stub_request(:get, 'https://example.com/unknown-status').to_return(status: 200, body: Oj.dump(status_json), headers: { 'Content-Type': 'application/activity+json' })
+        stub_request(:get, 'https://example.com/unknown-status').to_return(status: 200, body: JSON.dump(status_json), headers: { 'Content-Type': 'application/activity+json' })
         quoted_post.update(quote_approval_policy: Status::QUOTE_APPROVAL_POLICY_FLAGS[:public] << 16)
       end
 
@@ -95,7 +95,7 @@ RSpec.describe ActivityPub::Activity::QuoteRequest, feature: :outgoing_quotes do
           .to change { quoted_post.reload.quotes.accepted.count }.by(1)
           .and enqueue_sidekiq_job(ActivityPub::DeliveryWorker)
           .with(satisfying do |body|
-            outgoing_json = Oj.load(body)
+            outgoing_json = JSON.parse(body)
             outgoing_json['type'] == 'Accept' && %w(type id actor object instrument).all? { |key| json[key] == outgoing_json['object'][key] }
           end, recipient.id, sender.inbox_url)
       end
@@ -113,7 +113,7 @@ RSpec.describe ActivityPub::Activity::QuoteRequest, feature: :outgoing_quotes do
           .to change { quoted_post.reload.quotes.accepted.count }.by(1)
           .and enqueue_sidekiq_job(ActivityPub::DeliveryWorker)
           .with(satisfying do |body|
-            outgoing_json = Oj.load(body)
+            outgoing_json = JSON.parse(body)
             outgoing_json['type'] == 'Accept' && json['instrument']['id'] == outgoing_json['object']['instrument'] && %w(type id actor object).all? { |key| json[key] == outgoing_json['object'][key] }
           end, recipient.id, sender.inbox_url)
       end

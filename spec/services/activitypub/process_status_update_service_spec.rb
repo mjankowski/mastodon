@@ -23,7 +23,7 @@ RSpec.describe ActivityPub::ProcessStatusUpdateService do
       ],
     }
   end
-  let(:json) { Oj.load(Oj.dump(payload)) }
+  let(:json) { JSON.parse(JSON.dump(payload)) }
 
   let(:alice) { Fabricate(:account) }
   let(:bob) { Fabricate(:account) }
@@ -464,7 +464,7 @@ RSpec.describe ActivityPub::ProcessStatusUpdateService do
     end
 
     before do
-      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: Oj.dump({
+      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: JSON.dump({
         '@context': [
           'https://www.w3.org/ns/activitystreams',
           {
@@ -529,7 +529,7 @@ RSpec.describe ActivityPub::ProcessStatusUpdateService do
     end
 
     before do
-      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: Oj.dump({
+      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: JSON.dump({
         '@context': [
           'https://www.w3.org/ns/activitystreams',
           {
@@ -702,7 +702,7 @@ RSpec.describe ActivityPub::ProcessStatusUpdateService do
     end
 
     before do
-      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: Oj.dump({
+      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: JSON.dump({
         '@context': [
           'https://www.w3.org/ns/activitystreams',
           {
@@ -944,7 +944,7 @@ RSpec.describe ActivityPub::ProcessStatusUpdateService do
     end
 
     before do
-      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: Oj.dump({
+      stub_request(:get, approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: JSON.dump({
         '@context': [
           'https://www.w3.org/ns/activitystreams',
           {
@@ -1014,7 +1014,7 @@ RSpec.describe ActivityPub::ProcessStatusUpdateService do
     end
 
     before do
-      stub_request(:get, second_approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: Oj.dump({
+      stub_request(:get, second_approval_uri).to_return(headers: { 'Content-Type': 'application/activity+json' }, body: JSON.dump({
         '@context': [
           'https://www.w3.org/ns/activitystreams',
           {
