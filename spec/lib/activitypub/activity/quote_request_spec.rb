@@ -42,7 +42,7 @@ RSpec.describe ActivityPub::Activity::QuoteRequest do
         expect { subject.perform }
           .to enqueue_sidekiq_job(ActivityPub::DeliveryWorker)
           .with(satisfying do |body|
-            outgoing_json = Oj.load(body)
+            outgoing_json = JSON.load(body)
             outgoing_json['type'] == 'Reject' && %w(type id actor object instrument).all? { |key| json[key] == outgoing_json['object'][key] }
           end, recipient.id, sender.inbox_url)
       end
