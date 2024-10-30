@@ -34,6 +34,6 @@ class RevokeQuoteService < BaseService
   end
 
   def signed_activity_json
-    @signed_activity_json ||= Oj.dump(serialize_payload(@quote, ActivityPub::DeleteQuoteAuthorizationSerializer, signer: @account, always_sign: true))
+    @signed_activity_json ||= JSON.dump(serialize_payload(@quote, ActivityPub::DeleteQuoteAuthorizationSerializer, signer: @account, always_sign: true))
   end
 end
