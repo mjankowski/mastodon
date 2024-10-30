@@ -54,7 +54,7 @@ class ActivityPub::Activity::QuoteRequest < ActivityPub::Activity
       account: @account,
       activity_uri: @json['id']
     )
-    json = Oj.dump(serialize_payload(quote, ActivityPub::RejectQuoteRequestSerializer))
+    json = JSON.dump(serialize_payload(quote, ActivityPub::RejectQuoteRequestSerializer))
     ActivityPub::DeliveryWorker.perform_async(json, quoted_status.account_id, @account.inbox_url)
   end
 
