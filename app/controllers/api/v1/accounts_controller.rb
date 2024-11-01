@@ -44,7 +44,7 @@ class Api::V1::AccountsController < Api::BaseController
   end
 
   def follow
-    follow  = FollowService.new.call(current_user.account, @account, reblogs: params.key?(:reblogs) ? truthy_param?(:reblogs) : nil, notify: params.key?(:notify) ? truthy_param?(:notify) : nil, languages: params.key?(:languages) ? params[:languages] : nil, with_rate_limit: true)
+    follow = call_follow_service
     options = @account.locked? || current_user.account.silenced? ? {} : { following_map: { @account.id => { reblogs: follow.show_reblogs?, notify: follow.notify?, languages: follow.languages } }, requested_map: { @account.id => false } }
 
     render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships(**options)
@@ -128,5 +128,18 @@ class Api::V1::AccountsController < Api::BaseController
 
   def check_enabled_registrations
     forbidden unless allowed_registration?(request.remote_ip, invite)
+  end
+
+  def call_follow_service
+    FollowService
+      .new
+      .call(
+        current_user.account,
+        @account,
+        reblogs: params.key?(:reblogs) ? truthy_param?(:reblogs) : nil,
+        notify: params.key?(:notify) ? truthy_param?(:notify) : nil,
+        languages: params.key?(:languages) ? params[:languages] : nil,
+        with_rate_limit: true
+      )
   end
 end

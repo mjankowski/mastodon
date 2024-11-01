@@ -148,7 +148,9 @@ module Account::Interactions
     mute.expires_in = duration.zero? ? nil : duration
     mute.save!
 
-    # When toggling a mute between hiding and allowing notifications, the mute will already exist, so the find_or_create_by! call will return the existing Mute without updating the hide_notifications attribute. Therefore, we check that hide_notifications? is what we want and set it if it isn't.
+    # When toggling a mute between hiding and allowing notifications, the mute will already exist, so the
+    # find_or_create_by! call will return the existing Mute without updating the hide_notifications attribute.
+    # Therefore, we check that hide_notifications? is what we want and set it if it isn't.
     mute.update!(hide_notifications: notifications) if mute.hide_notifications? != notifications
 
     mute

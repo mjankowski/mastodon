@@ -3,6 +3,16 @@
 module Remotable
   extend ActiveSupport::Concern
 
+  PROCESSING_ERRORS = [
+    Addressable::URI::InvalidURIError,
+    Mastodon::DimensionsValidationError,
+    Mastodon::HostValidationError,
+    Mastodon::LengthValidationError,
+    Mastodon::StreamValidationError,
+    Paperclip::Error,
+    Paperclip::Errors::NotIdentifiedByImageMagickError,
+  ].freeze
+
   class_methods do
     def remotable_attachment(attachment_name, limit, suppress_errors: true, download_on_assign: true, attribute_name: nil)
       attribute_name ||= :"#{attachment_name}_remote_url"
@@ -30,7 +40,7 @@ module Remotable
           Rails.logger.debug { "Error fetching remote #{attachment_name}: #{e}" }
           public_send(:"#{attachment_name}=", nil) if public_send(:"#{attachment_name}_file_name").present?
           raise e unless suppress_errors
-        rescue Paperclip::Errors::NotIdentifiedByImageMagickError, Addressable::URI::InvalidURIError, Mastodon::HostValidationError, Mastodon::LengthValidationError, Paperclip::Error, Mastodon::DimensionsValidationError, Mastodon::StreamValidationError => e
+        rescue *PROCESSING_ERRORS => e
           Rails.logger.debug { "Error fetching remote #{attachment_name}: #{e}" }
           public_send(:"#{attachment_name}=", nil) if public_send(:"#{attachment_name}_file_name").present?
         end

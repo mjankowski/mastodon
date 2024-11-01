@@ -52,7 +52,7 @@ class StatusesIndex < Chewy::Index
     },
   }
 
-  index_scope ::Status.unscoped.kept.without_reblogs.includes(:media_attachments, :local_mentioned, :local_favorited, :local_reblogged, :local_bookmarked, :tags, preview_cards_status: :preview_card, preloadable_poll: :local_voters), delete_if: ->(status) { status.searchable_by.empty? }
+  index_scope searchable_statuses, delete_if: ->(status) { status.searchable_by.empty? }
 
   root date_detection: false do
     field(:id, type: 'long')
@@ -63,5 +63,13 @@ class StatusesIndex < Chewy::Index
     field(:language, type: 'keyword')
     field(:properties, type: 'keyword', value: ->(status) { status.searchable_properties })
     field(:created_at, type: 'date', value: ->(status) { clamp_date(status.created_at) })
+  end
+
+  def self.searchable_statuses
+    ::Status
+      .unscoped
+      .kept
+      .without_reblogs
+      .includes(:media_attachments, :local_mentioned, :local_favorited, :local_reblogged, :local_bookmarked, :tags, preview_cards_status: :preview_card, preloadable_poll: :local_voters)
   end
 end

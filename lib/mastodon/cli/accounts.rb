@@ -542,15 +542,21 @@ module Mastodon::CLI
         migration = account.migrations.last
         fail_with_message 'The specified account has not performed any migration' if migration.nil?
 
-        fail_with_message 'The specified account is not redirecting to its last migration target. Use --force if you want to replay the migration anyway' unless options[:force] || migration.target_account_id == account.moved_to_account_id
+        fail_with_message(<<~MSG.squish) unless options[:force] || migration.target_account_id == account.moved_to_account_id
+          The specified account is not redirecting to its last migration target. Use --force if you want to replay the migration anyway
+        MSG
       end
 
       if options[:target]
         target_account = ResolveAccountService.new.call(options[:target])
 
-        fail_with_message "The specified target account could not be found: #{options[:target]}" if target_account.nil?
+        fail_with_message(<<~MSG.squish) if target_account.nil?
+          The specified target account could not be found: #{options[:target]}
+        MSG
 
-        fail_with_message 'The specified account is redirecting to a different target account. Use --force if you want to change the migration target' unless options[:force] || account.moved_to_account_id.nil? || account.moved_to_account_id == target_account.id
+        fail_with_message(<<~MSG.squish) unless options[:force] || account.moved_to_account_id.nil? || account.moved_to_account_id == target_account.id
+          The specified account is redirecting to a different target account. Use --force if you want to change the migration target
+        MSG
 
         begin
           migration = account.migrations.create!(acct: target_account.acct)
