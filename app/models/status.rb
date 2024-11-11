@@ -39,6 +39,7 @@ class Status < ApplicationRecord
   include Status::SnapshotConcern
   include Status::ThreadingConcern
   include Status::Visibility
+  include Taggable
 
   MEDIA_ATTACHMENTS_LIMIT = 4
 
@@ -82,9 +83,6 @@ class Status < ApplicationRecord
   has_many :local_favorited, -> { merge(Account.local) }, through: :favourites, source: :account
   has_many :local_reblogged, -> { merge(Account.local) }, through: :reblogs, source: :account
   has_many :local_bookmarked, -> { merge(Account.local) }, through: :bookmarks, source: :account
-
-  has_many :taggings, as: :taggable, dependent: :destroy
-  has_many :tags, through: :taggings
 
   has_one :preview_cards_status, inverse_of: :status, dependent: :delete
 
