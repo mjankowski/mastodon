@@ -9,6 +9,8 @@ RSpec.describe User do
   let(:password) { 'abcd1234' }
   let(:account) { Fabricate(:account, username: 'alice') }
 
+  include_examples 'User::Approval'
+
   it_behaves_like 'two_factor_backupable'
 
   describe 'legacy_otp_secret' do
@@ -279,35 +281,6 @@ RSpec.describe User do
 
           expect(TriggerWebhookWorker).to_not have_received(:perform_async).with('account.approved', 'Account', user.account_id)
         end
-      end
-    end
-  end
-
-  describe '#approve!' do
-    subject { user.approve! }
-
-    before do
-      Setting.registrations_mode = 'approved'
-      allow(TriggerWebhookWorker).to receive(:perform_async)
-    end
-
-    context 'when the user is already confirmed' do
-      let(:user) { Fabricate(:user, confirmed_at: Time.now.utc, approved: false) }
-
-      it 'sets the approved flag and triggers `account.approved` web hook' do
-        expect { subject }.to change { user.reload.approved? }.to(true)
-
-        expect(TriggerWebhookWorker).to have_received(:perform_async).with('account.approved', 'Account', user.account_id).once
-      end
-    end
-
-    context 'when the user is not confirmed' do
-      let(:user) { Fabricate(:user, confirmed_at: nil, approved: false) }
-
-      it 'sets the approved flag and does not trigger web hook' do
-        expect { subject }.to change { user.reload.approved? }.to(true)
-
-        expect(TriggerWebhookWorker).to_not have_received(:perform_async).with('account.approved', 'Account', user.account_id)
       end
     end
   end
