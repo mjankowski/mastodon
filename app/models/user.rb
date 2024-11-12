@@ -57,6 +57,7 @@ class User < ApplicationRecord
 
   include LanguagesHelper
   include Redisable
+  include User::Approval
   include User::HasSettings
   include User::LdapAuthenticable
   include User::Omniauthable
@@ -117,8 +118,6 @@ class User < ApplicationRecord
 
   scope :account_not_suspended, -> { joins(:account).merge(Account.without_suspended) }
   scope :recent, -> { order(id: :desc) }
-  scope :pending, -> { where(approved: false) }
-  scope :approved, -> { where(approved: true) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :unconfirmed, -> { where(confirmed_at: nil) }
   scope :enabled, -> { where(disabled: false) }
@@ -130,7 +129,6 @@ class User < ApplicationRecord
   scope :matches_ip, ->(value) { left_joins(:ips).merge(IpBlock.contained_by(value)).group(users: [:id]) }
 
   before_validation :sanitize_role
-  before_create :set_approved
   before_create :set_age_verified_at
   after_commit :send_pending_devise_notifications
   after_create_commit :trigger_webhooks
@@ -241,10 +239,6 @@ class User < ApplicationRecord
     prepare_returning_user!
   end
 
-  def pending?
-    !approved?
-  end
-
   def active_for_authentication?
     !account.memorial?
   end
@@ -263,17 +257,6 @@ class User < ApplicationRecord
 
   def unconfirmed_or_pending?
     unconfirmed? || pending?
-  end
-
-  def approve!
-    return if approved?
-
-    update!(approved: true)
-
-    # Avoid extremely unlikely race condition when approving and confirming
-    # the user at the same time
-    reload unless confirmed?
-    prepare_new_user! if confirmed?
   end
 
   def otp_enabled?
@@ -436,6 +419,7 @@ class User < ApplicationRecord
     devise_mailer.send(notification, self, *, **).deliver_later
   end
 
+<<<<<<< HEAD
   def set_approved
     self.approved = begin
       if sign_up_from_ip_requires_approval? || sign_up_email_requires_approval?
@@ -450,6 +434,8 @@ class User < ApplicationRecord
     self.age_verified_at = Time.now.utc if Setting.min_age.present?
   end
 
+=======
+>>>>>>> f0dfebad7 (Extract `User::Approval` concern)
   def grant_approval_on_confirmation?
     # Re-check approval on confirmation if the server has switched to open registrations
     open_registrations? && !sign_up_from_ip_requires_approval? && !sign_up_email_requires_approval?
