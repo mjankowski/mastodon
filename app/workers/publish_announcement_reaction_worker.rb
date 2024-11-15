@@ -7,7 +7,7 @@ class PublishAnnouncementReactionWorker
   def perform(announcement_id, name)
     announcement = Announcement.find(announcement_id)
 
-    reaction,  = announcement.announcement_reactions.where(name: name).group(:announcement_id, :name, :custom_emoji_id).select('name, custom_emoji_id, count(*) as count, false as me')
+    reaction,  = announcement.announcement_reactions.where(name: name).group(:announcement_id, :name, :custom_emoji_id).select(:name, :custom_emoji_id, star_count, false_me)
     reaction ||= announcement.announcement_reactions.new(name: name)
 
     payload = InlineRenderer.render(reaction, nil, :reaction).tap { |h| h[:announcement_id] = announcement_id.to_s }
@@ -18,5 +18,15 @@ class PublishAnnouncementReactionWorker
     end
   rescue ActiveRecord::RecordNotFound
     true
+  end
+
+  private
+
+  def star_count
+    Arel.star.count.as('count')
+  end
+
+  def false_me
+    Arel.sql('false').as('me')
   end
 end
