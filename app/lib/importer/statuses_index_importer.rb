@@ -75,6 +75,12 @@ class Importer::StatusesIndexImporter < Importer::BaseImporter
   end
 
   def local_statuses_scope
-    Status.local.select('"statuses"."id", COALESCE("statuses"."reblog_of_id", "statuses"."id") AS status_id')
+    Status.local.select(:id, coalesced_status_id.as('status_id'))
+  end
+
+  def coalesced_status_id
+    Arel.sql(<<~SQL.squish)
+      COALESCE(statuses.reblog_of_id, statuses.id)
+    SQL
   end
 end
