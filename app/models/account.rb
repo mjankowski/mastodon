@@ -385,16 +385,20 @@ class Account < ApplicationRecord
     end
 
     def inboxes
-      urls = reorder(nil).activitypub.group(:preferred_inbox_url).pluck(Arel.sql("coalesce(nullif(accounts.shared_inbox_url, ''), accounts.inbox_url) AS preferred_inbox_url"))
+      urls = reorder(nil).activitypub.group(:preferred_inbox_url).pluck(coalesced_inbox_urls.as('preferred_inbox_url'))
       DeliveryFailureTracker.without_unavailable(urls)
     end
 
+    def coalesced_inbox_urls
+      Arel.sql(<<~SQL.squish)
+        COALESCE(NULLIF(accounts.shared_inbox_url, ''), accounts.inbox_url)
+      SQL
+    end
+
     def coalesced_activity_timestamps
-      Arel.sql(
-        <<~SQL.squish
-          COALESCE(users.current_sign_in_at, account_stats.last_status_at, to_timestamp(0))
-        SQL
-      )
+      Arel.sql(<<~SQL.squish)
+        COALESCE(users.current_sign_in_at, account_stats.last_status_at, to_timestamp(0))
+      SQL
     end
 
     def from_text(text)
