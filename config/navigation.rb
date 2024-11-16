@@ -7,7 +7,7 @@ SimpleNavigation::Configuration.run do |navigation|
     n.item :software_updates,
            safe_join([material_symbol('report'), t('admin.critical_update_pending')]),
            admin_software_updates_path,
-           if: -> { Rails.configuration.x.mastodon.software_update_url.present? && current_user.can?(:view_devops) && SoftwareUpdate.urgent_pending? },
+           if: -> { navigation_shows_software_updates? },
            html: { class: 'warning' }
 
     n.item :profile, safe_join([material_symbol('person'), t('settings.profile')]), settings_profile_path, if: -> { current_user.functional? }, unless: -> { self_destruct? }, highlights_on: %r{/settings/profile|/settings/featured_tags|/settings/verification|/settings/privacy}
@@ -37,7 +37,7 @@ SimpleNavigation::Configuration.run do |navigation|
       s.item :export, safe_join([material_symbol('cloud_download'), t('settings.export')]), settings_export_path
     end
 
-    n.item :user_invites, safe_join([material_symbol('person_add'), t('invites.title')]), invites_path, if: -> { current_user.can?(:invite_users) && current_user.functional? }, unless: -> { self_destruct? }
+    n.item :user_invites, safe_join([material_symbol('person_add'), t('invites.title')]), invites_path, if: -> { navigation_shows_invites? }, unless: -> { self_destruct? }
     n.item :development, safe_join([material_symbol('code'), t('settings.development')]), settings_applications_path, highlights_on: %r{/settings/applications}, if: -> { current_user.functional? }, unless: -> { self_destruct? }
 
     n.item :trends, safe_join([material_symbol('trending_up'), t('admin.trends.title')]), admin_trends_statuses_path, if: -> { current_user.can?(:manage_taxonomies) }, unless: -> { self_destruct? } do |s|
@@ -47,7 +47,7 @@ SimpleNavigation::Configuration.run do |navigation|
       s.item :follow_recommendations, safe_join([material_symbol('person_add'), t('admin.follow_recommendations.title')]), admin_follow_recommendations_path, highlights_on: %r{/admin/follow_recommendations}
     end
 
-    n.item :moderation, safe_join([material_symbol('gavel'), t('moderation.title')]), nil, if: -> { current_user.can?(:manage_reports, :view_audit_log, :manage_users, :manage_invites, :manage_taxonomies, :manage_federation, :manage_blocks) }, unless: -> { self_destruct? } do |s|
+    n.item :moderation, safe_join([material_symbol('gavel'), t('moderation.title')]), nil, if: -> { navigation_shows_moderation? }, unless: -> { self_destruct? } do |s|
       s.item :reports, safe_join([material_symbol('flag'), t('admin.reports.title')]), admin_reports_path, highlights_on: %r{/admin/reports|admin/report_notes}, if: -> { current_user.can?(:manage_reports) }
       s.item :appeals, safe_join([material_symbol('feedback'), t('admin.disputes.appeals.title')]), admin_disputes_appeals_path, highlights_on: %r{/admin/disputes/appeals}, if: -> { current_user.can?(:manage_appeals) }
       s.item :accounts, safe_join([material_symbol('groups'), t('admin.accounts.title')]), admin_accounts_path(origin: 'local'), highlights_on: %r{/admin/accounts|admin/account_moderation_notes|/admin/pending_accounts|/admin/users}, if: -> { current_user.can?(:manage_users) }
@@ -61,7 +61,7 @@ SimpleNavigation::Configuration.run do |navigation|
       s.item :action_logs, safe_join([material_symbol('list'), t('admin.action_logs.title')]), admin_action_logs_path, if: -> { current_user.can?(:view_audit_log) }
     end
 
-    n.item :admin, safe_join([material_symbol('manufacturing'), t('admin.title')]), nil, if: -> { current_user.can?(:view_dashboard, :manage_settings, :manage_rules, :manage_announcements, :manage_custom_emojis, :manage_webhooks, :manage_federation) }, unless: -> { self_destruct? } do |s|
+    n.item :admin, safe_join([material_symbol('manufacturing'), t('admin.title')]), nil, if: -> { navigation_shows_admin? }, unless: -> { self_destruct? } do |s|
       s.item :dashboard, safe_join([material_symbol('speed'), t('admin.dashboard.title')]), admin_dashboard_path, if: -> { current_user.can?(:view_dashboard) }
       s.item :settings, safe_join([material_symbol('manufacturing'), t('admin.settings.title')]), admin_settings_path, if: -> { current_user.can?(:manage_settings) }, highlights_on: %r{/admin/settings}
       s.item :rules, safe_join([material_symbol('gavel'), t('admin.rules.title')]), admin_rules_path, highlights_on: %r{/admin/rules}, if: -> { current_user.can?(:manage_rules) }
