@@ -6,7 +6,7 @@ ruby '>= 3.2.0'
 gem 'propshaft'
 gem 'puma', '~> 6.3'
 gem 'rack', '~> 2.2.7'
-gem 'rails', '~> 7.2.0'
+gem 'rails', '8.0.0.rc2'
 gem 'thor', '~> 1.2'
 
 gem 'dotenv'
@@ -22,7 +22,8 @@ gem 'jd-paperclip-azure', '~> 3.0', require: false
 gem 'kt-paperclip', '~> 7.2'
 gem 'ruby-vips', '~> 2.2', require: false
 
-gem 'active_model_serializers', '~> 0.10'
+# gem 'active_model_serializers', '~> 0.10'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-10-stable' # TODO: Wait on tagged release
 gem 'addressable', '~> 2.8'
 gem 'bootsnap', '~> 1.18.0', require: false
 gem 'browser'
