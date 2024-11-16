@@ -8,7 +8,7 @@ SimpleNavigation::Configuration.run do |navigation|
            safe_join([material_symbol('report'), t('admin.critical_update_pending')]),
            admin_software_updates_path,
            if: -> { navigation_shows_software_updates? },
-           html: { class: 'warning' }
+           html: { class: :warning }
 
     n.item :profile, safe_join([material_symbol('person'), t('settings.profile')]), settings_profile_path, if: -> { current_user.functional? }, unless: -> { self_destruct? }, highlights_on: %r{/settings/profile|/settings/featured_tags|/settings/verification|/settings/privacy}
 
@@ -75,6 +75,6 @@ SimpleNavigation::Configuration.run do |navigation|
 
     n.item :sidekiq, safe_join([material_symbol('diamond'), 'Sidekiq']), sidekiq_path, link_html: { target: 'sidekiq' }, if: -> { current_user.can?(:view_devops) }
     n.item :pghero, safe_join([material_symbol('database'), 'PgHero']), pghero_path, link_html: { target: 'pghero' }, if: -> { current_user.can?(:view_devops) }
-    n.item :logout, safe_join([material_symbol('logout'), t('auth.logout')]), destroy_user_session_path, link_html: { 'data-method' => 'delete' }
+    n.item :logout, safe_join([material_symbol('logout'), t('auth.logout')]), destroy_user_session_path, link_html: { data: { method: :delete } }
   end
 end
