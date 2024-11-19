@@ -134,32 +134,53 @@ class Report < ApplicationRecord
   end
 
   def history
-    subquery = [
-      Admin::ActionLog.where(
-        target_type: 'Report',
-        target_id: id
-      ).arel,
-
-      Admin::ActionLog.where(
-        target_type: 'Account',
-        target_id: target_account_id
-      ).arel,
-
-      Admin::ActionLog.where(
-        target_type: 'Status',
-        target_id: status_ids
-      ).arel,
-
-      Admin::ActionLog.where(
-        target_type: 'AccountWarning',
-        target_id: AccountWarning.where(report_id: id).select(:id)
-      ).arel,
-    ].reduce { |union, query| Arel::Nodes::UnionAll.new(union, query) }
-
-    Admin::ActionLog.latest.from(Arel::Nodes::As.new(subquery, Admin::ActionLog.arel_table))
+    Admin::ActionLog
+      .latest
+      .with(historical_logs:)
   end
 
   private
+
+  def historical_logs
+    [
+      report_action_logs,
+      account_action_logs,
+      status_action_logs,
+      account_warning_action_logs,
+    ]
+  end
+
+  def report_action_logs
+    Admin::ActionLog
+      .where(
+        target_type: 'Report',
+        target_id: id
+      )
+  end
+
+  def account_action_logs
+    Admin::ActionLog
+      .where(
+        target_type: 'Account',
+        target_id: target_account_id
+      )
+  end
+
+  def status_action_logs
+    Admin::ActionLog
+      .where(
+        target_type: 'Status',
+        target_id: status_ids
+      )
+  end
+
+  def account_warning_action_logs
+    Admin::ActionLog
+      .where(
+        target_type: 'AccountWarning',
+        target_id: AccountWarning.where(report_id: id).select(:id)
+      )
+  end
 
   def set_uri
     self.uri = ActivityPub::TagManager.instance.generate_uri_for(self) if uri.nil? && account.local?
