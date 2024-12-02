@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '>= 3.2.0'
+ruby '>= 3.3.0'
+
+# TODO: Silence ruby 3.4 warnings
+gem 'benchmark'
 
 gem 'propshaft'
 gem 'puma', '~> 6.3'
