@@ -119,6 +119,8 @@ class Form::AdminSettings
     # So for now, return early if errors aren't empty.
     return false unless errors.empty? && valid?
 
+    Rails.configuration.x.settings_updated_at = Time.current
+
     KEYS.each do |key|
       next unless instance_variable_defined?(:"@#{key}")
 

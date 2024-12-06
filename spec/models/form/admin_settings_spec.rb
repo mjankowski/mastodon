@@ -17,4 +17,15 @@ RSpec.describe Form::AdminSettings do
       end
     end
   end
+
+  describe '#save' do
+    describe 'updating settings time' do
+      subject { described_class.new(custom_css: 'body { color: red; }') }
+
+      it 'changes settings updated at time' do
+        expect { subject.save }
+          .to change(Rails.configuration.x, :settings_updated_at)
+      end
+    end
+  end
 end
