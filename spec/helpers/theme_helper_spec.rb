@@ -79,6 +79,32 @@ RSpec.describe ThemeHelper do
     end
   end
 
+  describe '#active_custom_stylesheet' do
+    context 'when settings value is present' do
+      before { Rails.configuration.x.settings_updated_at = datetime }
+
+      let(:datetime) { Time.current }
+
+      it 'returns value from settings' do
+        expect(active_custom_stylesheet)
+          .to eq("custom-#{datetime.to_i}")
+      end
+    end
+
+    context 'when settings value not present' do
+      before { Rails.configuration.x.settings_updated_at = nil }
+
+      let(:datetime) { Time.current }
+
+      it 'returns value from settings' do
+        travel_to(datetime) do
+          expect(active_custom_stylesheet)
+            .to eq("custom-#{datetime.to_i}")
+        end
+      end
+    end
+  end
+
   private
 
   def html_links

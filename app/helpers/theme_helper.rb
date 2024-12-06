@@ -23,6 +23,13 @@ module ThemeHelper
     end
   end
 
+  def active_custom_stylesheet
+    [
+      :custom,
+      (Rails.configuration.x.settings_updated_at.presence || Time.current).to_i,
+    ].join('-')
+  end
+
   private
 
   def theme_color_for(theme)
