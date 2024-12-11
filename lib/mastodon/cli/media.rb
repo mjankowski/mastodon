@@ -91,98 +91,17 @@ module Mastodon::CLI
       Please mind that some storage providers charge for the necessary API requests to list objects.
     LONG_DESC
     def remove_orphans
-      progress        = create_progress_bar(nil)
-      reclaimed_bytes = 0
-      removed         = 0
-      prefix          = options[:prefix]
+      progress = create_progress_bar(nil)
 
       case Paperclip::Attachment.default_options[:storage]
       when :s3
-        paperclip_instance = MediaAttachment.new.file
-        s3_interface       = paperclip_instance.s3_interface
-        s3_permissions     = Paperclip::Attachment.default_options[:s3_permissions]
-        bucket             = s3_interface.bucket(Paperclip::Attachment.default_options[:s3_credentials][:bucket])
-        last_key           = options[:start_after]
-
-        loop do
-          objects = begin
-            bucket.objects(start_after: last_key, prefix: prefix).limit(1000).map { |x| x }
-          rescue => e
-            progress.log(pastel.red("Error fetching list of files: #{e}"))
-            progress.log("If you want to continue from this point, add --start-after=#{last_key} to your command") if last_key
-            break
-          end
-
-          break if objects.empty?
-
-          last_key   = objects.last.key
-          record_map = preload_records_from_mixed_objects(objects)
-
-          objects.each do |object|
-            object.acl.put(acl: s3_permissions) if options[:fix_permissions] && !dry_run?
-
-            path_segments = object.key.split('/')
-
-            progress.increment
-
-            next unless orphaned_file?(path_segments, record_map)
-
-            begin
-              object.delete unless dry_run?
-
-              reclaimed_bytes += object.size
-              removed += 1
-
-              progress.log("Found and removed orphan: #{object.key}")
-            rescue => e
-              progress.log(pastel.red("Error processing #{object.key}: #{e}"))
-            end
-          rescue UnrecognizedOrphanType
-            progress.log(pastel.yellow("Unrecognized file found: #{object.key}"))
-          end
-        end
+        removed, reclaimed_bytes = remove_orphans_adapter_s3(progress)
       when :fog
         fail_with_message 'The fog storage driver is not supported for this operation at this time'
       when :azure
         fail_with_message 'The azure storage driver is not supported for this operation at this time'
       when :filesystem
-        require 'find'
-
-        root_path = Rails.configuration.x.file_storage_root_path.gsub(':rails_root', Rails.root.to_s)
-
-        Find.find(File.join(*[root_path, prefix].compact)) do |path|
-          next if File.directory?(path)
-
-          key = path.gsub("#{root_path}#{File::SEPARATOR}", '')
-
-          path_segments = key.split(File::SEPARATOR)
-
-          progress.increment
-
-          next unless orphaned_file?(path_segments)
-
-          begin
-            size = File.size(path)
-
-            unless dry_run?
-              File.delete(path)
-              begin
-                FileUtils.rmdir(File.dirname(path), parents: true)
-              rescue Errno::ENOTEMPTY
-                # OK
-              end
-            end
-
-            reclaimed_bytes += size
-            removed += 1
-
-            progress.log("Found and removed orphan: #{key}")
-          rescue => e
-            progress.log(pastel.red("Error processing #{key}: #{e}"))
-          end
-        rescue UnrecognizedOrphanType
-          progress.log(pastel.yellow("Unrecognized file found: #{path}"))
-        end
+        removed, reclaimed_bytes = remove_orphans_adapter_filesystem(progress)
       end
 
       progress.total = progress.progress
@@ -358,6 +277,104 @@ module Mastodon::CLI
       attachment = record&.public_send(attachment_name)
 
       attachment.blank? || !attachment.variant?(file_name)
+    end
+
+    def remove_orphans_adapter_s3(progress)
+      reclaimed_bytes = 0
+      removed = 0
+      prefix = options[:prefix]
+
+      paperclip_instance = MediaAttachment.new.file
+      s3_interface       = paperclip_instance.s3_interface
+      s3_permissions     = Paperclip::Attachment.default_options[:s3_permissions]
+      bucket             = s3_interface.bucket(Paperclip::Attachment.default_options[:s3_credentials][:bucket])
+      last_key           = options[:start_after]
+
+      loop do
+        objects = begin
+          bucket.objects(start_after: last_key, prefix: prefix).limit(1000).map { |x| x }
+        rescue => e
+          progress.log(pastel.red("Error fetching list of files: #{e}"))
+          progress.log("If you want to continue from this point, add --start-after=#{last_key} to your command") if last_key
+          break
+        end
+
+        break if objects.empty?
+
+        last_key   = objects.last.key
+        record_map = preload_records_from_mixed_objects(objects)
+
+        objects.each do |object|
+          object.acl.put(acl: s3_permissions) if options[:fix_permissions] && !dry_run?
+
+          path_segments = object.key.split('/')
+
+          progress.increment
+
+          next unless orphaned_file?(path_segments, record_map)
+
+          begin
+            object.delete unless dry_run?
+
+            reclaimed_bytes += object.size
+            removed += 1
+
+            progress.log("Found and removed orphan: #{object.key}")
+          rescue => e
+            progress.log(pastel.red("Error processing #{object.key}: #{e}"))
+          end
+        rescue UnrecognizedOrphanType
+          progress.log(pastel.yellow("Unrecognized file found: #{object.key}"))
+        end
+      end
+
+      [removed, reclaimed_bytes]
+    end
+
+    def remove_orphans_adapter_filesystem(progress)
+      reclaimed_bytes = 0
+      removed = 0
+      prefix = options[:prefix]
+
+      require 'find'
+
+      root_path = Rails.configuration.x.file_storage_root_path.gsub(':rails_root', Rails.root.to_s)
+
+      Find.find(File.join(*[root_path, prefix].compact)) do |path|
+        next if File.directory?(path)
+
+        key = path.gsub("#{root_path}#{File::SEPARATOR}", '')
+
+        path_segments = key.split(File::SEPARATOR)
+
+        progress.increment
+
+        next unless orphaned_file?(path_segments)
+
+        begin
+          size = File.size(path)
+
+          unless dry_run?
+            File.delete(path)
+            begin
+              FileUtils.rmdir(File.dirname(path), parents: true)
+            rescue Errno::ENOTEMPTY
+              # OK
+            end
+          end
+
+          reclaimed_bytes += size
+          removed += 1
+
+          progress.log("Found and removed orphan: #{key}")
+        rescue => e
+          progress.log(pastel.red("Error processing #{key}: #{e}"))
+        end
+      rescue UnrecognizedOrphanType
+        progress.log(pastel.yellow("Unrecognized file found: #{path}"))
+      end
+
+      [removed, reclaimed_bytes]
     end
   end
 end
