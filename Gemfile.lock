@@ -7,6 +7,15 @@ GIT
       hkdf (~> 0.2)
       jwt (~> 2.0)
 
+GIT
+  remote: https://github.com/scenic-views/scenic.git
+  revision: 8e9c5c41a9132cc1e7862916aee9e43babddee4a
+  branch: less-locks
+  specs:
+    scenic (1.8.0)
+      activerecord (>= 4.0.0)
+      railties (>= 4.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -752,9 +761,6 @@ GEM
     sanitize (7.0.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.16.8)
-    scenic (1.8.0)
-      activerecord (>= 4.0.0)
-      railties (>= 4.0.0)
     securerandom (0.4.1)
     selenium-webdriver (4.27.0)
       base64 (~> 0.2)
@@ -1008,7 +1014,7 @@ DEPENDENCIES
   ruby-vips (~> 2.2)
   rubyzip (~> 2.3)
   sanitize (~> 7.0)
-  scenic (~> 1.7)
+  scenic!
   selenium-webdriver
   shoulda-matchers
   sidekiq (~> 6.5)
