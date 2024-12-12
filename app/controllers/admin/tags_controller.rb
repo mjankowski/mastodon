@@ -9,7 +9,10 @@ module Admin
     def index
       authorize :tag, :index?
 
-      @tags = filtered_tags.page(params[:page]).per(PER_PAGE)
+      @page, @tags = pagy(
+        filtered_tags,
+        items: PER_PAGE
+      )
     end
 
     def show
