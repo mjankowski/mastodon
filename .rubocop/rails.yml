@@ -2,17 +2,5 @@
 Rails/BulkChangeTable:
   Enabled: false # Conflicts with strong_migrations features
 
-Rails/CreateTableWithTimestamps:
-  Exclude:
-    - db/*migrate/* # TODO: Work through these in old migrations
-
 Rails/FilePath:
   EnforcedStyle: arguments
-
-Rails/ReversibleMigration:
-  Exclude:
-    - db/*migrate/* # TODO: Work through these in old migrations
-
-Rails/ThreeStateBooleanColumn:
-  Exclude:
-    - db/*migrate/* # TODO: Work through these in old migrations
