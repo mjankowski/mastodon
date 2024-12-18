@@ -93,16 +93,7 @@ module Mastodon::CLI
     def remove_orphans
       progress = create_progress_bar(nil)
 
-      case Paperclip::Attachment.default_options[:storage]
-      when :s3
-        removed, reclaimed_bytes = remove_orphans_adapter_s3(progress)
-      when :fog
-        fail_with_message 'The fog storage driver is not supported for this operation at this time'
-      when :azure
-        fail_with_message 'The azure storage driver is not supported for this operation at this time'
-      when :filesystem
-        removed, reclaimed_bytes = remove_orphans_adapter_filesystem(progress)
-      end
+      removed, reclaimed_bytes = process_orphan_removal(progress)
 
       progress.total = progress.progress
       progress.finish
@@ -277,6 +268,19 @@ module Mastodon::CLI
       attachment = record&.public_send(attachment_name)
 
       attachment.blank? || !attachment.variant?(file_name)
+    end
+
+    def process_orphan_removal(progress)
+      case Paperclip::Attachment.default_options[:storage]
+      when :s3
+        remove_orphans_adapter_s3(progress)
+      when :fog
+        fail_with_message 'The fog storage driver is not supported for this operation at this time'
+      when :azure
+        fail_with_message 'The azure storage driver is not supported for this operation at this time'
+      when :filesystem
+        remove_orphans_adapter_filesystem(progress)
+      end
     end
 
     def remove_orphans_adapter_s3(progress)
