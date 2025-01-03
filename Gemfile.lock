@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/scenic-views/scenic.git
-  revision: 8e9c5c41a9132cc1e7862916aee9e43babddee4a
+  revision: 8172473c49048a1488621e6bf0d0a20c6362f036
   branch: less-locks
   specs:
     scenic (1.8.0)
