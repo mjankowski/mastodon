@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_16_224825) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_03_141121) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -1392,6 +1392,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_224825) do
   create_view "global_follow_recommendations", materialized: true, sql_definition: <<-SQL
       SELECT account_id,
       123 AS number,
+      'derek prior'::text AS personality,
       sum(rank) AS rank,
       array_agg(reason) AS reason
      FROM ( SELECT account_summaries.account_id,
