@@ -18,7 +18,7 @@ module User::Activity
 
   private
 
-  def inactive_since_duration?
-    last_sign_in_at < ACTIVE_DURATION.ago
+  def recent_session_activity?
+    last_sign_in_at >= ACTIVE_DURATION.ago
   end
 end
