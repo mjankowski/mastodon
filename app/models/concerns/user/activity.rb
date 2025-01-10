@@ -12,8 +12,8 @@ module User::Activity
   ACTIVE_DURATION = ENV.fetch('USER_ACTIVE_DAYS', 7).to_i.days.freeze
 
   included do
-    scope :signed_in_recently, -> { where(current_sign_in_at: ACTIVE_DURATION.ago..) }
     scope :not_signed_in_recently, -> { where(current_sign_in_at: ...ACTIVE_DURATION.ago) }
+    scope :signed_in_recently, -> { where(current_sign_in_at: ACTIVE_DURATION.ago..) }
   end
 
   private
