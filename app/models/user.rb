@@ -511,7 +511,7 @@ class User < ApplicationRecord
     return unless confirmed?
 
     ActivityTracker.record('activity:logins', id)
-    regenerate_feed! if inactive_since_duration?
+    regenerate_feed! unless recent_session_activity?
   end
 
   def notify_staff_about_pending_account!
