@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Admin Warning Presets' do
   describe 'Managing warning presets' do
-    before { sign_in Fabricate(:admin_user) }
+    before { sign_in(admin_user) }
 
     describe 'Viewing warning presets' do
       let!(:account_warning_preset) { Fabricate :account_warning_preset, text: 'This is a preset' }

@@ -3,16 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Statuses' do
-  let(:current_user) { Fabricate(:admin_user) }
-
-  before do
-    sign_in current_user
-  end
+  before { sign_in(admin_user) }
 
   describe 'Performing batch updates' do
     before do
-      _status = Fabricate(:status, account: current_user.account)
-      visit admin_account_statuses_path(account_id: current_user.account_id)
+      _status = Fabricate(:status, account: admin_user.account)
+      visit admin_account_statuses_path(account_id: admin_user.account_id)
     end
 
     context 'without selecting any records' do

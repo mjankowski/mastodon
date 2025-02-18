@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Trends::Tags' do
-  let(:current_user) { Fabricate(:admin_user) }
-
-  before { sign_in current_user }
+  before { sign_in(admin_user) }
 
   describe 'Performing batch updates' do
     context 'without selecting any records' do

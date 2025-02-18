@@ -3,8 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Settings::Branding' do
+  before { sign_in(admin_user) }
+
   it 'Saves changes to branding settings' do
-    sign_in admin_user
     visit admin_settings_branding_path
 
     fill_in short_description_field,

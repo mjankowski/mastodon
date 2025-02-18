@@ -6,9 +6,7 @@ RSpec.describe 'Admin Invites' do
   describe 'Invite interaction' do
     let!(:invite) { Fabricate(:invite, expires_at: nil) }
 
-    let(:user) { Fabricate(:admin_user) }
-
-    before { sign_in user }
+    before { sign_in(admin_user) }
 
     it 'allows invite listing and creation' do
       visit admin_invites_path
@@ -24,7 +22,7 @@ RSpec.describe 'Admin Invites' do
 
       expect { generate_invite }
         .to change(Invite, :count).by(1)
-      expect(user.invites.last)
+      expect(admin_user.invites.last)
         .to have_attributes(max_uses: 10)
     end
 

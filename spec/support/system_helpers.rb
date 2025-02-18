@@ -2,7 +2,7 @@
 
 module SystemHelpers
   def admin_user
-    Fabricate(:admin_user)
+    @admin_user ||= Fabricate(:admin_user)
   end
 
   def submit_button

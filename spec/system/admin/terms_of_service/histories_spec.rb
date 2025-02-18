@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin Terms of Service Histories' do
-  let(:current_user) { Fabricate(:admin_user) }
-
-  before { sign_in(current_user) }
+  before { sign_in(admin_user) }
 
   describe 'Viewing TOS histories' do
     before { Fabricate :terms_of_service, changelog: 'The changelog notes from v1 are here' }

@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin Follow Recommendations' do
-  let(:user) { Fabricate(:admin_user) }
-
-  before { sign_in(user) }
+  before { sign_in(admin_user) }
 
   describe 'Viewing follow recommendations details' do
     it 'shows a list of accounts' do

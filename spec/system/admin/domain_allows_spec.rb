@@ -3,13 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::DomainAllows' do
-  let(:user) { Fabricate(:admin_user) }
   let(:domain) { 'host.example' }
 
   before do
     Fabricate :account, domain: domain
     Instance.refresh
-    sign_in user
   end
 
   around do |example|
@@ -22,6 +20,8 @@ RSpec.describe 'Admin::DomainAllows' do
   end
 
   describe 'Managing domain allows' do
+    before { sign_in(admin_user) }
+
     it 'saves and then deletes a record' do
       # Visit new page
       visit new_admin_domain_allow_path

@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::EmailDomainBlocks' do
-  let(:current_user) { Fabricate(:admin_user) }
-
-  before { sign_in current_user }
+  before { sign_in(admin_user) }
 
   describe 'Managing email domain blocks' do
     before { configure_dns(domain: 'example.com', results: []) }

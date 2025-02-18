@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'blocking domains through the moderation interface' do
   before do
     allow(DomainBlockWorker).to receive(:perform_async).and_return(true)
-    sign_in Fabricate(:admin_user), scope: :user
+    sign_in(admin_user)
   end
 
   context 'when silencing a new domain' do
