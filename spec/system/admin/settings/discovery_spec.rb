@@ -3,8 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Settings::Discovery' do
+  before { sign_in(admin_user) }
+
   it 'Saves changes to discovery settings' do
-    sign_in admin_user
     visit admin_settings_discovery_path
 
     check trends_box

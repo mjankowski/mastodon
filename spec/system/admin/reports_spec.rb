@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin Reports' do
-  let(:user) { Fabricate(:admin_user) }
-
-  before { sign_in(user) }
+  before { sign_in(admin_user) }
 
   describe 'Viewing existing reports' do
     let!(:unresolved_report) { Fabricate(:report, action_taken_at: nil, comment: 'First report') }
@@ -47,7 +45,7 @@ RSpec.describe 'Admin Reports' do
 
       report.reload
       expect(report.action_taken_by_account)
-        .to eq user.account
+        .to eq admin_user.account
       expect(report)
         .to be_action_taken
       expect(last_action_log.target)
@@ -89,7 +87,7 @@ RSpec.describe 'Admin Reports' do
         .to have_title(I18n.t('admin.reports.report', id: report.id))
       report.reload
       expect(report.assigned_account)
-        .to eq user.account
+        .to eq admin_user.account
       expect(last_action_log.target)
         .to eq(report)
 

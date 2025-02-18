@@ -3,10 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::AccountModerationNotes' do
-  let(:current_user) { Fabricate(:admin_user) }
   let(:target_account) { Fabricate(:account) }
 
-  before { sign_in current_user }
+  before { sign_in(admin_user) }
 
   describe 'Managing account moderation note' do
     it 'saves and then deletes a record' do

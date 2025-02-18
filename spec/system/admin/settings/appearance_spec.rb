@@ -3,8 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Settings::Appearance' do
+  before { sign_in(admin_user) }
+
   it 'Saves changes to appearance settings' do
-    sign_in admin_user
     visit admin_settings_appearance_path
 
     fill_in custom_css_field,

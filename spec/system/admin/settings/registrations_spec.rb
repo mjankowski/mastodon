@@ -3,8 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Settings::Registrations' do
+  before { sign_in(admin_user) }
+
   it 'Saves changes to registrations settings' do
-    sign_in admin_user
     visit admin_settings_registrations_path
 
     select open_mode_option,

@@ -3,11 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Accounts' do
-  let(:current_user) { Fabricate(:admin_user) }
-
-  before do
-    sign_in current_user
-  end
+  before { sign_in(admin_user) }
 
   describe 'Performing batch updates' do
     let(:unapproved_user_account) { Fabricate(:account) }

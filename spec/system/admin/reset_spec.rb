@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::Reset' do
+  before { sign_in(admin_user) }
+
   it 'Resets password for account user', :inline_jobs do
     account = Fabricate :account
-    sign_in admin_user
     visit admin_account_path(account.id)
 
     emails = capture_emails do
@@ -25,10 +26,6 @@ RSpec.describe 'Admin::Reset' do
 
     expect(page)
       .to have_content(account.username)
-  end
-
-  def admin_user
-    Fabricate(:admin_user)
   end
 
   def submit_reset

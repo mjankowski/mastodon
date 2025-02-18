@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin Report Notes' do
-  let(:user) { Fabricate(:admin_user) }
-
-  before { sign_in user }
+  before { sign_in(admin_user) }
 
   describe 'Creating notes' do
     context 'when report is unresolved' do
@@ -49,7 +47,7 @@ RSpec.describe 'Admin Report Notes' do
     end
 
     context 'when report is resolved' do
-      let(:report) { Fabricate(:report, action_taken_at: Time.current, action_taken_by_account_id: user.account.id) }
+      let(:report) { Fabricate(:report, action_taken_at: Time.current, action_taken_by_account_id: admin_user.account.id) }
 
       context 'when create_and_unresolve flag is on' do
         it 'creates a report note and unresolves report' do

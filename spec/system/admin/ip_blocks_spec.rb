@@ -3,9 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Admin::IpBlocks' do
-  let(:current_user) { Fabricate(:admin_user) }
-
-  before { sign_in current_user }
+  before { sign_in(admin_user) }
 
   describe 'Creating an IP Block' do
     it 'lists blocks and creates new ones' do
