@@ -19,6 +19,7 @@ class Vacuum::StatusesVacuum
       # as the search index, must be handled first.
       statuses.direct_visibility
               .includes(mentions: :account)
+              .reorder(nil)
               .find_each(&:unlink_from_conversations!)
       if Chewy.enabled?
         remove_from_index(statuses.ids, 'chewy:queue:StatusesIndex')
