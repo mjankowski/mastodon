@@ -23,7 +23,7 @@ class Admin::Metrics::Measure::TagServersMeasure < Admin::Metrics::Measure::Base
 
   def data_source
     Status
-      .select('accounts.domain')
+      .select(accounts: [:domain])
       .distinct
       .reorder(nil)
       .joins(:tags, :account)
