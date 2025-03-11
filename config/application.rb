@@ -50,7 +50,7 @@ require_relative '../lib/webpacker/manifest_extensions'
 require_relative '../lib/webpacker/helper_extensions'
 require_relative '../lib/rails/engine_extensions'
 require_relative '../lib/action_dispatch/remote_ip/get_ip_extensions'
-require_relative '../lib/stoplight/redis_data_store_extensions'
+require_relative '../lib/stoplight/data_store/redis_extensions'
 require_relative '../lib/active_record/batches'
 require_relative '../lib/simple_navigation/item_extensions'
 
