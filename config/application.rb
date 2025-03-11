@@ -64,7 +64,7 @@ module Mastodon
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    # config.autoload_lib(ignore: %w(assets tasks templates generators linter paperclip))
+    config.autoload_lib(ignore: %w(assets tasks templates generators linter paperclip))
     # TODO: We should enable this eventually, but for now there are many things
     # in the wrong path from the perspective of zeitwerk.
 
