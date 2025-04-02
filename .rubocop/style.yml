@@ -22,6 +22,9 @@ Style/HashSyntax:
   EnforcedShorthandSyntax: either
   EnforcedStyle: ruby19_no_mixed_keys
 
+Style/HashTransformValues:
+  Enabled: false
+
 Style/IfUnlessModifier:
   Exclude:
     - '**/*.haml'

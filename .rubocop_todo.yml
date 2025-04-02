@@ -58,12 +58,6 @@ Style/FormatStringToken:
 Style/GuardClause:
   Enabled: false
 
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/HashTransformValues:
-  Exclude:
-    - 'app/serializers/rest/web_push_subscription_serializer.rb'
-    - 'app/services/import_service.rb'
-
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: respond_to_missing?
 Style/OptionalBooleanParameter:
