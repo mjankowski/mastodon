@@ -37,8 +37,8 @@ plugins:
   - rubocop-rails
   - rubocop-rspec
   - rubocop-rspec_rails
+  - standard-performance
+  - standard-rails
 
 require:
   - standard
-  - standard-performance
-  - standard-rails
