@@ -758,7 +758,7 @@ GEM
     rubocop-ast (1.44.1)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
-    rubocop-capybara (2.22.1)
+    rubocop-capybara (2.22.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
     rubocop-i18n (3.2.3)
@@ -838,6 +838,21 @@ GEM
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
     stackprof (0.2.27)
+    standard (1.50.0)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.75.5)
+      standard-custom (~> 1.0.0)
+      standard-performance (~> 1.8)
+    standard-custom (1.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.50)
+    standard-performance (1.8.0)
+      lint_roller (~> 1.1)
+      rubocop-performance (~> 1.25.0)
+    standard-rails (1.4.0)
+      lint_roller (~> 1.0)
+      rubocop-rails (~> 2.31.0)
     starry (0.2.0)
       base64
     stoplight (4.1.1)
@@ -932,6 +947,8 @@ GEM
     zeitwerk (2.7.2)
 
 PLATFORMS
+  ruby
+  ruby
   ruby
 
 DEPENDENCIES
@@ -1051,11 +1068,8 @@ DEPENDENCIES
   rspec-github (~> 3.0)
   rspec-rails (~> 8.0)
   rspec-sidekiq (~> 5.0)
-  rubocop
   rubocop-capybara
   rubocop-i18n
-  rubocop-performance
-  rubocop-rails
   rubocop-rspec
   rubocop-rspec_rails
   ruby-prof
@@ -1075,6 +1089,9 @@ DEPENDENCIES
   simplecov (~> 0.22)
   simplecov-lcov (~> 0.8)
   stackprof
+  standard
+  standard-performance
+  standard-rails
   stoplight (~> 4.1)
   strong_migrations
   test-prof
