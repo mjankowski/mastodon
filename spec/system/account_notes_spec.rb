@@ -9,6 +9,7 @@ RSpec.describe 'Account notes', :inline_jobs, :js, :streaming do
   let(:password)            { 'password' }
   let(:confirmed_at)        { Time.zone.now }
   let(:finished_onboarding) { true }
+  let(:note_text) { 'This is a personal note' }
 
   let!(:other_account) { Fabricate(:account) }
 
@@ -17,12 +18,11 @@ RSpec.describe 'Account notes', :inline_jobs, :js, :streaming do
   it 'can be written and viewed' do
     visit_profile(other_account)
 
-    note_text = 'This is a personal note'
-    fill_in frontend_translations('account_note.placeholder'), with: note_text
-
-    # This is a bit awkward since there is no button to save the change
-    # The easiest way is to send ctrl+enter ourselves
-    find_field(class: 'account__header__account-note__content').send_keys [:control, :enter]
+    # Locate the note input, fill in text, use ctrl+enter to submit
+    find_field(class: 'account__header__account-note__content')
+      .click
+      .fill_in(with: note_text)
+      .send_keys([:control, :enter])
 
     expect(page)
       .to have_css('.account__header__account-note__content', text: note_text)
@@ -31,9 +31,11 @@ RSpec.describe 'Account notes', :inline_jobs, :js, :streaming do
     visit root_url
     visit_profile(other_account)
 
-    expect(AccountNote.find_by(account: bob.account, target_account: other_account).comment)
-      .to eq note_text
+    # Verify record persisted
+    expect(relevant_account_note.comment)
+      .to eq(note_text)
 
+    # Verify content still present on page
     expect(page)
       .to have_css('.account__header__account-note__content', text: note_text)
   end
@@ -44,5 +46,9 @@ RSpec.describe 'Account notes', :inline_jobs, :js, :streaming do
     expect(page)
       .to have_css('div.app-holder')
       .and have_css('form.compose-form')
+  end
+
+  def relevant_account_note
+    AccountNote.find_by(account: bob.account, target_account: other_account)
   end
 end
