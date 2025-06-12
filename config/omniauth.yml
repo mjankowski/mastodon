@@ -1,4 +1,28 @@
 shared:
   cas_enabled?: <%= ENV.fetch('CAS_ENABLED', 'false') == 'true' %>
+  cas_options:
+    ca_path: <%= ENV.fetch('CAS_CA_PATH', nil) %>
+    callback_url: <%= ENV.fetch('CAS_CALLBACK_URL', nil) %>
+    disable_ssl_verification: <%= ENV.fetch('CAS_DISABLE_SSL_VERIFICATION', 'false') == 'true' %>
+    display_name: <%= ENV.fetch('CAS_DISPLAY_NAME', nil) %>
+    email_key: <%= ENV.fetch('CAS_EMAIL_KEY', 'email') %>
+    first_name_key: <%= ENV.fetch('CAS_FIRST_NAME_KEY', 'firstname') %>
+    host: <%= ENV.fetch('CAS_HOST', nil) %>
+    image_key: <%= ENV.fetch('CAS_IMAGE_KEY', 'image') %>
+    last_name_key: <%= ENV.fetch('CAS_LAST_NAME_KEY', 'lastname') %>
+    location_key: <%= ENV.fetch('CAS_LOCATION_KEY', 'location') %>
+    login_url: <%= ENV.fetch('CAS_LOGIN_URL', nil) %>
+    logout_url: <%= ENV.fetch('CAS_LOGOUT_URL', nil) %>
+    name_key: <%= ENV.fetch('CAS_NAME_KEY', 'name') %>
+    nickname_key: <%= ENV.fetch('CAS_NICKNAME_KEY', 'nickname') %>
+    phone_key: <%= ENV.fetch('CAS_PHONE_KEY', 'phone') %>
+    port: <%= ENV.fetch('CAS_PORT', nil) %>
+    security:
+      assume_email_is_verified: <%= ENV.fetch('CAS_SECURITY_ASSUME_EMAIL_IS_VERIFIED', 'false') == 'true' %>
+    service_validate_url: <%= ENV.fetch('CAS_VALIDATE_URL', nil) %>
+    ssl: <%= ENV.fetch('CAS_SSL', 'false') == 'true' %>
+    uid_field: <%= ENV.fetch('CAS_UID_FIELD', 'user') %>
+    uid_key: <%= ENV.fetch('CAS_UID_KEY', 'user') %>
+    url: <%= ENV.fetch('CAS_URL', nil) %>
   oidc_enabled?: <%= ENV.fetch('OIDC_ENABLED', 'false') == 'true' %>
   saml_enabled?: <%= ENV.fetch('SAML_ENABLED', 'false') == 'true' %>
