@@ -7,7 +7,7 @@ RSpec.describe 'Auth Registrations' do
     context 'when in single user mode and open for registration' do
       before do
         Setting.registrations_mode = 'open'
-        allow(Rails.configuration.x).to receive(:single_user_mode).and_return(true)
+        allow(Rails.configuration.x.mastodon).to receive(:single_user_mode).and_return(true)
       end
 
       it 'redirects to sign-in' do
@@ -15,21 +15,21 @@ RSpec.describe 'Auth Registrations' do
         subject
 
         expect(response).to redirect_to(new_user_session_path)
-        expect(Rails.configuration.x).to have_received(:single_user_mode)
+        expect(Rails.configuration.x.mastodon).to have_received(:single_user_mode)
       end
     end
 
     context 'when registrations closed and not in single user mode' do
       before do
         Setting.registrations_mode = 'none'
-        allow(Rails.configuration.x).to receive(:single_user_mode).and_return(false)
+        allow(Rails.configuration.x.mastodon).to receive(:single_user_mode).and_return(false)
       end
 
       it 'redirects to sign-in' do
         subject
 
         expect(response).to redirect_to(new_user_session_path)
-        expect(Rails.configuration.x).to have_received(:single_user_mode)
+        expect(Rails.configuration.x.mastodon).to have_received(:single_user_mode)
       end
     end
   end
