@@ -43,10 +43,10 @@ RSpec.describe SessionActivation do
     let!(:session_activation) { Fabricate :session_activation, user: }
 
     around do |example|
-      original = Rails.configuration.x.max_session_activations
-      Rails.configuration.x.max_session_activations = 1
+      before = Rails.configuration.x.mastodon.max_session_activations
+      Rails.configuration.x.mastodon.max_session_activations = 1
       example.run
-      Rails.configuration.x.max_session_activations = original
+      Rails.configuration.x.mastodon.max_session_activations = before
     end
 
     it 'creates a new activation and purges older ones' do
@@ -82,10 +82,10 @@ RSpec.describe SessionActivation do
 
   describe '.purge_old' do
     around do |example|
-      before = Rails.configuration.x.max_session_activations
-      Rails.configuration.x.max_session_activations = 1
+      before = Rails.configuration.x.mastodon.max_session_activations
+      Rails.configuration.x.mastodon.max_session_activations = 1
       example.run
-      Rails.configuration.x.max_session_activations = before
+      Rails.configuration.x.mastodon.max_session_activations = before
     end
 
     let!(:oldest_session_activation) { Fabricate(:session_activation, created_at: 10.days.ago) }
