@@ -9,10 +9,10 @@ RSpec.describe EmailMxValidator do
 
   context 'with an e-mail domain that is explicitly allowed' do
     around do |example|
-      original = Rails.configuration.x.email_domains_allowlist
-      Rails.configuration.x.email_domains_allowlist = 'example.com'
+      original = Rails.configuration.x.email_domains.allowlist
+      Rails.configuration.x.email_domains.allowlist = 'example.com'
       example.run
-      Rails.configuration.x.email_domains_allowlist = original
+      Rails.configuration.x.email_domains.allowlist = original
     end
 
     context 'when there are not DNS records' do
