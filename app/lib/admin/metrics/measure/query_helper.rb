@@ -16,11 +16,9 @@ module Admin::Metrics::Measure::QueryHelper
   end
 
   def generated_series_days
-    Arel.sql(
-      <<~SQL.squish
-        SELECT generate_series(:start_at::timestamp, :end_at::timestamp, '1 day')::date AS period
-      SQL
-    )
+    Arel.sql(<<~SQL.squish)
+      SELECT GENERATE_SERIES(:start_at::timestamp, :end_at::timestamp, '1 day')::date AS period
+    SQL
   end
 
   def account_domain_sql(include_subdomains)
