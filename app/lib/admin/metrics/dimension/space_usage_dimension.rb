@@ -40,10 +40,10 @@ class Admin::Metrics::Dimension::SpaceUsageDimension < Admin::Metrics::Dimension
 
   def media_size
     value = [
-      MediaAttachment.sum(Arel.sql('COALESCE(file_file_size, 0) + COALESCE(thumbnail_file_size, 0)')),
+      MediaAttachment.sum(media_storage_size),
       CustomEmoji.sum(:image_file_size),
       PreviewCard.sum(:image_file_size),
-      Account.sum(Arel.sql('COALESCE(avatar_file_size, 0) + COALESCE(header_file_size, 0)')),
+      Account.sum(account_storage_size),
       Backup.sum(:dump_file_size),
       SiteUpload.sum(:file_file_size),
     ].sum
@@ -55,6 +55,18 @@ class Admin::Metrics::Dimension::SpaceUsageDimension < Admin::Metrics::Dimension
       unit: 'bytes',
       human_value: number_to_human_size(value),
     }
+  end
+
+  def media_storage_size
+    Arel.sql(<<~SQL.squish)
+      COALESCE(file_file_size, 0) + COALESCE(thumbnail_file_size, 0)
+    SQL
+  end
+
+  def account_storage_size
+    Arel.sql(<<~SQL.squish)
+      COALESCE(avatar_file_size, 0) + COALESCE(header_file_size, 0)
+    SQL
   end
 
   def redis_info

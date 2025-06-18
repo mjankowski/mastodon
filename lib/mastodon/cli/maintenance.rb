@@ -583,7 +583,7 @@ module Mastodon::CLI
 
       say 'Deduplicating tags…'
       duplicate_record_ids(:tags, 'lower((name)::text)').each do |row|
-        tags = Tag.where(id: row['ids'].split(',')).order(Arel.sql('(usable::int + trendable::int + listable::int) desc')).to_a
+        tags = Tag.where(id: row['ids'].split(',')).order(tag_score_sum.desc).to_a
         ref_tag = tags.shift
         tags.each do |tag|
           merge_tags!(ref_tag, tag)
@@ -597,6 +597,12 @@ module Mastodon::CLI
       else
         database_connection.execute 'CREATE UNIQUE INDEX index_tags_on_name_lower_btree ON tags (lower(name) text_pattern_ops)'
       end
+    end
+
+    def tag_score_sum
+      Arel.sql(<<~SQL.squish)
+        (usable::int + trendable::int + listable::int)
+      SQL
     end
 
     def deduplicate_webauthn_credentials!

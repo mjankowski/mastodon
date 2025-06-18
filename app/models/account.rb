@@ -134,7 +134,7 @@ class Account < ApplicationRecord
   scope :without_internal, -> { where(id: 1...) }
   scope :remote, -> { where.not(domain: nil) }
   scope :local, -> { where(domain: nil) }
-  scope :partitioned, -> { order(Arel.sql('row_number() over (partition by domain)')) }
+  scope :partitioned, -> { order(domain_partition_rows) }
   scope :without_instance_actor, -> { where.not(id: INSTANCE_ACTOR_ID) }
   scope :recent, -> { reorder(id: :desc) }
   scope :bots, -> { where(actor_type: AUTOMATED_ACTOR_TYPES) }
@@ -142,7 +142,7 @@ class Account < ApplicationRecord
   scope :groups, -> { where(actor_type: 'Group') }
   scope :alphabetic, -> { order(domain: :asc, username: :asc) }
   scope :matches_uri_prefix, ->(value) { where(arel_table[:uri].matches("#{sanitize_sql_like(value)}/%", false, true)).or(where(uri: value)) }
-  scope :matches_username, ->(value) { where('lower((username)::text) LIKE lower(?)', "#{value}%") }
+  scope :matches_username, ->(value) { where(match_username_query, "#{value}%") }
   scope :matches_display_name, ->(value) { where(arel_table[:display_name].matches("#{value}%")) }
   scope :without_unapproved, -> { left_outer_joins(:user).merge(User.approved.confirmed).or(remote) }
   scope :auditable, -> { where(id: Admin::ActionLog.select(:account_id).distinct) }
@@ -397,16 +397,32 @@ class Account < ApplicationRecord
     end
 
     def inboxes
-      urls = reorder(nil).activitypub.group(:preferred_inbox_url).pluck(Arel.sql("coalesce(nullif(accounts.shared_inbox_url, ''), accounts.inbox_url) AS preferred_inbox_url"))
+      urls = reorder(nil).activitypub.group(:preferred_inbox_url).pluck(coalesced_inboxes.as('preferred_inbox_url'))
       DeliveryFailureTracker.without_unavailable(urls)
     end
 
+    def coalesced_inboxes
+      Arel.sql(<<~SQL.squish)
+        COALESCE(NULLIF(accounts.shared_inbox_url, ''), accounts.inbox_url)
+      SQL
+    end
+
     def coalesced_activity_timestamps
-      Arel.sql(
-        <<~SQL.squish
-          COALESCE(users.current_sign_in_at, account_stats.last_status_at, to_timestamp(0))
-        SQL
-      )
+      Arel.sql(<<~SQL.squish)
+        COALESCE(users.current_sign_in_at, account_stats.last_status_at, to_timestamp(0))
+      SQL
+    end
+
+    def domain_partition_rows
+      Arel.sql(<<~SQL.squish)
+        ROW_NUMBER() OVER (PARTITION BY domain)
+      SQL
+    end
+
+    def match_username_query
+      Arel.sql(<<~SQL.squish)
+        LOWER((username)::text) LIKE LOWER(?)
+      SQL
     end
 
     def from_text(text)
