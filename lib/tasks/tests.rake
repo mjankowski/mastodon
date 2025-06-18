@@ -188,7 +188,7 @@ namespace :tests do
     end
 
     desc 'Populate the database with test data for 3.3.0'
-    task populate_v3_3_0: :environment do # rubocop:disable Naming/VariableNumber
+    task populate_v3_3_0: :environment do
       user_public_key = ActiveRecord::Base.connection.quote(OpenSSL::PKey::RSA.new(2048).public_key.to_pem)
 
       ActiveRecord::Base.connection.execute(<<~SQL.squish)
@@ -245,7 +245,7 @@ namespace :tests do
     end
 
     desc 'Populate the database with test data for 2.4.3'
-    task populate_v2_4_3: :environment do # rubocop:disable Naming/VariableNumber
+    task populate_v2_4_3: :environment do
       user_key = OpenSSL::PKey::RSA.new(2048)
       user_private_key     = ActiveRecord::Base.connection.quote(user_key.to_pem)
       user_public_key      = ActiveRecord::Base.connection.quote(user_key.public_key.to_pem)
@@ -335,7 +335,7 @@ namespace :tests do
     end
 
     desc 'Populate the database with test data for 2.4.0'
-    task populate_v2_4: :environment do # rubocop:disable Naming/VariableNumber
+    task populate_v2_4: :environment do
       ActiveRecord::Base.connection.execute(<<~SQL.squish)
         INSERT INTO "settings"
           (id, thing_type, thing_id, var, value, created_at, updated_at)
