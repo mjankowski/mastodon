@@ -345,7 +345,7 @@ GEM
       azure-blob (~> 0.5.2)
       hashie (~> 5.0)
     jmespath (1.6.2)
-    json (2.13.2)
+    json (2.14.1)
     json-canonicalization (1.0.0)
     json-jwt (1.16.7)
       activesupport (>= 4.2)
@@ -624,7 +624,7 @@ GEM
       net-smtp
       premailer (~> 1.7, >= 1.7.9)
     prettyprint (0.2.0)
-    prism (1.4.0)
+    prism (1.5.1)
     prometheus_exporter (2.3.0)
       webrick
     propshaft (1.2.1)
@@ -641,7 +641,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.1.16)
+    rack (3.2.1)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-cors (3.0.0)
@@ -719,7 +719,7 @@ GEM
     redis (4.8.1)
     redis-client (0.25.3)
       connection_pool
-    regexp_parser (2.11.2)
+    regexp_parser (2.11.3)
     reline (0.6.2)
       io-console (~> 0.5)
     request_store (1.7.0)
@@ -777,23 +777,23 @@ GEM
     rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
-    rubocop-capybara (2.22.1)
+    rubocop-capybara (2.22.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
     rubocop-i18n (3.2.3)
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1)
-    rubocop-performance (1.26.0)
+    rubocop-performance (1.25.0)
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
-      rubocop-ast (>= 1.44.0, < 2.0)
-    rubocop-rails (2.33.3)
+      rubocop-ast (>= 1.38.0, < 2.0)
+    rubocop-rails (2.31.0)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
       rubocop (>= 1.75.0, < 2.0)
-      rubocop-ast (>= 1.44.0, < 2.0)
-    rubocop-rspec (3.7.0)
+      rubocop-ast (>= 1.38.0, < 2.0)
+    rubocop-rspec (3.6.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
     rubocop-rspec_rails (2.31.0)
@@ -851,6 +851,21 @@ GEM
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
     stackprof (0.2.27)
+    standard (1.51.1)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.80.2)
+      standard-custom (~> 1.0.0)
+      standard-performance (~> 1.8)
+    standard-custom (1.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.50)
+    standard-performance (1.8.0)
+      lint_roller (~> 1.1)
+      rubocop-performance (~> 1.25.0)
+    standard-rails (1.4.0)
+      lint_roller (~> 1.0)
+      rubocop-rails (~> 2.31.0)
     starry (0.2.0)
       base64
     stoplight (5.3.5)
@@ -897,9 +912,9 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.9.1)
-    unicode-display_width (3.1.5)
-      unicode-emoji (~> 4.0, >= 4.0.4)
-    unicode-emoji (4.0.4)
+    unicode-display_width (3.2.0)
+      unicode-emoji (~> 4.1)
+    unicode-emoji (4.1.0)
     uri (1.0.3)
     useragent (0.16.11)
     validate_url (1.0.15)
@@ -944,6 +959,8 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
+  ruby
+  ruby
   ruby
 
 DEPENDENCIES
@@ -1063,11 +1080,8 @@ DEPENDENCIES
   rspec-github (~> 3.0)
   rspec-rails (~> 8.0)
   rspec-sidekiq (~> 5.0)
-  rubocop
   rubocop-capybara
   rubocop-i18n
-  rubocop-performance
-  rubocop-rails
   rubocop-rspec
   rubocop-rspec_rails
   ruby-prof
@@ -1086,6 +1100,9 @@ DEPENDENCIES
   simplecov (~> 0.22)
   simplecov-lcov (~> 0.8)
   stackprof
+  standard
+  standard-performance
+  standard-rails
   stoplight
   strong_migrations
   test-prof
