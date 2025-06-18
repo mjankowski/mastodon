@@ -166,9 +166,21 @@ class AccountStatusesCleanupPolicy < ApplicationRecord
 
   def without_popular_scope
     scope = Status.left_joins(:status_stat)
-    scope = scope.where('COALESCE(status_stats.reblogs_count, 0) < ?', min_reblogs) unless min_reblogs.nil?
-    scope = scope.where('COALESCE(status_stats.favourites_count, 0) < ?', min_favs) unless min_favs.nil?
+    scope = scope.where(popular_reblogs_count.lt(min_reblogs)) unless min_reblogs.nil?
+    scope = scope.where(popular_favourites_count.lt(min_favs)) unless min_favs.nil?
     scope
+  end
+
+  def popular_reblogs_count
+    Arel.sql(<<~SQL.squish)
+      COALESCE(status_stats.reblogs_count, 0)
+    SQL
+  end
+
+  def popular_favourites_count
+    Arel.sql(<<~SQL.squish)
+      COALESCE(status_stats.favourites_count, 0)
+    SQL
   end
 
   def account_statuses

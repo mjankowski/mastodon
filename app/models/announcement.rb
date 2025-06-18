@@ -35,11 +35,9 @@ class Announcement < ApplicationRecord
 
   class << self
     def coalesced_chronology_timestamps
-      Arel.sql(
-        <<~SQL.squish
-          COALESCE(announcements.starts_at, announcements.scheduled_at, announcements.published_at, announcements.created_at)
-        SQL
-      )
+      Arel.sql(<<~SQL.squish)
+        COALESCE(announcements.starts_at, announcements.scheduled_at, announcements.published_at, announcements.created_at)
+      SQL
     end
   end
 
@@ -83,8 +81,8 @@ class Announcement < ApplicationRecord
 
   def reactions(account = nil)
     grouped_ordered_announcement_reactions.select(
-      [:name, :custom_emoji_id, 'COUNT(*) as count'].tap do |values|
-        values << value_for_reaction_me_column(account)
+      [:name, :custom_emoji_id, Arel.star.count.as('count')].tap do |values|
+        values << value_for_reaction_me_column(account).as('me')
       end
     ).to_a.tap do |records|
       ActiveRecord::Associations::Preloader.new(records: records, associations: :custom_emoji).call
@@ -100,23 +98,21 @@ class Announcement < ApplicationRecord
   def grouped_ordered_announcement_reactions
     announcement_reactions
       .group(:announcement_id, :name, :custom_emoji_id)
-      .order(
-        Arel.sql('MIN(created_at)').asc
-      )
+      .order(announcement_reactions.klass.arel_table[:created_at].minimum.asc)
   end
 
   def value_for_reaction_me_column(account)
     if account.nil?
-      'FALSE AS me'
+      Arel.sql(false.to_s.upcase)
     else
-      <<~SQL.squish
+      Arel.sql(<<~SQL.squish)
         EXISTS(
           SELECT 1
           FROM announcement_reactions inner_reactions
           WHERE inner_reactions.account_id = #{account.id}
             AND inner_reactions.announcement_id = announcement_reactions.announcement_id
             AND inner_reactions.name = announcement_reactions.name
-        ) AS me
+        )
       SQL
     end
   end
