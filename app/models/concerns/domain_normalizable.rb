@@ -11,11 +11,9 @@ module DomainNormalizable
 
   class_methods do
     def domain_char_length
-      Arel.sql(
-        <<~SQL.squish
-          CHAR_LENGTH(domain)
-        SQL
-      )
+      Arel.sql(<<~SQL.squish)
+        CHAR_LENGTH(domain)
+      SQL
     end
   end
 

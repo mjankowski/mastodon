@@ -14,10 +14,10 @@
 #  updated_at           :datetime         not null
 #
 class TermsOfService < ApplicationRecord
-  scope :published, -> { where.not(published_at: nil).order(Arel.sql('coalesce(effective_date, published_at) DESC')) }
-  scope :live, -> { published.where('effective_date IS NULL OR effective_date < now()').limit(1) }
-  scope :upcoming, -> { published.reorder(effective_date: :asc).where('effective_date IS NOT NULL AND effective_date > now()').limit(1) }
   scope :draft, -> { where(published_at: nil).order(id: :desc).limit(1) }
+  scope :live, -> { published.where(effective_date: nil).or(where(effective_date: ...Time.now.utc)).limit(1) }
+  scope :published, -> { where.not(published_at: nil).order(relevant_date.desc) }
+  scope :upcoming, -> { published.reorder(effective_date: :asc).where.not(effective_date: nil).where.not(effective_date: ..Time.now.utc).limit(1) }
 
   validates :text, presence: true
   validates :changelog, :effective_date, presence: true, if: -> { published? }
@@ -29,6 +29,12 @@ class TermsOfService < ApplicationRecord
 
   def self.current
     live.first || upcoming.first # For the case when none of the published terms have become effective yet
+  end
+
+  def self.relevant_date
+    Arel.sql(<<~SQL.squish)
+      COALESCE(effective_date, published_at)
+    SQL
   end
 
   def published?
