@@ -587,7 +587,7 @@ GEM
     ostruct (0.6.3)
     ox (2.14.27)
       bigdecimal (>= 3.0)
-    parallel (2.1.0)
+    parallel (1.28.0)
     parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
@@ -755,7 +755,7 @@ GEM
       rspec-mocks (~> 3.0)
       sidekiq (>= 5, < 9)
     rspec-support (3.13.7)
-    rubocop (1.88.0)
+    rubocop (1.87.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -779,7 +779,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.47.1, < 2.0)
-    rubocop-rails (2.35.5)
+    rubocop-rails (2.34.3)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
@@ -847,6 +847,21 @@ GEM
     simplecov_json_formatter (0.1.4)
     ssrf_filter (1.5.0)
     stackprof (0.2.28)
+    standard (1.55.0)
+      language_server-protocol (~> 3.17.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.87.0)
+      standard-custom (~> 1.0.0)
+      standard-performance (~> 1.8)
+    standard-custom (1.0.2)
+      lint_roller (~> 1.0)
+      rubocop (~> 1.50)
+    standard-performance (1.9.0)
+      lint_roller (~> 1.1)
+      rubocop-performance (~> 1.26.0)
+    standard-rails (1.6.0)
+      lint_roller (~> 1.0)
+      rubocop-rails (~> 2.34.0)
     starry (0.2.0)
       base64
     stoplight (5.8.2)
@@ -1063,11 +1078,8 @@ DEPENDENCIES
   rspec-github (~> 3.0)
   rspec-rails (~> 8.0)
   rspec-sidekiq (~> 5.0)
-  rubocop
   rubocop-capybara
   rubocop-i18n
-  rubocop-performance
-  rubocop-rails
   rubocop-rspec
   rubocop-rspec_rails
   ruby-prof
@@ -1086,6 +1098,9 @@ DEPENDENCIES
   simplecov (~> 0.22)
   simplecov-lcov (~> 0.8)
   stackprof
+  standard (~> 1.55.0)
+  standard-performance
+  standard-rails
   stoplight
   strong_migrations
   test-prof
