@@ -622,6 +622,8 @@ class FeedManager
   # @param [List] list
   # @return [Hash]
   def build_crutches(receiver_id, statuses, list: nil)
-    CrutchBuilder.new.crutches(receiver_id, statuses, list: list)
+    CrutchBuilder
+      .new(receiver_id, statuses, list:)
+      .crutches
   end
 end
