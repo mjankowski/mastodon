@@ -51,7 +51,7 @@ RSpec.describe 'OAuth Authorized Applications' do
 
       it 'revokes access tokens for the application and removes subscriptions and sends kill payload to streaming' do
         expect { subject }
-          .to change { Doorkeeper::AccessToken.where(application:).first.reload.revoked_at }.from(nil).to(be_present)
+          .to change { OAuth::AccessToken.where(application:).first.reload.revoked_at }.from(nil).to(be_present)
           .and change { Web::PushSubscription.where(user:).reload.count }.to(0)
         expect { web_push_subscription.reload }
           .to raise_error(ActiveRecord::RecordNotFound)
