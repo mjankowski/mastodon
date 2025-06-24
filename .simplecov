@@ -16,6 +16,7 @@ SimpleCov.start 'rails' do
 
   add_filter 'lib/linter'
 
+  add_group 'Filters', 'app/filters'
   add_group 'Libraries', 'lib'
   add_group 'Policies', 'app/policies'
   add_group 'Presenters', 'app/presenters'
