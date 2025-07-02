@@ -36,7 +36,8 @@ class Admin::AccountAction
     return false unless valid?
 
     ApplicationRecord.transaction do
-      process_action!
+      Admin::AccountActionService.new.call(self, current_account)
+      # process_action!
       process_strike!
       process_reports!
     end
@@ -83,19 +84,6 @@ class Admin::AccountAction
 
   private
 
-  def process_action!
-    case type
-    when 'disable'
-      handle_disable!
-    when 'sensitive'
-      handle_sensitive!
-    when 'silence'
-      handle_silence!
-    when 'suspend'
-      handle_suspend!
-    end
-  end
-
   def process_strike!
     @warning = target_account.strikes.create!(
       account: current_account,
@@ -123,30 +111,6 @@ class Admin::AccountAction
       log_action(:resolve, report)
       report.resolve!(current_account)
     end
-  end
-
-  def handle_disable!
-    authorize(target_account.user, :disable?)
-    log_action(:disable, target_account.user)
-    target_account.user&.disable!
-  end
-
-  def handle_sensitive!
-    authorize(target_account, :sensitive?)
-    log_action(:sensitive, target_account)
-    target_account.sensitize!
-  end
-
-  def handle_silence!
-    authorize(target_account, :silence?)
-    log_action(:silence, target_account)
-    target_account.silence!
-  end
-
-  def handle_suspend!
-    authorize(target_account, :suspend?)
-    log_action(:suspend, target_account)
-    target_account.suspend!(origin: :local)
   end
 
   def text_for_warning
