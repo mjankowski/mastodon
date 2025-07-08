@@ -2,7 +2,10 @@
 
 class HashtagNormalizer
   def normalize(str)
-    remove_invalid_characters(ascii_folding(lowercase(cjk_width(str))))
+    str.then { unicode_normalize(it) }
+       .then { lowercase(it) }
+       .then { ascii_fold(it) }
+       .then { remove_invalid_characters(it) }
   end
 
   private
@@ -11,7 +14,7 @@ class HashtagNormalizer
     str.gsub(Tag::HASHTAG_INVALID_CHARS_RE, '')
   end
 
-  def ascii_folding(str)
+  def ascii_fold(str)
     ASCIIFolding.new.fold(str)
   end
 
@@ -19,7 +22,7 @@ class HashtagNormalizer
     str.downcase.to_s
   end
 
-  def cjk_width(str)
+  def unicode_normalize(str)
     str.unicode_normalize(:nfkc)
   end
 end
