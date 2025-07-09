@@ -3,18 +3,22 @@
 class AnnualReport::TimeSeries < AnnualReport::Source
   def generate
     {
-      time_series: (1..12).map do |month|
-                     {
-                       month: month,
-                       statuses: statuses_per_month[month] || 0,
-                       following: following_per_month[month] || 0,
-                       followers: followers_per_month[month] || 0,
-                     }
-                   end,
+      time_series: monthly_map,
     }
   end
 
   private
+
+  def monthly_map
+    (1..12).map do |month|
+      {
+        month: month,
+        statuses: statuses_per_month[month] || 0,
+        following: following_per_month[month] || 0,
+        followers: followers_per_month[month] || 0,
+      }
+    end
+  end
 
   def statuses_per_month
     @statuses_per_month ||= report_statuses.group(:period).pluck(date_part_month.as('period'), Arel.star.count).to_h

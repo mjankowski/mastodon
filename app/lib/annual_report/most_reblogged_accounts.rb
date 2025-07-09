@@ -6,16 +6,20 @@ class AnnualReport::MostRebloggedAccounts < AnnualReport::Source
 
   def generate
     {
-      most_reblogged_accounts: most_reblogged_accounts.map do |(account_id, count)|
-                                 {
-                                   account_id: account_id.to_s,
-                                   count: count,
-                                 }
-                               end,
+      most_reblogged_accounts: reblogged_accounts_map,
     }
   end
 
   private
+
+  def reblogged_accounts_map
+    most_reblogged_accounts.map do |account_id, count|
+      {
+        account_id: account_id.to_s,
+        count: count,
+      }
+    end
+  end
 
   def most_reblogged_accounts
     report_statuses.only_reblogs.joins(reblog: :account).group(accounts: [:id]).having(minimum_reblog_count).order(count_all: :desc).limit(SET_SIZE).count
