@@ -5,19 +5,17 @@ class AnnualReport::TopHashtags < AnnualReport::Source
   SET_SIZE = 40
 
   def generate
-    {
-      top_hashtags: top_hashtags.map do |(name, count)|
-                      {
-                        name: name,
-                        count: count,
-                      }
-                    end,
-    }
+    { top_hashtags: }
   end
 
   private
 
   def top_hashtags
+    top_hashtags_records
+      .map { |name, count| { name:, count: } }
+  end
+
+  def top_hashtags_records
     Tag.joins(:statuses).where(statuses: { id: report_statuses.select(:id) }).group(coalesced_tag_names).having(minimum_taggings_count).order(count_all: :desc).limit(SET_SIZE).count
   end
 
