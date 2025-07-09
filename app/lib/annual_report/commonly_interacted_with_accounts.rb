@@ -5,19 +5,17 @@ class AnnualReport::CommonlyInteractedWithAccounts < AnnualReport::Source
   SET_SIZE = 40
 
   def generate
-    {
-      commonly_interacted_with_accounts: commonly_interacted_with_accounts.map do |(account_id, count)|
-                                           {
-                                             account_id: account_id.to_s,
-                                             count: count,
-                                           }
-                                         end,
-    }
+    { commonly_interacted_with_accounts: }
   end
 
   private
 
   def commonly_interacted_with_accounts
+    commonly_interacted_with_accounts_records
+      .map { |account_id, count| { account_id: account_id.to_s, count: } }
+  end
+
+  def commonly_interacted_with_accounts_records
     report_statuses.not_replying_to_account(@account).group(:in_reply_to_account_id).having(minimum_interaction_count).order(count_all: :desc).limit(SET_SIZE).count
   end
 

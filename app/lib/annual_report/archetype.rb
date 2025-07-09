@@ -6,9 +6,7 @@ class AnnualReport::Archetype < AnnualReport::Source
   AVERAGE_PER_YEAR = 113
 
   def generate
-    {
-      archetype: archetype,
-    }
+    { archetype: }
   end
 
   private
