@@ -14,14 +14,16 @@ class AnnualReport::Percentiles < AnnualReport::Source
   end
 
   def generate
-    {
-      percentiles: {
-        statuses: 100.0 - ((total_with_fewer_statuses / (total_with_any_statuses + 1.0)) * 100),
-      },
-    }
+    { percentiles: }
   end
 
   private
+
+  def percentiles
+    {
+      statuses: 100.0 - ((total_with_fewer_statuses / (total_with_any_statuses + 1.0)) * 100),
+    }
+  end
 
   def statuses_created
     @statuses_created ||= report_statuses.count
