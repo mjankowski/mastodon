@@ -19,8 +19,7 @@ module Admin
 
       log_action :resend, @user
 
-      flash[:notice] = I18n.t('admin.accounts.resend_confirmation.success')
-      redirect_to admin_accounts_path
+      redirect_to admin_accounts_path, notice: I18n.t('admin.accounts.resend_confirmation.success')
     end
 
     private
