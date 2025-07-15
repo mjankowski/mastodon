@@ -10,20 +10,23 @@ class Admin::Reports::ActionsController < Admin::BaseController
 
   def create
     authorize @report, :show?
-
     case action_from_button
     when 'delete', 'mark_as_sensitive'
       Admin::StatusBatchAction.new(status_batch_action_params).save!
+      redirect_after_processing
     when 'silence', 'suspend'
       Admin::AccountAction.new(account_action_params).save!
+      redirect_after_processing
     else
-      return redirect_to admin_report_path(@report), alert: I18n.t('admin.reports.unknown_action_msg', action: action_from_button)
+      redirect_to admin_report_path(@report), alert: t('admin.reports.unknown_action_msg', action: action_from_button)
     end
-
-    redirect_to admin_reports_path, notice: I18n.t('admin.reports.processed_msg', id: @report.id)
   end
 
   private
+
+  def redirect_after_processing
+    redirect_to admin_reports_path, notice: t('admin.reports.processed_msg', id: @report.id)
+  end
 
   def status_batch_action_params
     shared_params
