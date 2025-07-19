@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::UsernameBlocksController < Admin::BaseController
+  allow_batch_operation actions: %i(delete)
+
   before_action :set_username_block, only: [:edit, :update]
 
   def index
@@ -69,9 +71,5 @@ class Admin::UsernameBlocksController < Admin::BaseController
   def resource_params
     params
       .expect(username_block: [:username, :comparison, :allow_with_approval])
-  end
-
-  def action_from_button
-    'delete' if params[:delete]
   end
 end
