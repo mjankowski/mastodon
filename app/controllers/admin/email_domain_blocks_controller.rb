@@ -2,6 +2,8 @@
 
 module Admin
   class EmailDomainBlocksController < BaseController
+    allow_batch_operation actions:  %i(delete save)
+
     def index
       authorize :email_domain_block, :index?
 
@@ -69,14 +71,6 @@ module Admin
     def form_email_domain_block_batch_params
       params
         .expect(form_email_domain_block_batch: [email_domain_block_ids: []])
-    end
-
-    def action_from_button
-      if params[:delete]
-        'delete'
-      elsif params[:save]
-        'save'
-      end
     end
   end
 end

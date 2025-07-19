@@ -2,6 +2,8 @@
 
 module Admin
   class AccountsController < BaseController
+    allow_batch_operation actions: %i(suspend approve reject)
+
     before_action :set_account, except: [:index, :batch]
     before_action :require_remote_account!, only: [:redownload]
     before_action :require_local_account!, only: [:enable, :memorialize, :approve, :reject]
@@ -163,16 +165,6 @@ module Admin
     def form_account_batch_params
       params
         .expect(form_account_batch: [:action, account_ids: []])
-    end
-
-    def action_from_button
-      if params[:suspend]
-        'suspend'
-      elsif params[:approve]
-        'approve'
-      elsif params[:reject]
-        'reject'
-      end
     end
   end
 end
