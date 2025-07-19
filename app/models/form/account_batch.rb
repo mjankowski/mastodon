@@ -21,9 +21,9 @@ class Form::AccountBatch < Form::BaseBatch
       approve!
     when 'reject'
       reject!
-    when 'suppress_follow_recommendation'
+    when 'suppress'
       suppress_follow_recommendation!
-    when 'unsuppress_follow_recommendation'
+    when 'unsuppress'
       unsuppress_follow_recommendation!
     when 'suspend'
       suspend!

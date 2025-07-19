@@ -2,6 +2,8 @@
 
 module Admin
   class StatusesController < BaseController
+    allow_batch_operation actions: %i(report remove_from_report delete)
+
     before_action :set_account
     before_action :set_statuses, except: :show
     before_action :set_status, only: :show
@@ -71,16 +73,6 @@ module Admin
 
     def current_params
       params.slice(:media, :page).permit(:media, :page)
-    end
-
-    def action_from_button
-      if params[:report]
-        'report'
-      elsif params[:remove_from_report]
-        'remove_from_report'
-      elsif params[:delete]
-        'delete'
-      end
     end
   end
 end
