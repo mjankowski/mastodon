@@ -2,6 +2,8 @@
 
 module Admin
   class DomainBlocksController < BaseController
+    allow_batch_operation actions: %i(save)
+
     before_action :set_domain_block, only: [:destroy, :edit, :update]
 
     PERMITTED_PARAMS = %i(
@@ -122,10 +124,6 @@ module Admin
             domain_blocks_attributes: [[:enabled, :domain, :severity, :reject_media, :reject_reports, :private_comment, :public_comment, :obfuscate]],
           ]
         )
-    end
-
-    def action_from_button
-      'save' if params[:save]
     end
 
     def requires_confirmation?

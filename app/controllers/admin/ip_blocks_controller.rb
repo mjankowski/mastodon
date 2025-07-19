@@ -2,6 +2,8 @@
 
 module Admin
   class IpBlocksController < BaseController
+    allow_batch_operation actions: %i(delete)
+
     def index
       authorize :ip_block, :index?
 
@@ -46,10 +48,6 @@ module Admin
     def resource_params
       params
         .expect(ip_block: [:ip, :severity, :comment, :expires_in])
-    end
-
-    def action_from_button
-      'delete' if params[:delete]
     end
 
     def form_ip_block_batch_params

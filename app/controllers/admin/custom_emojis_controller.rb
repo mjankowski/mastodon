@@ -2,6 +2,8 @@
 
 module Admin
   class CustomEmojisController < BaseController
+    allow_batch_operation actions: %i(update list unlist enable disable copy delete)
+
     def index
       authorize :custom_emoji, :index?
 
@@ -54,24 +56,6 @@ module Admin
 
     def filter_params
       params.slice(:page, *CustomEmojiFilter::KEYS).permit(:page, *CustomEmojiFilter::KEYS)
-    end
-
-    def action_from_button
-      if params[:update]
-        'update'
-      elsif params[:list]
-        'list'
-      elsif params[:unlist]
-        'unlist'
-      elsif params[:enable]
-        'enable'
-      elsif params[:disable]
-        'disable'
-      elsif params[:copy]
-        'copy'
-      elsif params[:delete]
-        'delete'
-      end
     end
 
     def form_custom_emoji_batch_params
