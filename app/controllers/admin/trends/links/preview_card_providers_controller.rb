@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Trends::Links::PreviewCardProvidersController < Admin::BaseController
+  allow_batch_operation actions: %i(approve reject)
+
   def index
     authorize :preview_card_provider, :review?
 
@@ -33,13 +35,5 @@ class Admin::Trends::Links::PreviewCardProvidersController < Admin::BaseControll
   def trends_preview_card_provider_batch_params
     params
       .expect(trends_preview_card_provider_batch: [:action, preview_card_provider_ids: []])
-  end
-
-  def action_from_button
-    if params[:approve]
-      'approve'
-    elsif params[:reject]
-      'reject'
-    end
   end
 end

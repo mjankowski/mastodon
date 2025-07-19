@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Trends::StatusesController < Admin::BaseController
+  allow_batch_operation actions: %i(approve approve_accounts reject reject_accounts)
+
   def index
     authorize [:admin, :status], :review?
 
@@ -33,17 +35,5 @@ class Admin::Trends::StatusesController < Admin::BaseController
   def trends_status_batch_params
     params
       .expect(trends_status_batch: [:action, status_ids: []])
-  end
-
-  def action_from_button
-    if params[:approve]
-      'approve'
-    elsif params[:approve_accounts]
-      'approve_accounts'
-    elsif params[:reject]
-      'reject'
-    elsif params[:reject_accounts]
-      'reject_accounts'
-    end
   end
 end

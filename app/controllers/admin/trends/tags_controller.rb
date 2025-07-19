@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Admin::Trends::TagsController < Admin::BaseController
+  allow_batch_operation actions: %i(approve reject)
+
   def index
     authorize :tag, :review?
 
@@ -37,13 +39,5 @@ class Admin::Trends::TagsController < Admin::BaseController
   def trends_tag_batch_params
     params
       .expect(trends_tag_batch: [:action, tag_ids: []])
-  end
-
-  def action_from_button
-    if params[:approve]
-      'approve'
-    elsif params[:reject]
-      'reject'
-    end
   end
 end
