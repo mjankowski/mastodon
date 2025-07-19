@@ -2,6 +2,7 @@
 
 module Admin
   class BaseController < ApplicationController
+    include Admin::BatchActions
     include Authorization
     include AccountableConcern
 

@@ -2,6 +2,8 @@
 
 module Admin
   class FollowRecommendationsController < BaseController
+    allow_batch_operation actions: %i(suppress unsuppress)
+
     before_action :set_language
 
     def show
@@ -43,14 +45,6 @@ module Admin
 
     def filter_params
       params.slice(*FollowRecommendationFilter::KEYS).permit(*FollowRecommendationFilter::KEYS)
-    end
-
-    def action_from_button
-      if params[:suppress]
-        'suppress_follow_recommendation'
-      elsif params[:unsuppress]
-        'unsuppress_follow_recommendation'
-      end
     end
   end
 end
