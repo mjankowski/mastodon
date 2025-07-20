@@ -47,9 +47,9 @@ module Admin
 
     def action_from_button
       if params[:suppress]
-        'suppress_follow_recommendation'
+        'suppress'
       elsif params[:unsuppress]
-        'unsuppress_follow_recommendation'
+        'unsuppress'
       end
     end
   end
