@@ -6,10 +6,20 @@ module Admin
   class ExportDomainBlocksController < BaseController
     include Admin::ExportControllerConcern
 
-    before_action :set_dummy_import!, only: [:new]
+    before_action :authorize_domain_block_create, only: [:new, :import]
+    with_options only: :import do
+      before_action :set_import
+      before_action :validate_import
+    end
+
+    rescue_from ActionController::ParameterMissing do
+      flash.now[:alert] = I18n.t('admin.export_domain_blocks.no_file')
+      @import = Admin::Import.new
+      render :new
+    end
 
     def new
-      authorize :domain_block, :create?
+      @import = Admin::Import.new
     end
 
     def export
@@ -18,45 +28,65 @@ module Admin
     end
 
     def import
-      authorize :domain_block, :create?
-
-      @import = Admin::Import.new(import_params)
-      return render :new unless @import.validate
-
       @global_private_comment = I18n.t('admin.export_domain_blocks.import.private_comment_template', source: @import.data_file_name, date: I18n.l(Time.now.utc))
-
       @form = Form::DomainBlockBatch.new
-      @domain_blocks = @import.csv_rows.filter_map do |row|
-        domain = row['#domain'].strip
-        next if DomainBlock.rule_for(domain).present?
+      @domain_blocks = import_domain_blocks
+      @warning_domains = instances_from_imported_blocks.pluck(:domain)
+    end
 
-        domain_block = DomainBlock.new(domain: domain,
-                                       severity: row.fetch('#severity', :suspend),
-                                       reject_media: row.fetch('#reject_media', false),
-                                       reject_reports: row.fetch('#reject_reports', false),
-                                       private_comment: @global_private_comment,
-                                       public_comment: row['#public_comment'],
-                                       obfuscate: row.fetch('#obfuscate', false))
+    private
 
-        if domain_block.invalid?
-          flash.now[:alert] = I18n.t('admin.export_domain_blocks.invalid_domain_block', error: domain_block.errors.full_messages.join(', '))
-          next
+    def authorize_domain_block_create
+      authorize :domain_block, :create?
+    end
+
+    def set_import
+      @import = Admin::Import.new(import_params)
+    end
+
+    def validate_import
+      render :new unless @import.validate
+    end
+
+    def import_domain_blocks
+      @import.csv_rows.filter_map do |row|
+        next if already_blocked?(row)
+
+        domain_block_from_row(row).tap do |domain_block|
+          if domain_block.invalid?
+            flash.now[:alert] = alert_for_block(domain_block)
+            next
+          end
         end
-
-        domain_block
       rescue ArgumentError => e
         flash.now[:alert] = I18n.t('admin.export_domain_blocks.invalid_domain_block', error: e.message)
         next
       end
-
-      @warning_domains = instances_from_imported_blocks.pluck(:domain)
-    rescue ActionController::ParameterMissing
-      flash.now[:alert] = I18n.t('admin.export_domain_blocks.no_file')
-      set_dummy_import!
-      render :new
     end
 
-    private
+    def already_blocked?(row)
+      domain = row['#domain'].strip
+      DomainBlock.rule_for(domain).present?
+    end
+
+    def alert_for_block(domain_block)
+      t 'admin.export_domain_blocks.invalid_domain_block',
+        error: domain_block.errors.full_messages.join(', ')
+    end
+
+    def domain_block_from_row(row)
+      domain = row['#domain'].strip
+
+      DomainBlock.new(
+        domain: domain,
+        obfuscate: row.fetch('#obfuscate', false),
+        private_comment: @global_private_comment,
+        public_comment: row['#public_comment'],
+        reject_media: row.fetch('#reject_media', false),
+        reject_reports: row.fetch('#reject_reports', false),
+        severity: row.fetch('#severity', :suspend)
+      )
+    end
 
     def instances_from_imported_blocks
       Instance.with_domain_follows(@domain_blocks.map(&:domain))
