@@ -11,8 +11,6 @@ class Api::V1::Statuses::BookmarksController < Api::V1::Statuses::BaseController
   end
 
   def destroy
-    bookmark = current_account.bookmarks.find_by(status_id: params[:status_id])
-
     if bookmark
       @status = bookmark.status
     else
@@ -22,8 +20,22 @@ class Api::V1::Statuses::BookmarksController < Api::V1::Statuses::BaseController
 
     bookmark&.destroy!
 
-    render json: @status, serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new([@status], current_account.id, bookmarks_map: { @status.id => false })
+    render json: @status, serializer: REST::StatusSerializer, relationships:
   rescue Mastodon::NotPermittedError
     not_found
+  end
+
+  private
+
+  def relationships
+    StatusRelationshipsPresenter.new(
+      [@status],
+      current_account.id,
+      bookmarks_map: { @status.id => false }
+    )
+  end
+
+  def bookmark
+    @bookmark ||= current_account.bookmarks.find_by(status_id: params[:status_id])
   end
 end
