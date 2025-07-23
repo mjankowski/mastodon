@@ -11,11 +11,9 @@ class Api::V1::Statuses::FavouritesController < Api::V1::Statuses::BaseControlle
   end
 
   def destroy
-    fav = current_account.favourites.find_by(status_id: params[:status_id])
-
-    if fav
-      @status = fav.status
-      count = [@status.favourites_count - 1, 0].max
+    if favourite
+      @status = favourite.status
+      count = adjusted_count
       UnfavouriteWorker.perform_async(current_account.id, @status.id)
     else
       @status = Status.find(params[:status_id])
@@ -23,9 +21,27 @@ class Api::V1::Statuses::FavouritesController < Api::V1::Statuses::BaseControlle
       authorize @status, :show?
     end
 
-    relationships = StatusRelationshipsPresenter.new([@status], current_account.id, favourites_map: { @status.id => false }, attributes_map: { @status.id => { favourites_count: count } })
-    render json: @status, serializer: REST::StatusSerializer, relationships: relationships
+    render json: @status, serializer: REST::StatusSerializer, relationships: relationships(count)
   rescue Mastodon::NotPermittedError
     not_found
+  end
+
+  private
+
+  def favourite
+    @favourite ||= current_account.favourites.find_by(status_id: params[:status_id])
+  end
+
+  def relationships(count)
+    StatusRelationshipsPresenter.new(
+      [@status],
+      current_account.id,
+      favourites_map: { @status.id => false },
+      attributes_map: { @status.id => { favourites_count: count } }
+    )
+  end
+
+  def adjusted_count
+    [@status.favourites_count - 1, 0].max
   end
 end
