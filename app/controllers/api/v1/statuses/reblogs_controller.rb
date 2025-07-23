@@ -7,6 +7,7 @@ class Api::V1::Statuses::ReblogsController < Api::V1::Statuses::BaseController
   before_action -> { doorkeeper_authorize! :write, :'write:statuses' }
   before_action :require_user!
   before_action :set_reblog, only: [:create]
+  before_action :set_reblog_status, only: :destroy
   skip_before_action :set_status
 
   override_rate_limit_headers :create, family: :statuses
@@ -20,12 +21,10 @@ class Api::V1::Statuses::ReblogsController < Api::V1::Statuses::BaseController
   end
 
   def destroy
-    @status = current_account.statuses.find_by(reblog_of_id: params[:status_id])
-
     if @status
       authorize @status, :unreblog?
       @reblog = @status.reblog
-      count = [@reblog.reblogs_count - 1, 0].max
+      count = adjusted_count
       @status.discard
       RemovalWorker.perform_async(@status.id)
     else
@@ -34,8 +33,7 @@ class Api::V1::Statuses::ReblogsController < Api::V1::Statuses::BaseController
       authorize @reblog, :show?
     end
 
-    relationships = StatusRelationshipsPresenter.new([@status], current_account.id, reblogs_map: { @reblog.id => false }, attributes_map: { @reblog.id => { reblogs_count: count } })
-    render json: @reblog, serializer: REST::StatusSerializer, relationships: relationships
+    render json: @reblog, serializer: REST::StatusSerializer, relationships: relationships(count)
   rescue Mastodon::NotPermittedError
     not_found
   end
@@ -49,7 +47,24 @@ class Api::V1::Statuses::ReblogsController < Api::V1::Statuses::BaseController
     not_found
   end
 
+  def set_reblog_status
+    @status = current_account.statuses.find_by(reblog_of_id: params[:status_id])
+  end
+
   def reblog_params
     params.permit(:visibility)
+  end
+
+  def adjusted_count
+    [@reblog.reblogs_count - 1, 0].max
+  end
+
+  def relationships(count)
+    StatusRelationshipsPresenter.new(
+      [@status],
+      current_account.id,
+      reblogs_map: { @reblog.id => false },
+      attributes_map: { @reblog.id => { reblogs_count: count } }
+    )
   end
 end
