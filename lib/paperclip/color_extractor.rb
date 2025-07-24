@@ -97,10 +97,16 @@ module Paperclip
       depth = 8
 
       # Determine background palette by getting colors close to the image's edge only
-      background_palette = palette_from_im_histogram(convert(':source -alpha set -gravity Center -region 75%x75% -fill None -colorize 100% -alpha transparent +region -format %c -colors :quantity -depth :depth histogram:info:', source: File.expand_path(@file.path), quantity: 10, depth: depth), 10)
+      background_palette = palette_from_im_histogram(
+        convert(':source -alpha set -gravity Center -region 75%x75% -fill None -colorize 100% -alpha transparent +region -format %c -colors :quantity -depth :depth histogram:info:', source: File.expand_path(@file.path), quantity: 10, depth: depth),
+        10
+      )
 
       # Determine foreground palette from the whole image
-      foreground_palette = palette_from_im_histogram(convert(':source -format %c -colors :quantity -depth :depth histogram:info:', source: File.expand_path(@file.path), quantity: 10, depth: depth), 10)
+      foreground_palette = palette_from_im_histogram(
+        convert(':source -format %c -colors :quantity -depth :depth histogram:info:', source: File.expand_path(@file.path), quantity: 10, depth: depth),
+        10
+      )
       [background_palette, foreground_palette]
     end
 
