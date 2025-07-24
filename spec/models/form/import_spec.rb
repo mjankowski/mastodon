@@ -229,7 +229,7 @@ RSpec.describe Form::Import do
   end
 
   describe 'save' do
-    shared_examples 'on successful import' do |type, mode, file, expected_rows|
+    shared_examples 'import success' do |type, mode, file, expected_rows|
       let(:import_type) { type }
       let(:import_file) { file }
       let(:import_mode) { mode }
@@ -258,25 +258,25 @@ RSpec.describe Form::Import do
       end
     end
 
-    it_behaves_like('on successful import', 'following', 'merge', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
-    it_behaves_like('on successful import', 'following', 'overwrite', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
-    it_behaves_like('on successful import', 'blocking', 'merge', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
-    it_behaves_like('on successful import', 'blocking', 'overwrite', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
-    it_behaves_like('on successful import', 'muting', 'merge', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
-    it_behaves_like('on successful import', 'domain_blocking', 'merge', 'domain_blocks.csv', %w(bad.domain worse.domain reject.media).map { |domain| { 'domain' => domain } })
-    it_behaves_like('on successful import', 'bookmarks', 'merge', 'bookmark-imports.txt', %w(https://example.com/statuses/1312 https://local.com/users/foo/statuses/42 https://unknown-remote.com/users/bar/statuses/1 https://example.com/statuses/direct).map { |uri| { 'uri' => uri } })
+    it_behaves_like('import success', 'following', 'merge', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
+    it_behaves_like('import success', 'following', 'overwrite', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
+    it_behaves_like('import success', 'blocking', 'merge', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
+    it_behaves_like('import success', 'blocking', 'overwrite', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
+    it_behaves_like('import success', 'muting', 'merge', 'imports.txt', %w(user@example.com user@test.com).map { |acct| { 'acct' => acct } })
+    it_behaves_like('import success', 'domain_blocking', 'merge', 'domain_blocks.csv', %w(bad.domain worse.domain reject.media).map { |domain| { 'domain' => domain } })
+    it_behaves_like('import success', 'bookmarks', 'merge', 'bookmark-imports.txt', %w(https://example.com/statuses/1312 https://local.com/users/foo/statuses/42 https://unknown-remote.com/users/bar/statuses/1 https://example.com/statuses/direct).map { |uri| { 'uri' => uri } })
 
-    it_behaves_like 'on successful import', 'following', 'merge', 'following_accounts.csv', [
+    it_behaves_like 'import success', 'following', 'merge', 'following_accounts.csv', [
       { 'acct' => 'user@example.com', 'show_reblogs' => true, 'notify' => false, 'languages' => nil },
       { 'acct' => 'user@test.com', 'show_reblogs' => true, 'notify' => true, 'languages' => %w(en fr) },
     ]
 
-    it_behaves_like 'on successful import', 'muting', 'merge', 'muted_accounts.csv', [
+    it_behaves_like 'import success', 'muting', 'merge', 'muted_accounts.csv', [
       { 'acct' => 'user@example.com', 'hide_notifications' => true },
       { 'acct' => 'user@test.com', 'hide_notifications' => false },
     ]
 
-    it_behaves_like 'on successful import', 'lists', 'merge', 'lists.csv', [
+    it_behaves_like 'import success', 'lists', 'merge', 'lists.csv', [
       { 'acct' => 'gargron@example.com', 'list_name' => 'Mastodon project' },
       { 'acct' => 'mastodon@example.com', 'list_name' => 'Mastodon project' },
       { 'acct' => 'foo@example.com', 'list_name' => 'test' },
@@ -285,6 +285,6 @@ RSpec.describe Form::Import do
     # Based on the bug report 20571 where UTF-8 encoded domains were rejecting import of their users
     #
     # https://github.com/mastodon/mastodon/issues/20571
-    it_behaves_like 'on successful import', 'following', 'merge', 'utf8-followers.txt', [{ 'acct' => 'nare@թութ.հայ' }]
+    it_behaves_like 'import success', 'following', 'merge', 'utf8-followers.txt', [{ 'acct' => 'nare@թութ.հայ' }]
   end
 end
