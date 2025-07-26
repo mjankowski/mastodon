@@ -41,6 +41,15 @@ RSpec.describe User do
     it { is_expected.to allow_value('admin@localhost').for(:email) }
     it { is_expected.to validate_absence_of(:website).on(:create) }
     it { is_expected.to validate_absence_of(:confirm_password).on(:create) }
+
+    context 'when registration form time is present' do
+      subject { Fabricate.build :user }
+
+      before { stub_const 'User::REGISTRATION_ATTEMPT_WAIT_TIME', 3.seconds }
+
+      it { is_expected.to allow_value(10.seconds.ago).for(:registration_form_time) }
+      it { is_expected.to_not allow_value(1.second.ago).for(:registration_form_time).against(:base) }
+    end
   end
 
   describe 'Normalizations' do

@@ -65,6 +65,7 @@ class User < ApplicationRecord
   include User::LdapAuthenticable
   include User::Omniauthable
   include User::PamAuthenticable
+  include User::Registration
 
   devise :two_factor_authenticatable,
          otp_secret_length: 32
@@ -100,9 +101,6 @@ class User < ApplicationRecord
   validates_with EmailMxValidator, if: :validate_email_dns?
   validates :agreement, acceptance: { allow_nil: false, accept: [true, 'true', '1'] }, on: :create
 
-  attr_accessor :registration_form_time
-
-  validates_with RegistrationFormTimeValidator, on: :create
   validates :date_of_birth, presence: true, date_of_birth: true, on: :create, if: -> { Setting.min_age.present? && !bypass_registration_checks? }
   validate :validate_role_elevation
 
