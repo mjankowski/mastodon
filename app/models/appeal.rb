@@ -35,17 +35,20 @@ class Appeal < ApplicationRecord
   scope :rejected, -> { where.not(rejected_at: nil) }
   scope :pending, -> { where(approved_at: nil, rejected_at: nil) }
 
+  alias_attribute :approved, :approved_at
+  alias_attribute :rejected, :rejected_at
+
   def pending?
     !approved? && !rejected?
   end
 
-  def approved?
-    approved_at.present?
-  end
+  # def approved?
+  #   approved_at.present?
+  # end
 
-  def rejected?
-    rejected_at.present?
-  end
+  # def rejected?
+  #   rejected_at.present?
+  # end
 
   def approve!(current_account)
     update!(approved_at: Time.now.utc, approved_by_account: current_account)
