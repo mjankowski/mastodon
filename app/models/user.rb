@@ -171,11 +171,11 @@ class User < ApplicationRecord
   end
 
   def invited?
-    invite_id.present?
+    invite_id?
   end
 
   def valid_invitation?
-    invite_id.present? && invite.valid_for_use?
+    invited? && invite.valid_for_use?
   end
 
   def disable!
