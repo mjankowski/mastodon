@@ -22,4 +22,20 @@ RSpec.describe AccountWarning do
       it { is_expected.to be_appeal_eligible }
     end
   end
+
+  describe '#overruled?' do
+    subject { Fabricate.build :account_warning, overruled_at: }
+
+    context 'when timestamp is present' do
+      let(:overruled_at) { 2.days.ago }
+
+      it { is_expected.to be_overruled }
+    end
+
+    context 'when timestamp is nil' do
+      let(:overruled_at) { nil }
+
+      it { is_expected.to_not be_overruled }
+    end
+  end
 end

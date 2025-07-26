@@ -42,12 +42,10 @@ class AccountWarning < ApplicationRecord
   scope :custom, -> { where.not(text: '') }
   scope :recent, -> { where(created_at: RECENT_PERIOD.ago..) }
 
+  alias_attribute :overruled, :overruled_at
+
   def statuses
     Status.with_discarded.where(id: status_ids || [])
-  end
-
-  def overruled?
-    overruled_at.present?
   end
 
   def appeal_eligible?
