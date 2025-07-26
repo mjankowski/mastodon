@@ -35,8 +35,8 @@ class ListAccount < ApplicationRecord
     return if list_owner_account_is_account?
 
     errors.add(:account_id, :must_be_following) if follow_id.nil? && follow_request_id.nil?
-    errors.add(:follow, :invalid) if follow_id.present? && follow.target_account_id != account_id
-    errors.add(:follow_request, :invalid) if follow_request_id.present? && follow_request.target_account_id != account_id
+    errors.add(:follow, :invalid) if follow_id? && follow.target_account_id != account_id
+    errors.add(:follow_request, :invalid) if follow_request_id? && follow_request.target_account_id != account_id
   end
 
   def list_owner_account_is_account?

@@ -229,7 +229,7 @@ class MediaAttachment < ApplicationRecord
   end
 
   def discarded?
-    status&.discarded? || (status_id.present? && status.nil?)
+    status&.discarded? || (status_id? && status.nil?)
   end
 
   def significantly_changed?
@@ -420,7 +420,7 @@ class MediaAttachment < ApplicationRecord
   end
 
   def reset_parent_cache
-    Rails.cache.delete("v3:statuses/#{status_id}") if status_id.present?
+    Rails.cache.delete("v3:statuses/#{status_id}") if status_id?
   end
 
   # Record the cache keys to burst before the file get actually deleted

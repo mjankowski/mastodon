@@ -146,8 +146,8 @@ class Notification < ApplicationRecord
       requested_types -= exclude_types.map(&:to_sym)
 
       all.tap do |scope|
-        scope.merge!(where(filtered: false)) unless include_filtered || from_account_id.present?
-        scope.merge!(where(from_account_id: from_account_id)) if from_account_id.present?
+        scope.merge!(where(filtered: false)) unless include_filtered || from_account_id?
+        scope.merge!(where(from_account_id: from_account_id)) if from_account_id?
         scope.merge!(where(type: requested_types)) unless requested_types.size == TYPES.size
       end
     end
