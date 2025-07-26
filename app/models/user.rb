@@ -62,6 +62,7 @@ class User < ApplicationRecord
   include User::LdapAuthenticable
   include User::Omniauthable
   include User::PamAuthenticable
+  include User::Registration
 
   # The home and list feeds will be stored in Redis for this amount
   # of time, and status fan-out to followers will include only people
@@ -106,9 +107,8 @@ class User < ApplicationRecord
   validates :agreement, acceptance: { allow_nil: false, accept: [true, 'true', '1'] }, on: :create
 
   # Honeypot/anti-spam fields
-  attr_accessor :registration_form_time, :website, :confirm_password
+  attr_accessor :website, :confirm_password
 
-  validates_with RegistrationFormTimeValidator, on: :create
   validates :website, absence: true, on: :create
   validates :confirm_password, absence: true, on: :create
   validates :date_of_birth, presence: true, date_of_birth: true, on: :create, if: -> { Setting.min_age.present? && !bypass_registration_checks? }
