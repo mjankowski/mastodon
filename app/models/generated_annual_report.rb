@@ -21,7 +21,7 @@ class GeneratedAnnualReport < ApplicationRecord
   scope :pending, -> { where(viewed_at: nil) }
 
   def viewed?
-    viewed_at.present?
+    viewed_at?
   end
 
   def view!

@@ -36,7 +36,7 @@ class TermsOfService < ApplicationRecord
   end
 
   def published?
-    published_at.present?
+    published_at?
   end
 
   def effective?
@@ -48,7 +48,7 @@ class TermsOfService < ApplicationRecord
   end
 
   def notification_sent?
-    notification_sent_at.present?
+    notification_sent_at?
   end
 
   def base_user_scope

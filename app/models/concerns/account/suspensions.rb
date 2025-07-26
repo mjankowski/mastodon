@@ -10,7 +10,7 @@ module Account::Suspensions
   end
 
   def suspended?
-    suspended_at.present? && !instance_actor?
+    suspended_at? && !instance_actor?
   end
 
   def suspended_locally?
