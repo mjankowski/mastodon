@@ -49,6 +49,7 @@ class User < ApplicationRecord
     skip_sign_in_token
   )
 
+  include Honeypot
   include LanguagesHelper
   include Redisable
   include User::Activity
@@ -92,12 +93,9 @@ class User < ApplicationRecord
   validates_with UserEmailValidator, if: -> { (ENV['EMAIL_DOMAIN_LISTS_APPLY_AFTER_CONFIRMATION'] == 'true' || !confirmed?) && will_save_change_to_email? }
   validates :agreement, acceptance: { allow_nil: false, accept: [true, 'true', '1'] }, on: :create
 
-  # Honeypot/anti-spam fields
-  attr_accessor :registration_form_time, :website, :confirm_password
+  attr_accessor :registration_form_time
 
   validates_with RegistrationFormTimeValidator, on: :create
-  validates :website, absence: true, on: :create
-  validates :confirm_password, absence: true, on: :create
   validates :date_of_birth, presence: true, date_of_birth: true, on: :create, if: -> { Setting.min_age.present? && !bypass_registration_checks? }
   validate :validate_role_elevation
 
