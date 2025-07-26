@@ -465,7 +465,7 @@ class Status < ApplicationRecord
 
     account&.increment_count!(:statuses_count)
     reblog&.increment_count!(:reblogs_count) if reblog?
-    thread&.increment_count!(:replies_count) if in_reply_to_id.present? && distributable?
+    thread&.increment_count!(:replies_count) if in_reply_to_id? && distributable?
   end
 
   def decrement_counter_caches
@@ -473,7 +473,7 @@ class Status < ApplicationRecord
 
     account&.decrement_count!(:statuses_count)
     reblog&.decrement_count!(:reblogs_count) if reblog?
-    thread&.decrement_count!(:replies_count) if in_reply_to_id.present? && distributable?
+    thread&.decrement_count!(:replies_count) if in_reply_to_id? && distributable?
   end
 
   def trigger_create_webhooks
