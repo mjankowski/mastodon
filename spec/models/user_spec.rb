@@ -39,6 +39,8 @@ RSpec.describe User do
     end
 
     it { is_expected.to allow_value('admin@localhost').for(:email) }
+    it { is_expected.to validate_absence_of(:website).on(:create) }
+    it { is_expected.to validate_absence_of(:confirm_password).on(:create) }
   end
 
   describe 'Normalizations' do
