@@ -401,11 +401,7 @@ class Account < ApplicationRecord
     end
 
     def coalesced_activity_timestamps
-      Arel.sql(
-        <<~SQL.squish
-          COALESCE(users.current_sign_in_at, account_stats.last_status_at, to_timestamp(0))
-        SQL
-      )
+      arel_table.coalesce User.arel_table[:current_sign_in_at], AccountStat.arel_table[:last_status_at], Arel.sql('TO_TIMESTAMP(0)')
     end
 
     def from_text(text)

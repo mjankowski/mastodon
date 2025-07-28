@@ -179,4 +179,10 @@ RSpec.describe Announcement do
       end
     end
   end
+
+  describe '.coalesced_chronology_timestamps' do
+    subject { described_class.coalesced_chronology_timestamps }
+
+    it { is_expected.to be_an(Arel::Nodes::NamedFunction) }
+  end
 end

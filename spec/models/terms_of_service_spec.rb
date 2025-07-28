@@ -158,4 +158,10 @@ RSpec.describe TermsOfService do
       end
     end
   end
+
+  describe '.coalesced_timestamps' do
+    subject { described_class.coalesced_timestamps }
+
+    it { is_expected.to be_an(Arel::Nodes::NamedFunction) }
+  end
 end
