@@ -35,11 +35,7 @@ class Announcement < ApplicationRecord
 
   class << self
     def coalesced_chronology_timestamps
-      Arel.sql(
-        <<~SQL.squish
-          COALESCE(announcements.starts_at, announcements.scheduled_at, announcements.published_at, announcements.created_at)
-        SQL
-      )
+      arel_table.coalesce arel_table[:starts_at], arel_table[:scheduled_at], arel_table[:published_at], arel_table[:created_at]
     end
   end
 

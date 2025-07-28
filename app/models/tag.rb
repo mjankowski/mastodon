@@ -155,6 +155,10 @@ class Tag < ApplicationRecord
     def normalize(str)
       HashtagNormalizer.new.normalize(str)
     end
+
+    def coalesced_names
+      arel_table.coalesce arel_table[:display_name], arel_table[:name]
+    end
   end
 
   private

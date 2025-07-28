@@ -14,7 +14,7 @@
 #  updated_at           :datetime         not null
 #
 class TermsOfService < ApplicationRecord
-  scope :published, -> { where.not(published_at: nil).order(Arel.sql('coalesce(effective_date, published_at) DESC')) }
+  scope :published, -> { where.not(published_at: nil).order(coalesced_timestamps.desc) }
   scope :live, -> { published.where('effective_date IS NULL OR effective_date < now()') }
   scope :upcoming, -> { published.reorder(effective_date: :asc).where('effective_date IS NOT NULL AND effective_date > now()') }
   scope :draft, -> { where(published_at: nil).order(id: :desc) }
@@ -29,6 +29,10 @@ class TermsOfService < ApplicationRecord
 
   def self.current
     live.first || upcoming.first # For the case when none of the published terms have become effective yet
+  end
+
+  def self.coalesced_timestamps
+    arel_table.coalesce arel_table[:effective_date], arel_table[:published_at]
   end
 
   def published?
