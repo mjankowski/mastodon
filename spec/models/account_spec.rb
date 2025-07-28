@@ -781,4 +781,10 @@ RSpec.describe Account do
       expect(subject.reload.followers_count).to eq 15
     end
   end
+
+  describe '.coalesced_activity_timestamps' do
+    subject { described_class.coalesced_activity_timestamps }
+
+    it { is_expected.to be_an(Arel::Nodes::NamedFunction) }
+  end
 end
