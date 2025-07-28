@@ -307,4 +307,10 @@ RSpec.describe Tag do
       expect(results).to eq [tag, unlisted_tag]
     end
   end
+
+  describe '.coalesced_names' do
+    subject { described_class.coalesced_names }
+
+    it { is_expected.to be_an(Arel::Nodes::NamedFunction) }
+  end
 end

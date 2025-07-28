@@ -26,8 +26,6 @@ class AnnualReport::TopHashtags < AnnualReport::Source
   end
 
   def coalesced_tag_names
-    Arel.sql(<<~SQL.squish)
-      COALESCE(tags.display_name, tags.name)
-    SQL
+    Tag.coalesced_names.to_sql
   end
 end
