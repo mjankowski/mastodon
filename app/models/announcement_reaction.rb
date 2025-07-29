@@ -24,6 +24,8 @@ class AnnouncementReaction < ApplicationRecord
   validates :name, presence: true
   validates_with ReactionValidator
 
+  scope :by_minimum_created, -> { order(arel_table[:created_at].minimum.asc) }
+
   private
 
   def set_custom_emoji
