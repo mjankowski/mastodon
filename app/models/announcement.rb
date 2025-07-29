@@ -100,9 +100,7 @@ class Announcement < ApplicationRecord
   def grouped_ordered_announcement_reactions
     announcement_reactions
       .group(:announcement_id, :name, :custom_emoji_id)
-      .order(
-        Arel.sql('MIN(created_at)').asc
-      )
+      .by_minimum_created
   end
 
   def value_for_reaction_me_column(account)
