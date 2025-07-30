@@ -3,27 +3,43 @@
 require 'rails_helper'
 
 RSpec.describe HashtagNormalizer do
-  subject { described_class.new }
+  subject { described_class.new.normalize(string) }
 
   describe '#normalize' do
-    it 'converts full-width Latin characters into basic Latin characters' do
-      expect(subject.normalize('Ｓｙｎｔｈｗａｖｅ')).to eq 'synthwave'
+    context 'with full width latin characters' do
+      let(:string) { 'Ｓｙｎｔｈｗａｖｅ' }
+
+      it { is_expected.to eq('synthwave') }
     end
 
-    it 'converts half-width Katakana into Kana characters' do
-      expect(subject.normalize('ｼｰｻｲﾄﾞﾗｲﾅｰ')).to eq 'シーサイドライナー'
+    context 'with half width katakana' do
+      let(:string) { 'ｼｰｻｲﾄﾞﾗｲﾅｰ' }
+
+      it { is_expected.to eq('シーサイドライナー') }
     end
 
-    it 'converts modified Latin characters into basic Latin characters' do
-      expect(subject.normalize('BLÅHAJ')).to eq 'blahaj'
+    context 'with modified Latin characters' do
+      let(:string) { 'BLÅHAJ' }
+
+      it { is_expected.to eq('blahaj') }
     end
 
-    it 'strips out invalid characters' do
-      expect(subject.normalize('#foo')).to eq 'foo'
+    context 'with invalid characters' do
+      let(:string) { '#foo' }
+
+      it { is_expected.to eq('foo') }
     end
 
-    it 'keeps valid characters' do
-      expect(subject.normalize('a·b')).to eq 'a·b'
+    context 'with valid characters' do
+      let(:string) { 'a·b' }
+
+      it { is_expected.to eq('a·b') }
+    end
+
+    context 'with upper case characters' do
+      let(:string) { 'LEGO' }
+
+      it { is_expected.to eq('lego') }
     end
   end
 end
