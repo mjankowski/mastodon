@@ -38,20 +38,22 @@ class Admin::Metrics::Measure::InstanceMediaAttachmentsMeasure < Admin::Metrics:
 
   def data_source
     MediaAttachment
-      .select(media_size_total.as('size'))
+      .select(media_size_total)
       .joins(:account)
       .merge(account_domain_scope)
       .where(matching_day(MediaAttachment, :created_at))
   end
 
   def select_target
-    <<~SQL.squish
-      COALESCE(SUM(size), 0)
-    SQL
+    MediaAttachment.arel_table.coalesce(Arel.sql("SUM(#{media_size_name})"), 0).to_sql
   end
 
   def media_size_total
-    MediaAttachment.combined_media_file_size
+    MediaAttachment.combined_media_file_size.as(media_size_name)
+  end
+
+  def media_size_name
+    'size'
   end
 
   def params
