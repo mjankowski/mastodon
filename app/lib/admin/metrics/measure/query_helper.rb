@@ -8,27 +8,15 @@ module Admin::Metrics::Measure::QueryHelper
   end
 
   def measurement_data_rows
-    ActiveRecord::Base.connection.select_all(sanitized_sql_string)
+    ActiveRecord::Base.connection.select_all(axis_results)
   end
 
-  def sanitized_sql_string
-    ActiveRecord::Base.sanitize_sql_array(sql_array)
-  end
-
-  def sql_array
-    [sql_query_string, { start_at: @start_at, end_at: @end_at }]
-  end
-
-  def sql_query_string
-    <<~SQL.squish
-      SELECT axis.*, (
-        WITH data_source AS (#{data_source.to_sql})
-        SELECT #{select_target} FROM data_source
-      ) AS value
-      FROM (
-        SELECT generate_series(:start_at::timestamp, :end_at::timestamp, '1 day')::date AS period
-      ) AS axis
-    SQL
+  def axis_results
+    axis_table
+      .project(axis_table[Arel.star])
+      .project(data_source_value)
+      .from(axis_date_series)
+      .to_sql
   end
 
   def select_target
@@ -47,5 +35,21 @@ module Admin::Metrics::Measure::QueryHelper
     else
       Account.with_domain(params[:domain])
     end
+  end
+
+  def axis_table
+    Arel::Table.new('axis')
+  end
+
+  def data_source_value
+    Arel.sql(<<~SQL.squish)
+      (WITH data_source AS (#{data_source.to_sql}) SELECT #{select_target} FROM data_source) AS value
+    SQL
+  end
+
+  def axis_date_series
+    Arel.sql(<<~SQL.squish)
+      (SELECT GENERATE_SERIES('#{@start_at.to_fs(:db)}'::timestamp, '#{@end_at.to_fs(:db)}'::timestamp, '1 day')::date AS period) AS axis
+    SQL
   end
 end
