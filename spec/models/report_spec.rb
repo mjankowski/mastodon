@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Report do
+  describe 'Associations' do
+    it { is_expected.to have_many(:siblings).class_name('Report').with_primary_key(:target_account_id).with_foreign_key(:target_account_id) }
+  end
+
   describe 'statuses' do
     it 'returns the statuses for the report' do
       status = Fabricate(:status)
