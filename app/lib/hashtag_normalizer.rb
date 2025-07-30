@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class HashtagNormalizer
-  def normalize(str)
-    str.then { unicode_normalize(it) }
-       .then { lowercase(it) }
-       .then { ascii_fold(it) }
-       .then { remove_invalid_characters(it) }
+  def normalize(string)
+    string
+      .then { unicode_normalize(it) }
+      .then { lowercase(it) }
+      .then { ascii_fold(it) }
+      .then { remove_invalid_characters(it) }
   end
 
   private
