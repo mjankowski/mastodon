@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe HashtagNormalizer do
-  subject { described_class.new.normalize(string) }
-
   describe '#normalize' do
+    subject { described_class.new.normalize(string) }
+
     context 'with full width latin characters' do
       let(:string) { 'Ｓｙｎｔｈｗａｖｅ' }
 
