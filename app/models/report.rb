@@ -42,6 +42,7 @@ class Report < ApplicationRecord
 
   has_many :notes, class_name: 'ReportNote', inverse_of: :report, dependent: :destroy
   has_many :notifications, as: :activity, dependent: :destroy
+  has_many :siblings, foreign_key: :target_account_id, primary_key: :target_account_id, class_name: 'Report', dependent: nil, inverse_of: false
 
   scope :unresolved, -> { where(action_taken_at: nil) }
   scope :resolved,   -> { where.not(action_taken_at: nil) }
@@ -126,7 +127,7 @@ class Report < ApplicationRecord
   end
 
   def unresolved_siblings?
-    Report.where.not(id: id).where(target_account_id: target_account_id).unresolved.exists?
+    siblings.excluding(self).unresolved.exists?
   end
 
   def to_log_human_identifier
