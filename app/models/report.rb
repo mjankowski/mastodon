@@ -43,6 +43,7 @@ class Report < ApplicationRecord
 
   has_many :notes, class_name: 'ReportNote', inverse_of: :report, dependent: :destroy
   has_many :notifications, as: :activity, dependent: :destroy
+  has_many :siblings, ->(report) { excluding(report) }, class_name: 'Report', dependent: nil, foreign_key: :target_account_id, inverse_of: false, primary_key: :target_account_id
 
   scope :with_accounts, -> { includes([:account, :target_account, :action_taken_by_account, :assigned_account].index_with([:account_stat, { user: [:invite_request, :invite, :ips] }])) }
 
@@ -115,7 +116,7 @@ class Report < ApplicationRecord
   end
 
   def unresolved_siblings?
-    Report.where.not(id: id).where(target_account_id: target_account_id).unresolved.exists?
+    siblings.unresolved.exists?
   end
 
   def history
