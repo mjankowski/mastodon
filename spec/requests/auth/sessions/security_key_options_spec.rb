@@ -33,6 +33,12 @@ RSpec.describe 'Security Key Options' do
           .to have_http_status 200
         expect(response.content_type)
           .to start_with('application/json')
+        expect(response.parsed_body)
+          .to include(
+            challenge: be_present,
+            userVerification: eq('discouraged'),
+            allowCredentials: contain_exactly(include(type: 'public-key', id: be_present))
+          )
       end
     end
 
