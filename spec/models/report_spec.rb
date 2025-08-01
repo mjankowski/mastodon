@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Report do
+  it_behaves_like 'Report::Resolution'
+
   describe 'statuses' do
     it 'returns the statuses for the report' do
       status = Fabricate(:status)
@@ -51,54 +53,6 @@ RSpec.describe Report do
 
     it 'unassigns' do
       expect(subject).to be_nil
-    end
-  end
-
-  describe 'resolve!' do
-    subject(:report) { Fabricate(:report, action_taken_at: nil, action_taken_by_account_id: nil) }
-
-    let(:acting_account) { Fabricate(:account) }
-
-    before do
-      report.resolve!(acting_account)
-    end
-
-    it 'records action taken' do
-      expect(report.action_taken?).to be true
-      expect(report.action_taken_by_account_id).to eq acting_account.id
-    end
-  end
-
-  describe 'unresolve!' do
-    subject(:report) { Fabricate(:report, action_taken_at: Time.now.utc, action_taken_by_account_id: acting_account.id) }
-
-    let(:acting_account) { Fabricate(:account) }
-
-    before do
-      report.unresolve!
-    end
-
-    it 'unresolves' do
-      expect(report.action_taken?).to be false
-      expect(report.action_taken_by_account_id).to be_nil
-    end
-  end
-
-  describe 'unresolved?' do
-    subject { report.unresolved? }
-
-    let(:report) { Fabricate(:report, action_taken_at: action_taken) }
-
-    context 'when action is taken' do
-      let(:action_taken) { Time.now.utc }
-
-      it { is_expected.to be false }
-    end
-
-    context 'when action not is taken' do
-      let(:action_taken) { nil }
-
-      it { is_expected.to be true }
     end
   end
 
