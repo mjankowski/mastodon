@@ -133,6 +133,10 @@ class Report < ApplicationRecord
     id
   end
 
+  def history
+    ReportHistoryPresenter.new(self).logs
+  end
+
   private
 
   def set_uri
