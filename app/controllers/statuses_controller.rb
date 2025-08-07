@@ -8,14 +8,14 @@ class StatusesController < ApplicationController
 
   vary_by -> { public_fetch_mode? ? 'Accept, Accept-Language, Cookie' : 'Accept, Accept-Language, Cookie, Signature' }
 
-  before_action :require_account_signature!, only: [:show, :activity], if: -> { request.format == :json && authorized_fetch_mode? }
+  before_action :require_account_signature!, only: [:show, :activity], if: -> { request.format.json? && authorized_fetch_mode? }
   before_action :set_status
   before_action :redirect_to_original, only: :show
   before_action :verify_embed_allowed, only: :embed
 
   after_action :set_link_headers
 
-  skip_around_action :set_locale, if: -> { request.format == :json }
+  skip_around_action :set_locale, if: -> { request.format.json? }
   skip_before_action :require_functional!, only: [:show, :embed], unless: :limited_federation_mode?
 
   content_security_policy only: :embed do |policy|
