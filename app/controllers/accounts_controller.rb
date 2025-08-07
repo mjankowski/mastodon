@@ -9,9 +9,9 @@ class AccountsController < ApplicationController
 
   vary_by -> { public_fetch_mode? ? 'Accept, Accept-Language, Cookie' : 'Accept, Accept-Language, Cookie, Signature' }
 
-  before_action :require_account_signature!, if: -> { request.format == :json && authorized_fetch_mode? }
+  before_action :require_account_signature!, if: -> { request.format.json? && authorized_fetch_mode? }
 
-  skip_around_action :set_locale, if: -> { [:json, :rss].include?(request.format&.to_sym) }
+  skip_around_action :set_locale, unless: -> { request.format.html? }
   skip_before_action :require_functional!, unless: :limited_federation_mode?
 
   def show
@@ -72,7 +72,7 @@ class AccountsController < ApplicationController
   end
 
   def skip_temporary_suspension_response?
-    request.format == :json
+    request.format.json?
   end
 
   def rss_url
