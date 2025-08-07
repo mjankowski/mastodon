@@ -10,9 +10,9 @@ class AccountsController < ApplicationController
 
   vary_by -> { actors_require_signature? ? 'Accept, Accept-Language, Cookie, Signature' : 'Accept, Accept-Language, Cookie' }
 
-  before_action :require_account_signature!, if: -> { request.format == :json && actors_require_signature? }
+  before_action :require_account_signature!, if: -> { request.format.json? && actors_require_signature? }
 
-  skip_around_action :set_locale, if: -> { [:json, :rss].include?(request.format&.to_sym) }
+  skip_around_action :set_locale, unless: -> { request.format.html? }
   skip_before_action :require_functional!, unless: :limited_federation_mode?
 
   def show
@@ -86,7 +86,7 @@ class AccountsController < ApplicationController
   end
 
   def skip_temporary_suspension_response?
-    request.format == :json
+    request.format.json?
   end
 
   def rss_url
