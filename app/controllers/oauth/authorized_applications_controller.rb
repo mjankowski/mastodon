@@ -7,7 +7,7 @@ class OAuth::AuthorizedApplicationsController < Doorkeeper::AuthorizedApplicatio
   before_action :authenticate_resource_owner!
   before_action :require_not_suspended!, only: :destroy
 
-  before_action :set_last_used_at_by_app, only: :index, unless: -> { request.format == :json }
+  before_action :set_last_used_at_by_app, only: :index, unless: -> { request.format.json? }
 
   skip_before_action :require_functional!
 
