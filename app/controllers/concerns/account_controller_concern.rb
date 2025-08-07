@@ -9,7 +9,7 @@ module AccountControllerConcern
   FOLLOW_PER_PAGE = 12
 
   included do
-    after_action :set_link_headers, if: -> { request.format.nil? || request.format == :html }
+    after_action :set_link_headers, if: -> { request.format.nil? || request.format.html? }
   end
 
   private
