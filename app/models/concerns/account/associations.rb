@@ -14,6 +14,8 @@ module Account::Associations
         has_many :account_warnings
         has_many :action_logs, class_name: 'Admin::ActionLog'
         has_many :aliases, class_name: 'AccountAlias'
+        has_many :announcement_mutes
+        has_many :announcement_reactions
         has_many :bookmarks
         has_many :collections
         has_many :collection_items
