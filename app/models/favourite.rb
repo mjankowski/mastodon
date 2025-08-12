@@ -14,19 +14,18 @@
 class Favourite < ApplicationRecord
   include Paginable
   include Favourite::FaspConcern
+  include ReblogTarget
 
   update_index('statuses', :status)
 
-  belongs_to :account, inverse_of: :favourites
-  belongs_to :status,  inverse_of: :favourites
+  with_options inverse_of: :favourites do
+    belongs_to :account
+    belongs_to :status
+  end
 
   has_one :notification, as: :activity, dependent: :destroy
 
   validates :status_id, uniqueness: { scope: :account_id }
-
-  before_validation do
-    self.status = status.reblog if status&.reblog?
-  end
 
   after_create :increment_cache_counters
   after_destroy :decrement_cache_counters
