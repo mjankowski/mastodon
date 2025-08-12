@@ -33,11 +33,10 @@ class Rule < ApplicationRecord
     rules.delete_at(position)
     rules.insert(position + offset, self)
 
-    transaction do
-      rules.each.with_index do |rule, index|
-        rule.update!(priority: index)
-      end
-    end
+    self.class.upsert_all(
+      rules.map.with_index { |rule, index| { id: rule.id, priority: index } },
+      update_only: :priority
+    )
   end
 
   def translation_for(locale)
