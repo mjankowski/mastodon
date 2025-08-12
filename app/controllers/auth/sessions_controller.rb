@@ -13,6 +13,8 @@ class Auth::SessionsController < Devise::SessionsController
   skip_before_action :require_functional!
   skip_before_action :update_user_sign_in
 
+  after_action :clear_after_sign_out, only: :destroy
+
   prepend_before_action :check_suspicious!, only: [:create]
 
   include Auth::TwoFactorAuthenticationConcern
@@ -30,12 +32,6 @@ class Auth::SessionsController < Devise::SessionsController
 
       on_authentication_success(resource, :password) unless @on_authentication_success_called
     end
-  end
-
-  def destroy
-    super
-    session.delete(:challenge_passed_at)
-    flash.delete(:notice)
   end
 
   # By default, sign_out wipes the session cookie, but we want to keep the redirect location
@@ -98,6 +94,11 @@ class Auth::SessionsController < Devise::SessionsController
     original_stored_location = stored_location_for(:user)
     yield
     store_location_for(:user, original_stored_location)
+  end
+
+  def clear_after_sign_out
+    session.delete(:challenge_passed_at)
+    flash.delete(:notice)
   end
 
   def check_suspicious!
