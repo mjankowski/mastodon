@@ -223,6 +223,7 @@ class Account < ApplicationRecord
   def acct
     local? ? username : "#{username}@#{domain}"
   end
+  alias to_log_human_identifier acct
 
   def pretty_acct
     local? ? username : "#{username}@#{Addressable::IDNA.to_unicode(domain)}"
@@ -366,10 +367,6 @@ class Account < ApplicationRecord
 
   def to_param
     username
-  end
-
-  def to_log_human_identifier
-    acct
   end
 
   def excluded_from_timeline_account_ids
