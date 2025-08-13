@@ -17,9 +17,7 @@ class DomainAllow < ApplicationRecord
 
   validates :domain, presence: true, uniqueness: true, domain: true
 
-  def to_log_human_identifier
-    domain
-  end
+  alias_attribute :to_log_human_identifier, :domain
 
   class << self
     def allowed?(domain)

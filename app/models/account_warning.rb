@@ -42,6 +42,10 @@ class AccountWarning < ApplicationRecord
   scope :custom, -> { where.not(text: '') }
   scope :recent, -> { where(created_at: RECENT_PERIOD.ago..) }
 
+  delegate :acct, to: :target_account, prefix: true
+
+  alias to_log_human_identifier target_account_acct
+
   def statuses
     Status.with_discarded.where(id: status_ids || [])
   end
@@ -52,9 +56,5 @@ class AccountWarning < ApplicationRecord
 
   def appeal_eligible?
     created_at >= APPEAL_WINDOW.ago
-  end
-
-  def to_log_human_identifier
-    target_account.acct
   end
 end

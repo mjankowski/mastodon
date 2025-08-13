@@ -32,9 +32,7 @@ class DomainBlock < ApplicationRecord
   scope :with_limitations, -> { where(severity: [:silence, :suspend]).or(where(reject_media: true)) }
   scope :by_severity, -> { in_order_of(:severity, %w(noop silence suspend)).order(:domain) }
 
-  def to_log_human_identifier
-    domain
-  end
+  alias_attribute :to_log_human_identifier, :domain
 
   def policies
     if suspend?
