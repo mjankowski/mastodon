@@ -72,6 +72,8 @@ class Report < ApplicationRecord
   after_create_commit :trigger_create_webhooks
   after_update_commit :trigger_update_webhooks
 
+  alias_attribute :to_log_human_identifier, :id
+
   def object_type
     :flag
   end
@@ -128,10 +130,6 @@ class Report < ApplicationRecord
 
   def unresolved_siblings?
     Report.where.not(id: id).where(target_account_id: target_account_id).unresolved.exists?
-  end
-
-  def to_log_human_identifier
-    id
   end
 
   def history

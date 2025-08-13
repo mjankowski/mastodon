@@ -183,16 +183,14 @@ class Status < ApplicationRecord
                    ],
                    thread: :account
 
-  delegate :domain, :indexable?, to: :account, prefix: true
+  delegate :acct, :domain, :indexable?, to: :account, prefix: true
+
+  alias to_log_human_identifier account_acct
 
   REAL_TIME_WINDOW = 6.hours
 
   def cache_key
     "v3:#{super}"
-  end
-
-  def to_log_human_identifier
-    account.acct
   end
 
   def to_log_permalink
