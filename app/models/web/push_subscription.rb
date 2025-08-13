@@ -32,6 +32,12 @@ class Web::PushSubscription < ApplicationRecord
 
   generates_token_for :unsubscribe, expires_in: Web::PushNotificationWorker::TTL
 
+  store_accessor :data, %i(alerts policy)
+
+  def alerts
+    (super || {}).transform_values { |value| ActiveModel::Type::Boolean.new.cast(value) }
+  end
+
   def pushable?(notification)
     policy_allows_notification?(notification) && alert_enabled_for_notification_type?(notification)
   end
@@ -50,11 +56,11 @@ class Web::PushSubscription < ApplicationRecord
   private
 
   def alert_enabled_for_notification_type?(notification)
-    truthy?(data&.dig('alerts', notification.type.to_s))
+    alerts[notification.type.to_s]
   end
 
   def policy_allows_notification?(notification)
-    case data&.dig('policy')
+    case policy
     when nil, 'all'
       true
     when 'none'
@@ -64,9 +70,5 @@ class Web::PushSubscription < ApplicationRecord
     when 'follower'
       notification.from_account.following?(notification.account)
     end
-  end
-
-  def truthy?(val)
-    ActiveModel::Type::Boolean.new.cast(val)
   end
 end
