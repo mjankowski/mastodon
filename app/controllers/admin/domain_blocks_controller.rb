@@ -108,7 +108,7 @@ module Admin
     def existing_domain_block_matches_domain?
       # Existing domain block exists and the domain is exact match for the value from incoming params
       existing_domain_block.present? &&
-        existing_domain_block.domain == TagManager.instance.normalize_domain(@domain_block.domain.strip)
+        existing_domain_block.domain == TagManager.instance.normalize_domain(@domain_block.domain)
     end
 
     def verify_confirmation_needed
