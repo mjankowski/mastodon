@@ -30,12 +30,10 @@ class EmailDomainBlock < ApplicationRecord
 
   scope :parents, -> { where(parent_id: nil) }
 
+  alias_attribute :to_log_human_identifier, :domain
+
   # Used for adding multiple blocks at once
   attr_accessor :other_domains
-
-  def to_log_human_identifier
-    domain
-  end
 
   def history
     @history ||= Trends::History.new('email_domain_blocks', id)

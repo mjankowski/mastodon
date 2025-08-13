@@ -58,6 +58,8 @@ class CustomEmoji < ApplicationRecord
 
   after_commit :remove_entity_cache
 
+  alias_attribute :to_log_human_identifier, :shortcode
+
   def local?
     domain.nil?
   end
@@ -70,10 +72,6 @@ class CustomEmoji < ApplicationRecord
     copy = self.class.find_or_initialize_by(domain: nil, shortcode: shortcode)
     copy.image = image
     copy.tap(&:save!)
-  end
-
-  def to_log_human_identifier
-    shortcode
   end
 
   class << self
