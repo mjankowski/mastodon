@@ -19,6 +19,8 @@ class GeneratedAnnualReport < ApplicationRecord
 
   scope :pending, -> { where(viewed_at: nil) }
 
+  store_accessor :data, %i(most_reblogged_accounts commonly_interacted_with_accounts top_statuses)
+
   def viewed?
     viewed_at.present?
   end
@@ -28,10 +30,10 @@ class GeneratedAnnualReport < ApplicationRecord
   end
 
   def account_ids
-    data['most_reblogged_accounts'].pluck('account_id') + data['commonly_interacted_with_accounts'].pluck('account_id')
+    most_reblogged_accounts.pluck('account_id') + commonly_interacted_with_accounts.pluck('account_id')
   end
 
   def status_ids
-    data['top_statuses'].values
+    top_statuses.values
   end
 end
