@@ -126,6 +126,11 @@ class User < ApplicationRecord
 
   delegate :can?, to: :role
 
+  delegate :acct, to: :account, prefix: true
+
+  alias to_log_human_identifier account_acct
+  alias_attribute :to_log_route_param, :account_id
+
   attr_reader :invite_code
   attr_writer :current_account
 
@@ -199,14 +204,6 @@ class User < ApplicationRecord
     return if mails_disabled?
 
     super
-  end
-
-  def to_log_human_identifier
-    account.acct
-  end
-
-  def to_log_route_param
-    account_id
   end
 
   # Mark current email as confirmed, bypassing Devise

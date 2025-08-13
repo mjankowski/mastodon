@@ -21,16 +21,14 @@ class CanonicalEmailBlock < ApplicationRecord
 
   scope :matching_email, ->(email) { where(canonical_email_hash: digest(normalize_value_for(:email, email))) }
 
+  alias_attribute :to_log_human_identifier, :canonical_email_hash
+
   def self.block?(email)
     matching_email(email).exists?
   end
 
   def self.digest(value)
     Digest::SHA256.hexdigest(value)
-  end
-
-  def to_log_human_identifier
-    canonical_email_hash
   end
 
   def email=(email)

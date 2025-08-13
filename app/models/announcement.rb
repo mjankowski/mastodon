@@ -33,6 +33,8 @@ class Announcement < ApplicationRecord
 
   before_validation :set_published, on: :create
 
+  alias_attribute :to_log_human_identifier, :text
+
   class << self
     def coalesced_chronology_timestamps
       Arel.sql(
@@ -41,10 +43,6 @@ class Announcement < ApplicationRecord
         SQL
       )
     end
-  end
-
-  def to_log_human_identifier
-    text
   end
 
   def publish!

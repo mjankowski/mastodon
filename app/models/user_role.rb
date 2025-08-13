@@ -118,6 +118,8 @@ class UserRole < ApplicationRecord
 
   has_many :users, inverse_of: :role, foreign_key: 'role_id', dependent: :nullify
 
+  alias_attribute :to_log_human_identifier, :name
+
   def self.nobody
     @nobody ||= UserRole.new(permissions: Flags::NONE, position: NOBODY_POSITION)
   end
@@ -177,10 +179,6 @@ class UserRole < ApplicationRecord
         permissions
       end
     end
-  end
-
-  def to_log_human_identifier
-    name
   end
 
   def administrator?
