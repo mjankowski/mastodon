@@ -17,9 +17,7 @@ class UnavailableDomain < ApplicationRecord
 
   after_commit :reset_cache!
 
-  def to_log_human_identifier
-    domain
-  end
+  alias_attribute :to_log_human_identifier, :domain
 
   private
 

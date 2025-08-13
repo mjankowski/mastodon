@@ -25,9 +25,7 @@ class Relay < ApplicationRecord
 
   alias enabled? accepted?
 
-  def to_log_human_identifier
-    inbox_url
-  end
+  alias_attribute :to_log_human_identifier, :inbox_url
 
   def enable!
     activity_id = ActivityPub::TagManager.instance.generate_uri_for(nil)

@@ -35,6 +35,12 @@ class Appeal < ApplicationRecord
   scope :rejected, -> { where.not(rejected_at: nil) }
   scope :pending, -> { where(approved_at: nil, rejected_at: nil) }
 
+  delegate :acct, to: :account, prefix: true
+
+  alias to_log_human_identifier account_acct
+
+  alias_attribute :to_log_route_param, :account_warning_id
+
   def pending?
     !approved? && !rejected?
   end
@@ -53,14 +59,6 @@ class Appeal < ApplicationRecord
 
   def reject!(current_account)
     update!(rejected_at: Time.now.utc, rejected_by_account: current_account)
-  end
-
-  def to_log_human_identifier
-    account.acct
-  end
-
-  def to_log_route_param
-    account_warning_id
   end
 
   private
