@@ -3,6 +3,8 @@
 module CacheConcern
   extend ActiveSupport::Concern
 
+  HIGH_ENTROPY_HEADERS = %w(cookie authorization signature).freeze
+
   class_methods do
     def vary_by(value, **kwargs)
       before_action(**kwargs) do |controller|
@@ -12,16 +14,10 @@ module CacheConcern
   end
 
   included do
-    after_action :enforce_cache_control!
+    after_action :enforce_cache_control!, if: :high_entropy_vary_present?
   end
 
-  # Prevents high-entropy headers such as `Cookie`, `Signature` or `Authorization`
-  # from being used as cache keys, while allowing to `Vary` on them (to not serve
-  # anonymous cached data to authenticated requests when authentication matters)
   def enforce_cache_control!
-    vary = response.headers['Vary']&.split&.map { |x| x.strip.downcase }
-    return unless vary.present? && %w(cookie authorization signature).any? { |header| vary.include?(header) && request.headers[header].present? }
-
     response.cache_control.replace(private: true, no_store: true)
   end
 
@@ -44,5 +40,19 @@ module CacheConcern
       render(options)
       Rails.cache.write(key, response.body, expires_in: expires_in, raw: true)
     end
+  end
+
+  private
+
+  # Avoid using high-entropy headers as cache keys, but allow them for `Vary`
+  # (Avoids serving anonymous cached data to authenticated requests)
+  def high_entropy_vary_present?
+    normalized_vary_headers.present? && HIGH_ENTROPY_HEADERS.any? do |header|
+      normalized_vary_headers.include?(header) && request.headers[header].present?
+    end
+  end
+
+  def normalized_vary_headers
+    response.headers['Vary']&.split&.map { |x| x.strip.downcase }
   end
 end
