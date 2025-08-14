@@ -7,6 +7,7 @@ class FollowerAccountsController < ApplicationController
   vary_by -> { public_fetch_mode? ? 'Accept, Accept-Language, Cookie' : 'Accept, Accept-Language, Cookie, Signature' }
 
   before_action :require_account_signature!, if: -> { request.format == :json && authorized_fetch_mode? }
+  before_action :protect_hidden_collections, if: -> { request.format.json? }
 
   skip_around_action :set_locale, if: -> { request.format == :json }
   skip_before_action :require_functional!, unless: :limited_federation_mode?
@@ -18,8 +19,6 @@ class FollowerAccountsController < ApplicationController
       end
 
       format.json do
-        raise Mastodon::NotPermittedError if page_requested? && @account.hide_collections?
-
         expires_in(page_requested? ? 0 : 3.minutes, public: public_fetch_mode?)
 
         render json: collection_presenter,
@@ -37,6 +36,10 @@ class FollowerAccountsController < ApplicationController
     return @follows if defined?(@follows)
 
     @follows = passive_relationships.recent.page(params[:page]).per(FOLLOW_PER_PAGE).preload(:account)
+  end
+
+  def protect_hidden_collections
+    raise Mastodon::NotPermittedError if page_requested? && @account.hide_collections?
   end
 
   def page_requested?
