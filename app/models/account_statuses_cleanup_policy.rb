@@ -57,18 +57,11 @@ class AccountStatusesCleanupPolicy < ApplicationRecord
   before_save :update_last_inspected
 
   def statuses_to_delete(limit = 50, max_id = nil, min_id = nil)
-    scope = account_statuses
-    scope.merge!(old_enough_scope(max_id))
-    scope = scope.where(id: min_id..) if min_id.present?
-    scope.merge!(without_popular_scope) unless min_favs.nil? && min_reblogs.nil?
-    scope.merge!(without_direct_scope) if keep_direct?
-    scope.merge!(without_pinned_scope) if keep_pinned?
-    scope.merge!(without_poll_scope) if keep_polls?
-    scope.merge!(without_media_scope) if keep_media?
-    scope.merge!(without_self_fav_scope) if keep_self_fav?
-    scope.merge!(without_self_bookmark_scope) if keep_self_bookmark?
-
-    scope.reorder(id: :asc).limit(limit)
+    CleanupPolicyDeletionQuery
+      .new(policy: self, max_id:, min_id:)
+      .query
+      .limit(limit)
+      .reorder(id: :asc)
   end
 
   # This computes a toot id such that:
@@ -80,7 +73,7 @@ class AccountStatusesCleanupPolicy < ApplicationRecord
   def compute_cutoff_id
     min_id = last_inspected || 0
     max_id = Mastodon::Snowflake.id_at(min_status_age.seconds.ago, with_random: false)
-    subquery = account_statuses.where(id: min_id..max_id)
+    subquery = account.statuses.where(id: min_id..max_id)
     subquery = subquery.select(:id).reorder(id: :asc).limit(EARLY_SEARCH_CUTOFF)
 
     # We're textually interpolating a subquery here as ActiveRecord seem to not provide
@@ -127,68 +120,5 @@ class AccountStatusesCleanupPolicy < ApplicationRecord
 
   def validate_local_account
     errors.add(:account, :invalid) unless account&.local?
-  end
-
-  def without_direct_scope
-    Status.not_direct_visibility
-  end
-
-  def old_enough_scope(max_id = nil)
-    # Filtering on `id` rather than `min_status_age` ago will treat
-    # non-snowflake statuses as older than they really are, but Mastodon
-    # has switched to snowflake IDs significantly over 2 years ago anyway.
-    snowflake_id = Mastodon::Snowflake.id_at(min_status_age.seconds.ago, with_random: false)
-
-    max_id = snowflake_id if max_id.nil? || snowflake_id < max_id
-
-    Status.where(id: ..max_id)
-  end
-
-  def without_self_fav_scope
-    Status.where.not(self_status_reference_exists(Favourite))
-  end
-
-  def without_self_bookmark_scope
-    Status.where.not(self_status_reference_exists(Bookmark))
-  end
-
-  def without_pinned_scope
-    Status.where.not(self_status_reference_exists(StatusPin))
-  end
-
-  def without_media_scope
-    Status.where.not(status_media_reference_exists)
-  end
-
-  def without_poll_scope
-    Status.without_polls
-  end
-
-  def without_popular_scope
-    scope = Status.left_joins(:status_stat)
-    scope = scope.where('COALESCE(status_stats.reblogs_count, 0) < ?', min_reblogs) unless min_reblogs.nil?
-    scope = scope.where('COALESCE(status_stats.favourites_count, 0) < ?', min_favs) unless min_favs.nil?
-    scope
-  end
-
-  def account_statuses
-    Status.where(account_id: account_id)
-  end
-
-  def status_media_reference_exists
-    MediaAttachment
-      .where(MediaAttachment.arel_table[:status_id].eq Status.arel_table[:id])
-      .select(1)
-      .arel
-      .exists
-  end
-
-  def self_status_reference_exists(model)
-    model
-      .where(model.arel_table[:account_id].eq Status.arel_table[:account_id])
-      .where(model.arel_table[:status_id].eq Status.arel_table[:id])
-      .select(1)
-      .arel
-      .exists
   end
 end
