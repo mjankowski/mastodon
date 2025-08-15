@@ -106,7 +106,7 @@ RSpec.describe FeaturedTag do
 
     context 'with a missing name value but a present tag' do
       let(:name) { nil }
-      let(:tag) { Fabricate.build :tag, name: 'Tester' }
+      let(:tag) { Fabricate.build :tag, name: 'Tester', display_name: 'Tester' }
 
       it 'uses name value' do
         expect(subject.display_name).to eq('Tester')
