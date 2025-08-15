@@ -22,6 +22,10 @@ class StatusStat < ApplicationRecord
 
   MAX_UNTRUSTED_COUNT = 100_000_000
 
+  def self.coalesced_count(column)
+    arel_table.coalesce arel_table[column], 0
+  end
+
   def replies_count
     [attributes['replies_count'], 0].max
   end
