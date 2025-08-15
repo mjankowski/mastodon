@@ -54,6 +54,11 @@ RSpec.describe Invite do
       expect(invite.valid_for_use?).to be false
     end
 
+    it 'returns false when user is missing' do
+      invite = described_class.new(user: nil, expires_at: nil)
+      expect(invite.valid_for_use?).to be false
+    end
+
     it 'returns false when invite creator has been disabled' do
       invite = Fabricate(:invite, max_uses: nil, expires_at: nil)
       invite.user.account.suspend!
