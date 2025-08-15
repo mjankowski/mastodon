@@ -112,19 +112,25 @@ class Tag < ApplicationRecord
 
   class << self
     def find_or_create_by_names(name_or_names)
-      names = Array(name_or_names).map { |str| [normalize_value_for(:name, str), str] }.uniq(&:first)
-
-      names.map do |name, display_name|
-        tag = begin
-          matching_name(name).first || create!(name:, display_name:)
-        rescue ActiveRecord::RecordNotUnique
-          find_normalized(name)
+      normalized_pairs(name_or_names).map do |name, display_name|
+        matched_tag(name, display_name).tap do |tag|
+          yield tag if block_given?
         end
-
-        yield tag if block_given?
-
-        tag
       end
+    end
+
+    def matched_tag(name, display_name)
+      begin
+        matching_name(name).first || create(name:, display_name:)
+      rescue ActiveRecord::RecordNotUnique
+        find_normalized(name)
+      end
+    end
+
+    def normalized_pairs(values)
+      Array(values)
+        .map { |string| [normalize_value_for(:name, string), string] }
+        .uniq(&:first)
     end
 
     def search_for(term, limit = 5, offset = 0, options = {})
