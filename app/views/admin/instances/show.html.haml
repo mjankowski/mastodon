@@ -88,16 +88,16 @@
       - if @instance.unavailable?
         %span.negative-hint
           = t('admin.instances.availability.failure_threshold_reached', date: l(@instance.unavailable_domain.created_at.to_date))
-          = link_to t('admin.instances.delivery.restart'), restart_delivery_admin_instance_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :post }
+          = link_to t('admin.instances.delivery.restart'), admin_instance_delivery_pause_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :delete }
       - elsif @instance.exhausted_deliveries_days.empty?
         %span.positive-hint
           = t('admin.instances.availability.no_failures_recorded')
-          = link_to t('admin.instances.delivery.stop'), stop_delivery_admin_instance_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :post }
+          = link_to t('admin.instances.delivery.stop'), admin_instance_delivery_pause_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :post }
       - else
         %span.negative-hint
           = t('admin.instances.availability.failures_recorded', count: @instance.delivery_failure_tracker.days)
-          %span= link_to t('admin.instances.delivery.clear'), clear_delivery_errors_admin_instance_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :post } unless @instance.exhausted_deliveries_days.empty?
-          %span= link_to t('admin.instances.delivery.stop'), stop_delivery_admin_instance_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :post }
+          %span= link_to t('admin.instances.delivery.clear'), admin_instance_delivery_errors_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :delete } unless @instance.exhausted_deliveries_days.empty?
+          %span= link_to t('admin.instances.delivery.stop'), admin_instance_delivery_pause_path(@instance), data: { confirm: t('admin.accounts.are_you_sure'), method: :post }
 
   - if @instance.purgeable?
     %p= t('admin.instances.purge_description_html')
