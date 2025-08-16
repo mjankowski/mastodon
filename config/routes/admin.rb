@@ -166,9 +166,7 @@ namespace :admin do
     resources :relationships, only: [:index]
 
     resource :confirmation, only: [:create] do
-      collection do
-        post :resend
-      end
+      resource :resend, module: :confirmations, only: :create
     end
   end
 
