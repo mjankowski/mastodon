@@ -82,10 +82,11 @@ namespace :admin do
   end
 
   resources :instances, only: [:index, :show, :destroy], constraints: { id: %r{[^/]+} }, format: 'html' do
-    member do
-      post :clear_delivery_errors
-      post :restart_delivery
-      post :stop_delivery
+    scope module: :instances do
+      namespace :delivery do
+        resource :errors, only: :destroy
+        resource :pause, only: [:create, :destroy]
+      end
     end
 
     resources :moderation_notes, module: :instances, only: [:create, :destroy]
