@@ -38,7 +38,7 @@
       = t('admin.accounts.confirmed')
     - else
       = t('admin.accounts.confirming')
-  %td= table_link_to 'refresh', t('admin.accounts.resend_confirmation.send'), resend_admin_account_confirmation_path(account.id), method: :post if can?(:confirm, account.user)
+  %td= table_link_to 'refresh', t('admin.accounts.resend_confirmation.send'), admin_account_confirmation_resend_path(account.id), method: :post if can?(:confirm, account.user)
 %tr
   %th{ rowspan: can?(:reset_password, account.user) ? 2 : 1 }= t('admin.accounts.security')
   %td{ rowspan: can?(:reset_password, account.user) ? 2 : 1 }
