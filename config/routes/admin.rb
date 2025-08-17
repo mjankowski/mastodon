@@ -10,18 +10,16 @@ namespace :admin do
     end
   end
 
-  resources :export_domain_allows, only: [:new] do
+  concern :exports do
     collection do
       get :export, constraints: { format: :csv }
       post :import
     end
   end
 
-  resources :export_domain_blocks, only: [:new] do
-    collection do
-      get :export, constraints: { format: :csv }
-      post :import
-    end
+  with_options only: [:new], concerns: :exports do
+    resources :export_domain_allows
+    resources :export_domain_blocks
   end
 
   resources :email_domain_blocks, only: [:index, :new, :create] do
