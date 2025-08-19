@@ -274,7 +274,7 @@ RSpec.describe Settings::ImportsController do
         form_import: {
           type: import_type,
           mode: import_mode,
-          data: fixture_file_upload(import_file),
+          data: file_fixture_upload(import_file),
         },
       }
     end
@@ -329,7 +329,7 @@ RSpec.describe Settings::ImportsController do
       subject { post :create, params: { form_import: { type: 'custom_filters', mode: mode, data: data } } }
 
       describe 'successful import' do
-        let(:data) { fixture_file_upload('custom_filters.json', 'application/json') }
+        let(:data) { file_fixture_upload('custom_filters.json', 'application/json') }
         let(:mode) { 'merge' }
 
         it 'creates an unconfirmed bulk_import with expected type and redirects', :aggregate_failures do
@@ -340,7 +340,7 @@ RSpec.describe Settings::ImportsController do
 
       describe 'failing import' do
         let(:mode) { 'merge' }
-        let(:data) { fixture_file_upload('empty.json', 'application/json') }
+        let(:data) { file_fixture_upload('empty.json', 'application/json') }
 
         it 'does not creates an unconfirmed bulk_import', :aggregate_failures do
           expect { subject }.to_not(change { user.account.bulk_imports.count })

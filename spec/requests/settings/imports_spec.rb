@@ -19,7 +19,7 @@ RSpec.describe 'Settings Imports' do
     describe 'with JSON' do
       subject { post settings_imports_path, params: { form_import: { type: 'custom_filters', mode: 'merge', data: data } } }
 
-      let!(:data) { fixture_file_upload('custom_filters.json', 'application/json') }
+      let!(:data) { file_fixture_upload('custom_filters.json', 'application/json') }
       let(:confirm) { post confirm_settings_import_path(id: user.account.bulk_imports.last.id) }
 
       it 'redirects to confirm_settings_import_path' do
