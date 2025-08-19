@@ -237,7 +237,7 @@ RSpec.describe Settings::ImportsController do
         form_import: {
           type: import_type,
           mode: import_mode,
-          data: fixture_file_upload(import_file),
+          data: file_fixture_upload(import_file),
         },
       }
     end
