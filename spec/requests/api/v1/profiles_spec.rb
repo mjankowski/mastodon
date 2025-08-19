@@ -10,8 +10,8 @@ RSpec.describe 'Profile API' do
   let(:account) do
     Fabricate(
       :account,
-      avatar: fixture_file_upload('avatar.gif', 'image/gif'),
-      header: fixture_file_upload('attachment.jpg', 'image/jpeg')
+      avatar: file_fixture_upload('avatar.gif', 'image/gif'),
+      header: file_fixture_upload('attachment.jpg', 'image/jpeg')
     )
   end
   let(:user) { account.user }
@@ -61,11 +61,11 @@ RSpec.describe 'Profile API' do
 
     let(:params) do
       {
-        avatar: fixture_file_upload('avatar.gif', 'image/gif'),
+        avatar: file_fixture_upload('avatar.gif', 'image/gif'),
         avatar_description: 'animated walking round cat',
         discoverable: true,
         display_name: "Alice Isn't Dead",
-        header: fixture_file_upload('attachment.jpg', 'image/jpeg'),
+        header: file_fixture_upload('attachment.jpg', 'image/jpeg'),
         indexable: true,
         locked: false,
         note: 'Hello!',

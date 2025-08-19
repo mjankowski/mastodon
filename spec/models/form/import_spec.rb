@@ -6,7 +6,7 @@ RSpec.describe Form::Import do
   subject { described_class.new(current_account: account, type: import_type, mode: import_mode, data: data) }
 
   let(:account)     { Fabricate(:account) }
-  let(:data)        { fixture_file_upload(import_file) }
+  let(:data)        { file_fixture_upload(import_file) }
   let(:import_mode) { 'merge' }
 
   describe 'validations' do

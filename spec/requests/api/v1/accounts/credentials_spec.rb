@@ -52,10 +52,10 @@ RSpec.describe 'credentials API' do
 
     let(:params) do
       {
-        avatar: fixture_file_upload('avatar.gif', 'image/gif'),
+        avatar: file_fixture_upload('avatar.gif', 'image/gif'),
         discoverable: true,
         display_name: "Alice Isn't Dead",
-        header: fixture_file_upload('attachment.jpg', 'image/jpeg'),
+        header: file_fixture_upload('attachment.jpg', 'image/jpeg'),
         indexable: true,
         locked: false,
         note: 'Hello!',

@@ -109,6 +109,7 @@ RSpec.configure do |config|
   config.include ActionMailer::TestHelper
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveSupport::Testing::TimeHelpers
+  config.include ActionDispatch::TestProcess::FixtureFile
   config.include Chewy::Rspec::Helpers
   config.include Redisable
   config.include DomainHelpers
