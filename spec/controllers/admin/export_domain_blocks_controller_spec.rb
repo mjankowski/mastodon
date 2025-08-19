@@ -39,7 +39,7 @@ RSpec.describe Admin::ExportDomainBlocksController do
   describe 'POST #import' do
     context 'with complete domain blocks CSV' do
       before do
-        post :import, params: { admin_import: { data: fixture_file_upload('domain_blocks.csv') } }
+        post :import, params: { admin_import: { data: file_fixture_upload('domain_blocks.csv') } }
       end
 
       it 'renders page with expected domain blocks and returns http success' do
@@ -50,7 +50,7 @@ RSpec.describe Admin::ExportDomainBlocksController do
 
     context 'with a list of only domains' do
       before do
-        post :import, params: { admin_import: { data: fixture_file_upload('domain_blocks_list.txt') } }
+        post :import, params: { admin_import: { data: file_fixture_upload('domain_blocks_list.txt') } }
       end
 
       it 'renders page with expected domain blocks and returns http success' do
