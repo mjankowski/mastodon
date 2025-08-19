@@ -7,7 +7,7 @@ RSpec.describe 'Media API', :attachment_processing do
 
   describe 'POST /api/v2/media' do
     context 'when small media format attachment is processed immediately' do
-      let(:params) { { file: fixture_file_upload('attachment-jpg.123456_abcd', 'image/jpeg') } }
+      let(:params) { { file: file_fixture_upload('attachment-jpg.123456_abcd', 'image/jpeg') } }
 
       it 'returns http success' do
         post '/api/v2/media', headers: headers, params: params
@@ -29,7 +29,7 @@ RSpec.describe 'Media API', :attachment_processing do
     context 'when media description is too long' do
       let(:params) do
         {
-          file: fixture_file_upload('attachment-jpg.123456_abcd', 'image/jpeg'),
+          file: file_fixture_upload('attachment-jpg.123456_abcd', 'image/jpeg'),
           description: 'a' * MediaAttachment::MAX_DESCRIPTION_LENGTH * 2,
         }
       end
@@ -43,7 +43,7 @@ RSpec.describe 'Media API', :attachment_processing do
     end
 
     context 'when large format media attachment has not been processed' do
-      let(:params) { { file: fixture_file_upload('attachment.webm', 'video/webm') } }
+      let(:params) { { file: file_fixture_upload('attachment.webm', 'video/webm') } }
 
       it 'returns http accepted' do
         post '/api/v2/media', headers: headers, params: params
@@ -64,7 +64,7 @@ RSpec.describe 'Media API', :attachment_processing do
 
     describe 'when paperclip errors occur' do
       let(:media_attachments) { double }
-      let(:params)            { { file: fixture_file_upload('attachment.jpg', 'image/jpeg') } }
+      let(:params)            { { file: file_fixture_upload('attachment.jpg', 'image/jpeg') } }
 
       before do
         allow(User).to receive(:find).with(token.resource_owner_id).and_return(user)

@@ -6,7 +6,7 @@ RSpec.describe Form::Import do
   subject { described_class.new(current_account: account, type: import_type, mode: import_mode, data: data) }
 
   let(:account)     { Fabricate(:account) }
-  let(:data)        { fixture_file_upload(import_file) }
+  let(:data)        { file_fixture_upload(import_file) }
   let(:import_mode) { 'merge' }
 
   describe 'validations' do
@@ -44,7 +44,7 @@ RSpec.describe Form::Import do
     end
 
     describe 'when the import type is custom_filters' do
-      let(:data)        { fixture_file_upload(import_file, content_type) }
+      let(:data)        { file_fixture_upload(import_file, content_type) }
       let(:import_file) { File.open('spec/fixtures/files/custom_filters.json') }
       let(:import_type) { 'custom_filters' }
       let(:content_type) { 'application/json' }
@@ -271,7 +271,7 @@ RSpec.describe Form::Import do
 
     describe 'when importing json' do
       let(:import_type) { 'custom_filters' }
-      let(:data) { fixture_file_upload('custom_filters.json', 'application/json') }
+      let(:data) { file_fixture_upload('custom_filters.json', 'application/json') }
       let(:import_mode) { 'merge' }
       let(:expected_rows) do
         [

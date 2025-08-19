@@ -95,7 +95,7 @@ RSpec.describe 'Media' do
 
     describe 'when paperclip errors occur' do
       let(:media_attachments) { double }
-      let(:params)            { { file: fixture_file_upload('attachment.jpg', 'image/jpeg') } }
+      let(:params)            { { file: file_fixture_upload('attachment.jpg', 'image/jpeg') } }
 
       before do
         allow(User).to receive(:find).with(token.resource_owner_id).and_return(user)
@@ -128,19 +128,19 @@ RSpec.describe 'Media' do
     end
 
     context 'with image/jpeg', :attachment_processing do
-      let(:params) { { file: fixture_file_upload('attachment.jpg', 'image/jpeg'), description: 'jpeg image' } }
+      let(:params) { { file: file_fixture_upload('attachment.jpg', 'image/jpeg'), description: 'jpeg image' } }
 
       it_behaves_like 'a successful media upload', 'image'
     end
 
     context 'with image/gif', :attachment_processing do
-      let(:params) { { file: fixture_file_upload('attachment.gif', 'image/gif') } }
+      let(:params) { { file: file_fixture_upload('attachment.gif', 'image/gif') } }
 
       it_behaves_like 'a successful media upload', 'image'
     end
 
     context 'with video/webm', :attachment_processing do
-      let(:params) { { file: fixture_file_upload('attachment.webm', 'video/webm') } }
+      let(:params) { { file: file_fixture_upload('attachment.webm', 'video/webm') } }
 
       it_behaves_like 'a successful media upload', 'gifv'
     end
