@@ -10,7 +10,6 @@ class ApplicationController < ActionController::Base
   include SessionTrackingConcern
   include CacheConcern
   include PreloadingConcern
-  include DomainControlHelper
   include DatabaseHelper
   include AuthorizedFetchHelper
   include SelfDestructHelper
@@ -106,6 +105,10 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def limited_federation_mode?
+    Rails.configuration.x.mastodon.limited_federation_mode
+  end
 
   def truthy_param?(key)
     ActiveModel::Type::Boolean.new.cast(params[key])

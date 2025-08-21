@@ -2,7 +2,6 @@
 
 class ActivityPub::FetchRemoteActorService < BaseService
   include JsonLdHelper
-  include DomainControlHelper
 
   class Error < StandardError; end
 
@@ -10,7 +9,7 @@ class ActivityPub::FetchRemoteActorService < BaseService
 
   # Does a WebFinger roundtrip on each call, unless `only_key` is true
   def call(uri, prefetched_body: nil, break_on_redirect: false, only_key: false, suppress_errors: true, request_id: nil)
-    return if domain_not_allowed?(uri)
+    return if DomainControl.domain_not_allowed?(uri)
     return ActivityPub::TagManager.instance.uri_to_actor(uri) if ActivityPub::TagManager.instance.local_uri?(uri)
 
     @json = begin

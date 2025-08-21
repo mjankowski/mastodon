@@ -2,7 +2,6 @@
 
 class ActivityPub::ProcessCollectionService < BaseService
   include JsonLdHelper
-  include DomainControlHelper
 
   def call(body, actor, **options)
     @account = actor
@@ -71,7 +70,7 @@ class ActivityPub::ProcessCollectionService < BaseService
 
   def verify_account!
     return unless @json['signature'].is_a?(Hash)
-    return if domain_not_allowed?(@json['signature']['creator'])
+    return if DomainControl.domain_not_allowed?(@json['signature']['creator'])
 
     @options[:relayed_through_actor] = @account
     @account = ActivityPub::LinkedDataSignature.new(@json).verify_actor!
