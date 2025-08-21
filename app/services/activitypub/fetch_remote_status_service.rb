@@ -2,14 +2,13 @@
 
 class ActivityPub::FetchRemoteStatusService < BaseService
   include JsonLdHelper
-  include DomainControlHelper
   include Redisable
 
   DISCOVERIES_PER_REQUEST = 1000
 
   # Should be called when uri has already been checked for locality
   def call(uri, prefetched_body: nil, on_behalf_of: nil, expected_actor_uri: nil, request_id: nil, depth: nil)
-    return if domain_not_allowed?(uri)
+    return if DomainControl.domain_not_allowed?(uri)
 
     @depth = depth || 0
     @request_id = request_id || "#{Time.now.utc.to_i}-status-#{uri}"

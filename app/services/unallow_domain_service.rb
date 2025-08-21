@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 class UnallowDomainService < BaseService
-  include DomainControlHelper
-
   def call(domain_allow)
-    suspend_accounts!(domain_allow.domain) if limited_federation_mode?
+    suspend_accounts!(domain_allow.domain) if Rails.configuration.x.mastodon.limited_federation_mode
 
     domain_allow.destroy
   end

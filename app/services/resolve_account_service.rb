@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResolveAccountService < BaseService
-  include DomainControlHelper
   include Redisable
   include Lockable
 
@@ -22,7 +21,7 @@ class ResolveAccountService < BaseService
     # First of all we want to check if we've got the account
     # record with the URI already, and if so, we can exit early
 
-    return if domain_not_allowed?(@domain)
+    return if DomainControl.domain_not_allowed?(@domain)
 
     @account ||= Account.find_remote(@username, @domain)
 
@@ -37,7 +36,7 @@ class ResolveAccountService < BaseService
     # we already checked, we need to check if we've already got
     # the record with that URI, again
 
-    return if domain_not_allowed?(@domain)
+    return if DomainControl.domain_not_allowed?(@domain)
 
     @account ||= Account.find_remote(@username, @domain)
 
