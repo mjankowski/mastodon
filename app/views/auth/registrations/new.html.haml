@@ -18,12 +18,12 @@
       = render 'application/card', account: @invite.user.account
 
   .fields-group
-    = f.simple_fields_for :account do |ff|
-      = ff.input :username,
-                 append: "@#{site_hostname}",
-                 input_html: { autocomplete: 'off', pattern: '[a-zA-Z0-9_]+', maxlength: Account::USERNAME_LENGTH_LIMIT, placeholder: ' ' },
-                 required: true,
-                 wrapper: :with_label
+    = f.simple_fields_for :account do |fields|
+      = fields.input :username,
+                     append: "@#{site_hostname}",
+                     input_html: { autocomplete: 'off', pattern: '[a-zA-Z0-9_]+', maxlength: Account::USERNAME_LENGTH_LIMIT, placeholder: ' ' },
+                     required: true,
+                     wrapper: :with_label
     = f.input :email,
               hint: false,
               input_html: { autocomplete: 'username', placeholder: ' ' },
@@ -64,14 +64,14 @@
     %p.lead= t('auth.sign_up.manual_review', domain: site_hostname)
 
     .fields-group
-      = f.simple_fields_for :invite_request, resource.invite_request || resource.build_invite_request do |invite_request_fields|
-        = invite_request_fields.input :text,
-                                      as: :text,
-                                      hint: false,
-                                      label: false,
-                                      input_html: { maxlength: UserInviteRequest::TEXT_SIZE_LIMIT },
-                                      required: Setting.require_invite_text,
-                                      wrapper: :with_block_label
+      = f.simple_fields_for :invite_request, resource.invite_request || resource.build_invite_request do |fields|
+        = fields.input :text,
+                       as: :text,
+                       hint: false,
+                       label: false,
+                       input_html: { maxlength: UserInviteRequest::TEXT_SIZE_LIMIT },
+                       required: Setting.require_invite_text,
+                       wrapper: :with_block_label
 
   = hidden_field_tag :accept, params[:accept]
   = f.input :invite_code, as: :hidden

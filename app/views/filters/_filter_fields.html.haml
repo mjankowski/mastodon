@@ -52,8 +52,8 @@
         %th= t('simple_form.labels.defaults.whole_word')
         %th
     %tbody
-      = f.simple_fields_for :keywords do |keyword|
-        = render 'keyword_fields', f: keyword
+      = f.simple_fields_for :keywords do |fields|
+        = render 'keyword_fields', form: fields
     %tfoot
       %tr
         %td{ colspan: 3 }
