@@ -1,0 +1,28 @@
+-# locals: (form:, existing_relationships: false)
+
+.batch-table__row{ class: [existing_relationships && 'batch-table__row--attention'] }
+  %label.batch-table__row__select.batch-table__row__select--aligned.batch-checkbox
+    = form.check_box :enabled,
+                     checked: !existing_relationships
+  .batch-table__row__content.pending-account
+    .pending-account__header
+      %strong
+        = form.object.domain
+      = form.hidden_field :domain
+      = form.hidden_field :severity
+      = form.hidden_field :reject_media
+      = form.hidden_field :reject_reports
+      = form.hidden_field :obfuscate
+      = form.hidden_field :private_comment
+      = form.hidden_field :public_comment
+
+      %br/
+
+      = form.object.policies.map { |policy| t(policy, scope: 'admin.instances.content_policies.policies') }.join(' · ')
+      - if form.object.public_comment.present?
+        ·
+        = form.object.public_comment
+      - if existing_relationships
+        ·
+        = material_symbol 'warning'
+        = t('admin.export_domain_blocks.import.existing_relationships_warning')

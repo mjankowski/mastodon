@@ -19,8 +19,8 @@
           %th= t('admin.rules.translation')
           %th
       %tbody
-        = form.simple_fields_for :translations do |translation|
-          = render 'translation_fields', f: translation
+        = form.simple_fields_for :translations do |fields|
+          = render 'translation_fields', form: fields
       %tfoot
         %tr
           %td{ colspan: 3 }
