@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module FormattingHelper
-  SYNDICATED_EMOJI_STYLES = <<~CSS.squish
+  SYNDICATED_EMOJI_STYLES = %(
     height: 1.1em;
     margin: -.2ex .15em .2ex;
     object-fit: contain;
     vertical-align: middle;
     width: 1.1em;
-  CSS
+  ).squish
 
   def html_aware_format(text, local, options = {})
     HtmlAwareFormatter.new(text, local, options).to_s

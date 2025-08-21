@@ -2,7 +2,7 @@
 
 class OEmbedSerializer < ActiveModel::Serializer
   INLINE_STYLES = {
-    blockquote: <<~CSS.squish,
+    blockquote: %(
       background: #FCF8FF;
       border-radius: 8px;
       border: 1px solid #C9C4DA;
@@ -11,8 +11,8 @@ class OEmbedSerializer < ActiveModel::Serializer
       min-width: 270px;
       overflow: hidden;
       padding: 0;
-    CSS
-    status_link: <<~CSS.squish,
+    ),
+    status_link: %(
       align-items: center;
       color: #1C1A25;
       display: flex;
@@ -24,15 +24,15 @@ class OEmbedSerializer < ActiveModel::Serializer
       line-height: 20px;
       padding: 24px;
       text-decoration: none;
-    CSS
-    div_account: <<~CSS.squish,
+    ),
+    div_account: %(
       color: #787588;
       margin-top: 16px;
-    CSS
-    div_view: <<~CSS.squish,
+    ),
+    div_view: %(
       font-weight: 500;
-    CSS
-  }.freeze
+    ),
+  }.transform_values(&:squish).freeze
 
   DEFAULT_WIDTH = 400
 

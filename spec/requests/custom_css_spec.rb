@@ -40,9 +40,9 @@ RSpec.describe 'Custom CSS' do
       end
 
       def expected_css
-        <<~CSS.strip
+        %(
           body { background-color: red; }
-        CSS
+        ).squish
       end
     end
   end
