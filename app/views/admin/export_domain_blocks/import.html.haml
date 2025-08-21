@@ -21,5 +21,5 @@
       - if @domain_blocks.empty?
         = nothing_here 'nothing-here--under-tabs'
       - else
-        = f.simple_fields_for :domain_blocks, @domain_blocks do |ff|
-          = render 'domain_block', f: ff, existing_relationships: @warning_domains.include?(ff.object.domain)
+        = f.simple_fields_for :domain_blocks, @domain_blocks do |fields|
+          = render 'domain_block_fields', form: fields, existing_relationships: @warning_domains.include?(fields.object.domain)

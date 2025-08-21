@@ -25,10 +25,10 @@
         %label= t('simple_form.labels.defaults.fields')
         %span.hint= t('simple_form.hints.account.fields')
 
-        = f.simple_fields_for :fields do |fields_f|
+        = f.simple_fields_for :fields do |fields|
           .row
-            = fields_f.input :name, placeholder: t('simple_form.labels.account.fields.name'), input_html: { maxlength: Account::Field::MAX_CHARACTERS_LOCAL }
-            = fields_f.input :value, placeholder: t('simple_form.labels.account.fields.value'), input_html: { maxlength: Account::Field::MAX_CHARACTERS_LOCAL }
+            = fields.input :name, placeholder: t('simple_form.labels.account.fields.name'), input_html: { maxlength: Account::Field::MAX_CHARACTERS_LOCAL }
+            = fields.input :value, placeholder: t('simple_form.labels.account.fields.value'), input_html: { maxlength: Account::Field::MAX_CHARACTERS_LOCAL }
 
   .fields-row
     .fields-row__column.fields-row__column-6

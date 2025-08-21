@@ -27,9 +27,9 @@
   .fields-group
     = f.input :indexable, as: :boolean, wrapper: :with_label
 
-  = f.simple_fields_for :settings, current_user.settings do |ff|
+  = f.simple_fields_for :settings, current_user.settings do |fields|
     .fields-group
-      = ff.input :indexable, wrapper: :with_label
+      = fields.input :indexable, wrapper: :with_label
 
   %h4= t('privacy.privacy')
 
@@ -38,9 +38,9 @@
   .fields-group
     = f.input :show_collections, as: :boolean, wrapper: :with_label
 
-  = f.simple_fields_for :settings, current_user.settings do |ff|
+  = f.simple_fields_for :settings, current_user.settings do |fields|
     .fields-group
-      = ff.input :show_application, wrapper: :with_label
+      = fields.input :show_application, wrapper: :with_label
 
   .actions
     = f.button :button, t('generic.save_changes'), type: :submit
