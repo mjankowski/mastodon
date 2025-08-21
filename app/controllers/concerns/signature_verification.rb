@@ -5,6 +5,8 @@
 module SignatureVerification
   extend ActiveSupport::Concern
 
+  include DomainControl
+
   EXPIRATION_WINDOW_LIMIT = 12.hours
   CLOCK_SKEW_MARGIN       = 1.hour
   STOPLIGHT_COOL_OFF_TIME = 5.minutes.seconds
@@ -88,7 +90,7 @@ module SignatureVerification
     key_id = signed_request.key_id
     domain = key_id.start_with?('acct:') ? key_id.split('@').last : key_id
 
-    if DomainControl.domain_not_allowed?(domain)
+    if domain_not_allowed?(domain)
       @signature_verification_failure_code = 403
       return
     end

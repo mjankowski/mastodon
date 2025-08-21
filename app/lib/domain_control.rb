@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class DomainControl
-  def self.domain_not_allowed?(uri_or_domain)
+module DomainControl
+  def domain_not_allowed?(uri_or_domain)
     return false if uri_or_domain.blank?
 
     domain = if uri_or_domain.include?('://')
