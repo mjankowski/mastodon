@@ -32,7 +32,7 @@ class VotingLimitsValidator < ActiveModel::Validator
 
   def already_voted_for_same_choice_on_multiple_poll?
     if persisted?
-      account_votes_on_same_poll.where(choice:).where.not(poll_votes: { id: vote }).exists?
+      account_votes_on_same_poll.where(choice:).excluding(vote).exists?
     else
       account_votes_on_same_poll.exists?(choice:)
     end
@@ -40,7 +40,7 @@ class VotingLimitsValidator < ActiveModel::Validator
 
   def already_voted_on_non_multiple_poll?
     if persisted?
-      account_votes_on_same_poll.where.not(poll_votes: { id: vote }).exists?
+      account_votes_on_same_poll.excluding(vote).exists?
     else
       account_votes_on_same_poll.exists?
     end
