@@ -18,7 +18,10 @@ class PollVote < ApplicationRecord
   belongs_to :poll, inverse_of: :votes
 
   validates :choice, presence: true
-  validates_with VoteValidator
+  validates_with VotingLimitsValidator
+  validate :validate_poll_not_expired
+  validate :validate_invalid_choice
+  validate :validate_self_vote
 
   after_create_commit :increment_counter_cache
 
@@ -37,5 +40,25 @@ class PollVote < ApplicationRecord
   rescue ActiveRecord::StaleObjectError
     poll.reload
     retry
+  end
+
+  def validate_poll_not_expired
+    errors.add(:base, I18n.t('polls.errors.expired')) if poll_expired?
+  end
+
+  def validate_invalid_choice
+    errors.add(:base, I18n.t('polls.errors.invalid_choice')) if invalid_choice?
+  end
+
+  def validate_self_vote
+    errors.add(:base, I18n.t('polls.errors.self_vote')) if self_vote?
+  end
+
+  def self_vote?
+    account_id == poll.account_id
+  end
+
+  def invalid_choice?
+    choice.negative? || choice >= poll.options.size
   end
 end
