@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class Form::AccountBatch < Form::BaseBatch
+  include ActiveModel::Attributes
   include Payloadable
 
   attr_accessor :account_ids,
-                :query,
-                :select_all_matching
+                :query
+
+  attribute :select_all_matching, :boolean, default: false
 
   def save
     case action
@@ -63,7 +65,7 @@ class Form::AccountBatch < Form::BaseBatch
   end
 
   def accounts
-    if select_all_matching?
+    if select_all_matching
       query
     else
       Account.where(id: account_ids)
@@ -139,9 +141,5 @@ class Form::AccountBatch < Form::BaseBatch
     authorize(account.user, :approve?)
     log_action(:approve, account.user)
     account.user.approve!
-  end
-
-  def select_all_matching?
-    select_all_matching == '1'
   end
 end
