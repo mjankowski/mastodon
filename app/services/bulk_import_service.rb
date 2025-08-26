@@ -20,7 +20,7 @@ class BulkImportService < BaseService
       import_lists!
     end
 
-    @import.state_finished! if @import.processed_items == @import.total_items
+    @import.state_finished! if @import.processing_complete?
   rescue
     @import.state_finished!
 
