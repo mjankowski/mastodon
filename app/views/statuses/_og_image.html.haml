@@ -1,3 +1,5 @@
+-# locals(status:, account:)
+
 - if status.non_sensitive_with_media? || (status.with_media? && Setting.preview_sensitive_media)
   - status.ordered_media_attachments.each do |media|
     - if media.image?
