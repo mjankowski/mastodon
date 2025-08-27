@@ -9,6 +9,12 @@ RSpec.describe Status do
   let(:bob)   { Fabricate(:account, username: 'bob') }
   let(:other) { Fabricate(:status, account: bob, text: 'Skulls for the skull god! The enemy\'s gates are sideways!') }
 
+  describe 'Delegations' do
+    it { is_expected.to delegate_method(:domain).to(:account).with_prefix }
+    it { is_expected.to delegate_method(:indexable?).to(:account).with_prefix }
+    it { is_expected.to delegate_method(:name).to(:application).with_prefix }
+  end
+
   describe '#local?' do
     it 'returns true when no remote URI is set' do
       expect(subject.local?).to be true
