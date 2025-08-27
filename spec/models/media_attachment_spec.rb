@@ -25,6 +25,28 @@ RSpec.describe MediaAttachment, :attachment_processing do
     end
   end
 
+  describe '#linkable_url' do
+    subject { media.linkable_url }
+
+    context 'when remote_url is present' do
+      let(:media) { Fabricate.build :media_attachment, remote_url: 'https://host.example/file.jpg', file: nil }
+
+      it { is_expected.to match(/file.jpg/) }
+    end
+
+    context 'when file is present' do
+      let(:media) { Fabricate.build :media_attachment, type: :image }
+
+      it { is_expected.to match(%r{/original/.+\.jpg}) }
+    end
+
+    context 'when file and remote url are missing' do
+      let(:media) { Fabricate.build :media_attachment, remote_url: nil, file: nil }
+
+      it { is_expected.to eq('/files/original/missing.png') }
+    end
+  end
+
   describe 'needs_redownload?' do
     subject { media_attachment.needs_redownload? }
 
