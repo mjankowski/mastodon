@@ -3,6 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Report do
+  describe 'Delegations' do
+    it { is_expected.to delegate_method(:local?).to(:account) }
+    it { is_expected.to delegate_method(:name).to(:application).with_prefix }
+  end
+
   describe 'statuses' do
     it 'returns the statuses for the report' do
       status = Fabricate(:status)
