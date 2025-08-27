@@ -228,6 +228,10 @@ class MediaAttachment < ApplicationRecord
     file.blank? && remote_url.present?
   end
 
+  def linkable_url
+    remote_url.presence || file.url
+  end
+
   def discarded?
     status&.discarded? || (status_id.present? && status.nil?)
   end
