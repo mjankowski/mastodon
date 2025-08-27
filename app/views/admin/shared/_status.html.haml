@@ -14,7 +14,7 @@
 
   .detailed-status__meta
     - if status.application
-      = status.application.name
+      = status.application_name
       ·
     = conditional_link_to can?(:show, status), admin_account_status_path(status.account.id, status), class: 'detailed-status__datetime' do
       %time.formatted{ datetime: status.created_at.iso8601, title: l(status.created_at) }><= l(status.created_at)

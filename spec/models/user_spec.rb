@@ -58,6 +58,12 @@ RSpec.describe User do
     end
   end
 
+  describe 'Delegations' do
+    it { is_expected.to delegate_method(:can?).to(:role) }
+    it { is_expected.to delegate_method(:confirmation_redirect_url).to(:created_by_application).with_prefix }
+    it { is_expected.to delegate_method(:name).to(:created_by_application).with_prefix }
+  end
+
   describe 'scopes', :inline_jobs do
     describe 'recent' do
       it 'returns an array of recent users ordered by id' do
