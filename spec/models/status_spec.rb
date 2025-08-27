@@ -11,6 +11,12 @@ RSpec.describe Status do
 
   it_behaves_like 'Status::Visibility'
 
+  describe 'Delegations' do
+    it { is_expected.to delegate_method(:domain).to(:account).with_prefix }
+    it { is_expected.to delegate_method(:indexable?).to(:account).with_prefix }
+    it { is_expected.to delegate_method(:name).to(:application).with_prefix }
+  end
+
   describe '#local?' do
     it 'returns true when no remote URI is set' do
       expect(subject.local?).to be true
