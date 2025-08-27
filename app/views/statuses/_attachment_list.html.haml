@@ -4,5 +4,4 @@
   %ul.attachment-list__list
     - attachments.each do |media|
       %li
-        - url = media.remote_url.presence || media.file.url
-        = link_to File.basename(url), url, title: media.description
+        = link_to File.basename(media.linkable_url), media.linkable_url, title: media.description
