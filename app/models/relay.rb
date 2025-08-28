@@ -30,8 +30,7 @@ class Relay < ApplicationRecord
   end
 
   def enable!
-    activity_id = ActivityPub::TagManager.instance.generate_uri_for(nil)
-    payload     = Oj.dump(follow_activity(activity_id))
+    payload = Oj.dump(follow_activity)
 
     update!(state: :pending, follow_activity_id: activity_id)
     reset_delivery_tracker
@@ -39,8 +38,7 @@ class Relay < ApplicationRecord
   end
 
   def disable!
-    activity_id = ActivityPub::TagManager.instance.generate_uri_for(nil)
-    payload     = Oj.dump(unfollow_activity(activity_id))
+    payload = Oj.dump(unfollow_activity)
 
     update!(state: :idle, follow_activity_id: nil)
     reset_delivery_tracker
@@ -53,11 +51,15 @@ class Relay < ApplicationRecord
     DeliveryFailureTracker.reset!(inbox_url)
   end
 
+  def activity_id
+    @activity_id ||= ActivityPub::TagManager.instance.generate_uri_for(nil)
+  end
+
   def track_state_change(payload)
     ActivityPub::DeliveryWorker.perform_async(payload, some_local_account.id, inbox_url)
   end
 
-  def follow_activity(activity_id)
+  def follow_activity
     {
       '@context': ActivityPub::TagManager::CONTEXT,
       id: activity_id,
@@ -67,7 +69,7 @@ class Relay < ApplicationRecord
     }
   end
 
-  def unfollow_activity(activity_id)
+  def unfollow_activity
     {
       '@context': ActivityPub::TagManager::CONTEXT,
       id: activity_id,
