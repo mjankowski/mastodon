@@ -28,7 +28,7 @@
         = t('admin.reports.resolved')
       - else
         = t('admin.reports.unresolved')
-  - if report.local? && !report.target_account.local?
+  - if report.local? && !report.target_account_local?
     .report-header__details__item
       .report-header__details__item__header
         %strong= t('admin.reports.forwarded')
