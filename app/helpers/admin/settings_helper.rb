@@ -14,6 +14,17 @@ module Admin::SettingsHelper
     )
   end
 
+  def admin_settings_links
+    proc do |menu|
+      menu.item :branding, safe_join([material_symbol('edit'), t('admin.settings.branding.title')]), admin_settings_branding_path
+      menu.item :about, safe_join([material_symbol('description'), t('admin.settings.about.title')]), admin_settings_about_path
+      menu.item :registrations, safe_join([material_symbol('group'), t('admin.settings.registrations.title')]), admin_settings_registrations_path
+      menu.item :discovery, safe_join([material_symbol('search'), t('admin.settings.discovery.title')]), admin_settings_discovery_path
+      menu.item :content_retention, safe_join([material_symbol('history'), t('admin.settings.content_retention.title')]), admin_settings_content_retention_path
+      menu.item :appearance, safe_join([material_symbol('computer'), t('admin.settings.appearance.title')]), admin_settings_appearance_path
+    end
+  end
+
   private
 
   def login_activity_key(activity)
