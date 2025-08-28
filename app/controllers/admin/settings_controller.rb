@@ -2,6 +2,8 @@
 
 module Admin
   class SettingsController < BaseController
+    layout 'admin/settings'
+
     def show
       authorize :settings, :show?
 

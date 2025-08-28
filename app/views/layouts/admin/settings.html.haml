@@ -1,0 +1,6 @@
+- content_for :heading do
+  %h2= t('admin.settings.title')
+  .content__heading__tabs
+    = render_navigation renderer: :links, &admin_settings_links
+
+= render template: 'layouts/admin'
