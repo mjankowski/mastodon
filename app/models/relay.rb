@@ -30,17 +30,13 @@ class Relay < ApplicationRecord
   end
 
   def enable!
-    payload = Oj.dump(follow_activity)
-
     update!(state: :pending, follow_activity_id: activity_id)
-    track_state_change(payload)
+    track_state_change Oj.dump(follow_activity)
   end
 
   def disable!
-    payload = Oj.dump(unfollow_activity)
-
     update!(state: :idle, follow_activity_id: nil)
-    track_state_change(payload)
+    track_state_change Oj.dump(unfollow_activity)
   end
 
   private
