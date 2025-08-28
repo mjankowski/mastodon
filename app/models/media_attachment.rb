@@ -214,6 +214,8 @@ class MediaAttachment < ApplicationRecord
   scope :unattached, -> { where(status_id: nil, scheduled_status_id: nil) }
   scope :updated_before, ->(value) { where(arel_table[:updated_at].lt(value)) }
 
+  store_accessor :file_meta, :focus, prefix: true
+
   attr_accessor :skip_download
 
   def local?
@@ -260,12 +262,9 @@ class MediaAttachment < ApplicationRecord
   end
 
   def focus
-    x = file.meta&.dig('focus', 'x')
-    y = file.meta&.dig('focus', 'y')
+    return if file_meta_focus.blank? || file_meta_focus.values.any?(&:blank?)
 
-    return if x.nil? || y.nil?
-
-    "#{x},#{y}"
+    [file_meta_focus['x'], file_meta_focus['y']].join(',')
   end
 
   attr_writer :delay_processing
