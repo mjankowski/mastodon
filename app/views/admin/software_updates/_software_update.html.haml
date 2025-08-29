@@ -1,0 +1,8 @@
+%tr
+  %td= software_update.version
+  %td= t("admin.software_updates.types.#{software_update.type}")
+  - if software_update.urgent?
+    %td.critical= t('admin.software_updates.critical_update')
+  - else
+    %td
+  %td= table_link_to 'link', t('admin.software_updates.release_notes'), software_update.release_notes
