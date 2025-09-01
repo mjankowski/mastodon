@@ -24,4 +24,8 @@ class RuleTranslation < ApplicationRecord
   def self.languages
     joins(:rule).merge(Rule.kept).distinct.pluck(:language).sort
   end
+
+  def self.untranslated_languages(rule)
+    excluding(rule.translations).languages
+  end
 end
