@@ -18,7 +18,6 @@ module Admin
     def edit
       authorize @rule, :update?
 
-      missing_languages = RuleTranslation.languages - @rule.translations.pluck(:language)
       missing_languages.each { |lang| @rule.translations.build(language: lang) }
     end
 
@@ -77,6 +76,10 @@ module Admin
     def resource_params
       params
         .expect(rule: [:text, :hint, :priority, translations_attributes: [[:id, :language, :text, :hint, :_destroy]]])
+    end
+
+    def missing_languages
+      RuleTranslation.untranslated_languages(@rule)
     end
   end
 end
