@@ -27,7 +27,7 @@ class Admin::SystemCheck::ElasticsearchCheck < Admin::SystemCheck::BaseCheck
     elsif !compatible_version?
       Admin::SystemCheck::Message.new(
         :elasticsearch_version_check,
-        I18n.t(
+        value: I18n.t(
           'admin.system_checks.elasticsearch_version_check.version_comparison',
           running_version: running_version,
           required_version: required_version
@@ -36,23 +36,23 @@ class Admin::SystemCheck::ElasticsearchCheck < Admin::SystemCheck::BaseCheck
     elsif !indexes_match?
       Admin::SystemCheck::Message.new(
         :elasticsearch_index_mismatch,
-        mismatched_indexes.join(' ')
+        value: mismatched_indexes.join(' ')
       )
     elsif !specifications_match?
       Admin::SystemCheck::Message.new(
         :elasticsearch_analysis_index_mismatch,
-        mismatched_specifications_indexes.join(' ')
+        value: mismatched_specifications_indexes.join(' ')
       )
     elsif cluster_health['status'] == 'red'
       Admin::SystemCheck::Message.new(:elasticsearch_health_red)
     elsif cluster_health['number_of_nodes'] < 2 && es_preset != 'single_node_cluster'
-      Admin::SystemCheck::Message.new(:elasticsearch_preset_single_node, nil, 'https://docs.joinmastodon.org/admin/elasticsearch/#scaling')
+      Admin::SystemCheck::Message.new(:elasticsearch_preset_single_node, action: 'https://docs.joinmastodon.org/admin/elasticsearch/#scaling')
     elsif Chewy.client.indices.get_settings[Chewy::Stash::Specification.index_name]&.dig('settings', 'index', 'number_of_replicas')&.to_i&.positive? && es_preset == 'single_node_cluster'
       Admin::SystemCheck::Message.new(:elasticsearch_reset_chewy)
     elsif cluster_health['status'] == 'yellow'
       Admin::SystemCheck::Message.new(:elasticsearch_health_yellow)
     else
-      Admin::SystemCheck::Message.new(:elasticsearch_preset, nil, 'https://docs.joinmastodon.org/admin/elasticsearch/#scaling')
+      Admin::SystemCheck::Message.new(:elasticsearch_preset, action: 'https://docs.joinmastodon.org/admin/elasticsearch/#scaling')
     end
   rescue Faraday::ConnectionFailed, Elasticsearch::Transport::Transport::Error, HTTPClient::KeepAliveDisconnected
     Admin::SystemCheck::Message.new(:elasticsearch_running_check)

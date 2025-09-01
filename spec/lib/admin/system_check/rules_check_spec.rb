@@ -43,11 +43,11 @@ RSpec.describe Admin::SystemCheck::RulesCheck do
 
   describe 'message' do
     it 'sends class name symbol to message instance' do
-      allow(Admin::SystemCheck::Message).to receive(:new).with(:rules_check, nil, '/admin/rules')
+      allow(Admin::SystemCheck::Message).to receive(:new).with(:rules_check, action: '/admin/rules')
 
       check.message
 
-      expect(Admin::SystemCheck::Message).to have_received(:new).with(:rules_check, nil, '/admin/rules')
+      expect(Admin::SystemCheck::Message).to have_received(:new).with(:rules_check, action: '/admin/rules')
     end
   end
 end

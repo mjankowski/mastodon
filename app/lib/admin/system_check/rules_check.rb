@@ -12,6 +12,6 @@ class Admin::SystemCheck::RulesCheck < Admin::SystemCheck::BaseCheck
   end
 
   def message
-    Admin::SystemCheck::Message.new(:rules_check, nil, admin_rules_path)
+    Admin::SystemCheck::Message.new(:rules_check, action: admin_rules_path)
   end
 end

@@ -20,7 +20,7 @@ class Admin::SystemCheck::SidekiqProcessCheck < Admin::SystemCheck::BaseCheck
   end
 
   def message
-    Admin::SystemCheck::Message.new(:sidekiq_process_check, missing_queues.join(', '))
+    Admin::SystemCheck::Message.new(:sidekiq_process_check, value: missing_queues.join(', '))
   end
 
   private

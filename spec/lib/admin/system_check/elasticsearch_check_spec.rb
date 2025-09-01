@@ -110,7 +110,7 @@ RSpec.describe Admin::SystemCheck::ElasticsearchCheck do
         check.message
 
         expect(Admin::SystemCheck::Message).to have_received(:new)
-          .with(:elasticsearch_version_check, 'Elasticsearch 1.2.3 is running while 7.x is required')
+          .with(:elasticsearch_version_check, value: 'Elasticsearch 1.2.3 is running while 7.x is required')
       end
     end
 

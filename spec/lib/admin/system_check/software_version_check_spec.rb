@@ -106,12 +106,12 @@ RSpec.describe Admin::SystemCheck::SoftwareVersionCheck do
 
       it 'sends class name symbol to message instance' do
         allow(Admin::SystemCheck::Message).to receive(:new)
-          .with(:software_version_patch_check, anything, anything)
+          .with(:software_version_patch_check, anything)
 
         check.message
 
         expect(Admin::SystemCheck::Message).to have_received(:new)
-          .with(:software_version_patch_check, nil, admin_software_updates_path)
+          .with(:software_version_patch_check, action: admin_software_updates_path)
       end
     end
 
@@ -122,12 +122,12 @@ RSpec.describe Admin::SystemCheck::SoftwareVersionCheck do
 
       it 'sends class name symbol to message instance' do
         allow(Admin::SystemCheck::Message).to receive(:new)
-          .with(:software_version_critical_check, anything, anything, anything)
+          .with(:software_version_critical_check, anything)
 
         check.message
 
         expect(Admin::SystemCheck::Message).to have_received(:new)
-          .with(:software_version_critical_check, nil, admin_software_updates_path, critical: true)
+          .with(:software_version_critical_check, action: admin_software_updates_path, critical: true)
       end
     end
   end
