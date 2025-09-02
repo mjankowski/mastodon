@@ -27,30 +27,19 @@ class AccountMigration < ApplicationRecord
 
   normalizes :acct, with: ->(acct) { acct.strip.delete_prefix('@') }
 
+  around_save :wrap_with_lock, if: :current_user
+
   validates :acct, presence: true, domain: { acct: true }
   validate :validate_migration_cooldown
   validate :validate_target_account
+  validate :verify_challenge, on: :challenge, if: :current_user
 
   scope :within_cooldown, -> { where(created_at: cooldown_duration_ago..) }
 
-  attr_accessor :current_password, :current_username
+  attr_accessor :current_password, :current_user, :current_username
 
   def self.cooldown_duration_ago
     Time.current - COOLDOWN_PERIOD
-  end
-
-  def save_with_challenge(current_user)
-    if current_user.encrypted_password.present?
-      errors.add(:current_password, :invalid) unless current_user.valid_password?(current_password)
-    else
-      errors.add(:current_username, :invalid) unless account.username == current_username
-    end
-
-    return false unless errors.empty?
-
-    with_redis_lock("account_migration:#{account.id}") do
-      save
-    end
   end
 
   def cooldown_at
@@ -81,5 +70,17 @@ class AccountMigration < ApplicationRecord
 
   def validate_migration_cooldown
     errors.add(:base, I18n.t('migrations.errors.on_cooldown')) if account.migrations.within_cooldown.exists?
+  end
+
+  def verify_challenge
+    if current_user.encrypted_password?
+      errors.add(:current_password, :invalid) unless current_user.valid_password?(current_password)
+    else
+      errors.add(:current_username, :invalid) unless account.username == current_username
+    end
+  end
+
+  def wrap_with_lock(&block)
+    with_redis_lock("account_migration:#{account.id}", &block)
   end
 end

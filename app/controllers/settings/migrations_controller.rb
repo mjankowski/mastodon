@@ -13,8 +13,9 @@ class Settings::MigrationsController < Settings::BaseController
 
   def create
     @migration = current_account.migrations.build(resource_params)
+    @migration.current_user = current_user
 
-    if @migration.save_with_challenge(current_user)
+    if @migration.save(context: :challenge)
       MoveService.new.call(@migration)
       redirect_to settings_migration_path, notice: I18n.t('migrations.moved_msg', acct: current_account.moved_to_account.acct)
     else
