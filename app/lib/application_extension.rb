@@ -33,6 +33,10 @@ module ApplicationExtension
     redirect_uri.split
   end
 
+  def scope_groups
+    Doorkeeper.configuration.scopes.group_by { |value| value.split(':').first }.values
+  end
+
   def close_streaming_sessions(resource_owner = nil)
     # TODO: #28793 Combine into a single topic
     payload = Oj.dump(event: :kill)
