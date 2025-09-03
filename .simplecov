@@ -32,6 +32,7 @@ SimpleCov.configure do
 
   skip 'lib/linter'
 
+  group 'Feeds', 'app/feeds'
   group 'Libraries', 'lib'
   group 'Policies', 'app/policies'
   group 'Presenters', 'app/presenters'
