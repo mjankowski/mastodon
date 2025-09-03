@@ -15,6 +15,8 @@
 #
 
 class AccountStat < ApplicationRecord
+  include Counters
+
   self.locking_column = nil
   self.ignored_columns += %w(lock_version)
 
@@ -25,15 +27,5 @@ class AccountStat < ApplicationRecord
 
   update_index('accounts', :account)
 
-  def following_count
-    [attributes['following_count'], 0].max
-  end
-
-  def followers_count
-    [attributes['followers_count'], 0].max
-  end
-
-  def statuses_count
-    [attributes['statuses_count'], 0].max
-  end
+  counter_columns :followers_count, :following_count, :statuses_count
 end
