@@ -154,7 +154,7 @@ class User < ApplicationRecord
   def date_of_birth=(hash_or_string)
     @date_of_birth = begin
       if hash_or_string.is_a?(Hash)
-        day, month, year = hash_or_string.values_at(1, 2, 3)
+        day, month, year = hash_or_string.values_at(3, 2, 1)
         "#{day}.#{month}.#{year}"
       else
         hash_or_string
