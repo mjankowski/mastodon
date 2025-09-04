@@ -24,7 +24,7 @@ class Instance < ApplicationRecord
     has_many :moderation_notes, class_name: 'InstanceModerationNote', dependent: :destroy
   end
 
-  scope :searchable, -> { where.not(domain: DomainBlock.select(:domain)) }
+  scope :searchable, -> { where.missing(:domain_block) }
   scope :matches_domain, ->(value) { where(arel_table[:domain].matches("%#{value}%")) }
   scope :domain_starts_with, ->(value) { where(arel_table[:domain].matches("#{sanitize_sql_like(value)}%", false, true)) }
   scope :by_domain_and_subdomains, ->(domain) { where("reverse('.' || domain) LIKE reverse(?)", "%.#{domain}") }
