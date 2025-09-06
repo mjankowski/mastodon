@@ -8,9 +8,7 @@ class PollExpirationValidator < ActiveModel::Validator
     # We have a `presence: true` check for this attribute already
     return if poll.expires_at.nil?
 
-    current_time = Time.now.utc
-
-    poll.errors.add(:expires_at, I18n.t('polls.errors.duration_too_long')) if poll.expires_at - current_time > MAX_EXPIRATION
-    poll.errors.add(:expires_at, I18n.t('polls.errors.duration_too_short')) if (poll.expires_at - current_time).ceil < MIN_EXPIRATION
+    poll.errors.add(:expires_at, I18n.t('polls.errors.duration_too_long')) if poll.expires_at > MAX_EXPIRATION.from_now
+    poll.errors.add(:expires_at, I18n.t('polls.errors.duration_too_short')) if poll.expires_at < MIN_EXPIRATION.from_now
   end
 end
