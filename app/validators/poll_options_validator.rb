@@ -8,7 +8,7 @@ class PollOptionsValidator < ActiveModel::Validator
   def validate(poll)
     poll.errors.add(:options, too_few_message) unless poll.options.size > MIN_OPTIONS
     poll.errors.add(:options, too_many_message) if poll.options.size > MAX_OPTIONS
-    poll.errors.add(:options, character_limit_message) if poll.options.any? { |option| option.each_grapheme_cluster.size > MAX_OPTION_CHARS }
+    poll.errors.add(:options, character_limit_message) if options_over_limit?(poll.options)
     poll.errors.add(:options, duplicate_message) unless poll.options.uniq.size == poll.options.size
   end
 
@@ -28,5 +28,9 @@ class PollOptionsValidator < ActiveModel::Validator
 
   def duplicate_message
     I18n.t('polls.errors.duplicate_options')
+  end
+
+  def options_over_limit?(options)
+    options.any? { |option| option.each_grapheme_cluster.size > MAX_OPTION_CHARS }
   end
 end
