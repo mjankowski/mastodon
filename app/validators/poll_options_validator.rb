@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class PollOptionsValidator < ActiveModel::Validator
-  MAX_OPTIONS      = 4
   MAX_OPTION_CHARS = 50
+  MAX_OPTIONS = 4
+  MIN_OPTIONS = 1
 
   def validate(poll)
-    poll.errors.add(:options, too_few_message) unless poll.options.size > 1
+    poll.errors.add(:options, too_few_message) unless poll.options.size > MIN_OPTIONS
     poll.errors.add(:options, too_many_message) if poll.options.size > MAX_OPTIONS
     poll.errors.add(:options, character_limit_message) if poll.options.any? { |option| option.each_grapheme_cluster.size > MAX_OPTION_CHARS }
     poll.errors.add(:options, duplicate_message) unless poll.options.uniq.size == poll.options.size
