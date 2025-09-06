@@ -7,7 +7,7 @@ class FollowLimitValidator < ActiveModel::Validator
   def validate(follow)
     return if follow.account.nil? || !follow.account.local?
 
-    follow.errors.add(:base, I18n.t('users.follow_limit_reached', limit: self.class.limit_for_account(follow.account))) if limit_reached?(follow.account)
+    follow.errors.add(:base, limit_message(follow.account)) if limit_reached?(follow.account)
   end
 
   class << self
@@ -24,5 +24,9 @@ class FollowLimitValidator < ActiveModel::Validator
 
   def limit_reached?(account)
     account.following_count >= self.class.limit_for_account(account)
+  end
+
+  def limit_message(account)
+    I18n.t 'users.follow_limit_reached', limit: self.class.limit_for_account(account)
   end
 end
