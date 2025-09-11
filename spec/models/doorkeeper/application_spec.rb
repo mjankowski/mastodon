@@ -34,24 +34,6 @@ RSpec.describe Doorkeeper::Application do
     end
   end
 
-  describe '#scope_groups' do
-    subject { described_class.new.scope_groups }
-
-    before { allow(Doorkeeper.configuration).to receive(:scopes).and_return(scopes) }
-
-    context 'with configured scopes' do
-      let(:scopes) { %w(read read:accounts profile write write:accounts) }
-
-      it { is_expected.to eq [%w(read read:accounts), %w(profile), %w(write write:accounts)] }
-    end
-
-    context 'with empty scopes' do
-      let(:scopes) { [] }
-
-      it { is_expected.to be_empty }
-    end
-  end
-
   describe '#confirmation_redirect_uri' do
     subject { Fabricate.build(:application, redirect_uri:).confirmation_redirect_uri }
 

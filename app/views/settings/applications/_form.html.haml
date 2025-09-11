@@ -21,7 +21,7 @@
     = form.label t('activerecord.attributes.doorkeeper/application.scopes'), required: true
     %span.hint= t('simple_form.hints.defaults.scopes')
 
-  - form.object.scope_groups.each do |group|
+  - application_scope_groups.each do |group|
     = form.input :scopes,
                  as: :check_boxes,
                  collection_wrapper_tag: 'ul',
