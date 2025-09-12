@@ -23,6 +23,8 @@ RSpec.describe 'Health check endpoint' do
 
         expect(response)
           .to have_http_status(200)
+        expect(response.headers)
+          .to not_include('content-security-policy')
         expect(response.media_type)
           .to eq('text/html')
       end
