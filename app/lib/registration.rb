@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+class Registration
+  def self.mode
+    Setting.registrations_mode.to_s.inquiry
+  end
+end
