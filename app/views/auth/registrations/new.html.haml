@@ -60,7 +60,7 @@
                 required: true,
                 wrapper: :with_block_label
 
-  - if approved_registrations? && @invite.blank?
+  - if Registration.mode.approved? && @invite.blank?
     %p.lead= t('auth.sign_up.manual_review', domain: site_hostname)
 
     .fields-group

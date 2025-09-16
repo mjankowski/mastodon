@@ -79,11 +79,11 @@ class REST::V1::InstanceSerializer < ActiveModel::Serializer
   end
 
   def registrations
-    Setting.registrations_mode != 'none' && !Rails.configuration.x.single_user_mode
+    Registration.allowed? && !Rails.configuration.x.single_user_mode
   end
 
   def approval_required
-    Setting.registrations_mode == 'approved'
+    Registration.mode.approved?
   end
 
   def invites_enabled

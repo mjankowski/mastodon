@@ -477,7 +477,7 @@ class User < ApplicationRecord
   end
 
   def open_registrations?
-    Setting.registrations_mode == 'open'
+    Registration.mode.open?
   end
 
   def sanitize_role
