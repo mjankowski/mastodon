@@ -122,7 +122,7 @@ class REST::InstanceSerializer < ActiveModel::Serializer
   private
 
   def registrations_enabled?
-    Setting.registrations_mode != 'none' && !Rails.configuration.x.single_user_mode
+    Registration.allowed? && !Rails.configuration.x.single_user_mode
   end
 
   def registrations_message

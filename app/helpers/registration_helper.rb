@@ -8,7 +8,7 @@ module RegistrationHelper
   end
 
   def registrations_open?
-    Setting.registrations_mode != 'none'
+    Registration.allowed?
   end
 
   def omniauth_only?
