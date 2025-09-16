@@ -59,8 +59,9 @@ RSpec.describe HomeHelper do
 
   describe 'sign_up_messages' do
     context 'with closed registrations' do
+      before { Setting.registrations_mode = 'none' }
+
       it 'returns correct sign up message' do
-        allow(helper).to receive(:closed_registrations?).and_return(true)
         result = helper.sign_up_message
 
         expect(result).to eq t('auth.registration_closed', instance: local_domain_uri.host)
@@ -68,8 +69,9 @@ RSpec.describe HomeHelper do
     end
 
     context 'with open registrations' do
+      before { Setting.registrations_mode = 'open' }
+
       it 'returns correct sign up message' do
-        allow(helper).to receive_messages(closed_registrations?: false, open_registrations?: true)
         result = helper.sign_up_message
 
         expect(result).to eq t('auth.register')
@@ -77,8 +79,9 @@ RSpec.describe HomeHelper do
     end
 
     context 'with approved registrations' do
+      before { Setting.registrations_mode = 'approved' }
+
       it 'returns correct sign up message' do
-        allow(helper).to receive_messages(closed_registrations?: false, open_registrations?: false, approved_registrations?: true)
         result = helper.sign_up_message
 
         expect(result).to eq t('auth.apply_for_account')

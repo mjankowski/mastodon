@@ -22,20 +22,12 @@ module ApplicationHelper
     number_to_human(number, **options)
   end
 
-  def open_registrations?
-    Registration.mode.open?
-  end
-
   def approved_registrations?
     Registration.mode.approved?
   end
 
-  def closed_registrations?
-    Registration.mode.none?
-  end
-
   def available_sign_up_path
-    if closed_registrations? || omniauth_only?
+    if !Registration.allowed? || omniauth_only?
       'https://joinmastodon.org/#getting-started'
     else
       ENV.fetch('SSO_ACCOUNT_SIGN_UP', new_user_registration_path)

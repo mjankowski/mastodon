@@ -48,11 +48,11 @@ module HomeHelper
   end
 
   def sign_up_message
-    if closed_registrations?
+    if Registration.mode.none?
       t('auth.registration_closed', instance: site_hostname)
-    elsif open_registrations?
+    elsif Registration.mode.open?
       t('auth.register')
-    elsif approved_registrations?
+    elsif Registration.mode.approved?
       t('auth.apply_for_account')
     end
   end
