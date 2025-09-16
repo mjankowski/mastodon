@@ -92,6 +92,7 @@ class Request
 
     raise Mastodon::HostValidationError, 'Instance does not support hidden service connections' if block_hidden_service?
 
+    restore_query_values!
     set_common_headers!
     set_digest! if options.key?(:body)
   end
@@ -147,6 +148,13 @@ class Request
   end
 
   private
+
+  def restore_query_values!
+    if @url.query_values.present?
+      # Restore the URL encoding stripped by normalize
+      @url.query_values = @url.query_values.to_a
+    end
+  end
 
   def set_common_headers!
     @headers['User-Agent']      = Mastodon::Version.user_agent

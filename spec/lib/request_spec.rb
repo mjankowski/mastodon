@@ -43,6 +43,15 @@ RSpec.describe Request do
   describe '#initialize' do
     subject { described_class.new(:get, url) }
 
+    context 'when URL has encoded params in query' do
+      let(:url) { 'https://host.example/image.jpg?width=10&overlay-align=bottom%2Cleft' }
+
+      it 're-encodes query params in url value after normalization' do
+        expect(initialized_url_value)
+          .to eq(url)
+      end
+    end
+
     context 'when URL has new lines' do
       let(:url) { "https://host.example/image\nhttps://badhost.example/page.jpg" }
 
