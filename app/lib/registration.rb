@@ -6,6 +6,6 @@ class Registration
   end
 
   def self.allowed?
-    !mode.none? # rubocop:disable Style/InverseMethods
+    mode.approved? || mode.open?
   end
 end
