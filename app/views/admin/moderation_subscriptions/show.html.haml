@@ -37,7 +37,7 @@
         %tr
           %th= t('admin.moderation_subscriptions.last_synced_at')
           %td
-            %time.formatted{ datetime: @moderation_subscription.last_synced_at.iso8601 }= @moderation_subscription.last_synced_at
+            = formatted_time @moderation_subscription.last_synced_at
 
 .action-buttons
   = link_to t('admin.moderation_subscriptions.show.edit'), edit_admin_moderation_subscription_path(@moderation_subscription), class: 'button' if can?(:update, @moderation_subscription)
