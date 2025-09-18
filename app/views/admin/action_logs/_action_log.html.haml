@@ -13,4 +13,4 @@
           = action_log_subscription(action_log)
 
       .log-entry__timestamp
-        %time.formatted{ datetime: action_log.created_at.iso8601 }
+        = formatted_time(action_log.created_at)

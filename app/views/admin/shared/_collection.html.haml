@@ -10,7 +10,7 @@
 
   .detailed-status__meta
     = conditional_link_to can?(:show, collection), admin_account_collection_path(collection.account.id, collection), class: 'detailed-status__datetime' do
-      %time.formatted{ datetime: collection.created_at.iso8601, title: l(collection.created_at) }><= l(collection.created_at)
+      = formatted_time collection.created_at
     - if collection.sensitive?
       &nbsp;·
       = material_symbol('visibility_off')
