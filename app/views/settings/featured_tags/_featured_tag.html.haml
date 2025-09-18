@@ -13,4 +13,10 @@
                           method: :delete
         - else
           = t('accounts.nothing_here')
+        = table_link_to 'delete',
+                        t('filters.index.delete'),
+                        settings_featured_tag_path(featured_tag),
+                        data: { confirm: t('admin.accounts.are_you_sure') },
+                        method: :delete
+
     .trends__item__current= friendly_number_to_human featured_tag.statuses_count
