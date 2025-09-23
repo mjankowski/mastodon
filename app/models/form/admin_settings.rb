@@ -85,7 +85,7 @@ class Form::AdminSettings
 
   attr_accessor(*KEYS)
 
-  validates :registrations_mode, inclusion: { in: %w(open approved none) }, if: -> { defined?(@registrations_mode) }
+  validates :registrations_mode, inclusion: { in: Registration::MODES }, if: -> { defined?(@registrations_mode) }
   validates :site_contact_email, :site_contact_username, presence: true, if: -> { defined?(@site_contact_username) || defined?(@site_contact_email) }
   validates :site_contact_username, existing_username: true, if: -> { defined?(@site_contact_username) }
   validates :bootstrap_timeline_accounts, existing_username: { multiple: true }, if: -> { defined?(@bootstrap_timeline_accounts) }
