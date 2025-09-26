@@ -36,14 +36,7 @@ class UsernameBlock < ApplicationRecord
   normalizes :normalized_username, with: ->(value) { value.downcase.gsub(Regexp.union(HOMOGLYPHS.keys), HOMOGLYPHS) }
 
   alias_attribute :to_log_human_identifier, :username
-
-  def comparison
-    exact? ? 'equals' : 'contains'
-  end
-
-  def comparison=(val)
-    self.exact = val == 'equals'
-  end
+  alias_attribute :comparison, :exact
 
   def self.matches?(str, allow_with_approval: false)
     matches_exactly(str).or(matches_partially(str)).where(allow_with_approval: allow_with_approval).any?
