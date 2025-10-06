@@ -184,6 +184,7 @@ class Status < ApplicationRecord
                    thread: :account
 
   delegate :acct, :domain, :indexable?, to: :account, prefix: true
+  delegate :name, to: :application, prefix: true
 
   alias to_log_human_identifier account_acct
 

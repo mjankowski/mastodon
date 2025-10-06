@@ -130,6 +130,10 @@ class User < ApplicationRecord
   has_many :session_activations, dependent: :destroy
 
   delegate :can?, to: :role
+  delegate :confirmation_redirect_uri,
+           :name,
+           to: :created_by_application,
+           prefix: true
 
   delegate :acct, to: :account, prefix: true
 

@@ -158,7 +158,9 @@ RSpec.describe Report do
 
   describe 'Delegations' do
     it { is_expected.to delegate_method(:acct).to(:target_account).with_prefix }
+    it { is_expected.to delegate_method(:local?).to(:account) }
     it { is_expected.to delegate_method(:local?).to(:target_account).with_prefix }
+    it { is_expected.to delegate_method(:name).to(:application).with_prefix }
   end
 
   describe 'Validations' do
