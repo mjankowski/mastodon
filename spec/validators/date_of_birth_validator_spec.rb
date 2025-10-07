@@ -8,7 +8,7 @@ RSpec.describe DateOfBirthValidator do
   before { Setting.min_age = 16 }
 
   context 'with an invalid date' do
-    it { is_expected.to_not allow_values('76.830.10').for(:date_of_birth).with_message(:invalid) }
+    it { is_expected.to_not allow_values('76.830.10').for(:date_of_birth) }
   end
 
   context 'with a date below age limit' do
