@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: account_aliases
-#
-#  id         :bigint(8)        not null, primary key
-#  acct       :string           default(""), not null
-#  uri        :string           default(""), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  account_id :bigint(8)        not null
-#
-
 class AccountAlias < ApplicationRecord
   belongs_to :account
 

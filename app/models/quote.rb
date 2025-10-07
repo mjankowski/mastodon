@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: quotes
-#
-#  id                :bigint(8)        not null, primary key
-#  activity_uri      :string
-#  approval_uri      :string
-#  legacy            :boolean          default(FALSE), not null
-#  state             :integer          default("pending"), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  account_id        :bigint(8)        not null
-#  quoted_account_id :bigint(8)
-#  quoted_status_id  :bigint(8)
-#  status_id         :bigint(8)        not null
-#
 class Quote < ApplicationRecord
   include Paginable
 

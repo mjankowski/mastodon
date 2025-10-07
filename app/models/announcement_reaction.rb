@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: announcement_reactions
-#
-#  id              :bigint(8)        not null, primary key
-#  name            :string           default(""), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  account_id      :bigint(8)        not null
-#  announcement_id :bigint(8)        not null
-#  custom_emoji_id :bigint(8)
-#
-
 class AnnouncementReaction < ApplicationRecord
   before_validation :set_custom_emoji, if: :name?
   after_commit :queue_publish

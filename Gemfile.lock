@@ -90,9 +90,6 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     aes_key_wrap (1.1.0)
     android_key_attestation (0.3.0)
-    annotaterb (4.19.0)
-      activerecord (>= 6.0.0)
-      activesupport (>= 6.0.0)
     ast (2.4.3)
     attr_required (1.0.2)
     aws-eventstream (1.4.0)
@@ -970,7 +967,6 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10)
   addressable (~> 2.8)
-  annotaterb (~> 4.13)
   aws-sdk-core (< 3.216.0)
   aws-sdk-s3 (~> 1.123)
   better_errors (~> 2.9)

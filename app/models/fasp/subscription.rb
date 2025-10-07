@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: fasp_subscriptions
-#
-#  id                  :bigint(8)        not null, primary key
-#  category            :string           not null
-#  max_batch_size      :integer          not null
-#  subscription_type   :string           not null
-#  threshold_likes     :integer
-#  threshold_replies   :integer
-#  threshold_shares    :integer
-#  threshold_timeframe :integer
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  fasp_provider_id    :bigint(8)        not null
-#
 class Fasp::Subscription < ApplicationRecord
   TYPES = %w(lifecycle trends).freeze
 

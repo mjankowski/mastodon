@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: terms_of_services
-#
-#  id                   :bigint(8)        not null, primary key
-#  changelog            :text             default(""), not null
-#  effective_date       :date
-#  notification_sent_at :datetime
-#  published_at         :datetime
-#  text                 :text             default(""), not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#
 class TermsOfService < ApplicationRecord
   scope :published, -> { where.not(published_at: nil).order(Arel.sql('coalesce(effective_date, published_at) DESC')) }
   scope :live, -> { published.where('effective_date IS NULL OR effective_date < now()') }

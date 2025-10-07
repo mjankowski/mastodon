@@ -1,19 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: custom_filters
-#
-#  id         :bigint(8)        not null, primary key
-#  action     :integer          default("warn"), not null
-#  context    :string           default([]), not null, is an Array
-#  expires_at :datetime
-#  phrase     :text             default(""), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  account_id :bigint(8)        not null
-#
-
 class CustomFilter < ApplicationRecord
   self.ignored_columns += %w(whole_word irreversible)
 

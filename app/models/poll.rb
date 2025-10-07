@@ -1,25 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: polls
-#
-#  id              :bigint(8)        not null, primary key
-#  cached_tallies  :bigint(8)        default([]), not null, is an Array
-#  expires_at      :datetime
-#  hide_totals     :boolean          default(FALSE), not null
-#  last_fetched_at :datetime
-#  lock_version    :integer          default(0), not null
-#  multiple        :boolean          default(FALSE), not null
-#  options         :string           default([]), not null, is an Array
-#  voters_count    :bigint(8)
-#  votes_count     :bigint(8)        default(0), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  account_id      :bigint(8)        not null
-#  status_id       :bigint(8)        not null
-#
-
 class Poll < ApplicationRecord
   include Expireable
 

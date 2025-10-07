@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: username_blocks
-#
-#  id                  :bigint(8)        not null, primary key
-#  allow_with_approval :boolean          default(FALSE), not null
-#  exact               :boolean          default(FALSE), not null
-#  normalized_username :string           not null
-#  username            :string           not null
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#
-
 class UsernameBlock < ApplicationRecord
   HOMOGLYPHS = {
     '1' => 'i',

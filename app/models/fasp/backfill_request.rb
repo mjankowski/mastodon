@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: fasp_backfill_requests
-#
-#  id               :bigint(8)        not null, primary key
-#  category         :string           not null
-#  cursor           :string
-#  fulfilled        :boolean          default(FALSE), not null
-#  max_count        :integer          default(100), not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  fasp_provider_id :bigint(8)        not null
-#
 class Fasp::BackfillRequest < ApplicationRecord
   belongs_to :fasp_provider, class_name: 'Fasp::Provider'
 

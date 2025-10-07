@@ -174,9 +174,6 @@ group :development do
   gem 'standard-performance'
   gem 'standard-rails'
 
-  # Annotates modules with schema
-  gem 'annotaterb', '~> 4.13', require: false
-
   # Enhanced error message pages for development
   gem 'better_errors', '~> 2.9'
   gem 'binding_of_caller', '~> 1.0'

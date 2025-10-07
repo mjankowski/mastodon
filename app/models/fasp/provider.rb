@@ -1,25 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: fasp_providers
-#
-#  id                      :bigint(8)        not null, primary key
-#  base_url                :string           not null
-#  capabilities            :jsonb            not null
-#  confirmed               :boolean          default(FALSE), not null
-#  contact_email           :string
-#  delivery_last_failed_at :datetime
-#  fediverse_account       :string
-#  name                    :string           not null
-#  privacy_policy          :jsonb
-#  provider_public_key_pem :string           not null
-#  remote_identifier       :string           not null
-#  server_private_key_pem  :string           not null
-#  sign_in_url             :string
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#
 class Fasp::Provider < ApplicationRecord
   include DebugConcern
 

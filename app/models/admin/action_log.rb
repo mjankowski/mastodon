@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: admin_action_logs
-#
-#  id               :bigint(8)        not null, primary key
-#  action           :string           default(""), not null
-#  human_identifier :string
-#  permalink        :string
-#  route_param      :string
-#  target_type      :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  account_id       :bigint(8)        not null
-#  target_id        :bigint(8)
-#
-
 class Admin::ActionLog < ApplicationRecord
   self.ignored_columns += %w(
     recorded_changes

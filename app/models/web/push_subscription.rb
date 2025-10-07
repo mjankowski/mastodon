@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: web_push_subscriptions
-#
-#  id              :bigint(8)        not null, primary key
-#  data            :json
-#  endpoint        :string           not null
-#  key_auth        :string           not null
-#  key_p256dh      :string           not null
-#  standard        :boolean          default(FALSE), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  access_token_id :bigint(8)        not null
-#  user_id         :bigint(8)        not null
-#
-
 class Web::PushSubscription < ApplicationRecord
   belongs_to :user
   belongs_to :access_token, class_name: 'OAuth::AccessToken'
