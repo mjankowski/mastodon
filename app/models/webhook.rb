@@ -23,11 +23,11 @@ class Webhook < ApplicationRecord
   validates :events, presence: true
 
   validate :events_validation_error, if: :invalid_events?
-  validate :validate_permissions
-  validate :validate_template
+  validate :validate_permissions, if: -> { defined?(@current_account) }
+  validate :validate_template, if: :template?
 
   normalizes :events, with: ->(events) { events.filter_map { |event| event.strip.presence } }
-  before_validation :generate_secret
+  before_validation :generate_secret, unless: :secret?
 
   def rotate_secret!
     update!(secret: random_secret)
@@ -67,22 +67,23 @@ class Webhook < ApplicationRecord
   end
 
   def validate_permissions
-    errors.add(:events, :invalid_permissions) if defined?(@current_account) && required_permissions.any? { |permission| !@current_account.user_role.can?(permission) }
+    errors.add(:events, :invalid_permissions) if permissions_exceed_account_user_role?
+  end
+
+  def permissions_exceed_account_user_role?
+    required_permissions.any? { |permission| !@current_account.user_role.can?(permission) }
   end
 
   def validate_template
-    return if template.blank?
-
     begin
-      parser = Webhooks::PayloadRenderer::TemplateParser.new
-      parser.parse(template)
+      Webhooks::PayloadRenderer::TemplateParser.new.parse(template)
     rescue Parslet::ParseFailed
       errors.add(:template, :invalid)
     end
   end
 
   def generate_secret
-    self.secret = random_secret if secret.blank?
+    self.secret = random_secret
   end
 
   def random_secret

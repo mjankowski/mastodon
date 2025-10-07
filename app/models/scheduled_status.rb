@@ -10,14 +10,14 @@ class ScheduledStatus < ApplicationRecord
   belongs_to :account, inverse_of: :scheduled_statuses
   has_many :media_attachments, inverse_of: :scheduled_status, dependent: :nullify
 
-  validate :validate_future_date
+  validate :validate_future_date, if: :scheduled_at?
   validate :validate_total_limit
   validate :validate_daily_limit
 
   private
 
   def validate_future_date
-    errors.add(:scheduled_at, I18n.t('scheduled_statuses.too_soon')) if scheduled_at? && scheduled_at <= Time.now.utc + MINIMUM_OFFSET
+    errors.add(:scheduled_at, I18n.t('scheduled_statuses.too_soon')) if scheduled_at <= MINIMUM_OFFSET.from_now
   end
 
   def validate_total_limit
