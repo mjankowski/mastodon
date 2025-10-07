@@ -1,26 +1,22 @@
 # frozen_string_literal: true
 
-class Trends::PreviewCardProviderFilter
+class Admin::AppealFilter < BaseFilter
   KEYS = %i(
     status
   ).freeze
 
-  attr_reader :params
-
-  def initialize(params)
-    @params = params
-  end
+  IGNORED_PARAMS = %w(page).freeze
 
   def results
-    scope = PreviewCardProvider.unscoped
+    scope = Appeal.order(id: :desc)
 
     params.each do |key, value|
-      next if key.to_s == 'page'
+      next if IGNORED_PARAMS.include?(key.to_s)
 
       scope.merge!(scope_for(key, value.to_s.strip)) if value.present?
     end
 
-    scope.order(domain: :asc)
+    scope
   end
 
   private
@@ -35,13 +31,13 @@ class Trends::PreviewCardProviderFilter
   end
 
   def status_scope(value)
-    case value.to_s
+    case value
     when 'approved'
-      PreviewCardProvider.trendable
+      Appeal.approved
     when 'rejected'
-      PreviewCardProvider.not_trendable
-    when 'pending_review'
-      PreviewCardProvider.unreviewed
+      Appeal.rejected
+    when 'pending'
+      Appeal.pending
     else
       raise Mastodon::InvalidParameterError, "Unknown status: #{value}"
     end

@@ -1,18 +1,12 @@
 # frozen_string_literal: true
 
-class CustomEmojiFilter
+class CustomEmojiFilter < BaseFilter
   KEYS = %i(
     local
     remote
     by_domain
     shortcode
   ).freeze
-
-  attr_reader :params
-
-  def initialize(params)
-    @params = params
-  end
 
   def results
     scope = CustomEmoji.alphabetic

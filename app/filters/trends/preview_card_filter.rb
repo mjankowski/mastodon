@@ -1,18 +1,12 @@
 # frozen_string_literal: true
 
-class Trends::TagFilter
+class Trends::PreviewCardFilter < BaseFilter
   KEYS = %i(
     trending
-    status
+    locale
   ).freeze
 
   IGNORED_PARAMS = %w(page).freeze
-
-  attr_reader :params
-
-  def initialize(params)
-    @params = params
-  end
 
   def results
     scope = initial_scope
@@ -29,42 +23,29 @@ class Trends::TagFilter
   private
 
   def initial_scope
-    Tag.select(Tag.arel_table[Arel.star])
-       .joins(:trend)
-       .eager_load(:trend)
-       .reorder(score: :desc)
+    PreviewCard.select(PreviewCard.arel_table[Arel.star])
+               .joins(:trend)
+               .eager_load(:trend)
+               .reorder(score: :desc)
   end
 
   def scope_for(key, value)
     case key.to_s
-    when 'status'
-      status_scope(value)
     when 'trending'
       trending_scope(value)
+    when 'locale'
+      PreviewCardTrend.where(language: value)
     else
       raise Mastodon::InvalidParameterError, "Unknown filter: #{key}"
-    end
-  end
-
-  def status_scope(value)
-    case value.to_s
-    when 'approved'
-      Tag.trendable
-    when 'rejected'
-      Tag.not_trendable
-    when 'pending_review'
-      Tag.pending_review
-    else
-      raise Mastodon::InvalidParameterError, "Unknown status: #{value}"
     end
   end
 
   def trending_scope(value)
     case value
     when 'allowed'
-      TagTrend.allowed
+      PreviewCardTrend.allowed
     else
-      TagTrend.all
+      PreviewCardTrend.all
     end
   end
 end
