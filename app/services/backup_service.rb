@@ -63,14 +63,20 @@ class BackupService < BaseService
       dump_actor!(zipfile)
     end
 
-    archive_filename = "#{['archive', Time.now.utc.strftime('%Y%m%d%H%M%S'), SecureRandom.hex(16)].join('-')}.zip"
-
     @backup.dump      = ActionDispatch::Http::UploadedFile.new(tempfile: tmp_file, filename: archive_filename)
     @backup.processed = true
     @backup.save!
   ensure
     tmp_file.close
     tmp_file.unlink
+  end
+
+  def archive_filename
+    [archive_file_parts, 'zip'].join('.')
+  end
+
+  def archive_file_parts
+    ['archive', Time.current.to_fs(:number), SecureRandom.hex(16)].join('-')
   end
 
   def dump_media_attachments!(zipfile)
