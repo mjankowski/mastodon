@@ -13,20 +13,26 @@ class ValidationErrorFormatter
   private
 
   def details
-    h = {}
-
-    errors.details.each_pair do |attribute_name, attribute_errors|
-      messages = errors.messages[attribute_name]
-
-      h[@aliases[attribute_name] || attribute_name] = attribute_errors.map.with_index do |error, index|
-        { error: "ERR_#{error[:error].to_s.upcase}", description: messages[index] }
-      end
+    grouped_errors.to_h do |attribute, errors|
+      [label(attribute), summary(errors)]
     end
-
-    h
   end
 
-  def errors
-    @errors ||= @error.record.errors
+  def label(attribute)
+    @aliases[attribute] || attribute
+  end
+
+  def summary(errors)
+    errors.map do |error|
+      { error: code(error), description: error.message }
+    end
+  end
+
+  def code(error)
+    [:err, error.type.to_s].join('_').upcase
+  end
+
+  def grouped_errors
+    @error.record.errors.group_by(&:attribute)
   end
 end
