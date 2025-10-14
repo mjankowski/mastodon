@@ -67,7 +67,7 @@ class Instance < ApplicationRecord
 
   delegate :exhausted_deliveries_days, to: :delivery_failure_tracker
 
-  def availability_over_days(num_days, end_date = Time.now.utc.to_date)
+  def availability_over_days(num_days, end_date = Date.current)
     failures_map    = exhausted_deliveries_days.index_with { true }
     period_end_at   = exhausted_deliveries_days.last || end_date
     period_start_at = period_end_at - num_days.days
