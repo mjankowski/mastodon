@@ -1,32 +1,34 @@
 # frozen_string_literal: true
 
 class ValidationErrorFormatter
+  PREFIX = 'ERR'
+
   def initialize(error, aliases = {})
     @error   = error
     @aliases = aliases
   end
 
   def as_json
-    { error: @error.to_s, details: details }
+    { error: @error.to_s, details: }
   end
 
   private
 
   def details
-    h = {}
-
-    errors.details.each_pair do |attribute_name, attribute_errors|
-      messages = errors.messages[attribute_name]
-
-      h[@aliases[attribute_name] || attribute_name] = attribute_errors.map.with_index do |error, index|
-        { error: "ERR_#{error[:error].to_s.upcase}", description: messages[index] }
+    {}.tap do |detail|
+      record_errors.group_by(&:attribute).each do |attribute, errors|
+        detail[@aliases[attribute] || attribute] = errors.map do |error|
+          { error: code(error), description: error.message }
+        end
       end
     end
-
-    h
   end
 
-  def errors
-    @errors ||= @error.record.errors
+  def code(error)
+    [PREFIX, error.type.to_s.upcase].join('_')
+  end
+
+  def record_errors
+    @record_errors ||= @error.record.errors
   end
 end
