@@ -279,7 +279,7 @@ GEM
       rake (>= 13)
     googleapis-common-protos-types (1.22.0)
       google-protobuf (~> 4.26)
-    haml (6.3.0)
+    haml (7.0.0)
       temple (>= 0.8.2)
       thor
       tilt
