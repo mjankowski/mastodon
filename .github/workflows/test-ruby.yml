@@ -126,6 +126,7 @@ jobs:
         ruby-version:
           - '3.2'
           - '3.3'
+          - '3.4'
           - '.ruby-version'
     steps:
       - uses: actions/checkout@v5
@@ -228,6 +229,7 @@ jobs:
         ruby-version:
           - '3.2'
           - '3.3'
+          - '3.4'
           - '.ruby-version'
     steps:
       - uses: actions/checkout@v5
@@ -306,6 +308,7 @@ jobs:
         ruby-version:
           - '3.2'
           - '3.3'
+          - '3.4'
           - '.ruby-version'
 
     steps:
@@ -437,6 +440,7 @@ jobs:
         ruby-version:
           - '3.2'
           - '3.3'
+          - '3.4'
           - '.ruby-version'
         search-image:
           - docker.elastic.co/elasticsearch/elasticsearch:7.17.13
