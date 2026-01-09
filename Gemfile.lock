@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/devise-two-factor/devise-two-factor.git
-  revision: c2001a834ef5078d351392da7a732a93c32278b9
+  revision: 27bc66aa71289212556bb191d3d7675cf6da6231
   specs:
-    devise-two-factor (6.2.0)
+    devise-two-factor (6.3.0)
       activesupport (>= 7.0, < 8.2)
       devise (>= 4.0, < 5.0)
       railties (>= 7.0, < 8.2)
