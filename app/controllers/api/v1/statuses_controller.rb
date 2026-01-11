@@ -80,21 +80,18 @@ class Api::V1::StatusesController < Api::BaseController
   def create
     @status = PostStatusService.new.call(
       current_user.account,
-      text: status_params[:status],
-      thread: @thread,
-      quoted_status: @quoted_status,
-      quote_approval_policy: quote_approval_policy,
-      media_ids: status_params[:media_ids],
-      sensitive: status_params[:sensitive],
-      spoiler_text: status_params[:spoiler_text],
-      visibility: status_params[:visibility],
-      language: status_params[:language],
-      scheduled_at: status_params[:scheduled_at],
-      application: doorkeeper_token.application,
-      poll: status_params[:poll],
-      allowed_mentions: status_params[:allowed_mentions],
-      idempotency: request.headers['Idempotency-Key'],
-      with_rate_limit: true
+      default_status_params
+        .merge(
+          allowed_mentions: status_params[:allowed_mentions],
+          application: doorkeeper_token.application,
+          idempotency: request.headers['Idempotency-Key'],
+          quote_approval_policy: quote_approval_policy,
+          quoted_status: @quoted_status,
+          scheduled_at: status_params[:scheduled_at],
+          thread: @thread,
+          visibility: status_params[:visibility],
+          with_rate_limit: true
+        )
     )
 
     render json: @status, serializer: serializer_for_status
@@ -109,14 +106,12 @@ class Api::V1::StatusesController < Api::BaseController
     UpdateStatusService.new.call(
       @status,
       current_account.id,
-      text: status_params[:status],
-      media_ids: status_params[:media_ids],
-      media_attributes: status_params[:media_attributes],
-      sensitive: status_params[:sensitive],
-      language: status_params[:language],
-      spoiler_text: status_params[:spoiler_text],
-      poll: status_params[:poll],
-      quote_approval_policy: quote_approval_policy
+      default_status_params
+        .merge(
+          media_attributes: status_params[:media_attributes]
+        ).tap do |params|
+          params[:quote_approval_policy] = quote_approval_policy if status_params[:quote_approval_policy].present?
+        end
     )
 
     render json: @status, serializer: REST::StatusSerializer
@@ -218,5 +213,16 @@ class Api::V1::StatusesController < Api::BaseController
 
   def serialized_accounts(accounts)
     ActiveModel::Serializer::CollectionSerializer.new(accounts, serializer: REST::AccountSerializer)
+  end
+
+  def default_status_params
+    {
+      language: status_params[:language],
+      media_ids: status_params[:media_ids],
+      poll: status_params[:poll],
+      sensitive: status_params[:sensitive],
+      spoiler_text: status_params[:spoiler_text],
+      text: status_params[:status],
+    }
   end
 end
