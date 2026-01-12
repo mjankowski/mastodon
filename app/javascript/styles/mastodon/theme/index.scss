@@ -3,6 +3,8 @@
 @use 'light';
 @use 'utils';
 
+/* Mode: Auto (system) */
+
 html {
   @include base.palette;
 }
