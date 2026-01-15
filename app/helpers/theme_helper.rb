@@ -61,7 +61,9 @@ module ThemeHelper
   end
 
   def page_color_scheme
-    content_for(:force_color_scheme).presence || color_scheme
+    ActiveSupport::StringInquirer.new(
+      content_for(:force_color_scheme).presence || color_scheme
+    )
   end
 
   private

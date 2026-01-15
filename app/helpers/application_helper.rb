@@ -154,16 +154,16 @@ module ApplicationHelper
   end
 
   def html_attributes
-    base = {
+    {
       lang: I18n.locale,
       class: html_classes,
-      'data-contrast': contrast.parameterize,
-      'data-color-scheme': page_color_scheme.parameterize,
+      data: {
+        color_scheme: page_color_scheme.parameterize,
+        contrast: contrast.parameterize,
+      }.tap do |data|
+        data[:system_theme] = 'true' if page_color_scheme.auto?
+      end,
     }
-
-    base[:'data-system-theme'] = 'true' if page_color_scheme == 'auto'
-
-    base
   end
 
   def html_classes
