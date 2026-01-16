@@ -70,11 +70,9 @@ module ApplicationHelper
   end
 
   def locale_direction
-    if RTL_LOCALES.include?(I18n.locale)
-      'rtl'
-    else
-      'ltr'
-    end
+    ActiveSupport::StringInquirer.new(
+      RTL_LOCALES.include?(I18n.locale) ? 'rtl' : 'ltr'
+    )
   end
 
   def html_title
@@ -135,9 +133,9 @@ module ApplicationHelper
     if relationships.following[account_id] && relationships.followed_by[account_id]
       material_symbol('sync_alt', title: I18n.t('relationships.mutual'), class: 'active passive')
     elsif relationships.following[account_id]
-      material_symbol(locale_direction == 'ltr' ? 'arrow_right_alt' : 'arrow_left_alt', title: I18n.t('relationships.following'), class: 'active')
+      material_symbol(locale_direction.ltr? ? 'arrow_right_alt' : 'arrow_left_alt', title: I18n.t('relationships.following'), class: 'active')
     elsif relationships.followed_by[account_id]
-      material_symbol(locale_direction == 'ltr' ? 'arrow_left_alt' : 'arrow_right_alt', title: I18n.t('relationships.followers'), class: 'passive')
+      material_symbol(locale_direction.ltr? ? 'arrow_left_alt' : 'arrow_right_alt', title: I18n.t('relationships.followers'), class: 'passive')
     end
   end
 
@@ -172,7 +170,7 @@ module ApplicationHelper
     output << 'system-font' if current_account&.user&.setting_system_font_ui
     output << 'custom-scrollbars' unless current_account&.user&.setting_system_scrollbars_ui
     output << (current_account&.user&.setting_reduce_motion ? 'reduce-motion' : 'no-reduce-motion')
-    output << 'rtl' if locale_direction == 'rtl'
+    output << 'rtl' if locale_direction.rtl?
     output.compact_blank.join(' ')
   end
 
