@@ -70,11 +70,9 @@ module ApplicationHelper
   end
 
   def locale_direction
-    if RTL_LOCALES.include?(I18n.locale)
-      'rtl'
-    else
-      'ltr'
-    end
+    ActiveSupport::StringInquirer.new(
+      RTL_LOCALES.include?(I18n.locale) ? 'rtl' : 'ltr'
+    )
   end
 
   def html_title
