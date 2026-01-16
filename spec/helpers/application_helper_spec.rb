@@ -46,25 +46,25 @@ RSpec.describe ApplicationHelper do
   describe 'locale_direction' do
     it 'adds rtl body class if locale is Arabic' do
       I18n.with_locale(:ar) do
-        expect(helper.locale_direction).to eq 'rtl'
+        expect(helper.locale_direction).to be_rtl
       end
     end
 
     it 'adds rtl body class if locale is Farsi' do
       I18n.with_locale(:fa) do
-        expect(helper.locale_direction).to eq 'rtl'
+        expect(helper.locale_direction).to be_rtl
       end
     end
 
     it 'adds rtl if locale is Hebrew' do
       I18n.with_locale(:he) do
-        expect(helper.locale_direction).to eq 'rtl'
+        expect(helper.locale_direction).to be_rtl
       end
     end
 
     it 'does not add rtl if locale is Thai' do
       I18n.with_locale(:th) do
-        expect(helper.locale_direction).to_not eq 'rtl'
+        expect(helper.locale_direction).to be_ltr
       end
     end
   end
