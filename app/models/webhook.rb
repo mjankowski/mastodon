@@ -25,6 +25,12 @@ class Webhook < ApplicationRecord
     status.updated
   ).freeze
 
+  EVENT_PERMISSIONS = {
+    /account/ => :manage_users,
+    /report/ => :manage_reports,
+    /status/ => :view_devops,
+  }.freeze
+
   SECRET_LENGTH_MIN = 12
   SECRET_SIZE = 20
 
@@ -60,14 +66,9 @@ class Webhook < ApplicationRecord
   end
 
   def self.permission_for_event(event)
-    case event
-    when 'account.approved', 'account.created', 'account.updated'
-      :manage_users
-    when 'report.created', 'report.updated'
-      :manage_reports
-    when 'status.created', 'status.updated'
-      :view_devops
-    end
+    event.presence && EVENT_PERMISSIONS
+      .detect { |permissions| permissions.first.match(event) }
+      .last
   end
 
   private
