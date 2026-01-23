@@ -22,35 +22,13 @@
 
     .actions
       = form_with url: oauth_authorization_path do |form|
-        = form.hidden_field :client_id,
-                            value: @pre_auth.client.uid
-        = form.hidden_field :redirect_uri,
-                            value: @pre_auth.redirect_uri
-        = form.hidden_field :code_challenge, value: @pre_auth.code_challenge
-        = form.hidden_field :code_challenge_method, value: @pre_auth.code_challenge_method
-        = form.hidden_field :state,
-                            value: @pre_auth.state
-        = form.hidden_field :response_type,
-                            value: @pre_auth.response_type
-        = form.hidden_field :scope,
-                            value: @pre_auth.scope
+        = render form, pre_auth: @pre_auth
         = form.button t('doorkeeper.authorizations.buttons.authorize'),
                       type: :submit,
                       class: 'btn'
 
       = form_with url: oauth_authorization_path, method: :delete do |form|
-        = form.hidden_field :client_id,
-                            value: @pre_auth.client.uid
-        = form.hidden_field :redirect_uri,
-                            value: @pre_auth.redirect_uri
-        = form.hidden_field :code_challenge, value: @pre_auth.code_challenge
-        = form.hidden_field :code_challenge_method, value: @pre_auth.code_challenge_method
-        = form.hidden_field :state,
-                            value: @pre_auth.state
-        = form.hidden_field :response_type,
-                            value: @pre_auth.response_type
-        = form.hidden_field :scope,
-                            value: @pre_auth.scope
+        = render form, pre_auth: @pre_auth
         = form.button t('doorkeeper.authorizations.buttons.deny'),
                       type: :submit,
                       class: 'btn negative'
