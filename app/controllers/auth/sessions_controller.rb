@@ -193,10 +193,8 @@ class Auth::SessionsController < Devise::SessionsController
     flash.delete(:notice)
 
     user.login_activities.create(
-      request_details.merge(
-        authentication_method: security_measure,
-        success: true
-      )
+      authentication_method: security_measure,
+      success: true
     )
 
     UserMailer.suspicious_sign_in(user, request.remote_ip, request.user_agent, Time.now.utc).deliver_later! if @login_is_suspicious
@@ -208,11 +206,9 @@ class Auth::SessionsController < Devise::SessionsController
 
   def on_authentication_failure(user, security_measure, failure_reason)
     user.login_activities.create(
-      request_details.merge(
-        authentication_method: security_measure,
-        failure_reason: failure_reason,
-        success: false
-      )
+      authentication_method: security_measure,
+      failure_reason: failure_reason,
+      success: false
     )
 
     # No need to send a mail for failure to log in with a sign-in token, as that goes throug a mail
@@ -223,13 +219,6 @@ class Auth::SessionsController < Devise::SessionsController
     return if redis.set("2fa_failure_notification:#{user.id}", '1', ex: 1.hour, get: true).present?
 
     UserMailer.failed_2fa(user, request.remote_ip, request.user_agent, Time.now.utc).deliver_later!
-  end
-
-  def request_details
-    {
-      ip: request.remote_ip,
-      user_agent: request.user_agent,
-    }
   end
 
   def second_factor_attempts_key(user)
