@@ -75,14 +75,9 @@ RSpec.describe 'UnsubscriptionsController' do
     describe 'unsubscribing with List-Unsubscribe-Post' do
       subject { post unsubscribe_url(token: token, type: type), params: { 'List-Unsubscribe' => 'One-Click' } }
 
-      around do |example|
-        old = ActionController::Base.allow_forgery_protection
-        ActionController::Base.allow_forgery_protection = true
-
-        example.run
-
-        ActionController::Base.allow_forgery_protection = old
-      end
+    around do |example|
+      with_forgery_protection { example.run }
+    end
 
       it_behaves_like 'not found with invalid token'
       it_behaves_like 'not found with invalid type'
