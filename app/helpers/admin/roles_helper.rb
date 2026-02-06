@@ -11,6 +11,13 @@ module Admin
       )
     end
 
+    def privileges_list(role)
+      role
+        .permissions_as_keys
+        .map { |privilege| I18n.t("admin.roles.privileges.#{privilege}") }
+        .join(', ')
+    end
+
     def disable_permissions?(permissions)
       permissions.filter { |privilege| role_flag_value(privilege).zero? }
     end
