@@ -46,6 +46,12 @@ class DomainBlock < ApplicationRecord
     end
   end
 
+  def policy_list
+    policies
+      .map { |policy| I18n.t(policy, scope: 'admin.instances.content_policies.policies') }
+      .join(' · ')
+  end
+
   class << self
     def suspend?(domain)
       !!rule_for(domain)&.suspend?
