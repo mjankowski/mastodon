@@ -11,6 +11,10 @@ class Api::V1::Admin::ReportsController < Api::BaseController
   before_action :set_reports, only: :index
   before_action :set_report, except: :index
 
+  before_action do
+    Rails.event.set_context account_id: current_account.id
+  end
+
   after_action :verify_authorized
   after_action :insert_pagination_headers, only: :index
 
@@ -35,7 +39,7 @@ class Api::V1::Admin::ReportsController < Api::BaseController
   def update
     authorize @report, :update?
     @report.update!(report_params)
-    log_action :update, @report
+    log_event :update, @report
     render json: @report, serializer: REST::Admin::ReportSerializer
   end
 
