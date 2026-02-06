@@ -31,14 +31,7 @@ RSpec.describe Form::Redirect do
   end
 
   describe 'Normalizations' do
-    it 'applies normalization to nil acct attribute' do
-      subject.acct = nil
-      expect(subject.acct).to eq('')
-    end
-
-    it 'applies normalization to acct attribute' do
-      subject.acct = '   @username   '
-      expect(subject.acct).to eq('username')
-    end
+    it { is_expected.to normalize(:acct).from(nil).to('') }
+    it { is_expected.to normalize(:acct).from('  @username  ').to('username') }
   end
 end
