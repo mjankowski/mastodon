@@ -3,10 +3,9 @@
 class ActionLogSubscriber
   def emit(event)
     Admin::ActionLog.create(
-      event[:payload].merge(
-        account_id: event[:context][:account_id],
-        action: event[:name]
-      )
+      event[:payload]
+        .merge(action: event[:name])
+        .merge(event[:context].slice(:account_id))
     )
   end
 end
