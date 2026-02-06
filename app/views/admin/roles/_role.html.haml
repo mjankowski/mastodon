@@ -25,7 +25,7 @@
       - else
         = link_to t('admin.roles.assigned_users', count: role.users.count), admin_accounts_path(role_ids: role.id)
         ·
-        %abbr{ title: role.permissions_as_keys.map { |privilege| I18n.t("admin.roles.privileges.#{privilege}") }.join(', ') }= t('admin.roles.permissions_count', count: role.permissions_as_keys.size)
+        %abbr{ title: privileges_list(role) }= t('admin.roles.permissions_count', count: role.permissions_as_keys.size)
         - if role.require_2fa?
           ·
           = t('admin.roles.requires_2fa')
