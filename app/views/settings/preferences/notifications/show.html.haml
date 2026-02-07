@@ -2,9 +2,9 @@
   = t('settings.notifications')
 
 - content_for :heading_actions do
-  = button_tag t('generic.save_changes'), class: 'button', form: 'edit_notification'
+  = button_tag t('generic.save_changes'), class: 'button', form: dom_target(:edit, current_user)
 
-= simple_form_for current_user, url: settings_preferences_notifications_path, html: { id: :edit_notification } do |f|
+= simple_form_for current_user, url: settings_preferences_notifications_path do |f|
   = render 'shared/error_messages', object: current_user
 
   %h4= t 'notifications.email_events'

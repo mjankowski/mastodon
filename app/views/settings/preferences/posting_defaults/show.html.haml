@@ -2,12 +2,12 @@
   = t('preferences.posting_defaults')
 
 - content_for :heading_actions do
-  = button_tag t('generic.save_changes'), class: 'button', form: 'edit_preferences'
+  = button_tag t('generic.save_changes'), class: 'button', form: dom_target(:edit, current_user)
 
 - if ['unlisted', 'private'].include?(current_user.setting_default_privacy)
   - initial_quote_hint = I18n.t("simple_form.hints.defaults.setting_default_quote_policy_#{current_user.setting_default_privacy}")
 
-= simple_form_for current_user, url: settings_preferences_posting_defaults_path, html: { id: :edit_preferences } do |f|
+= simple_form_for current_user, url: settings_preferences_posting_defaults_path do |f|
   = render 'shared/error_messages', object: current_user
 
   = f.simple_fields_for :settings, current_user.settings do |ff|
