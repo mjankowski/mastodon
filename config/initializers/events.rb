@@ -6,6 +6,12 @@ class ActivitySubscriber
 
     when 'interaction'
       ActivityTracker.increment('activity:interactions')
+    when 'status'
+      ActivityTracker.increment('activity:statuses:local')
+    when 'account'
+      ActivityTracker.increment('activity:accounts:local')
+    when 'login'
+      ActivityTracker.record('activity:logins', event[:payload][:id])
     else
       raise ArgumentError, "Invalid activity type: #{name}"
     end

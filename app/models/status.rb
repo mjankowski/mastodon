@@ -476,7 +476,7 @@ class Status < ApplicationRecord
   def update_statistics
     return unless distributable?
 
-    ActivityTracker.increment('activity:statuses:local')
+    Rails.event.tagged(:activity) { Rails.event.notify :status }
   end
 
   def increment_counter_caches

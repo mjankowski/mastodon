@@ -485,8 +485,10 @@ class User < ApplicationRecord
 
   def prepare_new_user!
     BootstrapTimelineWorker.perform_async(account_id)
-    ActivityTracker.increment('activity:accounts:local')
-    ActivityTracker.record('activity:logins', id)
+    Rails.event.tagged(:activity) do
+      Rails.event.notify :account
+      Rails.event.notify :login, id:
+    end
     UserMailer.welcome(self).deliver_later(wait: 1.hour)
     TriggerWebhookWorker.perform_async('account.approved', 'Account', account_id)
   end
@@ -494,7 +496,7 @@ class User < ApplicationRecord
   def prepare_returning_user!
     return unless confirmed?
 
-    ActivityTracker.record('activity:logins', id)
+    Rails.event.tagged(:activity) { Rails.event.notify :login, id: }
     regenerate_feed! if inactive_since_duration?
   end
 
