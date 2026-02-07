@@ -33,7 +33,7 @@ RSpec.describe Admin::Metrics::Measure::InteractionsMeasure do
       end
 
       def record_interaction_activity
-        ActivityTracker.increment('activity:interactions')
+        Rails.event.tagged(:activity) { Rails.event.notify :interaction }
       end
     end
   end

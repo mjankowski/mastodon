@@ -30,7 +30,7 @@ class VoteService < BaseService
 
     increment_voters_count! unless already_voted
 
-    ActivityTracker.increment('activity:interactions')
+    Rails.event.tagged(:activity) { Rails.event.notify :interaction }
 
     if @poll.account.local?
       distribute_poll!

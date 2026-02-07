@@ -215,7 +215,7 @@ class PostStatusService < BaseService
   def bump_potential_friendship!
     return if !@status.reply? || @account.id == @status.in_reply_to_account_id
 
-    ActivityTracker.increment('activity:interactions')
+    Rails.event.tagged(:activity) { Rails.event.notify :interaction }
   end
 
   def status_attributes

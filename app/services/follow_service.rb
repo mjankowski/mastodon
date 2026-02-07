@@ -29,7 +29,7 @@ class FollowService < BaseService
       return change_follow_request_options!
     end
 
-    ActivityTracker.increment('activity:interactions')
+    Rails.event.tagged(:activity) { Rails.event.notify :interaction }
 
     # When an account follows someone for the first time, avoid showing
     # an empty home feed while the follow request is being processed

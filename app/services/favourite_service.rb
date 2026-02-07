@@ -38,7 +38,7 @@ class FavouriteService < BaseService
   end
 
   def increment_statistics
-    ActivityTracker.increment('activity:interactions')
+    Rails.event.tagged(:activity) { Rails.event.notify :interaction }
   end
 
   def build_json(favourite)

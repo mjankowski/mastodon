@@ -47,6 +47,6 @@ class ReblogService < BaseService
   end
 
   def increment_statistics
-    ActivityTracker.increment('activity:interactions')
+    Rails.event.tagged(:activity) { Rails.event.notify :interaction }
   end
 end
