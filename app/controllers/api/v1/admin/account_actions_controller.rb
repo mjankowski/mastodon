@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::Admin::AccountActionsController < Api::BaseController
+class Api::V1::Admin::AccountActionsController < Api::V1::Admin::BaseController
   include Authorization
 
   before_action -> { authorize_if_got_token! :'admin:write', :'admin:write:accounts' }

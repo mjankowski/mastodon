@@ -13,6 +13,7 @@ RSpec.describe Admin::AccountAction do
     let(:type)           { 'disable' }
 
     before do
+      Rails.event.set_context account_id: account.id
       account_action.assign_attributes(
         type: type,
         current_account: account,

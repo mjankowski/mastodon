@@ -8,6 +8,7 @@ module Admin
     layout 'admin'
 
     before_action :set_referrer_policy_header
+    before_action :set_action_log_context
 
     after_action :verify_authorized
 
@@ -15,6 +16,10 @@ module Admin
 
     def set_referrer_policy_header
       response.headers['Referrer-Policy'] = 'same-origin'
+    end
+
+    def set_action_log_context
+      Rails.event.set_context account_id: current_account&.id
     end
 
     def set_user

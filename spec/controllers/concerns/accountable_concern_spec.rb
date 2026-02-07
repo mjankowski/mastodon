@@ -6,24 +6,19 @@ RSpec.describe AccountableConcern do
   let(:hoge_class) do
     Class.new do
       include AccountableConcern
-
-      attr_reader :current_account
-
-      def initialize(current_account)
-        @current_account = current_account
-      end
     end
   end
 
   let(:user)   { Fabricate(:account) }
   let(:target) { Fabricate(:account) }
-  let(:hoge)   { hoge_class.new(user) }
+  let(:hoge)   { hoge_class.new }
 
   describe '#log_action' do
+    before { Rails.event.set_context account_id: user.id }
+
     it 'creates Admin::ActionLog' do
-      expect do
-        hoge.log_action(:create, target)
-      end.to change(Admin::ActionLog, :count).by(1)
+      expect { hoge.log_action(:create, target) }
+        .to change(Admin::ActionLog, :count).by(1)
     end
   end
 end

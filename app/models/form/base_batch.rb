@@ -3,6 +3,7 @@
 class Form::BaseBatch
   include ActiveModel::Model
   include Authorization
+
   include AccountableConcern
 
   attr_accessor :action,
