@@ -49,6 +49,31 @@ module ThemeHelper
     )
   end
 
+  def current_theme
+    return Setting.theme unless Themes.instance.names.include? current_user&.setting_theme
+
+    current_user.setting_theme
+  end
+
+  def color_scheme
+    current = current_user&.setting_color_scheme
+    return current if current && current != 'auto'
+
+    return 'dark' if current_theme.include?('default') || current_theme.include?('contrast')
+    return 'light' if current_theme.include?('light')
+
+    'auto'
+  end
+
+  def contrast
+    current = current_user&.setting_contrast
+    return current if current && current != 'auto'
+
+    return 'high' if current_theme.include?('contrast')
+
+    'auto'
+  end
+
   private
 
   def active_custom_stylesheet

@@ -122,6 +122,40 @@ RSpec.describe ThemeHelper do
     end
   end
 
+  describe '#current_theme' do
+    subject { helper.current_theme }
+
+    context 'when user is not signed in' do
+      context 'when theme was not changed in settings' do
+        it { is_expected.to eq('system') }
+      end
+
+      context 'when theme is changed in settings' do
+        before { Setting.theme = 'contrast' }
+
+        it { is_expected.to eq('contrast') }
+      end
+    end
+
+    context 'when user is signed in' do
+      before { allow(helper).to receive(:current_user).and_return(current_user) }
+
+      let(:current_user) { Fabricate :user }
+
+      context 'when user did not set theme' do
+        before { current_user.settings.update(theme: 'contrast', noindex: false) }
+
+        it { is_expected.to eq('contrast') }
+      end
+
+      context 'when user set theme' do
+        before { current_user.settings.update(theme: 'mastodon-light', noindex: false) }
+
+        it { is_expected.to eq('mastodon-light') }
+      end
+    end
+  end
+
   private
 
   def html_links
