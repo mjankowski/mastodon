@@ -1039,7 +1039,7 @@ DEPENDENCIES
   parslet
   pg (~> 1.5)
   pghero
-  playwright-ruby-client (~> 1.58.0)
+  playwright-ruby-client (= 1.58.0)
   premailer-rails
   prometheus_exporter (~> 2.2)
   propshaft
