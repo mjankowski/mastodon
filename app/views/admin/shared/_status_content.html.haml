@@ -1,12 +1,7 @@
 -# locals: (status:, is_quote: false)
 - if status.spoiler_text.present?
   %details<
-    %summary{
-      data: {
-        show: t('statuses.content_warnings.show'),
-        hide: t('statuses.content_warnings.hide'),
-      }
-    }><
+    %summary{ data: { show: t('statuses.content_warnings.show'), hide: t('statuses.content_warnings.hide') } }><
       %strong>
         = prerender_custom_emojis(h(status.spoiler_text), status.emojis)
     .status__content><
