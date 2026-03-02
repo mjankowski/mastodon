@@ -21,7 +21,7 @@ module Localized
   end
 
   def http_accept_language
-    HttpAcceptLanguage::Parser.new(request.headers.fetch('Accept-Language')).language_region_compatible_from(I18n.available_locales) if request.headers.key?('Accept-Language')
+    AcceptLanguage.parse(request.headers.fetch('Accept-Language')).match(*I18n.available_locales) if request.headers.key?('Accept-Language')
   end
 
   def available_locale_or_nil(locale_name)

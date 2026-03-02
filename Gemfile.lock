@@ -10,6 +10,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    accept_language (2.2.0)
     action_text-trix (2.1.16)
       railties
     actioncable (8.1.2)
@@ -320,7 +321,6 @@ GEM
     http-cookie (1.1.0)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    http_accept_language (2.1.1)
     httpclient (2.9.0)
       mutex_m
     httplog (1.8.0)
@@ -947,6 +947,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  accept_language
   active_model_serializers (~> 0.10)
   addressable (~> 2.8)
   annotaterb (~> 4.13)
@@ -993,7 +994,6 @@ DEPENDENCIES
   hiredis-client
   htmlentities (~> 4.3)
   http (~> 5.3.0)
-  http_accept_language (~> 2.1)
   httplog (~> 1.8.0)
   i18n
   i18n-tasks (~> 1.0)
