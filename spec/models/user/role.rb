@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.shared_examples 'User::Role' do
+  describe 'Associations' do
+    it { is_expected.to belong_to(:role).class_name(UserRole).optional }
+  end
+
   describe 'Delegations' do
     it { is_expected.to delegate_method(:can?).to(:role) }
   end
