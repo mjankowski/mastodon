@@ -11,6 +11,24 @@ RSpec.shared_examples 'User::Role' do
     it { is_expected.to delegate_method(:can?).to(:role) }
   end
 
+  describe '#role' do
+    subject { user.role }
+
+    let(:user) { Fabricate.build :user, role: }
+
+    context 'when user does not have a role' do
+      let(:role) { nil }
+
+      it { is_expected.to eq(UserRole.everyone) }
+    end
+
+    context 'when user has a role' do
+      let(:role) { Fabricate :user_role }
+
+      it { is_expected.to eq(role) }
+    end
+  end
+
   describe '.those_who_can' do
     before { Fabricate(:moderator_user) }
 
