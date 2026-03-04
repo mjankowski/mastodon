@@ -11,6 +11,7 @@ RSpec.describe User do
 
   it_behaves_like 'two_factor_backupable'
   it_behaves_like 'User::Activity'
+  it_behaves_like 'User::Approval'
   it_behaves_like 'User::Confirmation'
 
   describe 'otp_secret' do
@@ -211,35 +212,6 @@ RSpec.describe User do
       it 'does not persist the user' do
         expect { user.update_sign_in! }
           .to_not change(user, :persisted?).from(false)
-      end
-    end
-  end
-
-  describe '#approve!' do
-    subject { user.approve! }
-
-    before do
-      Setting.registrations_mode = 'approved'
-      allow(TriggerWebhookWorker).to receive(:perform_async)
-    end
-
-    context 'when the user is already confirmed' do
-      let(:user) { Fabricate(:user, confirmed_at: Time.now.utc, approved: false) }
-
-      it 'sets the approved flag and triggers `account.approved` web hook' do
-        expect { subject }.to change { user.reload.approved? }.to(true)
-
-        expect(TriggerWebhookWorker).to have_received(:perform_async).with('account.approved', 'Account', user.account_id).once
-      end
-    end
-
-    context 'when the user is not confirmed' do
-      let(:user) { Fabricate(:user, confirmed_at: nil, approved: false) }
-
-      it 'sets the approved flag and does not trigger web hook' do
-        expect { subject }.to change { user.reload.approved? }.to(true)
-
-        expect(TriggerWebhookWorker).to_not have_received(:perform_async).with('account.approved', 'Account', user.account_id)
       end
     end
   end
