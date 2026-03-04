@@ -84,6 +84,10 @@ RSpec.describe User do
     it { is_expected.to accept_nested_attributes_for(:invite_request) }
   end
 
+  describe 'Delegations' do
+    it { is_expected.to delegate_method(:can?).to(:role) }
+  end
+
   describe 'scopes', :inline_jobs do
     describe 'recent' do
       it 'returns an array of recent users ordered by id' do

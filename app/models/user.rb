@@ -123,8 +123,6 @@ class User < ApplicationRecord
 
   has_many :session_activations, dependent: :destroy
 
-  delegate :can?, to: :role
-
   attr_reader :invite_code
   attr_writer :current_account
 
