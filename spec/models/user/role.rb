@@ -11,6 +11,29 @@ RSpec.shared_examples 'User::Role' do
     it { is_expected.to delegate_method(:can?).to(:role) }
   end
 
+  describe 'Validations' do
+    describe 'Role elevation' do
+      subject { Fabricate :user, email: 'this@that.com' }
+
+      let(:current_account) { Fabricate :account, user: Fabricate(:user, role: Fabricate(:user_role)) }
+      let(:user_role) { Fabricate(:user_role, position: 2**4) }
+
+      before { subject.current_account = current_account }
+
+      context 'when current_account user role has higher position' do
+        before { current_account.user.role.update! position: 2**5 }
+
+        it { is_expected.to allow_value(user_role).for(:role) }
+      end
+
+      context 'when current_account user role has lower position' do
+        before { current_account.user.role.update! position: 2**3 }
+
+        it { is_expected.to_not allow_value(user_role).for(:role).with_message(:elevated).against(:role_id) }
+      end
+    end
+  end
+
   describe '#role' do
     subject { user.role }
 
