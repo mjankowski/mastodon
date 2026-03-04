@@ -59,6 +59,7 @@ class User < ApplicationRecord
   include LanguagesHelper
   include Redisable
   include User::Activity
+  include User::Approval
   include User::Confirmation
   include User::HasSettings
   include User::LdapAuthenticable
@@ -241,17 +242,6 @@ class User < ApplicationRecord
 
   def unconfirmed_or_pending?
     unconfirmed? || pending?
-  end
-
-  def approve!
-    return if approved?
-
-    update!(approved: true)
-
-    # Avoid extremely unlikely race condition when approving and confirming
-    # the user at the same time
-    reload unless confirmed?
-    prepare_new_user! if confirmed?
   end
 
   def otp_enabled?
