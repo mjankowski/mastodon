@@ -149,14 +149,6 @@ class User < ApplicationRecord
     Rails.env.local?
   end
 
-  def role
-    if role_id.nil?
-      UserRole.everyone
-    else
-      super
-    end
-  end
-
   def invited?
     invite_id.present?
   end

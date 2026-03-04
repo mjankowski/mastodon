@@ -11,6 +11,14 @@ module User::Role
     before_validation :sanitize_role
   end
 
+  def role
+    if role_id.nil?
+      UserRole.everyone
+    else
+      super
+    end
+  end
+
   private
 
   def sanitize_role
