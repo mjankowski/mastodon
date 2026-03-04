@@ -100,7 +100,6 @@ class User < ApplicationRecord
   validates :website, absence: true, on: :create
   validates :confirm_password, absence: true, on: :create
   validates :date_of_birth, presence: true, date_of_birth: true, on: :create, if: -> { Setting.min_age.present? && !bypass_registration_checks? }
-  validate :validate_role_elevation
 
   scope :account_available, -> { joins(:account).merge(Account.without_suspended.without_requested_deletion) }
   scope :recent, -> { order(id: :desc) }
@@ -555,10 +554,6 @@ class User < ApplicationRecord
 
   def validate_email_dns?
     email_changed? && !external? && !self.class.skip_mx_check?
-  end
-
-  def validate_role_elevation
-    errors.add(:role_id, :elevated) if defined?(@current_account) && role&.overrides?(@current_account&.user_role)
   end
 
   def invite_text_required?
