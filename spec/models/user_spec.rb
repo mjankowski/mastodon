@@ -84,10 +84,6 @@ RSpec.describe User do
     it { is_expected.to accept_nested_attributes_for(:invite_request) }
   end
 
-  describe 'Delegations' do
-    it { is_expected.to delegate_method(:can?).to(:role) }
-  end
-
   describe 'scopes', :inline_jobs do
     describe 'recent' do
       it 'returns an array of recent users ordered by id' do
@@ -742,32 +738,6 @@ RSpec.describe User do
         let(:confirmed_at) { nil }
 
         it { is_expected.to be true }
-      end
-    end
-  end
-
-  describe '.those_who_can' do
-    before { Fabricate(:moderator_user) }
-
-    context 'when there are not any user roles' do
-      before { UserRole.destroy_all }
-
-      it 'returns an empty list' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([])
-      end
-    end
-
-    context 'when there are not users with the needed role' do
-      it 'returns an empty list' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([])
-      end
-    end
-
-    context 'when there are users with roles' do
-      let!(:admin_user) { Fabricate(:admin_user) }
-
-      it 'returns the users with the role' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([admin_user])
       end
     end
   end
