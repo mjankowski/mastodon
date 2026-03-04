@@ -12,6 +12,7 @@ RSpec.describe User do
   it_behaves_like 'two_factor_backupable'
   it_behaves_like 'User::Activity'
   it_behaves_like 'User::Confirmation'
+  it_behaves_like 'User::Role'
 
   describe 'otp_secret' do
     it 'encrypts the saved value' do
@@ -65,10 +66,6 @@ RSpec.describe User do
       it { is_expected.to normalize(:chosen_languages).from(['en', 'fr', '']).to(%w(en fr)) }
       it { is_expected.to normalize(:chosen_languages).from(['']).to(nil) }
     end
-  end
-
-  describe 'Delegations' do
-    it { is_expected.to delegate_method(:can?).to(:role) }
   end
 
   describe 'scopes', :inline_jobs do
@@ -535,32 +532,6 @@ RSpec.describe User do
         let(:confirmed_at) { nil }
 
         it { is_expected.to be true }
-      end
-    end
-  end
-
-  describe '.those_who_can' do
-    before { Fabricate(:moderator_user) }
-
-    context 'when there are not any user roles' do
-      before { UserRole.destroy_all }
-
-      it 'returns an empty list' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([])
-      end
-    end
-
-    context 'when there are not users with the needed role' do
-      it 'returns an empty list' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([])
-      end
-    end
-
-    context 'when there are users with roles' do
-      let!(:admin_user) { Fabricate(:admin_user) }
-
-      it 'returns the users with the role' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([admin_user])
       end
     end
   end
