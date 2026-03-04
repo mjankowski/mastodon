@@ -52,6 +52,7 @@ class User < ApplicationRecord
   include LanguagesHelper
   include Redisable
   include User::Activity
+  include User::Approval
   include User::Confirmation
   include User::HasSettings
   include User::LdapAuthenticable
@@ -103,8 +104,6 @@ class User < ApplicationRecord
 
   scope :account_available, -> { joins(:account).merge(Account.without_suspended.without_requested_deletion) }
   scope :recent, -> { order(id: :desc) }
-  scope :pending, -> { where(approved: false) }
-  scope :approved, -> { where(approved: true) }
   scope :enabled, -> { where(disabled: false) }
   scope :disabled, -> { where(disabled: true) }
   scope :active, -> { confirmed.signed_in_recently.account_available }
@@ -112,7 +111,6 @@ class User < ApplicationRecord
   scope :matches_ip, ->(value) { left_joins(:ips).merge(UserIp.contained_by(value)).group(users: [:id]) }
 
   before_validation :sanitize_role
-  before_create :set_approved, prepend: true # Must be called before Devise callbacks
   before_create :set_age_verified_at
   after_commit :send_pending_devise_notifications
   after_create_commit :trigger_webhooks
@@ -236,10 +234,6 @@ class User < ApplicationRecord
     end
   end
 
-  def pending?
-    !approved?
-  end
-
   def active_for_authentication?
     !account.memorial?
   end
@@ -276,18 +270,6 @@ class User < ApplicationRecord
 
   def unconfirmed_or_pending?
     unconfirmed? || pending?
-  end
-
-  def approve!
-    return if approved?
-
-    enable! if disabled?
-    update!(approved: true)
-
-    # Avoid extremely unlikely race condition when approving and confirming
-    # the user at the same time
-    reload unless confirmed?
-    prepare_new_user! if confirmed?
   end
 
   def otp_enabled?
@@ -448,18 +430,6 @@ class User < ApplicationRecord
     devise_mailer.send(notification, self, *, **).deliver_later
   end
 
-  def set_approved
-    self.approved = begin
-      if requires_approval?
-        false
-      else
-        open_registrations? || valid_bypassing_invitation? || external?
-      end
-    end
-
-    self.disabled ||= !approved && Setting.postpone_confirmation_emails
-  end
-
   def set_age_verified_at
     self.age_verified_at = Time.now.utc if Setting.min_age.present?
   end
@@ -467,10 +437,6 @@ class User < ApplicationRecord
   def grant_approval_on_confirmation?
     # Re-check approval on confirmation if the server has switched to open registrations
     open_registrations? && !requires_approval?
-  end
-
-  def requires_approval?
-    sign_up_from_ip_requires_approval? || sign_up_email_requires_approval? || sign_up_username_requires_approval?
   end
 
   def wrap_email_confirmation
@@ -491,26 +457,6 @@ class User < ApplicationRecord
     else
       notify_staff_about_pending_account!
     end
-  end
-
-  def sign_up_from_ip_requires_approval?
-    sign_up_ip.present? && IpBlock.severity_sign_up_requires_approval.containing(sign_up_ip.to_s).exists?
-  end
-
-  def sign_up_email_requires_approval?
-    return false if email_domain.blank?
-
-    records = []
-
-    # Doing this conditionally is not very satisfying, but this is consistent
-    # with the MX records validations we do and keeps the specs tractable.
-    records = DomainResource.new(email_domain).mx unless self.class.skip_mx_check?
-
-    EmailDomainBlock.requires_approval?(records + [email_domain], attempt_ip: sign_up_ip)
-  end
-
-  def sign_up_username_requires_approval?
-    account.username? && UsernameBlock.matches?(account.username, allow_with_approval: true)
   end
 
   def open_registrations?

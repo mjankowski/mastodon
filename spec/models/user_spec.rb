@@ -320,58 +320,6 @@ RSpec.describe User do
     end
   end
 
-  describe '#approve!' do
-    subject { user.approve! }
-
-    around do |example|
-      queue_adapter = ActiveJob::Base.queue_adapter
-      example.run
-      ActiveJob::Base.queue_adapter = queue_adapter
-    end
-
-    before do
-      Setting.registrations_mode = 'approved'
-      allow(TriggerWebhookWorker).to receive(:perform_async)
-    end
-
-    context 'when the user is already confirmed' do
-      let(:user) { Fabricate(:user, confirmed_at: Time.now.utc, approved: false) }
-
-      it 'sets the approved flag and triggers `account.approved` web hook' do
-        expect { subject }.to change { user.reload.approved? }.to(true)
-
-        expect(TriggerWebhookWorker).to have_received(:perform_async).with('account.approved', 'Account', user.account_id).once
-      end
-    end
-
-    context 'when the user is not confirmed' do
-      let(:user) { Fabricate(:user, confirmed_at: nil, approved: false) }
-
-      it 'sets the approved flag and does not trigger web hook' do
-        expect { subject }.to change { user.reload.approved? }.to(true)
-
-        expect(TriggerWebhookWorker).to_not have_received(:perform_async).with('account.approved', 'Account', user.account_id)
-      end
-
-      context 'when the user is disabled' do
-        let(:user) { Fabricate(:user, confirmed_at: nil, approved: false, disabled: true) }
-
-        it 'sets the approved flag, enables the account, sends a mail but does not trigger web hook' do
-          ActiveJob::Base.queue_adapter = :test
-
-          expect { subject }
-            .to change { user.reload.approved? }.to(true)
-            .and change(user, :disabled?).to(false)
-            .and change(user, :confirmation_token).from(nil)
-            .and change(user, :confirmation_sent_at).from(nil)
-            .and enqueue_job(ActionMailer::MailDeliveryJob)
-
-          expect(TriggerWebhookWorker).to_not have_received(:perform_async).with('account.approved', 'Account', user.account_id)
-        end
-      end
-    end
-  end
-
   describe '#disable_two_factor!' do
     it 'saves false for otp_required_for_login' do
       user = Fabricate.build(:user, otp_required_for_login: true)
