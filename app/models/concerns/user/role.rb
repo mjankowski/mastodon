@@ -6,6 +6,8 @@ module User::Role
   included do
     validate :validate_role_elevation, if: -> { defined?(@current_account) }
 
+    delegate :can?, to: :role
+
     before_validation :sanitize_role
   end
 
