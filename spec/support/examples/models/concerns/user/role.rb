@@ -34,6 +34,21 @@ RSpec.shared_examples 'User::Role' do
     end
   end
 
+  describe 'Callbacks' do
+    describe 'Setting role nil when everyone' do
+      subject { Fabricate.build :user, role: }
+
+      context 'when role is everyone role' do
+        let(:role) { UserRole.everyone }
+
+        it 'changes to nil on validation' do
+          expect { subject.valid? }
+            .to change { subject.attributes['role_id'] }.to(be_nil).from(be_present)
+        end
+      end
+    end
+  end
+
   describe '#role' do
     subject { user.role }
 
