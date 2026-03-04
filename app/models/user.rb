@@ -110,8 +110,6 @@ class User < ApplicationRecord
 
   scope :account_not_suspended, -> { joins(:account).merge(Account.without_suspended) }
   scope :recent, -> { order(id: :desc) }
-  scope :pending, -> { where(approved: false) }
-  scope :approved, -> { where(approved: true) }
   scope :enabled, -> { where(disabled: false) }
   scope :disabled, -> { where(disabled: true) }
   scope :active, -> { confirmed.signed_in_recently.account_not_suspended }
@@ -119,7 +117,6 @@ class User < ApplicationRecord
   scope :matches_ip, ->(value) { left_joins(:ips).merge(IpBlock.contained_by(value)).group(users: [:id]) }
 
   before_validation :sanitize_role
-  before_create :set_approved
   before_create :set_age_verified_at
   after_commit :send_pending_devise_notifications
   after_create_commit :trigger_webhooks
@@ -212,10 +209,6 @@ class User < ApplicationRecord
 
     save(validate: false) unless new_record?
     prepare_returning_user!
-  end
-
-  def pending?
-    !approved?
   end
 
   def active_for_authentication?
@@ -403,27 +396,8 @@ class User < ApplicationRecord
     devise_mailer.send(notification, self, *, **).deliver_later
   end
 
-  def set_approved
-    self.approved = begin
-      if requires_approval?
-        false
-      else
-        open_registrations? || valid_invitation? || external?
-      end
-    end
-  end
-
   def set_age_verified_at
     self.age_verified_at = Time.now.utc if Setting.min_age.present?
-  end
-
-  def grant_approval_on_confirmation?
-    # Re-check approval on confirmation if the server has switched to open registrations
-    open_registrations? && !requires_approval?
-  end
-
-  def requires_approval?
-    sign_up_from_ip_requires_approval? || sign_up_email_requires_approval? || sign_up_username_requires_approval?
   end
 
   def wrap_email_confirmation
@@ -444,29 +418,6 @@ class User < ApplicationRecord
     else
       notify_staff_about_pending_account!
     end
-  end
-
-  def sign_up_from_ip_requires_approval?
-    sign_up_ip.present? && IpBlock.severity_sign_up_requires_approval.containing(sign_up_ip.to_s).exists?
-  end
-
-  def sign_up_email_requires_approval?
-    return false if email.blank?
-
-    _, domain = email.split('@', 2)
-    return false if domain.blank?
-
-    records = []
-
-    # Doing this conditionally is not very satisfying, but this is consistent
-    # with the MX records validations we do and keeps the specs tractable.
-    records = DomainResource.new(domain).mx unless self.class.skip_mx_check?
-
-    EmailDomainBlock.requires_approval?(records + [domain], attempt_ip: sign_up_ip)
-  end
-
-  def sign_up_username_requires_approval?
-    account.username? && UsernameBlock.matches?(account.username, allow_with_approval: true)
   end
 
   def open_registrations?
