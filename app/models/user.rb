@@ -54,6 +54,7 @@ class User < ApplicationRecord
   include User::Activity
   include User::Confirmation
   include User::HasSettings
+  include User::Invitations
   include User::LdapAuthenticable
   include User::Omniauthable
   include User::PamAuthenticable
@@ -69,22 +70,16 @@ class User < ApplicationRecord
          :confirmable
 
   belongs_to :account, inverse_of: :user
-  belongs_to :invite, optional: true
   belongs_to :created_by_application, class_name: 'Doorkeeper::Application', optional: true
   belongs_to :role, class_name: 'UserRole', optional: true
   accepts_nested_attributes_for :account
 
   has_many :applications, class_name: 'Doorkeeper::Application', as: :owner, dependent: nil
   has_many :backups, inverse_of: :user, dependent: nil
-  has_many :invites, inverse_of: :user, dependent: nil
   has_many :login_activities, inverse_of: :user, dependent: :destroy
   has_many :markers, inverse_of: :user, dependent: :destroy
   has_many :webauthn_credentials, dependent: :destroy
   has_many :ips, class_name: 'UserIp', inverse_of: :user, dependent: nil
-
-  has_one :invite_request, class_name: 'UserInviteRequest', inverse_of: :user, dependent: :destroy
-  accepts_nested_attributes_for :invite_request, reject_if: ->(attributes) { attributes['text'].blank? && !Setting.require_invite_text }
-  validates :invite_request, presence: true, on: :create, if: :invite_text_required?
 
   validates :email, presence: true, email_address: true, length: { maximum: 320 }
   validates :email, email_mx: { attempt_ip: :sign_up_ip }, if: :validate_email_dns?
@@ -114,7 +109,6 @@ class User < ApplicationRecord
   before_validation :sanitize_role
   before_create :set_approved, prepend: true # Must be called before Devise callbacks
   before_create :set_age_verified_at
-  after_create :increment_invite_uses
   after_commit :send_pending_devise_notifications
   after_create_commit :trigger_webhooks
   after_commit :reload_home_feed, if: :saved_change_to_settings, on: [:create, :update]
@@ -127,7 +121,6 @@ class User < ApplicationRecord
 
   delegate :can?, to: :role
 
-  attr_reader :invite_code
   attr_writer :current_account
 
   attribute :external, :boolean, default: false
@@ -154,18 +147,6 @@ class User < ApplicationRecord
     else
       super
     end
-  end
-
-  def invited?
-    invite_id.present?
-  end
-
-  def valid_invitation?
-    invite_id.present? && invite.valid_for_use?
-  end
-
-  def valid_bypassing_invitation?
-    valid_invitation? && invite.bypass_approval?
   end
 
   def disable!
@@ -346,11 +327,6 @@ class User < ApplicationRecord
 
   def web_push_subscription(session)
     session.web_push_subscription.nil? ? nil : session.web_push_subscription
-  end
-
-  def invite_code=(code)
-    self.invite  = Invite.find_by(code: code) if code.present?
-    @invite_code = code
   end
 
   def password_required?
@@ -561,10 +537,6 @@ class User < ApplicationRecord
     errors.add(:role_id, :elevated) if defined?(@current_account) && role&.overrides?(@current_account&.user_role)
   end
 
-  def invite_text_required?
-    Setting.require_invite_text && !open_registrations? && !invite&.bypass_approval? && !external? && !bypass_registration_checks?
-  end
-
   def trigger_webhooks
     TriggerWebhookWorker.perform_async('account.created', 'Account', account_id)
   end
@@ -583,9 +555,5 @@ class User < ApplicationRecord
 
   def initial_setting_display_own_posts
     saved_change_to_settings.first['display_own_posts']
-  end
-
-  def increment_invite_uses
-    invite&.increment!(:uses)
   end
 end
