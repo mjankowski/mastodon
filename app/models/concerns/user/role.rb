@@ -11,6 +11,18 @@ module User::Role
     before_validation :sanitize_role
   end
 
+  class_methods do
+    def those_who_can(*any_of_privileges)
+      matching_role_ids = UserRole.that_can(*any_of_privileges).map(&:id)
+
+      if matching_role_ids.empty?
+        none
+      else
+        where(role_id: matching_role_ids)
+      end
+    end
+  end
+
   def role
     if role_id.nil?
       UserRole.everyone
