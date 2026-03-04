@@ -3,6 +3,29 @@
 require 'rails_helper'
 
 RSpec.shared_examples 'User::Approval' do
+  describe 'Scopes' do
+    let!(:approved_user) { Fabricate :user }
+    let!(:unapproved_user) { Fabricate :user }
+
+    before { unapproved_user.update! approved: false }
+
+    describe '.approved' do
+      it 'returns approved records' do
+        expect(described_class.approved)
+          .to include(approved_user)
+          .and not_include(unapproved_user)
+      end
+    end
+
+    describe '.pending' do
+      it 'returns non approved records' do
+        expect(described_class.pending)
+          .to include(unapproved_user)
+          .and not_include(approved_user)
+      end
+    end
+  end
+
   describe '#approve!' do
     subject { user.approve! }
 
