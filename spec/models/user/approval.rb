@@ -31,4 +31,20 @@ RSpec.shared_examples 'User::Approval' do
       end
     end
   end
+
+  describe '#pending?' do
+    subject { user.pending? }
+
+    context 'when user is approved' do
+      let(:user) { Fabricate.build :user, approved: true }
+
+      it { is_expected.to be(false) }
+    end
+
+    context 'when user is not approved' do
+      let(:user) { Fabricate.build :user, approved: false }
+
+      it { is_expected.to be(true) }
+    end
+  end
 end
