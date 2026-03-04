@@ -4,11 +4,13 @@ module User::Role
   extend ActiveSupport::Concern
 
   included do
-    validate :validate_role_elevation, if: -> { defined?(@current_account) }
+    before_validation :sanitize_role
+
+    belongs_to :role, class_name: 'UserRole', optional: true
 
     delegate :can?, to: :role
 
-    before_validation :sanitize_role
+    validate :validate_role_elevation, if: -> { defined?(@current_account) }
   end
 
   class_methods do
