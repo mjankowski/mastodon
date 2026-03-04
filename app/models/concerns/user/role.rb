@@ -14,13 +14,13 @@ module User::Role
   end
 
   class_methods do
-    def those_who_can(*any_of_privileges)
-      matching_role_ids = UserRole.that_can(*any_of_privileges).map(&:id)
-
-      if matching_role_ids.empty?
-        none
-      else
-        where(role_id: matching_role_ids)
+    def those_who_can(*privileges)
+      UserRole.that_can(*privileges).then do |roles|
+        if roles.empty?
+          none
+        else
+          where(role: roles)
+        end
       end
     end
   end
