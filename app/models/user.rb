@@ -111,7 +111,6 @@ class User < ApplicationRecord
   scope :matches_email, ->(value) { where(arel_table[:email].matches("#{value}%")) }
   scope :matches_ip, ->(value) { left_joins(:ips).merge(UserIp.contained_by(value)).group(users: [:id]) }
 
-  before_validation :sanitize_role
   before_create :set_approved, prepend: true # Must be called before Devise callbacks
   before_create :set_age_verified_at
   after_commit :send_pending_devise_notifications
@@ -515,10 +514,6 @@ class User < ApplicationRecord
 
   def open_registrations?
     Setting.registrations_mode == 'open'
-  end
-
-  def sanitize_role
-    self.role = nil if role.present? && role.everyone?
   end
 
   def prepare_new_user!

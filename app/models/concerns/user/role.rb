@@ -5,9 +5,15 @@ module User::Role
 
   included do
     validate :validate_role_elevation, if: -> { defined?(@current_account) }
+
+    before_validation :sanitize_role
   end
 
   private
+
+  def sanitize_role
+    self.role = nil if role.present? && role.everyone?
+  end
 
   def validate_role_elevation
     errors.add(:role_id, :elevated) if role&.overrides?(@current_account&.user_role)
