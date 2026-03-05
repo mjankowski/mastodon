@@ -41,7 +41,7 @@ module User::Approval
   end
 
   def sign_up_from_ip_requires_approval?
-    sign_up_ip.present? && IpBlock.severity_sign_up_requires_approval.containing(sign_up_ip.to_s).exists?
+    sign_up_ip? && IpBlock.severity_sign_up_requires_approval.containing(sign_up_ip.to_s).exists?
   end
 
   def sign_up_email_requires_approval?
