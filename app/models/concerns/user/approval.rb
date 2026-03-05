@@ -62,9 +62,4 @@ module User::Approval
   def sign_up_username_requires_approval?
     account.username? && UsernameBlock.matches?(account.username, allow_with_approval: true)
   end
-
-  def grant_approval_on_confirmation?
-    # Handle condition where server has switched to open registrations
-    open_registrations? && !requires_approval?
-  end
 end
