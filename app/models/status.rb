@@ -38,6 +38,7 @@ class Status < ApplicationRecord
   include RateLimitable
   include Status::FaspConcern
   include Status::FetchRepliesConcern
+  include Status::Media
   include Status::SafeReblogInsert
   include Status::SearchConcern
   include Status::SnapshotConcern
@@ -58,8 +59,6 @@ class Status < ApplicationRecord
     preview_cards_status: { preview_card: { author_account: [:account_stat, user: :role] } },
     quote: { status: { account: [:account_stat, user: :role] } },
   ].freeze
-
-  MEDIA_ATTACHMENTS_LIMIT = 4
 
   rate_limit by: :account, family: :statuses
 
@@ -93,7 +92,6 @@ class Status < ApplicationRecord
   has_many :replies, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :thread, dependent: nil
   has_many :mentions, dependent: :destroy, inverse_of: :status
   has_many :mentioned_accounts, through: :mentions, source: :account, class_name: 'Account'
-  has_many :media_attachments, dependent: :nullify
   has_many :tagged_objects, dependent: :destroy
   has_many :quotes, foreign_key: 'quoted_status_id', inverse_of: :quoted_status, dependent: :nullify
 
@@ -152,7 +150,6 @@ class Status < ApplicationRecord
   scope :tagged_with_none, lambda { |tag_ids|
     where('NOT EXISTS (SELECT * FROM statuses_tags forbidden WHERE forbidden.status_id = statuses.id AND forbidden.tag_id IN (?))', tag_ids)
   }
-  scope :without_empty_attachments, -> { where(ordered_media_attachment_ids: nil).or(where.not(ordered_media_attachment_ids: [])) }
 
   after_create_commit :trigger_create_webhooks
   after_update_commit :trigger_update_webhooks
@@ -251,10 +248,6 @@ class Status < ApplicationRecord
     PreviewCardsStatus.where(status_id: id).delete_all
   end
 
-  def with_media?
-    ordered_media_attachments.any?
-  end
-
   def with_quote?
     quote.present?
   end
@@ -282,17 +275,6 @@ class Status < ApplicationRecord
     fields += preloadable_poll.options unless preloadable_poll.nil?
 
     @emojis = CustomEmoji.from_text(fields.join(' '), account.domain)
-  end
-
-  def ordered_media_attachments
-    if ordered_media_attachment_ids.nil?
-      # NOTE: sort Ruby-side to avoid hitting the database when the status is
-      # not persisted to database yet
-      media_attachments.sort_by(&:id)
-    else
-      map = media_attachments.index_by(&:id)
-      ordered_media_attachment_ids.filter_map { |media_attachment_id| map[media_attachment_id] }
-    end.take(MEDIA_ATTACHMENTS_LIMIT)
   end
 
   def replies_count
