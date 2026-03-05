@@ -9,6 +9,7 @@ RSpec.describe Status do
   let(:bob)   { Fabricate(:account, username: 'bob') }
   let(:other) { Fabricate(:status, account: bob, text: 'Skulls for the skull god! The enemy\'s gates are sideways!') }
 
+  it_behaves_like 'Status::Conversations'
   it_behaves_like 'Status::Visibility'
 
   describe '#local?' do

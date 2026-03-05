@@ -36,6 +36,7 @@ class Status < ApplicationRecord
   include Discard::Model
   include Paginable
   include RateLimitable
+  include Status::Conversations
   include Status::FaspConcern
   include Status::FetchRepliesConcern
   include Status::SafeReblogInsert
@@ -62,15 +63,12 @@ class Status < ApplicationRecord
 
   belongs_to :account, inverse_of: :statuses
   belongs_to :in_reply_to_account, class_name: 'Account', optional: true
-  belongs_to :conversation, optional: true
   belongs_to :preloadable_poll, class_name: 'Poll', foreign_key: 'poll_id', optional: true, inverse_of: false
 
   with_options class_name: 'Status', optional: true do
     belongs_to :thread, foreign_key: 'in_reply_to_id', inverse_of: :replies
     belongs_to :reblog, foreign_key: 'reblog_of_id', inverse_of: :reblogs
   end
-
-  has_one :owned_conversation, class_name: 'Conversation', foreign_key: 'parent_status_id', inverse_of: :parent_status, dependent: nil
 
   has_many :favourites, inverse_of: :status, dependent: :destroy
   has_many :bookmarks, inverse_of: :status, dependent: :destroy
@@ -150,17 +148,11 @@ class Status < ApplicationRecord
 
   before_validation :prepare_contents, if: :local?
   before_validation :set_reblog
-  before_validation :set_conversation
   before_validation :set_local
 
   around_create Mastodon::Snowflake::Callbacks
 
   after_create :set_poll_id
-  after_create :update_conversation
-
-  # The `prepend: true` option below ensures this runs before
-  # the `dependent: destroy` callbacks remove relevant records
-  before_destroy :unlink_from_conversations!, prepend: true
 
   cache_associated :application,
                    :media_attachments,
@@ -406,17 +398,6 @@ class Status < ApplicationRecord
     update_attribute(:deleted_at, discard_time)
   end
 
-  def unlink_from_conversations!
-    return unless direct_visibility?
-
-    inbox_owners = mentioned_accounts.local
-    inbox_owners += [account] if account.local?
-
-    inbox_owners.each do |inbox_owner|
-      AccountConversation.remove_status(inbox_owner, self)
-    end
-  end
-
   private
 
   def update_status_stat!(attrs)
@@ -440,25 +421,6 @@ class Status < ApplicationRecord
 
   def set_poll_id
     update_column(:poll_id, poll.id) if association(:poll).loaded? && poll.present?
-  end
-
-  def set_conversation
-    self.thread = thread.reblog if thread&.reblog?
-
-    self.reply = !(in_reply_to_id.nil? && thread.nil?) unless reply
-
-    if reply? && !thread.nil?
-      self.in_reply_to_account_id = carried_over_reply_to_account_id
-      self.conversation_id        = thread.conversation_id if conversation_id.nil?
-    elsif conversation_id.nil?
-      build_conversation
-    end
-  end
-
-  def update_conversation
-    return if reply?
-
-    conversation.update!(parent_status: self, parent_account: account) if conversation && conversation.parent_status.nil?
   end
 
   def carried_over_reply_to_account_id
