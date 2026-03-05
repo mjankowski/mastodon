@@ -9,6 +9,7 @@ RSpec.describe Status do
   let(:bob)   { Fabricate(:account, username: 'bob') }
   let(:other) { Fabricate(:status, account: bob, text: 'Skulls for the skull god! The enemy\'s gates are sideways!') }
 
+  it_behaves_like 'Status::Polls'
   it_behaves_like 'Status::Visibility'
 
   describe '#local?' do
@@ -373,28 +374,6 @@ RSpec.describe Status do
       expect(described_class.only_reblogs)
         .to include(reblog)
         .and not_include(status)
-    end
-  end
-
-  describe '.only_polls' do
-    let!(:poll_status) { Fabricate :status, poll: Fabricate(:poll) }
-    let!(:no_poll_status) { Fabricate :status }
-
-    it 'returns the expected statuses' do
-      expect(described_class.only_polls)
-        .to include(poll_status)
-        .and not_include(no_poll_status)
-    end
-  end
-
-  describe '.without_polls' do
-    let!(:poll_status) { Fabricate :status, poll: Fabricate(:poll) }
-    let!(:no_poll_status) { Fabricate :status }
-
-    it 'returns the expected statuses' do
-      expect(described_class.without_polls)
-        .to not_include(poll_status)
-        .and include(no_poll_status)
     end
   end
 

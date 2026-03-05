@@ -38,6 +38,7 @@ class Status < ApplicationRecord
   include RateLimitable
   include Status::FaspConcern
   include Status::FetchRepliesConcern
+  include Status::Polls
   include Status::SafeReblogInsert
   include Status::SearchConcern
   include Status::SnapshotConcern
@@ -63,7 +64,6 @@ class Status < ApplicationRecord
   belongs_to :account, inverse_of: :statuses
   belongs_to :in_reply_to_account, class_name: 'Account', optional: true
   belongs_to :conversation, optional: true
-  belongs_to :preloadable_poll, class_name: 'Poll', foreign_key: 'poll_id', optional: true, inverse_of: false
 
   with_options class_name: 'Status', optional: true do
     belongs_to :thread, foreign_key: 'in_reply_to_id', inverse_of: :replies
@@ -98,7 +98,6 @@ class Status < ApplicationRecord
 
   has_one :notification, as: :activity, dependent: :destroy
   has_one :status_stat, inverse_of: :status, dependent: nil
-  has_one :poll, inverse_of: :status, dependent: :destroy
   has_one :trend, class_name: 'StatusTrend', inverse_of: :status, dependent: nil
   has_one :quote, inverse_of: :status, dependent: :destroy
 
@@ -107,8 +106,6 @@ class Status < ApplicationRecord
   validates_with StatusLengthValidator
   validates_with DisallowedHashtagsValidator
   validates :reblog, uniqueness: { scope: :account }, if: :reblog?
-
-  accepts_nested_attributes_for :poll
 
   default_scope { recent.kept }
 
@@ -119,8 +116,6 @@ class Status < ApplicationRecord
   scope :without_replies, -> { not_reply.or(reply_to_account) }
   scope :not_reply, -> { where(reply: false) }
   scope :only_reblogs, -> { where.not(reblog_of_id: nil) }
-  scope :only_polls, -> { where.not(poll_id: nil) }
-  scope :without_polls, -> { where(poll_id: nil) }
   scope :reply_to_account, -> { where(arel_table[:in_reply_to_account_id].eq arel_table[:account_id]) }
   scope :not_replying_to_account, ->(account) { where.not(in_reply_to_account: account) }
   scope :without_reblogs, -> { where(statuses: { reblog_of_id: nil }) }
@@ -155,7 +150,6 @@ class Status < ApplicationRecord
 
   around_create Mastodon::Snowflake::Callbacks
 
-  after_create :set_poll_id
   after_create :update_conversation
 
   # The `prepend: true` option below ensures this runs before
@@ -264,10 +258,6 @@ class Status < ApplicationRecord
 
   def with_preview_card?
     preview_cards_status.present?
-  end
-
-  def with_poll?
-    preloadable_poll.present?
   end
 
   def non_sensitive_with_media?
@@ -436,10 +426,6 @@ class Status < ApplicationRecord
 
   def set_reblog
     self.reblog = reblog.reblog if reblog? && reblog.reblog?
-  end
-
-  def set_poll_id
-    update_column(:poll_id, poll.id) if association(:poll).loaded? && poll.present?
   end
 
   def set_conversation
