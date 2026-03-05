@@ -406,6 +406,11 @@ class User < ApplicationRecord
     self.age_verified_at = Time.now.utc if Setting.min_age.present?
   end
 
+  def grant_approval_on_confirmation?
+    # Re-check approval on confirmation if the server has switched to open registrations
+    open_registrations? && !requires_approval?
+  end
+
   def wrap_email_confirmation
     new_user      = !confirmed?
     self.approved = true if grant_approval_on_confirmation?
