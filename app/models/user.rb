@@ -53,6 +53,7 @@ class User < ApplicationRecord
   include Redisable
   include User::Activity
   include User::Confirmation
+  include User::EmailAddress
   include User::HasSettings
   include User::LdapAuthenticable
   include User::Omniauthable
@@ -85,10 +86,6 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :invite_request, reject_if: ->(attributes) { attributes['text'].blank? && !Setting.require_invite_text }
   validates :invite_request, presence: true, on: :create, if: :invite_text_required?
 
-  validates :email, presence: true, email_address: true, length: { maximum: 320 }
-  validates :email, email_mx: { attempt_ip: :sign_up_ip }, if: :validate_email_dns?
-
-  validates_with UserEmailValidator, if: -> { (ENV['EMAIL_DOMAIN_LISTS_APPLY_AFTER_CONFIRMATION'] == 'true' || !confirmed?) && will_save_change_to_email? }
   validates :agreement, acceptance: { allow_nil: false, accept: [true, 'true', '1'] }, on: :create
 
   # Honeypot/anti-spam fields
@@ -107,7 +104,6 @@ class User < ApplicationRecord
   scope :enabled, -> { where(disabled: false) }
   scope :disabled, -> { where(disabled: true) }
   scope :active, -> { confirmed.signed_in_recently.account_available }
-  scope :matches_email, ->(value) { where(arel_table[:email].matches("#{value}%")) }
   scope :matches_ip, ->(value) { left_joins(:ips).merge(UserIp.contained_by(value)).group(users: [:id]) }
 
   before_validation :sanitize_role
@@ -139,10 +135,6 @@ class User < ApplicationRecord
     else
       where(role_id: matching_role_ids)
     end
-  end
-
-  def self.skip_mx_check?
-    Rails.env.local?
   end
 
   def role
@@ -191,12 +183,6 @@ class User < ApplicationRecord
       skip_confirmation!
       save!
     end
-  end
-
-  def email_domain
-    Mail::Address.new(email).domain
-  rescue Mail::Field::ParseError
-    nil
   end
 
   def update_sign_in!(new_sign_in: false)
@@ -505,10 +491,6 @@ class User < ApplicationRecord
 
     home_feed.regeneration_in_progress!
     RegenerationWorker.perform_async(account_id)
-  end
-
-  def validate_email_dns?
-    email_changed? && !external? && !self.class.skip_mx_check?
   end
 
   def validate_role_elevation
