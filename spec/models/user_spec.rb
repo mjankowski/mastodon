@@ -11,6 +11,7 @@ RSpec.describe User do
 
   it_behaves_like 'two_factor_backupable'
   it_behaves_like 'User::Activity'
+  it_behaves_like 'User::EmailAddress'
   it_behaves_like 'User::Confirmation'
 
   describe 'otp_secret' do
@@ -30,16 +31,6 @@ RSpec.describe User do
   end
 
   describe 'Validations' do
-    it { is_expected.to_not allow_value('john@').for(:email) }
-
-    it 'is valid with an invalid e-mail that has already been saved' do
-      user = Fabricate.build(:user, email: 'invalid-email')
-      user.save(validate: false)
-      expect(user.valid?).to be true
-    end
-
-    it { is_expected.to allow_value('admin@localhost').for(:email) }
-
     context 'when registration form time is present' do
       subject { Fabricate.build :user }
 
@@ -89,15 +80,6 @@ RSpec.describe User do
       end
     end
 
-    describe 'matches_email' do
-      it 'returns a relation of users whose email starts with the given string' do
-        specified = Fabricate(:user, email: 'specified@spec')
-        Fabricate(:user, email: 'unspecified@spec')
-
-        expect(described_class.matches_email('specified')).to contain_exactly(specified)
-      end
-    end
-
     describe 'matches_ip' do
       it 'returns a relation of users whose ip address is matching with the given CIDR' do
         user1 = Fabricate(:user)
@@ -109,64 +91,6 @@ RSpec.describe User do
 
         expect(described_class.matches_ip('2160:2160::/32')).to contain_exactly(user1)
       end
-    end
-  end
-
-  describe 'email domains denylist integration' do
-    around do |example|
-      original = Rails.configuration.x.email_domains_denylist
-
-      Rails.configuration.x.email_domains_denylist = 'mvrht.com'
-
-      example.run
-
-      Rails.configuration.x.email_domains_denylist = original
-    end
-
-    it 'allows a user with an email domain that is not on the denylist to be created' do
-      user = described_class.new(email: 'foo@example.com', account: account, password: password, agreement: true)
-
-      expect(user).to be_valid
-    end
-
-    it 'does not allow a user with an email domain on the deylist to be created' do
-      user = described_class.new(email: 'foo@mvrht.com', account: account, password: password, agreement: true)
-
-      expect(user).to_not be_valid
-    end
-
-    it 'does not allow a user with an email where the subdomain is on the denylist to be created' do
-      user = described_class.new(email: 'foo@mvrht.com.topdomain.tld', account: account, password: password, agreement: true)
-
-      expect(user).to_not be_valid
-    end
-  end
-
-  describe '#email_domain' do
-    subject { described_class.new(email: email).email_domain }
-
-    context 'when value is nil' do
-      let(:email) { nil }
-
-      it { is_expected.to be_nil }
-    end
-
-    context 'when value is blank' do
-      let(:email) { '' }
-
-      it { is_expected.to be_nil }
-    end
-
-    context 'when value has valid domain' do
-      let(:email) { 'user@host.example' }
-
-      it { is_expected.to eq('host.example') }
-    end
-
-    context 'when value has no split' do
-      let(:email) { 'user$host.example' }
-
-      it { is_expected.to be_nil }
     end
   end
 
@@ -301,48 +225,6 @@ RSpec.describe User do
     it "returns 'public' if user has not configured default privacy setting and account is not locked" do
       user = Fabricate(:account, locked: false).user
       expect(user.setting_default_privacy).to eq 'public'
-    end
-  end
-
-  describe 'allowlist integration' do
-    around do |example|
-      original = Rails.configuration.x.email_domains_allowlist
-
-      Rails.configuration.x.email_domains_allowlist = 'mastodon.space'
-
-      example.run
-
-      Rails.configuration.x.email_domains_allowlist = original
-    end
-
-    it 'does not allow a user to be created when their email is not on the allowlist' do
-      user = described_class.new(email: 'foo@example.com', account: account, password: password, agreement: true)
-      expect(user).to_not be_valid
-    end
-
-    it 'allows a user to be created when their email is on the allowlist' do
-      user = described_class.new(email: 'foo@mastodon.space', account: account, password: password, agreement: true)
-      expect(user).to be_valid
-    end
-
-    it 'does not allow a user with an email subdomain included on the top level domain allowlist to be created' do
-      user = described_class.new(email: 'foo@mastodon.space.userdomain.com', account: account, password: password, agreement: true)
-      expect(user).to_not be_valid
-    end
-
-    context 'with a subdomain on the denylist' do
-      around do |example|
-        original = Rails.configuration.x.email_domains_denylist
-        example.run
-        Rails.configuration.x.email_domains_denylist = original
-      end
-
-      it 'does not allow a user to be created with an email subdomain on the denylist even if the top domain is on the allowlist' do
-        Rails.configuration.x.email_domains_denylist = 'denylisted.mastodon.space'
-
-        user = described_class.new(email: 'foo@denylisted.mastodon.space', account: account, password: password)
-        expect(user).to_not be_valid
-      end
     end
   end
 
