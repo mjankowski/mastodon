@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.shared_examples 'User::Approval' do
+RSpec.describe User::Approval do
+  subject { User.new }
+
   describe 'Scopes' do
     let!(:approved_user) { Fabricate :user }
     let!(:unapproved_user) { Fabricate :user }
@@ -11,7 +13,7 @@ RSpec.shared_examples 'User::Approval' do
 
     describe '.approved' do
       it 'returns approved records' do
-        expect(described_class.approved)
+        expect(User.approved)
           .to include(approved_user)
           .and not_include(unapproved_user)
       end
@@ -19,7 +21,7 @@ RSpec.shared_examples 'User::Approval' do
 
     describe '.pending' do
       it 'returns non approved records' do
-        expect(described_class.pending)
+        expect(User.pending)
           .to include(unapproved_user)
           .and not_include(approved_user)
       end
