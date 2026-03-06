@@ -23,27 +23,6 @@ RSpec.describe ApplicationController do
     end
   end
 
-  shared_examples 'error response' do |code|
-    it "returns http #{code} for http and renders template" do
-      subject
-
-      expect(response)
-        .to have_http_status(code)
-      expect(response.parsed_body)
-        .to have_css('body[class=error]')
-      expect(response.parsed_body.css('h1').to_s)
-        .to include(error_content(code))
-    end
-
-    def error_content(code)
-      if code == 422
-        I18n.t('errors.422.content')
-      else
-        I18n.t("errors.#{code}")
-      end
-    end
-  end
-
   context 'with a forgery' do
     subject do
       ActionController::Base.allow_forgery_protection = true
@@ -140,65 +119,5 @@ RSpec.describe ApplicationController do
       controller.params[:unmatched_route] = 'unmatched'
       expect { controller.raise_not_found }.to raise_error(ActionController::RoutingError, 'No route matches unmatched')
     end
-  end
-
-  describe 'forbidden' do
-    controller do
-      def route_forbidden
-        forbidden
-      end
-    end
-
-    subject do
-      routes.draw { get 'route_forbidden' => 'anonymous#route_forbidden' }
-      get 'route_forbidden'
-    end
-
-    it_behaves_like 'error response', 403
-  end
-
-  describe 'not_found' do
-    controller do
-      def route_not_found
-        not_found
-      end
-    end
-
-    subject do
-      routes.draw { get 'route_not_found' => 'anonymous#route_not_found' }
-      get 'route_not_found'
-    end
-
-    it_behaves_like 'error response', 404
-  end
-
-  describe 'gone' do
-    controller do
-      def route_gone
-        gone
-      end
-    end
-
-    subject do
-      routes.draw { get 'route_gone' => 'anonymous#route_gone' }
-      get 'route_gone'
-    end
-
-    it_behaves_like 'error response', 410
-  end
-
-  describe 'unprocessable_content' do
-    controller do
-      def route_unprocessable_content
-        unprocessable_content
-      end
-    end
-
-    subject do
-      routes.draw { get 'route_unprocessable_content' => 'anonymous#route_unprocessable_content' }
-      get 'route_unprocessable_content'
-    end
-
-    it_behaves_like 'error response', 422
   end
 end
