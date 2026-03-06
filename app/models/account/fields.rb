@@ -6,8 +6,10 @@ module Account::Fields
   DEFAULT_FIELDS_SIZE = 4
 
   included do
-    validates :fields, length: { maximum: DEFAULT_FIELDS_SIZE }, if: -> { local? && will_save_change_to_fields? }
-    validates_with EmptyProfileFieldNamesValidator, if: -> { local? && will_save_change_to_fields? }
+    with_options if: [:local?, :will_save_change_to_fields?] do
+      validates :fields, length: { maximum: DEFAULT_FIELDS_SIZE }
+      validates_with EmptyProfileFieldNamesValidator
+    end
   end
 
   def fields
