@@ -2,21 +2,23 @@
 
 require 'rails_helper'
 
-RSpec.shared_examples 'Status::Media' do
+RSpec.describe Status::Media do
+  subject { Fabricate.build :status }
+
   describe 'Associations' do
     it { is_expected.to have_many(:media_attachments).dependent(:nullify) }
   end
 
   describe 'Scopes' do
     describe '.without_empty_attachments' do
-      subject { described_class.without_empty_attachments }
+      subject { Status.without_empty_attachments }
 
       let!(:status_attachments_nil) { Fabricate :status, ordered_media_attachment_ids: nil }
       let!(:status_attachments_empty) { Fabricate :status, ordered_media_attachment_ids: [] }
       let!(:status_attachments_present) { Fabricate :status, ordered_media_attachment_ids: [123, 456] }
 
       it 'returns records without empty array ordered attachments' do
-        expect(described_class.without_empty_attachments)
+        expect(subject)
           .to include(status_attachments_nil)
           .and include(status_attachments_present)
           .and not_include(status_attachments_empty)
