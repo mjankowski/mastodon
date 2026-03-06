@@ -25,4 +25,34 @@ RSpec.describe Account::Fields do
       end
     end
   end
+
+  describe '#fields' do
+    subject { account.fields }
+
+    let(:account) { Fabricate.build :account }
+
+    context 'when attribute is nil' do
+      before { account.fields = nil }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when attribute has valid data' do
+      before { account.fields = [{ 'name' => 'Personal Web Site', 'value' => 'https://host.example' }] }
+
+      it 'returns array of account field objects' do
+        expect(subject)
+          .to be_an(Array)
+          .and contain_exactly(
+            be_a(Account::Field).and(have_attributes(name: /Personal/, value: /host.example/))
+          )
+      end
+    end
+
+    context 'when attribute has invalid data' do
+      before { account.fields = [{ 'blurp' => 'zorp', '@@@@' => '###' }] }
+
+      it { is_expected.to be_empty }
+    end
+  end
 end
