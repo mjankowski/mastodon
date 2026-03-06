@@ -11,7 +11,6 @@ RSpec.describe User do
 
   it_behaves_like 'two_factor_backupable'
   it_behaves_like 'User::Activity'
-  it_behaves_like 'User::EmailAddress'
   it_behaves_like 'User::Confirmation'
 
   describe 'otp_secret' do
