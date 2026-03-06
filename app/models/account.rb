@@ -75,7 +75,6 @@ class Account < ApplicationRecord
   BACKGROUND_REFRESH_INTERVAL = 1.week.freeze
   REFRESH_DEADLINE = 6.hours
   STALE_THRESHOLD = 1.day
-  DEFAULT_FIELDS_SIZE = 4
   INSTANCE_ACTOR_ID = -99
 
   USERNAME_RE   = /[a-z0-9_]+([.-]+[a-z0-9_]+)*/i
@@ -101,6 +100,7 @@ class Account < ApplicationRecord
   include Account::Avatar
   include Account::Counters
   include Account::FaspConcern
+  include Account::Fields
   include Account::FinderConcern
   include Account::Header
   include Account::InteractionPolicyConcern
@@ -136,8 +136,6 @@ class Account < ApplicationRecord
   validates_with UnreservedUsernameValidator, if: -> { local? && will_save_change_to_username? && !actor_type_application? && !user&.bypass_registration_checks }
   validates :display_name, length: { maximum: DISPLAY_NAME_LENGTH_LIMIT }, if: -> { local? && will_save_change_to_display_name? }
   validates :note, note_length: { maximum: NOTE_LENGTH_LIMIT }, if: -> { local? && will_save_change_to_note? }
-  validates :fields, length: { maximum: DEFAULT_FIELDS_SIZE }, if: -> { local? && will_save_change_to_fields? }
-  validates_with EmptyProfileFieldNamesValidator, if: -> { local? && will_save_change_to_fields? }
   with_options on: :create, if: :local? do
     validates :followers_url, absence: true
     validates :following_url, absence: true
@@ -312,47 +310,6 @@ class Account < ApplicationRecord
 
   def also_known_as
     self[:also_known_as] || []
-  end
-
-  def fields
-    (self[:fields] || []).filter_map do |f|
-      Account::Field.new(self, f)
-    rescue
-      nil
-    end
-  end
-
-  def fields_attributes=(attributes)
-    fields     = []
-    old_fields = self[:fields] || []
-    old_fields = [] if old_fields.is_a?(Hash)
-
-    attributes = attributes.values if attributes.is_a?(Hash)
-
-    attributes.each do |attr|
-      next if attr[:name].blank? && attr[:value].blank?
-
-      previous = old_fields.find { |item| item['value'] == attr[:value] }
-
-      attr[:verified_at] = previous['verified_at'] if previous && previous['verified_at'].present?
-
-      fields << attr
-    end
-
-    self[:fields] = fields
-  end
-
-  def build_fields
-    return if fields.size >= DEFAULT_FIELDS_SIZE
-
-    tmp = self[:fields] || []
-    tmp = [] if tmp.is_a?(Hash)
-
-    (DEFAULT_FIELDS_SIZE - tmp.size).times do
-      tmp << { name: '', value: '' }
-    end
-
-    self.fields = tmp
   end
 
   def save_with_optional_media!
