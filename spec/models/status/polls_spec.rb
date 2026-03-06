@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.shared_examples 'Status::Polls' do
+RSpec.describe Status::Polls do
+  subject { Fabricate.build :status }
+
   describe 'Associations' do
     it { is_expected.to belong_to(:preloadable_poll).class_name(Poll).with_foreign_key(:poll_id).optional.inverse_of(false) }
     it { is_expected.to have_one(:poll).inverse_of(:status).dependent(:destroy) }
@@ -18,7 +20,7 @@ RSpec.shared_examples 'Status::Polls' do
       let!(:no_poll_status) { Fabricate :status }
 
       it 'returns the expected statuses' do
-        expect(described_class.only_polls)
+        expect(Status.only_polls)
           .to include(poll_status)
           .and not_include(no_poll_status)
       end
@@ -29,7 +31,7 @@ RSpec.shared_examples 'Status::Polls' do
       let!(:no_poll_status) { Fabricate :status }
 
       it 'returns the expected statuses' do
-        expect(described_class.without_polls)
+        expect(Status.without_polls)
           .to not_include(poll_status)
           .and include(no_poll_status)
       end
