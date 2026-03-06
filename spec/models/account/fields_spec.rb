@@ -147,4 +147,52 @@ RSpec.describe Account::Fields do
       end
     end
   end
+
+  describe '#build_fields' do
+    let(:account) { Fabricate.build :account }
+
+    context 'when fields already full' do
+      before { account.fields = Array.new(Account::DEFAULT_FIELDS_SIZE) { |i| { name: "Name#{i}", value: 'Test' } } }
+
+      it 'returns nil without updating fields' do
+        expect(account.build_fields)
+          .to be_nil
+
+        expect(account.fields)
+          .to be_an(Array)
+          .and have_attributes(size: Account::DEFAULT_FIELDS_SIZE)
+      end
+    end
+
+    context 'when fields partially full' do
+      before { account.fields = Array.new(2) { |i| { name: "Name#{i}", value: 'Test' } } }
+
+      it 'returns nil without updating fields' do
+        expect(account.build_fields)
+          .to be_an(Array)
+
+        expect(account.attributes['fields'])
+          .to be_an(Array)
+          .and contain_exactly(
+            include('name' => /Name/),
+            include('name' => /Name/),
+            include('name' => ''),
+            include('name' => '')
+          )
+      end
+    end
+
+    context 'when fields were previously a hash' do
+      before { account.fields = {} }
+
+      it 'assigns fields array with empty values' do
+        expect(account.build_fields)
+          .to be_an(Array)
+
+        expect(account.attributes['fields'])
+          .to be_an(Array)
+          .and all(include('name' => '', 'value' => ''))
+      end
+    end
+  end
 end
