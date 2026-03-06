@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Account, '#fields' do
+RSpec.describe Account::Fields do
   subject { Fabricate.build :account }
 
   describe 'Validations' do
