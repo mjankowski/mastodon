@@ -6,48 +6,49 @@ module Account::Fields
   DEFAULT_FIELDS_SIZE = 4
 
   included do
-    validates :fields, length: { maximum: DEFAULT_FIELDS_SIZE }, if: -> { local? && will_save_change_to_fields? }
-    validates_with EmptyProfileFieldNamesValidator, if: -> { local? && will_save_change_to_fields? }
+    with_options if: [:local?, :will_save_change_to_fields?] do
+      validates :fields, length: { maximum: DEFAULT_FIELDS_SIZE }
+      validates_with EmptyProfileFieldNamesValidator
+    end
   end
 
   def fields
-    (self[:fields] || []).filter_map do |f|
-      Account::Field.new(self, f)
+    Array(self[:fields]).filter_map do |field|
+      Account::Field.new(self, field)
     rescue
       nil
     end
   end
 
   def fields_attributes=(attributes)
-    fields     = []
-    old_fields = self[:fields] || []
-    old_fields = [] if old_fields.is_a?(Hash)
-
     attributes = attributes.values if attributes.is_a?(Hash)
 
-    attributes.each do |attr|
-      next if attr[:name].blank? && attr[:value].blank?
+    self[:fields] = [].tap do |fields|
+      attributes.each do |attr|
+        next if attr.values_at(:name, :value).compact_blank.empty?
 
-      previous = old_fields.find { |item| item['value'] == attr[:value] }
+        normalized_previous_fields
+          .find { |field| field['value'] == attr[:value] }
+          .tap { |previous| attr[:verified_at] = previous && previous['verified_at'].presence }
 
-      attr[:verified_at] = previous['verified_at'] if previous && previous['verified_at'].present?
-
-      fields << attr
+        fields << attr
+      end
     end
-
-    self[:fields] = fields
   end
 
   def build_fields
     return if fields.size >= DEFAULT_FIELDS_SIZE
 
-    tmp = self[:fields] || []
-    tmp = [] if tmp.is_a?(Hash)
+    self.fields = normalized_previous_fields + additional_fields
+  end
 
-    (DEFAULT_FIELDS_SIZE - tmp.size).times do
-      tmp << { name: '', value: '' }
-    end
+  private
 
-    self.fields = tmp
+  def additional_fields
+    Array.new(DEFAULT_FIELDS_SIZE - normalized_previous_fields.size) { %i(name value).index_with('') }
+  end
+
+  def normalized_previous_fields
+    @normalized_previous_fields ||= Array(self[:fields].is_a?(Hash) ? nil : self[:fields])
   end
 end
