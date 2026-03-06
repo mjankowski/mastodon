@@ -55,4 +55,96 @@ RSpec.describe Account::Fields do
       it { is_expected.to be_empty }
     end
   end
+
+  describe '#fields_attributes=' do
+    let(:account) { Fabricate.build :account }
+
+    context 'when sent empty hash' do
+      it 'assigns empty array to fields' do
+        account.fields_attributes = {}
+
+        expect(account.fields)
+          .to be_empty
+      end
+    end
+
+    context 'when sent indexed hash' do
+      it 'assigns fields array' do
+        account.fields_attributes = {
+          '0' => { name: 'Color', value: 'Red' },
+          '1' => { name: 'Size', value: 'Medium' },
+        }
+
+        expect(account.fields)
+          .to be_an(Array)
+          .and contain_exactly(
+            be_a(Account::Field).and(have_attributes(name: /Color/, value: /Red/)),
+            be_a(Account::Field).and(have_attributes(name: /Size/, value: /Medium/))
+          )
+      end
+    end
+
+    context 'when sent indexed hash with missing values' do
+      it 'rejects blanks and assigns fields array' do
+        account.fields_attributes = {
+          '0' => { name: 'Color', value: 'Red' },
+          '1' => { name: '', value: '' },
+        }
+
+        expect(account.fields)
+          .to be_an(Array)
+          .and contain_exactly(
+            be_a(Account::Field).and(have_attributes(name: /Color/, value: /Red/))
+          )
+      end
+    end
+
+    context 'when sent array of field hashes' do
+      it 'assigns fields array' do
+        account.fields_attributes = [
+          { name: 'Color', value: 'Red' },
+          { name: 'Size', value: 'Medium' },
+        ]
+
+        expect(account.fields)
+          .to be_an(Array)
+          .and contain_exactly(
+            be_a(Account::Field).and(have_attributes(name: /Color/, value: /Red/)),
+            be_a(Account::Field).and(have_attributes(name: /Size/, value: /Medium/))
+          )
+      end
+    end
+
+    context 'when fields were previously a hash' do
+      before { account.fields = {} }
+
+      it 'assigns fields array' do
+        account.fields_attributes = {
+          '0' => { name: 'Color', value: 'Red' },
+        }
+
+        expect(account.fields)
+          .to be_an(Array)
+          .and contain_exactly(
+            be_a(Account::Field).and(have_attributes(name: /Color/, value: /Red/))
+          )
+      end
+    end
+
+    context 'when fields were previously verified' do
+      before { account.fields = [{ name: 'Color', value: 'Red', verified_at: 2.weeks.ago.to_datetime }] }
+
+      it 'assigns fields array with preserved verification' do
+        account.fields_attributes = {
+          '0' => { name: 'Color', value: 'Red' },
+        }
+
+        expect(account.fields)
+          .to be_an(Array)
+          .and contain_exactly(
+            be_a(Account::Field).and(have_attributes(name: /Color/, value: /Red/, verified_at: 2.weeks.ago.to_datetime).and(be_verified))
+          )
+      end
+    end
+  end
 end
