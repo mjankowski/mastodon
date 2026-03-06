@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rails_helper'
+
 RSpec.describe Account::Fields do
   subject { Fabricate.build :account }
 
