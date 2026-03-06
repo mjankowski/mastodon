@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.shared_examples 'User::Role' do
+RSpec.describe User::Role do
+  subject { User.new }
+
   describe 'Associations' do
     it { is_expected.to belong_to(:role).class_name(UserRole).optional }
   end
@@ -68,28 +70,24 @@ RSpec.shared_examples 'User::Role' do
   end
 
   describe '.those_who_can' do
+    subject { User.those_who_can(:manage_blocks) }
+
     before { Fabricate(:moderator_user) }
 
     context 'when there are not any user roles' do
       before { UserRole.destroy_all }
 
-      it 'returns an empty list' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([])
-      end
+      it { is_expected.to be_empty }
     end
 
     context 'when there are not users with the needed role' do
-      it 'returns an empty list' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([])
-      end
+      it { is_expected.to be_empty }
     end
 
     context 'when there are users with roles' do
       let!(:admin_user) { Fabricate(:admin_user) }
 
-      it 'returns the users with the role' do
-        expect(described_class.those_who_can(:manage_blocks)).to eq([admin_user])
-      end
+      it { is_expected.to contain_exactly(admin_user) }
     end
   end
 end
