@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.shared_examples 'User::EmailAddress' do
+RSpec.describe User::EmailAddress do
+  subject { User.new }
+
   describe 'Validations' do
     subject { Fabricate.build :user }
 
@@ -76,7 +78,7 @@ RSpec.shared_examples 'User::EmailAddress' do
       let!(:unspecified) { Fabricate :user, email: 'unspecified@host.example' }
 
       it 'returns users whose email starts with the string' do
-        expect(described_class.matches_email('specified'))
+        expect(User.matches_email('specified'))
           .to contain_exactly(specified)
           .and not_include(unspecified)
       end
@@ -84,7 +86,7 @@ RSpec.shared_examples 'User::EmailAddress' do
   end
 
   describe '#email_domain' do
-    subject { described_class.new(email: email).email_domain }
+    subject { User.new(email: email).email_domain }
 
     context 'when value is nil' do
       let(:email) { nil }
