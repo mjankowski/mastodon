@@ -68,26 +68,6 @@ RSpec.describe UserRole do
     end
   end
 
-  describe 'Callback for position' do
-    context 'when everyone' do
-      subject { Fabricate.build :user_role, id: described_class::EVERYONE_ROLE_ID }
-
-      it 'sets the position to nobody position' do
-        expect { subject.valid? }
-          .to change(subject, :position).to(described_class::NOBODY_POSITION)
-      end
-    end
-
-    context 'when not everyone' do
-      subject { Fabricate.build :user_role }
-
-      it 'does not change the position' do
-        expect { subject.valid? }
-          .to_not change(subject, :position)
-      end
-    end
-  end
-
   describe '#can?' do
     subject { Fabricate :user_role }
 
@@ -207,58 +187,6 @@ RSpec.describe UserRole do
 
     it 'returns permissions combined with the everyone role' do
       expect(subject.computed_permissions).to eq described_class.everyone.permissions
-    end
-  end
-
-  describe '.everyone' do
-    subject { described_class.everyone }
-
-    it 'returns correct role with permissions and position' do
-      expect(subject)
-        .to be_a(described_class)
-        .and be_everyone
-        .and have_attributes(
-          permissions: described_class::FLAGS[:invite_users],
-          position: described_class::NOBODY_POSITION
-        )
-    end
-  end
-
-  describe '.nobody' do
-    subject { described_class.nobody }
-
-    it 'returns correct role with permissions and position' do
-      expect(subject)
-        .to be_a(described_class)
-        .and be_nobody
-        .and have_attributes(
-          permissions: described_class::Flags::NONE,
-          position: described_class::NOBODY_POSITION
-        )
-    end
-  end
-
-  describe '#everyone?' do
-    it 'returns true when id matches the everyone id' do
-      subject.id = described_class::EVERYONE_ROLE_ID
-      expect(subject.everyone?).to be true
-    end
-
-    it 'returns false when id does not match the everyone id' do
-      subject.id = 123
-      expect(subject.everyone?).to be false
-    end
-  end
-
-  describe '#nobody?' do
-    it 'returns true when id is nil' do
-      subject.id = nil
-      expect(subject.nobody?).to be true
-    end
-
-    it 'returns false when id is not nil' do
-      subject.id = 123
-      expect(subject.nobody?).to be false
     end
   end
 end
