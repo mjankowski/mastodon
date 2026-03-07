@@ -34,6 +34,7 @@ class MediaAttachment < ApplicationRecord
   self.inheritance_column = nil
 
   include Attachmentable
+  include MimeTypes
 
   enum :type, { image: 0, gifv: 1, video: 2, unknown: 3, audio: 4 }
   enum :processing, { queued: 0, in_progress: 1, complete: 2, failed: 3 }, prefix: true
@@ -58,12 +59,6 @@ class MediaAttachment < ApplicationRecord
     original
     small
   ).freeze
-
-  IMAGE_MIME_TYPES             = %w(image/jpeg image/png image/gif image/heic image/heif image/webp image/avif).freeze
-  IMAGE_CONVERTIBLE_MIME_TYPES = %w(image/heic image/heif image/avif).freeze
-  VIDEO_MIME_TYPES             = %w(video/webm video/mp4 video/quicktime video/ogg).freeze
-  VIDEO_CONVERTIBLE_MIME_TYPES = %w(video/webm video/quicktime).freeze
-  AUDIO_MIME_TYPES             = %w(audio/wave audio/wav audio/x-wav audio/x-pn-wave audio/vnd.wave audio/ogg audio/vorbis audio/mpeg audio/mp3 audio/webm audio/flac audio/aac audio/m4a audio/x-m4a audio/mp4 audio/3gpp video/x-ms-asf).freeze
 
   BLURHASH_OPTIONS = {
     x_comp: 4,
@@ -300,10 +295,6 @@ class MediaAttachment < ApplicationRecord
   after_post_process :set_meta
 
   class << self
-    def supported_mime_types
-      IMAGE_MIME_TYPES + VIDEO_MIME_TYPES + AUDIO_MIME_TYPES
-    end
-
     def supported_file_extensions
       IMAGE_FILE_EXTENSIONS + VIDEO_FILE_EXTENSIONS + AUDIO_FILE_EXTENSIONS
     end
@@ -345,18 +336,6 @@ class MediaAttachment < ApplicationRecord
 
   def set_unknown_type
     self.type = :unknown if file.blank? && !type_changed?
-  end
-
-  def set_type_and_extension
-    self.type = begin
-      if VIDEO_MIME_TYPES.include?(file_content_type)
-        :video
-      elsif AUDIO_MIME_TYPES.include?(file_content_type)
-        :audio
-      else
-        :image
-      end
-    end
   end
 
   def set_processing
