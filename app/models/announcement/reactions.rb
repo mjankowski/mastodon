@@ -8,13 +8,10 @@ module Announcement::Reactions
   end
 
   def reactions(account = nil)
-    grouped_ordered_announcement_reactions.select(
-      [:name, :custom_emoji_id, 'COUNT(*) as count'].tap do |values|
-        values << value_for_reaction_me_column(account)
-      end
-    ).to_a.tap do |records|
-      ActiveRecord::Associations::Preloader.new(records: records, associations: :custom_emoji).call
-    end
+    grouped_ordered_announcement_reactions
+      .select(reaction_columns_for_account(account))
+      .to_a
+      .tap { |records| ActiveRecord::Associations::Preloader.new(records: records, associations: :custom_emoji).call }
   end
 
   private
@@ -22,23 +19,27 @@ module Announcement::Reactions
   def grouped_ordered_announcement_reactions
     announcement_reactions
       .group(:announcement_id, :name, :custom_emoji_id)
-      .order(
-        Arel.sql('MIN(created_at)').asc
-      )
+      .order(AnnouncementReaction.arel_table[:created_at].minimum.asc)
   end
 
-  def value_for_reaction_me_column(account)
+  def reaction_columns_for_account(account)
+    [:name, :custom_emoji_id, Arel.star.count.as('count')].tap do |values|
+      values << reaction_me_column_value(account).as('me')
+    end
+  end
+
+  def reaction_me_column_value(account)
     if account.nil?
-      'FALSE AS me'
+      Arel.sql 'FALSE'
     else
-      <<~SQL.squish
+      Arel.sql(<<~SQL.squish)
         EXISTS(
           SELECT 1
           FROM announcement_reactions inner_reactions
           WHERE inner_reactions.account_id = #{account.id}
             AND inner_reactions.announcement_id = announcement_reactions.announcement_id
             AND inner_reactions.name = announcement_reactions.name
-        ) AS me
+        )
       SQL
     end
   end
