@@ -16,6 +16,8 @@
 #
 
 class UserRole < ApplicationRecord
+  include Defaults
+
   FLAGS = {
     administrator: (1 << 0),
     view_devops: (1 << 1),
@@ -39,9 +41,6 @@ class UserRole < ApplicationRecord
     delete_user_data: (1 << 19),
     view_feeds: (1 << 20),
   }.freeze
-
-  EVERYONE_ROLE_ID = -99
-  NOBODY_POSITION = -1
 
   POSITION_LIMIT = (2**31) - 1
   CSS_COLORS = /\A#?(?:[A-F0-9]{3}){1,2}\z/i # CSS-style hex colors
@@ -102,32 +101,12 @@ class UserRole < ApplicationRecord
   validate :validate_dangerous_permissions
   validate :validate_own_role_edition
 
-  before_validation :set_position
-
   scope :assignable, -> { where.not(id: EVERYONE_ROLE_ID).order(position: :asc) }
 
   has_many :users, inverse_of: :role, foreign_key: 'role_id', dependent: :nullify
 
-  def self.nobody
-    @nobody ||= UserRole.new(permissions: Flags::NONE, position: NOBODY_POSITION)
-  end
-
-  def self.everyone
-    UserRole.find(EVERYONE_ROLE_ID)
-  rescue ActiveRecord::RecordNotFound
-    UserRole.create!(id: EVERYONE_ROLE_ID, permissions: Flags::DEFAULT)
-  end
-
   def self.that_can(*any_of_privileges)
     all.select { |role| role.can?(*any_of_privileges) }
-  end
-
-  def everyone?
-    id == EVERYONE_ROLE_ID
-  end
-
-  def nobody?
-    id.nil?
   end
 
   def permissions_as_keys
@@ -183,10 +162,6 @@ class UserRole < ApplicationRecord
     raise ArgumentError, "Unknown privilege: #{privilege}" unless FLAGS.key?(privilege)
 
     computed_permissions & FLAGS[privilege] == FLAGS[privilege]
-  end
-
-  def set_position
-    self.position = NOBODY_POSITION if everyone?
   end
 
   def validate_own_role_edition
