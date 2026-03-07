@@ -206,7 +206,7 @@ RSpec.describe User do
     end
 
     context 'with a new user' do
-      let(:user) { Fabricate.build :user }
+      let(:user) { Fabricate.build :user, confirmed_at: nil }
 
       it 'does not persist the user' do
         expect { user.update_sign_in! }
