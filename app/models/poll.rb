@@ -22,6 +22,7 @@
 
 class Poll < ApplicationRecord
   include Expireable
+  include Options
 
   MAKE_FETCH_HAPPEN = 1.minute
 
@@ -37,20 +38,13 @@ class Poll < ApplicationRecord
 
   has_many :notifications, as: :activity, dependent: :destroy
 
-  validates :options, presence: true
   validates :expires_at, presence: true, if: :local?
-  validates_with PollOptionsValidator, if: :local?
   validates_with PollExpirationValidator, if: -> { local? && expires_at_changed? }
 
-  before_validation :prepare_options, if: :local?
   before_validation :prepare_votes_count
   before_validation :prepare_cached_tallies
 
   after_commit :reset_parent_cache, on: :update
-
-  def loaded_options
-    options.map.with_index { |title, key| Option.new(self, key.to_s, title, show_totals_now? ? (cached_tallies[key] || 0) : nil) }
-  end
 
   def possibly_stale?
     remote? && last_fetched_before_expiration? && time_passed_since_last_fetch?
@@ -70,19 +64,6 @@ class Poll < ApplicationRecord
     @emojis ||= CustomEmoji.from_text(options.join(' '), account.domain)
   end
 
-  class Option < ActiveModelSerializers::Model
-    attributes :id, :title, :votes_count, :poll
-
-    def initialize(poll, id, title, votes_count)
-      super(
-        poll: poll,
-        id: id,
-        title: title,
-        votes_count: votes_count,
-      )
-    end
-  end
-
   def reset_votes!
     self.cached_tallies = options.map { 0 }
     self.votes_count = 0
@@ -98,10 +79,6 @@ class Poll < ApplicationRecord
 
   def prepare_votes_count
     self.votes_count = cached_tallies.sum unless cached_tallies.empty?
-  end
-
-  def prepare_options
-    self.options = options.map(&:strip).compact_blank
   end
 
   def reset_parent_cache
