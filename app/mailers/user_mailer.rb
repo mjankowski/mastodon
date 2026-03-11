@@ -3,6 +3,22 @@
 class UserMailer < Devise::Mailer
   include BulkMailSettingsConcern
 
+  AUTHENTICATION_ACTIVE_REQUIRED = %i(
+    backup_ready
+    confirmation_instructions
+    email_changed
+    password_change
+    reset_password_instructions
+    two_factor_disabled
+    two_factor_enabled
+    two_factor_recovery_codes_changed
+    webauthn_credential_added
+    webauthn_credential_deleted
+    webauthn_disabled
+    webauthn_enabled
+    welcome
+  ).freeze
+
   layout 'mailer'
 
   helper :accounts
@@ -14,6 +30,7 @@ class UserMailer < Devise::Mailer
 
   before_action :set_instance
 
+  after_action :confirm_active, only: AUTHENTICATION_ACTIVE_REQUIRED
   after_action :use_bulk_mail_delivery_settings, only: [:announcement_published, :terms_of_service_changed]
 
   default to: -> { @resource.email }
@@ -21,8 +38,6 @@ class UserMailer < Devise::Mailer
   def confirmation_instructions(user, token, *, **)
     @resource = user
     @token    = token
-
-    return unless @resource.active_for_authentication?
 
     I18n.with_locale(locale) do
       mail to: @resource.unconfirmed_email.presence || @resource.email,
@@ -35,8 +50,6 @@ class UserMailer < Devise::Mailer
     @resource = user
     @token    = token
 
-    return unless @resource.active_for_authentication?
-
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
     end
@@ -44,8 +57,6 @@ class UserMailer < Devise::Mailer
 
   def password_change(user, *, **)
     @resource = user
-
-    return unless @resource.active_for_authentication?
 
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
@@ -55,8 +66,6 @@ class UserMailer < Devise::Mailer
   def email_changed(user, *, **)
     @resource = user
 
-    return unless @resource.active_for_authentication?
-
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
     end
@@ -64,8 +73,6 @@ class UserMailer < Devise::Mailer
 
   def two_factor_enabled(user, *, **)
     @resource = user
-
-    return unless @resource.active_for_authentication?
 
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
@@ -75,8 +82,6 @@ class UserMailer < Devise::Mailer
   def two_factor_disabled(user, *, **)
     @resource = user
 
-    return unless @resource.active_for_authentication?
-
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
     end
@@ -84,8 +89,6 @@ class UserMailer < Devise::Mailer
 
   def two_factor_recovery_codes_changed(user, *, **)
     @resource = user
-
-    return unless @resource.active_for_authentication?
 
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
@@ -95,8 +98,6 @@ class UserMailer < Devise::Mailer
   def webauthn_enabled(user, *, **)
     @resource = user
 
-    return unless @resource.active_for_authentication?
-
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
     end
@@ -104,8 +105,6 @@ class UserMailer < Devise::Mailer
 
   def webauthn_disabled(user, *, **)
     @resource = user
-
-    return unless @resource.active_for_authentication?
 
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: default_devise_subject
@@ -116,8 +115,6 @@ class UserMailer < Devise::Mailer
     @resource = user
     @webauthn_credential = webauthn_credential
 
-    return unless @resource.active_for_authentication?
-
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: I18n.t('devise.mailer.webauthn_credential.added.subject')
     end
@@ -127,8 +124,6 @@ class UserMailer < Devise::Mailer
     @resource = user
     @webauthn_credential = webauthn_credential
 
-    return unless @resource.active_for_authentication?
-
     I18n.with_locale(locale(use_current_locale: true)) do
       mail subject: I18n.t('devise.mailer.webauthn_credential.deleted.subject')
     end
@@ -136,8 +131,6 @@ class UserMailer < Devise::Mailer
 
   def welcome(user)
     @resource = user
-
-    return unless @resource.active_for_authentication?
 
     @suggestions = AccountSuggestions.new(@resource.account).get(5)
     @tags = Trends.tags.query.allowed.limit(5)
@@ -153,8 +146,6 @@ class UserMailer < Devise::Mailer
   def backup_ready(user, backup)
     @resource = user
     @backup   = backup
-
-    return unless @resource.active_for_authentication?
 
     I18n.with_locale(locale) do
       mail subject: default_i18n_subject
@@ -239,6 +230,10 @@ class UserMailer < Devise::Mailer
 
   def set_instance
     @instance = Rails.configuration.x.local_domain
+  end
+
+  def confirm_active
+    mail.perform_deliveries = false unless @resource.active_for_authentication?
   end
 
   def locale(use_current_locale: false)
