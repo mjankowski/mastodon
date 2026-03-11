@@ -35,7 +35,7 @@
 ===
 <%= t('user_mailer.welcome.follows_subtitle') %>
 
-<%- @suggestions.each do |suggestion| %>
+<%- @onboarding.account_suggestions.each do |suggestion| %>
 * <%= suggestion.account.display_name.presence || suggestion.account.username %> · @<%= suggestion.account.pretty_acct %>
   <%= web_url("@#{suggestion.account.acct}") %>
 <%- end %>
@@ -48,7 +48,7 @@
 ===
 <%= t('user_mailer.welcome.hashtags_subtitle') %>
 
-<%- @tags.each do |tag| %>
+<%- @onboarding.tags.each do |tag| %>
 * #<%= tag.display_name %> · <%= recent_tag_usage(tag) %>
   <%= tag_url(tag) %>
 <%- end %>
