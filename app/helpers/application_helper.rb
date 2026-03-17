@@ -23,15 +23,15 @@ module ApplicationHelper
   end
 
   def open_registrations?
-    Setting.registrations_mode == 'open'
+    Registration.mode.open?
   end
 
   def approved_registrations?
-    Setting.registrations_mode == 'approved'
+    Registration.mode.approved?
   end
 
   def closed_registrations?
-    Setting.registrations_mode == 'none'
+    Registration.mode.none?
   end
 
   def available_sign_up_url
