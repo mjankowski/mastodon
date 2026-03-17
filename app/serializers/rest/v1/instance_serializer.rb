@@ -83,7 +83,7 @@ class REST::V1::InstanceSerializer < ActiveModel::Serializer
   end
 
   def approval_required
-    Setting.registrations_mode == 'approved'
+    Registration.mode.approved?
   end
 
   def invites_enabled
