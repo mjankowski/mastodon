@@ -24,4 +24,26 @@ RSpec.describe Registration do
       it { is_expected.to be_none }
     end
   end
+
+  describe '.enabled?' do
+    subject { described_class }
+
+    context 'when registrations mode setting is open' do
+      before { Setting.registrations_mode = 'open' }
+
+      it { is_expected.to be_enabled }
+    end
+
+    context 'when registrations mode setting is approved' do
+      before { Setting.registrations_mode = 'approved' }
+
+      it { is_expected.to be_enabled }
+    end
+
+    context 'when registrations mode setting is none' do
+      before { Setting.registrations_mode = 'none' }
+
+      it { is_expected.to_not be_enabled }
+    end
+  end
 end
