@@ -22,10 +22,6 @@ module ApplicationHelper
     number_to_human(number, **options)
   end
 
-  def open_registrations?
-    Registration.mode.open?
-  end
-
   def approved_registrations?
     Registration.mode.approved?
   end
