@@ -26,10 +26,6 @@ module ApplicationHelper
     Registration.mode.approved?
   end
 
-  def closed_registrations?
-    Registration.mode.none?
-  end
-
   def available_sign_up_url
     if closed_registrations? || omniauth_only?
       'https://joinmastodon.org/'
