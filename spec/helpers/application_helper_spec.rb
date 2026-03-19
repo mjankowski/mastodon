@@ -80,9 +80,7 @@ RSpec.describe ApplicationHelper do
 
   describe 'available_sign_up_url' do
     context 'when registrations are closed' do
-      before do
-        allow(Setting).to receive(:[]).with('registrations_mode').and_return 'none'
-      end
+      before { Setting.registrations_mode = 'none' }
 
       it 'redirects to joinmastodon site' do
         expect(helper.available_sign_up_url).to match(/joinmastodon.org/)
