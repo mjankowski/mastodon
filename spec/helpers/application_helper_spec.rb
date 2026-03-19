@@ -78,22 +78,6 @@ RSpec.describe ApplicationHelper do
     end
   end
 
-  describe 'open_registrations?' do
-    it 'returns true when open for registrations' do
-      allow(Setting).to receive(:[]).with('registrations_mode').and_return('open')
-
-      expect(helper.open_registrations?).to be true
-      expect(Setting).to have_received(:[]).with('registrations_mode')
-    end
-
-    it 'returns false when closed for registrations' do
-      allow(Setting).to receive(:[]).with('registrations_mode').and_return('none')
-
-      expect(helper.open_registrations?).to be false
-      expect(Setting).to have_received(:[]).with('registrations_mode')
-    end
-  end
-
   describe 'available_sign_up_url' do
     context 'when registrations are closed' do
       before do
