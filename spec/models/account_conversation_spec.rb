@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe AccountConversation do
+  describe 'Normalizations' do
+    it { is_expected.to normalize(:participant_account_ids).from([3, 2, 1]).to([1, 2, 3]) }
+  end
+
   describe '#participant_accounts' do
     subject { account_conversation.participant_accounts }
 
