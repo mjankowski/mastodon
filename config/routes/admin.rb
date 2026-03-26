@@ -159,6 +159,10 @@ namespace :admin do
   resources :report_notes, only: [:create, :destroy]
 
   resources :accounts, only: [:index, :show, :destroy], concerns: :batch do
+    scope module: :accounts do
+      resource :email_blocks, only: :destroy
+    end
+
     member do
       post :enable
       post :unsensitive
@@ -170,7 +174,6 @@ namespace :admin do
       post :memorialize
       post :approve
       post :reject
-      post :unblock_email
     end
 
     resource :change_email, only: [:show, :update]
