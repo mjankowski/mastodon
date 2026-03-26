@@ -4,7 +4,8 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   include RegistrationHelper
   include Auth::RegistrationSpamConcern
 
-  layout :determine_layout
+  layout 'auth', except: [:edit, :update]
+  layout 'admin', only: [:edit, :update]
 
   before_action :set_invite, only: [:new, :create]
   before_action :check_enabled_registrations, only: [:new, :create]
@@ -107,10 +108,6 @@ class Auth::RegistrationsController < Devise::RegistrationsController
       invite = Invite.find_by(code: invite_code) if invite_code.present?
       invite if invite&.valid_for_use?
     end
-  end
-
-  def determine_layout
-    %w(edit update).include?(action_name) ? 'admin' : 'auth'
   end
 
   def set_sessions
