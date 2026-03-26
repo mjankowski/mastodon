@@ -22,10 +22,6 @@ module ApplicationHelper
     number_to_human(number, **options)
   end
 
-  def approved_registrations?
-    Registration.mode.approved?
-  end
-
   def available_sign_up_url
     if closed_registrations? || omniauth_only?
       'https://joinmastodon.org/'
