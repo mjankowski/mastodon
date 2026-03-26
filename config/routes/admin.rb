@@ -131,6 +131,7 @@ namespace :admin do
     scope module: :accounts do
       resource :header, only: :destroy
       resource :avatar, only: :destroy
+      resource :email_blocks, only: :destroy
     end
 
     member do
@@ -142,7 +143,6 @@ namespace :admin do
       post :memorialize
       post :approve
       post :reject
-      post :unblock_email
     end
 
     resource :email, only: [:show, :update]
