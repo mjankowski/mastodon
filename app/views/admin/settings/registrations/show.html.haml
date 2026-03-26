@@ -27,7 +27,7 @@
     .fields-row__column.fields-row__column-6.fields-group
       = f.input :require_invite_text,
                 as: :boolean,
-                disabled: !approved_registrations?,
+                disabled: !Registration.mode.approved?,
                 wrapper: :with_label
 
   - if captcha_available?
