@@ -172,7 +172,7 @@ class PostStatusService < BaseService
 
   def process_email_subscriptions!
     return unless Mastodon::Feature.email_subscriptions_enabled? &&
-                  @status.public_visibility? && (!@status.reply? || @status.in_reply_to_account_id == @status.account_id) &&
+                  @status.public_visibility? && non_self_reply? &&
                   @status.account.user_can?(:manage_email_subscriptions) &&
                   @status.account.user_email_subscriptions_enabled?
 
@@ -182,6 +182,10 @@ class PostStatusService < BaseService
     redis.sadd("email_subscriptions:#{@status.account_id}:next_batch", @status.id)
     redis.expire("email_subscriptions:#{@status.account_id}:next_batch", EMAIL_DISTRIBUTION_TTL)
     EmailDistributionWorker.perform_in(EMAIL_DISTRIBUTION_DELAY, @status.account_id)
+  end
+
+  def non_self_reply?
+    !@status.reply? || @status.in_reply_to_account_id == @status.account_id
   end
 
   def validate_media!
