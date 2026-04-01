@@ -17,7 +17,8 @@ class SearchService < BaseService
       next if @query.blank? || @limit.zero?
 
       if url_query?
-        results.merge!(url_resource_results) unless url_resource.nil? || @offset.positive? || (@options[:type].present? && url_resource_symbol != @options[:type].to_sym)
+        options_remove_type = @options[:type].present? && url_resource_symbol != @options[:type].to_sym
+        results.merge!(url_resource_results) unless url_resource.nil? || @offset.positive? || options_remove_type
       elsif @query.present?
         results[:accounts] = perform_accounts_search! if account_searchable?
         results[:statuses] = perform_statuses_search! if status_searchable?
