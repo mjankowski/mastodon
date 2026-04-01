@@ -14,7 +14,8 @@ class ActivityPub::FetchRemoteKeyService < BaseService
     @json = fetch_resource(uri, false)
 
     raise Error, "Unable to fetch key JSON at #{uri}" if @json.nil?
-    raise Error, "Unsupported JSON-LD context for document #{uri}" unless supported_context?(@json) || (supported_security_context?(@json) && @json['owner'].present? && !actor_type?)
+
+    raise Error, "Unsupported JSON-LD context for document #{uri}" unless supported_context?(@json) || non_actor_owner?
     raise Error, "Unexpected object type for key #{uri}" unless expected_type?
     return keypair_from_actor_json(@json['id'], @json) if actor_type?
 
@@ -47,6 +48,10 @@ class ActivityPub::FetchRemoteKeyService < BaseService
     actor   = ActivityPub::TagManager.instance.uri_to_actor(uri)
     actor ||= ActivityPub::FetchRemoteActorService.new.call(uri, prefetched_body: prefetched_body, suppress_errors: @suppress_errors)
     actor
+  end
+
+  def non_actor_owner?
+    supported_security_context?(@json) && @json['owner'].present? && !actor_type?
   end
 
   def expected_type?
