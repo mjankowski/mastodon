@@ -254,6 +254,10 @@ class MediaAttachment < ApplicationRecord
     audio? || video?
   end
 
+  def moving_image?
+    video? || gifv?
+  end
+
   def to_param
     shortcode.presence || id&.to_s
   end
@@ -364,7 +368,7 @@ class MediaAttachment < ApplicationRecord
   end
 
   def check_video_dimensions
-    return unless (video? || gifv?) && file.queued_for_write[:original].present?
+    return unless moving_image? && file.queued_for_write[:original].present?
 
     movie = ffmpeg_data(file.queued_for_write[:original].path)
 
