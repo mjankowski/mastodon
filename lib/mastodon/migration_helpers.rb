@@ -185,7 +185,7 @@ module Mastodon
       ADD CONSTRAINT #{key_name}
       FOREIGN KEY (#{column})
       REFERENCES #{target} (#{target_col})
-      #{on_delete ? "ON DELETE #{on_delete.upcase}" : ''}
+      #{"ON DELETE #{on_delete.upcase}" if on_delete}
       NOT VALID;
       EOF
 
