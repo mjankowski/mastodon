@@ -413,8 +413,9 @@ class ActivityPub::ProcessAccountService < BaseService
     uri       = tag['id']
     updated   = tag['updated']
     emoji     = CustomEmoji.find_by(shortcode: shortcode, domain: @account.domain)
+    recent_update = updated && updated >= emoji.updated_at
 
-    return unless emoji.nil? || image_url != emoji.image_remote_url || (updated && updated >= emoji.updated_at)
+    return unless emoji.nil? || image_url != emoji.image_remote_url || recent_update
 
     emoji ||= CustomEmoji.new(domain: @account.domain, shortcode: shortcode, uri: uri)
     emoji.image_remote_url = image_url
