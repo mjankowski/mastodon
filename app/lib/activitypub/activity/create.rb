@@ -270,7 +270,9 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
 
     emoji = CustomEmoji.find_by(shortcode: custom_emoji_parser.shortcode, domain: @account.domain)
 
-    return unless emoji.nil? || custom_emoji_parser.image_remote_url != emoji.image_remote_url || (custom_emoji_parser.updated_at && custom_emoji_parser.updated_at >= emoji.updated_at)
+    recent_update = custom_emoji_parser.updated_at && custom_emoji_parser.updated_at >= emoji.updated_at
+
+    return unless emoji.nil? || custom_emoji_parser.image_remote_url != emoji.image_remote_url || recent_update
 
     begin
       emoji ||= CustomEmoji.new(domain: @account.domain, shortcode: custom_emoji_parser.shortcode, uri: custom_emoji_parser.uri)
