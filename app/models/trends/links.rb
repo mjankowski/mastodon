@@ -33,10 +33,13 @@ class Trends::Links < Trends::Base
   def register(status, at_time = Time.now.utc)
     original_status = status.proper
 
+    neither_silenced = !(original_status.account.silenced? || status.account.silenced?)
+    original_viewable = !(original_status.spoiler_text? || original_status.sensitive?)
+
     return unless original_status.public_visibility? &&
                   status.public_visibility? &&
-                  !(original_status.account.silenced? || status.account.silenced?) &&
-                  !(original_status.spoiler_text? || original_status.sensitive?)
+                  neither_silenced &&
+                  original_viewable
 
     add(original_status.preview_card, status.account_id, at_time) if original_status.preview_card&.appropriate_for_trends?
   end
