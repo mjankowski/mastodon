@@ -47,8 +47,9 @@ class FetchResourceService < BaseService
     if valid_activitypub_content_type?(response)
       body = response.body_with_limit
       json = body_to_json(body)
+      supported_type = equals_or_includes_any?(json['type'], ActivityPub::FetchRemoteActorService::SUPPORTED_TYPES) || expected_type?(json)
 
-      return unless supported_context?(json) && (equals_or_includes_any?(json['type'], ActivityPub::FetchRemoteActorService::SUPPORTED_TYPES) || expected_type?(json))
+      return unless supported_context?(json) && supported_type
 
       if json['id'] != @url
         return if terminal
