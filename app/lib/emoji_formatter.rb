@@ -48,8 +48,9 @@ class EmojiFormatter
           inside_shortname = false
           shortcode = text[(shortname_start_index + 1)..(i - 1)]
           char_after = text[i + 1]
+          valid_char_after = char_after.nil? || !DISALLOWED_BOUNDING_REGEX.match?(char_after)
 
-          next unless (char_after.nil? || !DISALLOWED_BOUNDING_REGEX.match?(char_after)) && (emoji = emoji_map[shortcode])
+          next unless valid_char_after && (emoji = emoji_map[shortcode])
 
           result << tree.document.create_text_node(text[last_index..(shortname_start_index - 1)]) if shortname_start_index.positive?
           result << tree.document.fragment(tag_for_emoji(shortcode, emoji))
