@@ -16,8 +16,7 @@
 class AccountMigration < ApplicationRecord
   include Redisable
   include Lockable
-
-  COOLDOWN_PERIOD = 30.days.freeze
+  include Cooldown
 
   belongs_to :account
   belongs_to :target_account, class_name: 'Account'
@@ -31,16 +30,9 @@ class AccountMigration < ApplicationRecord
   normalizes :current_username, with: ->(value) { value.strip.delete_prefix('@') }
 
   validates :acct, presence: true, domain: { acct: true }
-  validate :validate_migration_cooldown
   validate :validate_target_account
 
-  scope :within_cooldown, -> { where(created_at: cooldown_duration_ago..) }
-
   attr_accessor :current_password
-
-  def self.cooldown_duration_ago
-    Time.current - COOLDOWN_PERIOD
-  end
 
   def save_with_challenge(current_user)
     if current_user.encrypted_password.present?
@@ -54,14 +46,6 @@ class AccountMigration < ApplicationRecord
     with_redis_lock("account_migration:#{account.id}") do
       save
     end
-  end
-
-  def cooldown_at
-    created_at + COOLDOWN_PERIOD
-  end
-
-  def remaining_cooldown_days
-    ((cooldown_at - Time.current) / 1.day).ceil
   end
 
   private
@@ -84,9 +68,5 @@ class AccountMigration < ApplicationRecord
       errors.add(:acct, I18n.t('migrations.errors.already_moved')) if account.moved? && account.moved_to_account_id == target_account.id
       errors.add(:acct, I18n.t('migrations.errors.move_to_self')) if account.id == target_account.id
     end
-  end
-
-  def validate_migration_cooldown
-    errors.add(:base, I18n.t('migrations.errors.on_cooldown')) if account.migrations.within_cooldown.exists?
   end
 end
