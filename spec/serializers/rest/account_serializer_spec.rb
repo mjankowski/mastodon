@@ -10,7 +10,7 @@ RSpec.describe REST::AccountSerializer do
     })
   end
 
-  let(:default_datetime) { DateTime.new(2024, 11, 28, 16, 20, 0) }
+  let(:default_datetime) { Time.zone.local(2024, 11, 28, 16, 20, 0) }
   let(:role)    { Fabricate(:user_role, name: 'Role', highlighted: true) }
   let(:user)    { Fabricate(:user, role: role) }
   let(:account) { user.account }

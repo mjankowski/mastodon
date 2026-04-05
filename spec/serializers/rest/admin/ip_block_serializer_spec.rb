@@ -6,7 +6,7 @@ RSpec.describe REST::Admin::IpBlockSerializer do
   subject { serialized_record_json(record, described_class) }
 
   context 'when timestamps are populated' do
-    let(:record) { Fabricate(:ip_block, expires_at: DateTime.new(2024, 11, 28, 16, 20, 0)) }
+    let(:record) { Fabricate(:ip_block, expires_at: Time.zone.local(2024, 11, 28, 16, 20, 0)) }
 
     it 'parses as RFC 3339 datetime' do
       expect(subject)

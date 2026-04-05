@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Trends::Tags do
   subject { described_class.new(threshold: 5, review_threshold: 10) }
 
-  let!(:at_time) { DateTime.new(2021, 11, 14, 10, 15, 0) }
+  let!(:at_time) { Time.zone.local(2021, 11, 14, 10, 15, 0) }
 
   describe '#add' do
     let(:tag) { Fabricate(:tag) }

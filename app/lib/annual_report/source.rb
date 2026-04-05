@@ -32,10 +32,10 @@ class AnnualReport::Source
   private
 
   def beginning_snowflake_id
-    Mastodon::Snowflake.id_at DateTime.new(year).beginning_of_year
+    Mastodon::Snowflake.id_at Time.zone.local(year).beginning_of_year
   end
 
   def ending_snowflake_id
-    Mastodon::Snowflake.id_at DateTime.new(year).end_of_year
+    Mastodon::Snowflake.id_at Time.zone.local(year).end_of_year
   end
 end

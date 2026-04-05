@@ -22,7 +22,7 @@ RSpec.describe AnnualReport::TimeSeries do
     context 'with an active account' do
       let(:account) { Fabricate :account }
 
-      let(:month_one_date) { DateTime.new(Time.zone.now.year, 1, 1, 12, 12, 12) }
+      let(:month_one_date) { Time.zone.local(Time.zone.now.year, 1, 1, 12, 12, 12) }
 
       let(:tag) { Fabricate :tag }
 

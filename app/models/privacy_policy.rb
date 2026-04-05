@@ -2,7 +2,7 @@
 
 class PrivacyPolicy < ActiveModelSerializers::Model
   DEFAULT_PRIVACY_POLICY = Rails.root.join('config', 'templates', 'privacy-policy.md').read
-  DEFAULT_UPDATED_AT = DateTime.new(2022, 10, 7).freeze
+  DEFAULT_UPDATED_AT = '2022-10-07'.to_datetime.freeze
 
   attributes :updated_at, :text
 

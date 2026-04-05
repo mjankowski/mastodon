@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe REST::ExtendedDescriptionSerializer do
   subject { serialized_record_json(record, described_class) }
 
-  let(:default_datetime) { DateTime.new(2024, 11, 28, 16, 20, 0) }
+  let(:default_datetime) { '2024-11-28 16:20:00'.to_datetime }
 
   describe 'serialization' do
     context 'with text present' do

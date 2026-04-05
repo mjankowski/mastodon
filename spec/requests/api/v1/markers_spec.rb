@@ -7,7 +7,7 @@ RSpec.describe 'API Markers' do
 
   describe 'GET /api/v1/markers' do
     before do
-      travel_to DateTime.parse('2026-03-15T12:34:56.789Z'), with_usec: true do
+      travel_to Time.parse('2026-03-15T12:34:56.789Z'), with_usec: true do
         Fabricate(:marker, timeline: 'home', last_read_id: 123, user: user)
         Fabricate(:marker, timeline: 'notifications', last_read_id: 456, user: user)
       end

@@ -14,7 +14,7 @@ RSpec.describe REST::FeaturedTagSerializer do
 
   context 'when last_status_at is populated' do
     before do
-      featured_tag.increment(DateTime.new(2024, 11, 28, 16, 20, 0))
+      featured_tag.increment(Time.zone.local(2024, 11, 28, 16, 20, 0))
     end
 
     it 'is serialized as yyyy-mm-dd' do

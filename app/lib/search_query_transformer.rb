@@ -226,8 +226,7 @@ class SearchQueryTransformer < Parslet::Transform
     end
 
     def date_from_term(term)
-      DateTime.iso8601(term) unless term.match?(EPOCH_RE) # This will raise Date::Error if the date is invalid
-      term
+      term.tap { |term| term.to_datetime unless term.match?(EPOCH_RE) } # This will raise Date::Error if the date is invalid
     end
   end
 

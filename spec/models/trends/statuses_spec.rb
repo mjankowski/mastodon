@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Trends::Statuses do
   subject! { described_class.new(threshold: 5, review_threshold: 10, score_halflife: 8.hours) }
 
-  let!(:at_time) { DateTime.new(2021, 11, 14, 10, 15, 0) }
+  let!(:at_time) { Time.zone.local(2021, 11, 14, 10, 15, 0) }
 
   describe 'Trends::Statuses::Query' do
     let!(:query) { subject.query }

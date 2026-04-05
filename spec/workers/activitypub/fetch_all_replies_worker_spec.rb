@@ -269,7 +269,7 @@ RSpec.describe ActivityPub::FetchAllRepliesWorker do
 
     context 'when replies should not be fetched' do
       # ensure that we should not fetch by setting the status to be created in the debounce window
-      let(:status) { Fabricate(:status, account: account, uri: top_note_uri, created_at: DateTime.now) }
+      let(:status) { Fabricate(:status, account: account, uri: top_note_uri, created_at: Time.current) }
 
       before do
         stub_const('Status::FetchRepliesConcern::FETCH_REPLIES_INITIAL_WAIT_MINUTES', 1.week)

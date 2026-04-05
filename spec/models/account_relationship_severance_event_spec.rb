@@ -10,7 +10,7 @@ RSpec.describe AccountRelationshipSeveranceEvent do
   describe '#identifier' do
     subject { account_relationship_severance_event.identifier }
 
-    let(:account_relationship_severance_event) { Fabricate.build :account_relationship_severance_event, relationship_severance_event:, created_at: DateTime.new(2026, 3, 15, 1, 2, 3) }
+    let(:account_relationship_severance_event) { Fabricate.build :account_relationship_severance_event, relationship_severance_event:, created_at: Time.zone.local(2026, 3, 15, 1, 2, 3) }
     let(:relationship_severance_event) { Fabricate.build :relationship_severance_event, target_name: 'host.example' }
 
     context 'with a hostname target and timestamp' do

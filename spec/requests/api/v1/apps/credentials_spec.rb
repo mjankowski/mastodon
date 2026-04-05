@@ -116,7 +116,7 @@ RSpec.describe 'Credentials' do
 
     context 'with a revoked oauth token' do
       let(:application) { Fabricate(:application, scopes: 'read') }
-      let(:token)   { Fabricate(:accessible_access_token, application: application, revoked_at: DateTime.now.utc) }
+      let(:token)   { Fabricate(:accessible_access_token, application: application, revoked_at: Time.current) }
       let(:headers) { { 'Authorization' => "Bearer #{token.token}" } }
 
       it 'returns http authorization error' do
