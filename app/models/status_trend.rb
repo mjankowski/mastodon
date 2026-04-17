@@ -19,5 +19,12 @@ class StatusTrend < ApplicationRecord
   belongs_to :status
   belongs_to :account
 
-  scope :allowed, -> { joins('INNER JOIN (SELECT account_id, MAX(score) AS max_score FROM status_trends GROUP BY account_id) AS grouped_status_trends ON status_trends.account_id = grouped_status_trends.account_id AND status_trends.score = grouped_status_trends.max_score').where(allowed: true) }
+  scope :allowed, -> { by_max_rank.where(allowed: true) }
+
+  def self.by_max_rank
+    with(max_scores: select(:account_id, arel_table[:score].maximum.as('max_score')).group(:account_id))
+      .joins(<<~SQL.squish)
+        JOIN max_scores ON status_trends.account_id = max_scores.account_id AND status_trends.score = max_scores.max_score
+      SQL
+  end
 end
