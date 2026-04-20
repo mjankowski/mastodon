@@ -185,7 +185,7 @@ namespace :admin do
         post :preview
       end
     end
-    resource :change_email, only: [:show, :update]
+    resource :email, only: [:show, :update]
     resource :reset, only: [:create]
 
     # TODO: can be removed after 5.0.0

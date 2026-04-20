@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Admin Change Emails' do
+RSpec.describe 'Admin Emails' do
   let(:admin) { Fabricate(:admin_user) }
 
   before { sign_in admin }
@@ -11,7 +11,7 @@ RSpec.describe 'Admin Change Emails' do
     let(:user) { Fabricate :user }
 
     it 'updates user details and sends email' do
-      visit admin_account_change_email_path(user.account.id)
+      visit admin_account_email_path(user.account.id)
       expect(page)
         .to have_title(I18n.t('admin.accounts.change_email.title', username: user.account.username))
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  class ChangeEmailsController < BaseController
+  class EmailsController < BaseController
     before_action :set_account
     before_action :require_local_account!
 

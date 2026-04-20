@@ -2,21 +2,21 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Admin Account Change Email' do
-  describe 'PUT /admin/accounts/:account_id/change_email' do
+RSpec.describe 'Admin Account Email' do
+  describe 'PUT /admin/accounts/:account_id/email' do
     before { sign_in Fabricate(:admin_user) }
 
     let(:account) { Fabricate :account }
 
     it 'gracefully handles invalid nested params' do
-      put admin_account_change_email_path(account.id, user: 'invalid')
+      put admin_account_email_path(account.id, user: 'invalid')
 
       expect(response)
         .to have_http_status(400)
     end
 
     context 'when email is not changed' do
-      subject { put admin_account_change_email_path(user.account_id, user: { unconfirmed_email: 'original@host.example' }) }
+      subject { put admin_account_email_path(user.account_id, user: { unconfirmed_email: 'original@host.example' }) }
 
       let(:user) { Fabricate :user, email: 'original@host.example' }
 
