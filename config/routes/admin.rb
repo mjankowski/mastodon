@@ -141,7 +141,7 @@ namespace :admin do
       post :unblock_email
     end
 
-    resource :change_email, only: [:show, :update]
+    resource :email, only: [:show, :update]
     resource :reset, only: [:create]
     resource :action, only: [:new, :create], controller: 'account_actions'
 
