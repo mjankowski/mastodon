@@ -33,9 +33,6 @@ Rails.application.routes.draw do
   end
 
   namespace :oauth do
-    # As this is borrowed from OpenID, the specification says we must also support
-    # POST for the userinfo endpoint:
-    # https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
     match 'userinfo', via: [:get, :post], to: 'userinfo#show', defaults: { format: 'json' }
   end
 
