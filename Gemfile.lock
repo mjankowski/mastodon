@@ -7,6 +7,12 @@ GIT
       hkdf (~> 0.2)
       jwt (~> 2.0)
 
+GIT
+  remote: https://github.com/simplecov-ruby/simplecov.git
+  revision: 90a0179a98aa209ed2e888400b6a038a17b18f4c
+  specs:
+    simplecov (0.22.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -207,7 +213,6 @@ GEM
     diff-lcs (1.6.2)
     discard (1.4.0)
       activerecord (>= 4.2, < 9.0)
-    docile (1.4.1)
     domain_name (0.6.20240107)
     doorkeeper (5.9.0)
       railties (>= 5)
@@ -838,13 +843,7 @@ GEM
     simple_form (5.4.1)
       actionpack (>= 7.0)
       activemodel (>= 7.0)
-    simplecov (0.22.0)
-      docile (~> 1.1)
-      simplecov-html (~> 0.11)
-      simplecov_json_formatter (~> 0.1)
-    simplecov-html (0.13.2)
     simplecov-lcov (0.9.0)
-    simplecov_json_formatter (0.1.4)
     stackprof (0.2.28)
     starry (0.2.0)
       base64
@@ -1079,7 +1078,7 @@ DEPENDENCIES
   sidekiq-unique-jobs (> 8)
   simple-navigation (~> 4.4)
   simple_form (~> 5.2)
-  simplecov (~> 0.22)
+  simplecov!
   simplecov-lcov (~> 0.8)
   stackprof
   stoplight
