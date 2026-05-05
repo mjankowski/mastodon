@@ -509,10 +509,6 @@ module Mastodon::CLI
     LONG_DESC
     def prune
       _, deleted = parallelize_with_progress(prunable_accounts) do |account|
-        next if account.bot? || account.group?
-        next if account.suspended?
-        next if account.silenced?
-
         account.destroy unless dry_run?
         1
       end
@@ -577,6 +573,9 @@ module Mastodon::CLI
       Account
         .remote
         .non_automated
+        .without_suspended
+        .without_silenced
+        .where.not(actor_type: 'Group')
         .where.not(referencing_account(Mention, :account_id))
         .where.not(referencing_account(Favourite, :account_id))
         .where.not(referencing_account(Status, :account_id))
