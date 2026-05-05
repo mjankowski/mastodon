@@ -571,16 +571,7 @@ module Mastodon::CLI
         .without_suspended
         .without_silenced
         .where.not(actor_type: 'Group')
-        .where.not(referencing_account(Mention, :account_id))
-        .where.not(referencing_account(Favourite, :account_id))
-        .where.not(referencing_account(Status, :account_id))
-        .where.not(referencing_account(Follow, :account_id))
-        .where.not(referencing_account(Follow, :target_account_id))
-        .where.not(referencing_account(Block, :account_id))
-        .where.not(referencing_account(Block, :target_account_id))
-        .where.not(referencing_account(Mute, :target_account_id))
-        .where.not(referencing_account(Report, :target_account_id))
-        .where.not(referencing_account(FollowRequest, :account_id))
+        .where.missing(:mentions, :favourites, :statuses, :active_relationships, :passive_relationships, :block_relationships, :blocked_by_relationships, :muted_by_relationships, :targeted_reports, :follow_requests)
         .where.not(referencing_account(FollowRequest, :target_account_id))
     end
 
