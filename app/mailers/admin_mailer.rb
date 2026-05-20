@@ -3,6 +3,8 @@
 class AdminMailer < ApplicationMailer
   layout 'admin_mailer'
 
+  prepend_view_path Rails.root.join('app', 'views', 'admin_mailer')
+
   helper :accounts
   helper :languages
 
