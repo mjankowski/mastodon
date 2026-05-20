@@ -19,6 +19,13 @@ module AccountsHelper
     end
   end
 
+  def usage_history(record)
+    {
+      today: record.history.get(Time.current).accounts,
+      yesterday: record.history.get(1.day.ago).accounts,
+    }
+  end
+
   def account_formatted_stat(value)
     number_to_human(value, precision: 3, strip_insignificant_zeros: true)
   end
