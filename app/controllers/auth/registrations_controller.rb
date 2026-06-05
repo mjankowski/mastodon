@@ -13,7 +13,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :set_strikes, only: [:edit, :update]
   before_action :require_not_suspended!, only: [:update]
   before_action :set_rules, only: :new
-  before_action :require_rules_acceptance!, only: :new
+  before_action :require_rules_acceptance!, only: :new, unless: :rules_missing_or_accepted?
   before_action :set_registration_form_time, only: :new
 
   skip_before_action :check_self_destruct!, only: [:edit, :update]
@@ -130,17 +130,14 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   end
 
   def require_rules_acceptance!
-    return if @rules.empty? || validated_accept_token?
-
-    @accept_token = session[:accept_token] = SecureRandom.hex
     @invite_code = invite_code
     @rule_translations = @rules.map { |rule| rule.translation_for(I18n.locale) }
 
     render :rules
   end
 
-  def validated_accept_token?
-    session[:accept_token].present? && params[:accept] == session[:accept_token]
+  def rules_missing_or_accepted?
+    @rules.empty? || session[:rules_accepted].present?
   end
 
   def is_flashing_format? # rubocop:disable Naming/PredicatePrefix
