@@ -16,11 +16,13 @@ class UserMailer < Devise::Mailer
 
   after_action :use_bulk_mail_delivery_settings, only: [:announcement_published, :terms_of_service_changed]
 
+  rescue_from(ActiveRecord::RecordNotFound) { false }
+
   default to: -> { @resource.email }
 
   def confirmation_instructions(user, token, *, **)
-    @resource = user
-    @token    = token
+    load_resource(user)
+    @token = token
 
     return unless @resource.active_for_authentication?
 
@@ -32,8 +34,8 @@ class UserMailer < Devise::Mailer
   end
 
   def reset_password_instructions(user, token, *, **)
-    @resource = user
-    @token    = token
+    load_resource(user)
+    @token = token
 
     return unless @resource.active_for_authentication?
 
@@ -43,7 +45,7 @@ class UserMailer < Devise::Mailer
   end
 
   def password_change(user, *, **)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -53,7 +55,7 @@ class UserMailer < Devise::Mailer
   end
 
   def email_changed(user, *, **)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -63,7 +65,7 @@ class UserMailer < Devise::Mailer
   end
 
   def two_factor_enabled(user, *, **)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -73,7 +75,7 @@ class UserMailer < Devise::Mailer
   end
 
   def two_factor_disabled(user, *, **)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -83,7 +85,7 @@ class UserMailer < Devise::Mailer
   end
 
   def two_factor_recovery_codes_changed(user, *, **)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -93,7 +95,7 @@ class UserMailer < Devise::Mailer
   end
 
   def webauthn_enabled(user, *, **)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -103,7 +105,7 @@ class UserMailer < Devise::Mailer
   end
 
   def webauthn_disabled(user, *, **)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -113,7 +115,7 @@ class UserMailer < Devise::Mailer
   end
 
   def webauthn_credential_added(user, webauthn_credential)
-    @resource = user
+    load_resource(user)
     @webauthn_credential = webauthn_credential
 
     return unless @resource.active_for_authentication?
@@ -124,7 +126,7 @@ class UserMailer < Devise::Mailer
   end
 
   def webauthn_credential_deleted(user, webauthn_credential)
-    @resource = user
+    load_resource(user)
     @webauthn_credential = webauthn_credential
 
     return unless @resource.active_for_authentication?
@@ -135,7 +137,7 @@ class UserMailer < Devise::Mailer
   end
 
   def welcome(user)
-    @resource = user
+    load_resource(user)
 
     return unless @resource.active_for_authentication?
 
@@ -151,8 +153,8 @@ class UserMailer < Devise::Mailer
   end
 
   def backup_ready(user, backup)
-    @resource = user
-    @backup   = backup
+    load_resource(user)
+    @backup = backup
 
     return unless @resource.active_for_authentication?
 
@@ -162,7 +164,7 @@ class UserMailer < Devise::Mailer
   end
 
   def warning(user, warning)
-    @resource = user
+    load_resource(user)
     @warning  = warning
     @statuses = @warning.statuses.includes(:account, :preloadable_poll, :media_attachments, active_mentions: [:account])
 
@@ -172,10 +174,8 @@ class UserMailer < Devise::Mailer
   end
 
   def appeal_approved(user, appeal)
-    return if user.nil?
-
-    @resource = user
-    @appeal   = appeal
+    load_resource(user)
+    @appeal = appeal
 
     I18n.with_locale(locale) do
       mail subject: default_i18n_subject(date: l(@appeal.created_at))
@@ -183,10 +183,8 @@ class UserMailer < Devise::Mailer
   end
 
   def appeal_rejected(user, appeal)
-    return if user.nil?
-
-    @resource = user
-    @appeal   = appeal
+    load_resource(user)
+    @appeal = appeal
 
     I18n.with_locale(locale) do
       mail subject: default_i18n_subject(date: l(@appeal.created_at))
@@ -194,7 +192,7 @@ class UserMailer < Devise::Mailer
   end
 
   def suspicious_sign_in(user, remote_ip, user_agent, timestamp)
-    @resource   = user
+    load_resource(user)
     @remote_ip  = remote_ip
     @user_agent = user_agent
     @detection  = Browser.new(user_agent)
@@ -206,7 +204,7 @@ class UserMailer < Devise::Mailer
   end
 
   def failed_2fa(user, remote_ip, user_agent, timestamp)
-    @resource   = user
+    load_resource(user)
     @remote_ip  = remote_ip
     @user_agent = user_agent
     @detection  = Browser.new(user_agent)
@@ -218,7 +216,7 @@ class UserMailer < Devise::Mailer
   end
 
   def terms_of_service_changed(user, terms_of_service)
-    @resource = user
+    load_resource(user)
     @terms_of_service = terms_of_service
 
     I18n.with_locale(locale) do
@@ -227,7 +225,7 @@ class UserMailer < Devise::Mailer
   end
 
   def announcement_published(user, announcement)
-    @resource = user
+    load_resource(user)
     @announcement = announcement
 
     I18n.with_locale(locale) do
@@ -236,6 +234,12 @@ class UserMailer < Devise::Mailer
   end
 
   private
+
+  def load_resource(user)
+    raise(ActiveRecord::RecordNotFound) if user.blank?
+
+    @resource = User.find(user.id)
+  end
 
   def default_devise_subject
     I18n.t(:subject, scope: ['devise.mailer', action_name])
