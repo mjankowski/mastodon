@@ -14,6 +14,15 @@ RSpec.describe UserMailer do
     end
   end
 
+  shared_examples 'delivery to missing user' do
+    before { receiver.destroy! }
+
+    it 'handles missing record without sending mail' do
+      expect { mail.deliver_now }
+        .to_not send_email
+    end
+  end
+
   shared_examples 'optional bulk mailer settings' do
     context 'when no optional bulk mailer settings are present' do
       it 'does not include delivery method options' do
@@ -80,6 +89,7 @@ RSpec.describe UserMailer do
                     'devise.mailer.confirmation_instructions.subject',
                     instance: Rails.configuration.x.local_domain
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#reset_password_instructions' do
@@ -96,6 +106,7 @@ RSpec.describe UserMailer do
     it_behaves_like 'localized subject',
                     'devise.mailer.reset_password_instructions.subject'
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#password_change' do
@@ -111,6 +122,7 @@ RSpec.describe UserMailer do
     it_behaves_like 'localized subject',
                     'devise.mailer.password_change.subject'
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#email_changed' do
@@ -126,6 +138,7 @@ RSpec.describe UserMailer do
     it_behaves_like 'localized subject',
                     'devise.mailer.email_changed.subject'
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#warning' do
@@ -141,10 +154,12 @@ RSpec.describe UserMailer do
         .to match(I18n.t('user_mailer.warning.title.suspend', acct: receiver.account.acct))
         .and match(strike.text)
     end
+
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#webauthn_credential_deleted' do
-    let(:credential) { Fabricate(:webauthn_credential, user_id: receiver.id) }
+    let!(:credential) { Fabricate(:webauthn_credential, user_id: receiver.id) }
     let(:mail) { described_class.webauthn_credential_deleted(receiver, credential) }
 
     it 'renders webauthn credential deleted notification' do
@@ -157,6 +172,7 @@ RSpec.describe UserMailer do
     it_behaves_like 'localized subject',
                     'devise.mailer.webauthn_credential.deleted.subject'
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#suspicious_sign_in' do
@@ -174,6 +190,7 @@ RSpec.describe UserMailer do
 
     it_behaves_like 'localized subject',
                     'user_mailer.suspicious_sign_in.subject'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#failed_2fa' do
@@ -191,6 +208,7 @@ RSpec.describe UserMailer do
 
     it_behaves_like 'localized subject',
                     'user_mailer.failed_2fa.subject'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#appeal_approved' do
@@ -204,14 +222,7 @@ RSpec.describe UserMailer do
         .to match(I18n.t('user_mailer.appeal_approved.title'))
     end
 
-    context 'when user is missing' do
-      let(:mail) { described_class.appeal_approved(nil, appeal) }
-
-      it 'handles missing value without sending' do
-        expect { mail.deliver }
-          .to_not send_email
-      end
-    end
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#appeal_rejected' do
@@ -225,14 +236,7 @@ RSpec.describe UserMailer do
         .to match(I18n.t('user_mailer.appeal_rejected.title'))
     end
 
-    context 'when user is missing' do
-      let(:mail) { described_class.appeal_rejected(nil, appeal) }
-
-      it 'handles missing value without sending' do
-        expect { mail.deliver }
-          .to_not send_email
-      end
-    end
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#two_factor_enabled' do
@@ -246,6 +250,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#two_factor_disabled' do
@@ -259,6 +264,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#webauthn_enabled' do
@@ -272,6 +278,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#webauthn_disabled' do
@@ -285,6 +292,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#two_factor_recovery_codes_changed' do
@@ -298,6 +306,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#webauthn_credential_added' do
@@ -312,6 +321,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#welcome' do
@@ -331,6 +341,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#backup_ready' do
@@ -345,6 +356,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'delivery to memorialized user'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#terms_of_service_changed' do
@@ -359,6 +371,7 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'optional bulk mailer settings'
+    it_behaves_like 'delivery to missing user'
   end
 
   describe '#announcement_published' do
@@ -373,5 +386,6 @@ RSpec.describe UserMailer do
     end
 
     it_behaves_like 'optional bulk mailer settings'
+    it_behaves_like 'delivery to missing user'
   end
 end
