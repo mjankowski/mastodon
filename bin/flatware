@@ -12,5 +12,9 @@ ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
 
 require "rubygems"
 require "bundler/setup"
+require "etc"
+
+# Cap the parallel worker limit to the default Redis DB count
+ARGV.push("--workers", [Etc.nprocessors, 15].min) if ARGV.include?("rspec")
 
 load Gem.bin_path("flatware", "flatware")
