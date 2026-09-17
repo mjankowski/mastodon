@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/no-autofocus */
+/* oxlint-disable jsx-a11y/no-autofocus */
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';

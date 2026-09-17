@@ -102,11 +102,7 @@ export const RedesignComposeForm: React.FC<
 
       <ComposeSensitiveField />
 
-      <ComposeTextarea
-        // eslint-disable-next-line jsx-a11y/no-autofocus
-        autoFocus={autoFocus}
-        onSubmit={onSubmit}
-      >
+      <ComposeTextarea autoFocus={autoFocus} onSubmit={onSubmit}>
         <ComposeAttachments className={classes.attachments} />
       </ComposeTextarea>
 

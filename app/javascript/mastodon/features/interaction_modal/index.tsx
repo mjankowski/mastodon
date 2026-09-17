@@ -364,7 +364,7 @@ const LoginForm: React.FC<{
           aria-label={intl.formatMessage(messages.loginPrompt, {
             example: EXAMPLE_VALUE,
           })}
-          // eslint-disable-next-line jsx-a11y/no-autofocus
+          // oxlint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
           onChange={handleChange}
           onFocus={handleFocus}
@@ -509,5 +509,5 @@ const InteractionModal: React.FC<{
   );
 };
 
-// eslint-disable-next-line import/no-default-export
+// oxlint-disable-next-line import/no-default-export
 export default InteractionModal;

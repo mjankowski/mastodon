@@ -254,7 +254,7 @@ const ComposePollOption: React.FC<{
           number: index + 1,
         })}
         maxLength={50}
-        // eslint-disable-next-line jsx-a11y/no-autofocus
+        // oxlint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={index === 0}
         data-index={index}
         spellCheck

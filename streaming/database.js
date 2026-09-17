@@ -1,5 +1,5 @@
-import pg from 'pg';
-import pgConnectionString from 'pg-connection-string';
+import pg, { defaults, Pool } from 'pg';
+import { parse } from 'pg-connection-string';
 
 import { parseIntFromEnvValue } from './utils.js';
 
@@ -12,11 +12,11 @@ export function configFromEnv(env, environment) {
   /** @type {Record<string, pg.PoolConfig>} */
   const pgConfigs = {
     development: {
-      user: env.DB_USER || pg.defaults.user,
-      password: env.DB_PASS || pg.defaults.password,
+      user: env.DB_USER || defaults.user,
+      password: env.DB_PASS || defaults.password,
       database: env.DB_NAME || 'mastodon_development',
-      host: env.DB_HOST || pg.defaults.host,
-      port: parseIntFromEnvValue(env.DB_PORT, pg.defaults.port ?? 5432, 'DB_PORT')
+      host: env.DB_HOST || defaults.host,
+      port: parseIntFromEnvValue(env.DB_PORT, defaults.port ?? 5432, 'DB_PORT')
     },
 
     production: {
@@ -34,7 +34,7 @@ export function configFromEnv(env, environment) {
   let baseConfig = {};
 
   if (env.DATABASE_URL) {
-    const parsedUrl = pgConnectionString.parse(env.DATABASE_URL);
+    const parsedUrl = parse(env.DATABASE_URL);
 
     // The result of dbUrlToConfig from pg-connection-string is not type
     // compatible with pg.PoolConfig, since parts of the connection URL may be
@@ -125,7 +125,7 @@ export function getPool(config, environment, logger) {
     return pool;
   }
 
-  pool = new pg.Pool(config);
+  pool = new Pool(config);
 
   // Setup logging on pool.query and client.query for checked out clients:
   // This is taken from: https://node-postgres.com/guides/project-structure

@@ -8,6 +8,7 @@ import {
   TestProjectInlineConfiguration,
 } from 'vitest/config';
 
+// oxlint-disable-next-line import/extensions -- .mjs specifier maps to the sibling vite.config.mts file under TS's bundler module resolution
 import { config as viteConfig } from './vite.config.mjs';
 
 const storybookTests: TestProjectInlineConfiguration = {

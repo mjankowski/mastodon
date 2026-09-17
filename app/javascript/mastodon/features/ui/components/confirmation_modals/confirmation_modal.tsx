@@ -109,7 +109,7 @@ export const ConfirmationModal: React.FC<
           </>
         )}
 
-        {/* eslint-disable jsx-a11y/no-autofocus -- we are in a modal and thus autofocusing is justified */}
+        {/* oxlint-disable jsx-a11y/no-autofocus -- we are in a modal and thus autofocusing is justified */}
         <Button
           type='submit'
           loading={updating}
@@ -118,7 +118,6 @@ export const ConfirmationModal: React.FC<
         >
           {confirm}
         </Button>
-        {/* eslint-enable */}
       </ModalShellActions>
     </ModalShell>
   );
