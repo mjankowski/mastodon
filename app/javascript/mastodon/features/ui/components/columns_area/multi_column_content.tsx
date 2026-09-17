@@ -58,7 +58,9 @@ const ErrorComponent = (props: { onRetry: () => void }) => (
 const renderLoading = (columnId: string) => {
   const LoadingComponent =
     columnId === 'COMPOSE' ? <DrawerLoading /> : <ColumnLoading multiColumn />;
-  return () => LoadingComponent;
+  return function Loading() {
+    return LoadingComponent;
+  };
 };
 
 export const MultiColumnContent: React.FC<{

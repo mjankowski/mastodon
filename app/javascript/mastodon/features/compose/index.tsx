@@ -209,7 +209,7 @@ const Compose: React.FC<{ multiColumn: boolean }> = ({ multiColumn }) => {
       <div className='scrollable'>
         <ComposeFormContainer
           // This is fine on this single-purpose view
-          // eslint-disable-next-line jsx-a11y/no-autofocus
+          // oxlint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
         />
       </div>
@@ -221,5 +221,5 @@ const Compose: React.FC<{ multiColumn: boolean }> = ({ multiColumn }) => {
   );
 };
 
-// eslint-disable-next-line import/no-default-export
+// oxlint-disable-next-line import/no-default-export
 export default Compose;

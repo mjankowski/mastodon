@@ -1,0 +1,22 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "extends": ["../.oxlintrc.json"],
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "no-delete-var": "off",
+    "import-js/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/*.config.mjs"]
+      }
+    ],
+    // Disabled: oxlint's native import/extensions port does not exempt
+    // bare package specifiers (e.g. "ioredis") from the "always" policy,
+    // unlike eslint-plugin-import, so it misfires on every third-party
+    // import. A missing extension on a real relative import would fail
+    // immediately at runtime under Node's ESM loader regardless.
+    "import/extensions": "off"
+  }
+}

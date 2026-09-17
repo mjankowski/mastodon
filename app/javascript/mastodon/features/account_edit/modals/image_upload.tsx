@@ -284,7 +284,7 @@ const StepUpload: FC<{
       />
       <Button
         onClick={handleUploadClick}
-        // eslint-disable-next-line jsx-a11y/no-autofocus -- This is the main input, so auto-focus on it.
+        // oxlint-disable-next-line jsx-a11y/no-autofocus -- This is the main input, so auto-focus on it.
         autoFocus
       >
         <FormattedMessage

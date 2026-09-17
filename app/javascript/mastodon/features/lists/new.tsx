@@ -333,5 +333,5 @@ const NewListWrapper: React.FC<{
   );
 };
 
-// eslint-disable-next-line import/no-default-export
+// oxlint-disable-next-line import/no-default-export
 export default NewListWrapper;
