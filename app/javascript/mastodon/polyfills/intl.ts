@@ -1,5 +1,6 @@
 // import { shouldPolyfill as shouldPolyfillCanonicalLocales } from '@formatjs/intl-getcanonicallocales/should-polyfill';
 // import { shouldPolyfill as shouldPolyfillLocale } from '@formatjs/intl-locale/should-polyfill';
+// oxlint-disable-next-line import/extensions -- the package's "exports" map only defines the .js-suffixed subpath
 import { shouldPolyfill as shoudPolyfillPluralRules } from '@formatjs/intl-pluralrules/should-polyfill.js';
 // import { shouldPolyfill as shouldPolyfillNumberFormat } from '@formatjs/intl-numberformat/should-polyfill';
 // import { shouldPolyfill as shouldPolyfillIntlDateTimeFormat } from '@formatjs/intl-datetimeformat/should-polyfill';
@@ -76,7 +77,7 @@ async function loadIntlPluralRulesPolyfills(locale: string) {
 // }
 
 export async function loadIntlPolyfills() {
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- we want to match empty strings
+  // oxlint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- we want to match empty strings
   const locale = document.querySelector('html')?.lang || 'en';
 
   // order is important here

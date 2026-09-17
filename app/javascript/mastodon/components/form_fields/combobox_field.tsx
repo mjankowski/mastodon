@@ -319,7 +319,7 @@ const ComboboxWithRef = <Item extends ComboboxItem, GroupKey extends string>(
     if (flatItems.length) {
       // This only runs when the items change so should be safe from
       // cascade renders.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+      // oxlint-disable-next-line react-hooks/set-state-in-effect
       resetHighlight();
     }
   }, [flatItems, resetHighlight]);
