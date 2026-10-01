@@ -31,8 +31,7 @@
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic -d storybook-static",
-    "msw:updateWorker": "msw init"
+    "chromatic": "npx chromatic -d storybook-static"
   },
   "repository": {
     "type": "git",
@@ -130,10 +129,10 @@
   "devDependencies": {
     "@eslint/js": "9.39.5",
     "@formatjs/cli": "6.14.4",
-    "@storybook/addon-a11y": "10.3.3",
-    "@storybook/addon-docs": "10.3.3",
-    "@storybook/addon-vitest": "10.3.3",
-    "@storybook/react-vite": "10.3.3",
+    "@storybook/addon-a11y": "10.6.1",
+    "@storybook/addon-docs": "10.6.1",
+    "@storybook/addon-vitest": "10.6.1",
+    "@storybook/react-vite": "10.6.1",
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.2",
     "@types/debug": "4.1.13",
@@ -170,16 +169,16 @@
     "eslint-plugin-promise": "7.3.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-storybook": "10.6.0",
+    "eslint-plugin-storybook": "10.6.1",
     "fake-indexeddb": "6.2.5",
     "globals": "17.12.0",
     "husky": "9.1.7",
     "lint-staged": "17.5.1",
-    "msw": "2.12.14",
+    "msw": "3.0.1",
     "msw-storybook-addon": "3.0.3",
     "oxfmt": "0.70.0",
     "playwright": "1.63.0",
-    "storybook": "10.3.3",
+    "storybook": "10.6.1",
     "stylelint": "17.15.0",
     "stylelint-config-standard-scss": "17.0.0",
     "type-fest": "5.7.0",
@@ -197,10 +196,5 @@
     "react-router-dom": {
       "optional": true
     }
-  },
-  "msw": {
-    "workerDirectory": [
-      ".storybook/static"
-    ]
   }
 }

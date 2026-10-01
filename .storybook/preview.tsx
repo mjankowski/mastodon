@@ -21,12 +21,22 @@ import { IdentityContext } from '@/mastodon/identity_context';
 import type { LocaleData } from '@/mastodon/locales';
 import { reducerWithInitialState } from '@/mastodon/reducers';
 import { defaultMiddleware } from '@/mastodon/store/store';
-import { mockHandlers, unhandledRequestHandler } from '@/testing/api';
+import { mockHandlers, unhandledFrameHandler } from '@/testing/api';
 
 import { modes } from './modes';
 
 import '../app/javascript/styles/application.scss';
 import './styles.css';
+
+const startMsw = mswLoader(async () => {
+  const worker = setupWorker();
+
+  await worker.start({
+    onUnhandledFrame: unhandledFrameHandler,
+  });
+
+  return worker;
+});
 
 const preview: Preview = {
   // Auto-generate docs: https://storybook.js.org/docs/writing-docs/autodocs
@@ -205,18 +215,16 @@ const preview: Preview = {
     },
   ],
   loaders: [
-    mswLoader(async () => {
-      const worker = setupWorker();
+    // Storybook runs loaders concurrently, so wait for msw to be ready
+    async (context) => {
+      await startMsw(context);
 
-      await worker.start({
-        onUnhandledRequest: unhandledRequestHandler,
-      });
-
-      return worker;
-    }),
-    importCustomEmojiData,
-    importLegacyShortcodes,
-    ({ globals: { locale } }) => importEmojiData(locale),
+      await Promise.all([
+        importCustomEmojiData(),
+        importLegacyShortcodes(),
+        importEmojiData(context.globals.locale),
+      ]);
+    },
   ],
   parameters: {
     layout: 'centered',
