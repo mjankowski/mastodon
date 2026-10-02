@@ -417,6 +417,7 @@ class StatusActionBar extends ImmutablePureComponent {
               needsStatusRefresh={quickBoosting && status.get('quote_approval') === null}
               items={menu}
               direction='right'
+              // eslint-disable-next-line react/jsx-no-bind
               onOpen={() => {
                 dismissQuoteHint();
                 return true;
