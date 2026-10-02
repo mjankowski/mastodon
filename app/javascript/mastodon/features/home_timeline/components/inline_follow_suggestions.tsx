@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useId } from 'react';
 
 import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import { Link } from 'react-router-dom';
 
@@ -25,7 +26,16 @@ import { LoadingIndicator } from 'mastodon/components/loading_indicator';
 import { domain } from 'mastodon/initial_state';
 import { useAppDispatch, useAppSelector } from 'mastodon/store';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly previous: NoMessageValues;
+  readonly next: NoMessageValues;
+  readonly dismiss: NoMessageValues;
+  readonly friendsOfFriendsHint: NoMessageValues;
+  readonly similarToRecentlyFollowedHint: NoMessageValues;
+  readonly featuredHint: { readonly domain: MessageValue };
+  readonly mostFollowedHint: { readonly domain: MessageValue };
+  readonly mostInteractionsHint: { readonly domain: MessageValue };
+}>({
   previous: { id: 'lightbox.previous', defaultMessage: 'Previous' },
   next: { id: 'lightbox.next', defaultMessage: 'Next' },
   dismiss: {

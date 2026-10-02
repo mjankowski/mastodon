@@ -167,7 +167,11 @@ export default tseslint.config([
       'formatjs/blocklist-elements': 'off', // CrowdIn supports `select` translation
       'formatjs/enforce-description': 'off', // description values not currently used
       'formatjs/enforce-id': 'off', // Explicit IDs are used in the project
-      'formatjs/enforce-placeholders': 'off', // Issues in short_number.jsx
+      'formatjs/enforce-message-types': [
+        'error',
+        { moduleSource: 'react-intl' },
+      ],
+      'formatjs/enforce-placeholders': 'off', // Superseded by enforce-message-types
       'formatjs/no-invalid-icu': 'error',
       'formatjs/no-literal-string-in-jsx': 'off', // Should be looked at, but mainly flagging punctuation outside of strings
       'formatjs/no-multiple-plurals': 'off', // Should be looked at
@@ -288,6 +292,11 @@ export default tseslint.config([
       // This is not needed as we use noImplicitReturns, which handles this in addition to understanding types
       'consistent-return': 'off',
 
+      'formatjs/enforce-message-types': [
+        'error',
+        // Generates TypeScript argument contracts, so only valid in TS files.
+        { generateTypes: true, moduleSource: 'react-intl' },
+      ],
       'formatjs/enforce-plural-rules': 'off',
 
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],

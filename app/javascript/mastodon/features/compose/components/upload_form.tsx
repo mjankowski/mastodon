@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 
 import { useIntl, defineMessages } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import type {
   List,
@@ -37,7 +38,13 @@ import { useAppSelector, useAppDispatch } from 'mastodon/store';
 import { Upload } from './upload';
 import { UploadProgress } from './upload_progress';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly screenReaderInstructions: NoMessageValues;
+  readonly onDragStart: { readonly item: MessageValue };
+  readonly onDragOver: { readonly item: MessageValue };
+  readonly onDragEnd: { readonly item: MessageValue };
+  readonly onDragCancel: { readonly item: MessageValue };
+}>({
   screenReaderInstructions: {
     id: 'upload_form.drag_and_drop.instructions',
     defaultMessage:

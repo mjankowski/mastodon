@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import type { FC } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import type { MessageValue, NoMessageValues } from 'react-intl';
 
 import { ChatCircleDotsIcon, UserMinusIcon } from '@phosphor-icons/react';
 
@@ -24,7 +25,12 @@ import { IconButton as LegacyIconButton } from '../icon_button';
 import { AccountMenu } from './menu';
 import classes from './styles.module.scss';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly enableNotifications: { readonly name: MessageValue };
+  readonly disableNotifications: { readonly name: MessageValue };
+  readonly share: { readonly name: MessageValue };
+  readonly copy: NoMessageValues;
+}>({
   enableNotifications: {
     id: 'account.enable_notifications',
     defaultMessage: 'Notify me when @{name} posts',

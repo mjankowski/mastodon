@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import type { FC } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -23,7 +24,11 @@ import type { VisibilityModalCallback } from '../../ui/components/visibility_mod
 
 import { messages as privacyMessages } from './privacy_dropdown';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly anyone_quote: { readonly visibility: MessageValue };
+  readonly limited_quote: { readonly visibility: MessageValue };
+  readonly disabled_quote: { readonly visibility: MessageValue };
+}>({
   anyone_quote: {
     id: 'privacy.quote.anyone',
     defaultMessage: '{visibility}, anyone can quote',

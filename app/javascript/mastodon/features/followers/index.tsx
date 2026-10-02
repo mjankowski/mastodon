@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { FC } from 'react';
 
 import { defineMessage, FormattedMessage } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -19,7 +20,7 @@ import { BaseEmptyMessage } from './components/empty';
 import { AccountListHeader } from './components/header';
 import { AccountList } from './components/list';
 
-const titleText = defineMessage({
+const titleText = defineMessage<{ readonly name: MessageValue }>({
   id: 'followers.title',
   defaultMessage: 'Following {name}',
 });

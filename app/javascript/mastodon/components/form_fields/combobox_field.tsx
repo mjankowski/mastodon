@@ -772,7 +772,7 @@ function useGetA11yStatusMessage({
   }
 
   if (itemCount > 0) {
-    return intl.formatMessage(
+    return intl.formatMessage<{ readonly count: number | bigint }>(
       {
         id: 'combobox.results_available',
         defaultMessage:

@@ -2,6 +2,7 @@ import type React from 'react';
 import { useCallback, useId } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -24,7 +25,12 @@ import { DAY, HOUR, MINUTE } from '@/mastodon/utils/time';
 import classes from './attachments.module.scss';
 import { selectComposePoll } from './selectors';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly option_placeholder: { readonly number: MessageValue };
+  readonly minutes: { readonly number: number | bigint };
+  readonly hours: { readonly number: number | bigint };
+  readonly days: { readonly number: number | bigint };
+}>({
   option_placeholder: {
     id: 'compose_form.poll.option_placeholder',
     defaultMessage: 'Option {number}',

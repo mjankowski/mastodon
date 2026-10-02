@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -15,16 +16,13 @@ import { Button } from '@/mastodon/components/button';
 import { DisplayName } from '@/mastodon/components/display_name';
 import { me } from '@/mastodon/initial_state';
 import type { Account } from '@/mastodon/models/account';
-import type {
-  AnnualReport,
-  Archetype as ArchetypeData,
-} from '@/mastodon/models/annual_report';
+import type { AnnualReport } from '@/mastodon/models/annual_report';
 import { wrapstodonSettings } from '@/mastodon/settings';
 
 import styles from './index.module.scss';
 import { ShareButton } from './share_button';
 
-export const archetypeNames = defineMessages<ArchetypeData>({
+export const archetypeNames = defineMessages({
   booster: {
     id: 'annual_report.summary.archetype.booster.name',
     defaultMessage: 'The Archer',
@@ -47,7 +45,7 @@ export const archetypeNames = defineMessages<ArchetypeData>({
   },
 });
 
-export const archetypeSelfDescriptions = defineMessages<ArchetypeData>({
+export const archetypeSelfDescriptions = defineMessages({
   booster: {
     id: 'annual_report.summary.archetype.booster.desc_self',
     defaultMessage:
@@ -75,7 +73,13 @@ export const archetypeSelfDescriptions = defineMessages<ArchetypeData>({
   },
 });
 
-export const archetypePublicDescriptions = defineMessages<ArchetypeData>({
+export const archetypePublicDescriptions = defineMessages<{
+  readonly booster: { readonly name: MessageValue };
+  readonly replier: { readonly name: MessageValue };
+  readonly pollster: { readonly name: MessageValue };
+  readonly lurker: { readonly name: MessageValue };
+  readonly oracle: { readonly name: MessageValue };
+}>({
   booster: {
     id: 'annual_report.summary.archetype.booster.desc_public',
     defaultMessage:

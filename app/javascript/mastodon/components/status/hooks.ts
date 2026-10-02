@@ -1,6 +1,7 @@
 import { createContext, createElement, use, useCallback, useMemo } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import { useHistory } from 'react-router';
 
@@ -378,7 +379,11 @@ export function useStatusIcons(statusId: string) {
   } as const;
 }
 
-const screenReaderMessages = defineMessages({
+const screenReaderMessages = defineMessages<{
+  readonly quote_noun: NoMessageValues;
+  readonly contains_quote: NoMessageValues;
+  readonly boosted: { readonly name: MessageValue };
+}>({
   quote_noun: {
     id: 'status.quote_noun',
     defaultMessage: 'Quote',
@@ -522,7 +527,38 @@ export const onStatusLinksDisabled: OnElementHandler<AccountStatusShape> = (
   return undefined;
 };
 
-const menuMessages = defineMessages({
+const menuMessages = defineMessages<{
+  readonly delete: NoMessageValues;
+  readonly redraft: NoMessageValues;
+  readonly edit: NoMessageValues;
+  readonly follow: { readonly name: MessageValue };
+  readonly direct: { readonly name: MessageValue };
+  readonly mention: { readonly name: MessageValue };
+  readonly mute: { readonly name: MessageValue };
+  readonly muteBoosts: { readonly name: MessageValue };
+  readonly unmuteBoosts: { readonly name: MessageValue };
+  readonly block: { readonly name: MessageValue };
+  readonly share: NoMessageValues;
+  readonly open: NoMessageValues;
+  readonly report: { readonly name: MessageValue };
+  readonly muteConversation: NoMessageValues;
+  readonly unmuteConversation: NoMessageValues;
+  readonly pin: NoMessageValues;
+  readonly unpin: NoMessageValues;
+  readonly embed: NoMessageValues;
+  readonly admin_account: { readonly name: MessageValue };
+  readonly admin_status: NoMessageValues;
+  readonly admin_domain: { readonly domain: MessageValue };
+  readonly copy: NoMessageValues;
+  readonly blockDomain: { readonly domain: MessageValue };
+  readonly unblockDomain: { readonly domain: MessageValue };
+  readonly unmute: { readonly name: MessageValue };
+  readonly unblock: { readonly name: MessageValue };
+  readonly filter: NoMessageValues;
+  readonly openOriginalPage: NoMessageValues;
+  readonly revokeQuote: { readonly name: MessageValue };
+  readonly quotePolicyChange: NoMessageValues;
+}>({
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
   redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
   edit: { id: 'status.edit', defaultMessage: 'Edit' },

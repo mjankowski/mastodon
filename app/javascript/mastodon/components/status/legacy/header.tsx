@@ -1,6 +1,7 @@
 import type { FC, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { defineMessage, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
@@ -82,7 +83,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   );
 };
 
-const editMessage = defineMessage({
+const editMessage = defineMessage<{ readonly date: MessageValue }>({
   id: 'status.edited',
   defaultMessage: 'Edited {date}',
 });

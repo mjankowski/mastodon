@@ -8,6 +8,7 @@ import {
 import type { FC, FocusEventHandler } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import { closeModal } from '@/mastodon/actions/modal';
 import { Button } from '@/mastodon/components/button';
@@ -32,7 +33,21 @@ import { DialogModal } from '../../ui/components/dialog_modal';
 
 import classes from './styles.module.scss';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly editTitle: NoMessageValues;
+  readonly addTitle: NoMessageValues;
+  readonly editLabelField: NoMessageValues;
+  readonly editLabelHint: NoMessageValues;
+  readonly editValueField: NoMessageValues;
+  readonly editValueHint: NoMessageValues;
+  readonly save: NoMessageValues;
+  readonly discardMessage: NoMessageValues;
+  readonly discardConfirm: NoMessageValues;
+  readonly errorBlank: NoMessageValues;
+  readonly warningLength: NoMessageValues;
+  readonly warningUrlEmoji: NoMessageValues;
+  readonly warningUrlProtocol: { readonly protocol: MessageValue };
+}>({
   editTitle: {
     id: 'account_edit.field_edit_modal.edit_title',
     defaultMessage: 'Edit custom field',

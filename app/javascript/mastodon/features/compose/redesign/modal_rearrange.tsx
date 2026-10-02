@@ -2,6 +2,7 @@ import type React from 'react';
 import { useCallback, useState } from 'react';
 
 import { defineMessages, FormattedMessage } from 'react-intl';
+import type { NoMessageValues } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -25,7 +26,20 @@ import { useAppDispatch, useAppSelector } from '@/mastodon/store';
 import classes from './modals.module.scss';
 import { selectComposeAttachment, selectComposeAttachments } from './selectors';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly screenReaderInstructions: NoMessageValues;
+  readonly onDragStart: { readonly item: number | bigint };
+  readonly onDragMove: { readonly item: number | bigint };
+  readonly onDragMoveOver: {
+    readonly item: number | bigint;
+    readonly over: number | bigint;
+  };
+  readonly onDragEnd: {
+    readonly item: number | bigint;
+    readonly over: number | bigint;
+  };
+  readonly onDragCancel: { readonly item: number | bigint };
+}>({
   screenReaderInstructions: {
     id: 'compose.rearrange_modal.drag_instructions',
     defaultMessage:
