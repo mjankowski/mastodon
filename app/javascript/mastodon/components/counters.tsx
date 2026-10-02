@@ -55,6 +55,9 @@ export const FollowersYouKnowCounter = (
     id='account.followers_you_know_counter'
     defaultMessage='{counter} you know'
     values={{
+      // The English message has no plural, but translations for languages
+      // with plural forms (e.g. be, cs, fi, ru, sk, uk) depend on `count`.
+      // eslint-disable-next-line formatjs/enforce-message-types
       count: pluralReady,
       counter: <strong>{displayNumber}</strong>,
     }}

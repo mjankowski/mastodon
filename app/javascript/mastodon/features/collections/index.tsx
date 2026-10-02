@@ -1,4 +1,5 @@
 import { defineMessages, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
@@ -20,7 +21,13 @@ import { CollectionsCreatedByAccount } from './overview/created_by_account';
 import { CollectionsFeaturingYou } from './overview/featuring_you';
 import classes from './styles.module.scss';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly headingMe: NoMessageValues;
+  readonly headingOther: { readonly name: MessageValue };
+  readonly createdByYou: NoMessageValues;
+  readonly createdByAuthor: { readonly name: MessageValue };
+  readonly featuringYou: NoMessageValues;
+}>({
   headingMe: {
     id: 'column.your_collections',
     defaultMessage: 'Your Collections',
@@ -54,20 +61,16 @@ export const Collections: React.FC<{
 
   const isOwnCollectionsPage = accountId === me;
 
-  const titleMessage = isOwnCollectionsPage
-    ? messages.headingMe
-    : messages.headingOther;
-
-  const pageTitle = intl.formatMessage(titleMessage, {
-    name: account?.get('display_name'),
-  });
-  const pageTitleHtml = intl.formatMessage(titleMessage, {
-    name: <DisplayNameSimple account={account} />,
-  });
-
-  const createdByTabMessage = isOwnCollectionsPage
-    ? messages.createdByYou
-    : messages.createdByAuthor;
+  const pageTitle = isOwnCollectionsPage
+    ? intl.formatMessage(messages.headingMe)
+    : intl.formatMessage(messages.headingOther, {
+        name: account?.get('display_name'),
+      });
+  const pageTitleHtml = isOwnCollectionsPage
+    ? intl.formatMessage(messages.headingMe)
+    : intl.formatMessage(messages.headingOther, {
+        name: <DisplayNameSimple account={account} />,
+      });
 
   return (
     <Column bindToDocument={!multiColumn} label={pageTitle}>
@@ -91,9 +94,11 @@ export const Collections: React.FC<{
           )}
           <TabList plain>
             <TabLink exact to={`/@${account?.acct}/collections`}>
-              {intl.formatMessage(createdByTabMessage, {
-                name: <DisplayNameSimple account={account} />,
-              })}
+              {isOwnCollectionsPage
+                ? intl.formatMessage(messages.createdByYou)
+                : intl.formatMessage(messages.createdByAuthor, {
+                    name: <DisplayNameSimple account={account} />,
+                  })}
             </TabLink>
             {isOwnCollectionsPage && (
               <TabLink

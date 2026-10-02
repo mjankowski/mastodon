@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -19,7 +20,9 @@ import {
 } from 'mastodon/initial_state';
 import { useAppSelector, useAppDispatch } from 'mastodon/store';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly loginPrompt: { readonly example: MessageValue };
+}>({
   loginPrompt: {
     id: 'interaction_modal.username_prompt',
     defaultMessage: 'E.g. {example}',

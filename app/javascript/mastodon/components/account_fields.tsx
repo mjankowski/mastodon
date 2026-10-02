@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -35,7 +36,7 @@ export const AccountFields: React.FC<Pick<Account, 'fields' | 'emojis'>> = ({
           <dd className='translate' title={pair.value_plain ?? ''}>
             {pair.verified_at && (
               <span
-                title={intl.formatMessage(
+                title={intl.formatMessage<{ readonly date: MessageValue }>(
                   {
                     id: 'account.link_verified_on',
                     defaultMessage:

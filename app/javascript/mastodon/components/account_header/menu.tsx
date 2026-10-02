@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { FC } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import { DotsThreeIcon } from '@phosphor-icons/react';
 
@@ -127,7 +128,42 @@ interface MenuItemsParams {
   dispatch: AppDispatch;
 }
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly share: NoMessageValues;
+  readonly copy: NoMessageValues;
+  readonly copied: NoMessageValues;
+  readonly mention: NoMessageValues;
+  readonly noteDescription: NoMessageValues;
+  readonly direct: NoMessageValues;
+  readonly redesignMessage: NoMessageValues;
+  readonly mute: NoMessageValues;
+  readonly unmute: NoMessageValues;
+  readonly block: NoMessageValues;
+  readonly unblock: NoMessageValues;
+  readonly domainBlock: { readonly domain: MessageValue };
+  readonly domainUnblock: { readonly domain: MessageValue };
+  readonly report: NoMessageValues;
+  readonly hideReblogs: NoMessageValues;
+  readonly showReblogs: NoMessageValues;
+  readonly addToList: NoMessageValues;
+  readonly addToCustomFeed: NoMessageValues;
+  readonly addToCollection: NoMessageValues;
+  readonly openOriginalPage: { readonly domain: MessageValue };
+  readonly openOriginalPageInvalid: NoMessageValues;
+  readonly removeFollower: NoMessageValues;
+  readonly addNote: NoMessageValues;
+  readonly editNote: NoMessageValues;
+  readonly endorse: NoMessageValues;
+  readonly unendorse: NoMessageValues;
+  readonly admin_account: { readonly name: MessageValue };
+  readonly admin_domain: { readonly domain: MessageValue };
+  readonly enableNotifications: NoMessageValues;
+  readonly disableNotifications: NoMessageValues;
+  readonly languages: NoMessageValues;
+  readonly confirmRemoveFromFollowersTitle: NoMessageValues;
+  readonly confirmRemoveFromFollowersMessage: { readonly name: MessageValue };
+  readonly confirmRemoveFromFollowersButton: NoMessageValues;
+}>({
   share: { id: 'account.menu.share', defaultMessage: 'Share…' },
   copy: { id: 'account.menu.copy', defaultMessage: 'Copy link' },
   copied: {

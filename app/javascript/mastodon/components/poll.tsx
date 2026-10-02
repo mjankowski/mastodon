@@ -2,6 +2,7 @@ import type { KeyboardEventHandler } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import type { NoMessageValues } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -19,7 +20,11 @@ import { useAppDispatch, useAppSelector } from 'mastodon/store';
 
 import { RelativeTimestamp } from './relative_timestamp';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly closed: NoMessageValues;
+  readonly voted: NoMessageValues;
+  readonly votes: { readonly votes: number | bigint };
+}>({
   closed: {
     id: 'poll.closed',
     defaultMessage: 'Closed',

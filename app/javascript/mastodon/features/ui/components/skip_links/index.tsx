@@ -1,6 +1,7 @@
 import { useId } from 'react';
 
 import { useIntl } from 'react-intl';
+import type { MessageValue, MessageTag } from 'react-intl';
 
 import classes from './skip_links.module.scss';
 
@@ -39,7 +40,10 @@ const SkipLink: React.FC<{
         {children}
       </a>
       <span id={id} className={classes.hotkeyHint}>
-        {intl.formatMessage(
+        {intl.formatMessage<{
+          readonly hotkey: MessageValue;
+          readonly span: MessageTag;
+        }>(
           {
             id: 'skip_links.hotkey',
             defaultMessage: '<span>Hotkey</span> {hotkey}',

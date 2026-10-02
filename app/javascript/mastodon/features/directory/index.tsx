@@ -2,6 +2,7 @@ import type { ChangeEventHandler } from 'react';
 import { useCallback, useEffect } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import { List as ImmutableList } from 'immutable';
 
@@ -32,7 +33,13 @@ import { useAppDispatch, useAppSelector } from 'mastodon/store';
 
 import { AccountCard } from './components/account_card';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly title: NoMessageValues;
+  readonly recentlyActive: NoMessageValues;
+  readonly newArrivals: NoMessageValues;
+  readonly local: { readonly domain: MessageValue };
+  readonly federated: NoMessageValues;
+}>({
   title: { id: 'column.directory', defaultMessage: 'Browse profiles' },
   recentlyActive: {
     id: 'directory.recently_active',
