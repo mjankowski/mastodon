@@ -54,20 +54,16 @@ export const Collections: React.FC<{
 
   const isOwnCollectionsPage = accountId === me;
 
-  const titleMessage = isOwnCollectionsPage
-    ? messages.headingMe
-    : messages.headingOther;
-
-  const pageTitle = intl.formatMessage(titleMessage, {
-    name: account?.get('display_name'),
-  });
-  const pageTitleHtml = intl.formatMessage(titleMessage, {
-    name: <DisplayNameSimple account={account} />,
-  });
-
-  const createdByTabMessage = isOwnCollectionsPage
-    ? messages.createdByYou
-    : messages.createdByAuthor;
+  const pageTitle = isOwnCollectionsPage
+    ? intl.formatMessage(messages.headingMe)
+    : intl.formatMessage(messages.headingOther, {
+        name: account?.get('display_name'),
+      });
+  const pageTitleHtml = isOwnCollectionsPage
+    ? intl.formatMessage(messages.headingMe)
+    : intl.formatMessage(messages.headingOther, {
+        name: <DisplayNameSimple account={account} />,
+      });
 
   return (
     <Column bindToDocument={!multiColumn} label={pageTitle}>
@@ -91,9 +87,11 @@ export const Collections: React.FC<{
           )}
           <TabList plain>
             <TabLink exact to={`/@${account?.acct}/collections`}>
-              {intl.formatMessage(createdByTabMessage, {
-                name: <DisplayNameSimple account={account} />,
-              })}
+              {isOwnCollectionsPage
+                ? intl.formatMessage(messages.createdByYou)
+                : intl.formatMessage(messages.createdByAuthor, {
+                    name: <DisplayNameSimple account={account} />,
+                  })}
             </TabLink>
             {isOwnCollectionsPage && (
               <TabLink
