@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import { useHashtag } from '@/mastodon/hooks/useHashtag';
 import MoreHorizIcon from '@/material-icons/400-24px/more_horiz.svg?react';
@@ -10,7 +11,13 @@ import { ShortNumber } from 'mastodon/components/short_number';
 import { useIdentity } from 'mastodon/identity_context';
 import { PERMISSION_MANAGE_TAXONOMIES } from 'mastodon/permissions';
 
-export const messages = defineMessages({
+export const messages = defineMessages<{
+  readonly followHashtag: NoMessageValues;
+  readonly unfollowHashtag: NoMessageValues;
+  readonly adminModeration: { readonly name: MessageValue };
+  readonly feature: NoMessageValues;
+  readonly unfeature: NoMessageValues;
+}>({
   followHashtag: { id: 'hashtag.follow', defaultMessage: 'Follow hashtag' },
   unfollowHashtag: {
     id: 'hashtag.unfollow',

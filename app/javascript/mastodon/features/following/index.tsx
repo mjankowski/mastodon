@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { FC } from 'react';
 
 import { defineMessage, FormattedMessage } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -20,7 +21,7 @@ import { AccountList } from '../followers/components/list';
 
 import { RemoteHint } from './components/remote';
 
-const titleText = defineMessage({
+const titleText = defineMessage<{ readonly name: MessageValue }>({
   id: 'following.title',
   defaultMessage: 'Followed by {name}',
 });

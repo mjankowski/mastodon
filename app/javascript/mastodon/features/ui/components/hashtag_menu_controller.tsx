@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 
 import { useIntl, defineMessages } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import { useLocation } from 'react-router-dom';
 
@@ -11,7 +12,16 @@ import { useIdentity } from 'mastodon/identity_context';
 import type { MenuItem } from 'mastodon/models/dropdown_menu';
 import { useAppSelector } from 'mastodon/store';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly follow: NoMessageValues;
+  readonly unfollow: NoMessageValues;
+  readonly browseHashtag: { readonly hashtag: MessageValue };
+  readonly browseHashtagFromAccount: {
+    readonly hashtag: MessageValue;
+    readonly name: MessageValue;
+  };
+  readonly muteHashtag: { readonly hashtag: MessageValue };
+}>({
   follow: {
     id: 'hashtag.follow',
     defaultMessage: 'Follow hashtag',

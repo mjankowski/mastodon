@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { MessageValue, NoMessageValues } from 'react-intl';
 
 import { useHistory } from 'react-router';
 
@@ -12,7 +13,11 @@ import { useAppDispatch } from 'mastodon/store';
 import type { BaseConfirmationModalProps } from './confirmation_modal';
 import { ConfirmationModal } from './confirmation_modal';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly deleteListTitle: { readonly name: MessageValue };
+  readonly deleteListMessage: NoMessageValues;
+  readonly deleteListConfirm: NoMessageValues;
+}>({
   deleteListTitle: {
     id: 'confirmations.delete_collection.title',
     defaultMessage: 'Delete "{name}"?',

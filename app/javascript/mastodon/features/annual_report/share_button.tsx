@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import type { FC } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { MessageValue, NoMessageValues } from 'react-intl';
 
 import { showAlert } from '@/mastodon/actions/alerts';
 import { resetCompose, focusCompose } from '@/mastodon/actions/compose';
@@ -13,7 +14,13 @@ import { useAppDispatch } from '@/mastodon/store';
 import { archetypeNames } from './archetype';
 import styles from './index.module.scss';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly share_message: { readonly archetype: MessageValue };
+  readonly share_on_mastodon: NoMessageValues;
+  readonly share_elsewhere: NoMessageValues;
+  readonly copy_link: NoMessageValues;
+  readonly copied: NoMessageValues;
+}>({
   share_message: {
     id: 'annual_report.summary.share_message',
     defaultMessage: 'I got the {archetype} archetype!',
