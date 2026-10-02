@@ -131,6 +131,10 @@ export default tseslint.config([
     '.bundle/**/*',
     'storybook-static/**/*',
   ]),
+  {
+    // ESLint only lints .js, .mjs and .cjs by default; opt .jsx in explicitly.
+    files: ['**/*.jsx'],
+  },
   react.configs.flat.recommended,
   react.configs.flat['jsx-runtime'],
   reactHooks.configs.flat.recommended,
