@@ -765,8 +765,8 @@ GEM
       rspec-mocks (~> 3.0)
       sidekiq (>= 5, < 9)
     rspec-support (3.13.7)
-    rubocop (1.88.2)
-      json (~> 2.3)
+    rubocop (1.91.0)
+      json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
       parallel (>= 1.10)
@@ -853,10 +853,10 @@ GEM
     simplecov-lcov (0.9.0)
     ssrf_filter (1.6.0)
     stackprof (0.2.28)
-    standard (1.56.0)
+    standard (1.57.0)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
-      rubocop (~> 1.88.0)
+      rubocop (~> 1.91.0)
       standard-custom (~> 1.0.0)
       standard-performance (~> 1.8)
     standard-custom (1.0.2)
@@ -1098,7 +1098,7 @@ DEPENDENCIES
   simplecov
   simplecov-lcov (~> 0.8)
   stackprof
-  standard (~> 1.56.0)
+  standard
   standard-performance
   standard-rails
   stoplight
