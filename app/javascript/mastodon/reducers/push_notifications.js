@@ -3,6 +3,7 @@ import { Map as ImmutableMap } from 'immutable';
 import { SET_BROWSER_SUPPORT, SET_SUBSCRIPTION, CLEAR_SUBSCRIPTION, SET_ALERTS } from '../actions/push_notifications';
 import { STORE_HYDRATE } from '../actions/store';
 
+/** @type {ImmutableMap<string, unknown>} */
 const initialState = ImmutableMap({
   subscription: null,
   alerts: ImmutableMap({

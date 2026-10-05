@@ -178,7 +178,7 @@ export const Conversation: React.FC<{
       ) : null,
     )
     .filter(Boolean)
-    .reduce((prev, cur) => [prev, ', ', cur]);
+    .reduce<React.ReactNode>((prev, cur) => [prev, ', ', cur]);
 
   const handlers = {
     reply: handleReply,

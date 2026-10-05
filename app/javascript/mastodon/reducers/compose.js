@@ -64,6 +64,8 @@ import { me } from '../initial_state';
 import { unescapeHTML } from '../utils/html';
 import { uuid } from '../uuid';
 
+// Keys are accessed and added dynamically, so this is intentionally not a fixed-key `MapOf`.
+/** @type {ImmutableMap<string, unknown>} */
 const initialState = ImmutableMap({
   mounted: 0,
   sensitive: false,

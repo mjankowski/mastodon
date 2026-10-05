@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
 
-import type { Map as ImmutableMap, List as ImmutableList } from 'immutable';
+import type { List as ImmutableList } from 'immutable';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -34,9 +34,7 @@ export const Upload: React.FC<{
   const dispatch = useAppDispatch();
   const media = useAppSelector((state) =>
     (
-      (state.compose as ImmutableMap<string, unknown>).get(
-        'media_attachments',
-      ) as ImmutableList<MediaAttachment>
+      state.compose.get('media_attachments') as ImmutableList<MediaAttachment>
     ).find((item) => item.get('id') === id),
   );
   const sensitive = useAppSelector(

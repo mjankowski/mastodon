@@ -69,6 +69,7 @@ const initialListState = ImmutableMap({
   items: ImmutableList(),
 });
 
+/** @type {ImmutableMap<string, unknown>} */
 const initialState = ImmutableMap({
   followers: initialListState,
   following: initialListState,

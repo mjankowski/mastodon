@@ -2,11 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 
 import { useIntl, defineMessages } from 'react-intl';
 
-import type {
-  List,
-  Map as ImmutableMap,
-  List as ImmutableList,
-} from 'immutable';
+import type { List, List as ImmutableList } from 'immutable';
 
 import type {
   DragStartEvent,
@@ -68,9 +64,7 @@ export const UploadForm: React.FC = () => {
   const mediaIds = useAppSelector(
     (state) =>
       (
-        (state.compose as ImmutableMap<string, unknown>).get(
-          'media_attachments',
-        ) as ImmutableList<MediaAttachment>
+        state.compose.get('media_attachments') as ImmutableList<MediaAttachment>
       ).map((item: MediaAttachment) => item.get('id')) as List<string>,
   );
   const active = useAppSelector(
@@ -164,7 +158,7 @@ export const UploadForm: React.FC = () => {
         >
           {mediaIds.size === 1 ? (
             <Upload
-              id={mediaIds.first()}
+              id={mediaIds.first() as string}
               dragging={false}
               draggable={false}
               tall

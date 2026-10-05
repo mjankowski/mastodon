@@ -2,6 +2,7 @@ import { Map as ImmutableMap, List as ImmutableList } from 'immutable';
 
 import { STORE_HYDRATE } from '../actions/store';
 
+/** @type {ImmutableMap<string, unknown>} */
 const initialState = ImmutableMap({
   accept_content_types: ImmutableList(),
 });

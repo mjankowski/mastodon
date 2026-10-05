@@ -279,9 +279,6 @@ export const selectComposePoll = createAppSelector(
 );
 
 export const selectSuggestions = createAppSelector(
-  [
-    (state) =>
-      state.compose.get('suggestions') as unknown as Immutable.List<unknown>,
-  ],
+  [(state) => state.compose.get('suggestions') as Immutable.List<unknown>],
   (list) => immutableListToSuggestions(list),
 );

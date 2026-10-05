@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
 
-import type { Map as ImmutableMap, List as ImmutableList } from 'immutable';
+import type { List as ImmutableList } from 'immutable';
 
 import { submitCompose } from 'mastodon/actions/compose';
 import { openModal } from 'mastodon/actions/modal';
@@ -39,11 +39,7 @@ export const ConfirmMissingAltTextModal: React.FC<
   const dispatch = useAppDispatch();
   const mediaId = useAppSelector(
     (state) =>
-      (
-        (state.compose as ImmutableMap<string, unknown>).get(
-          'media_attachments',
-        ) as ImmutableList<MediaAttachment>
-      )
+      (state.compose.get('media_attachments') as ImmutableList<MediaAttachment>)
         .find(
           (media) =>
             ['image', 'gifv'].includes(media.get('type') as string) &&

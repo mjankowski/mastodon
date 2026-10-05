@@ -1,7 +1,8 @@
 import { defineMessages } from 'react-intl';
 
 import { createAction } from '@reduxjs/toolkit';
-import type { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+import type { List as ImmutableList } from 'immutable';
+import { isList } from 'immutable';
 
 import { apiUpdateMedia } from '@/mastodon/api/compose';
 import { apiGetSearch } from '@/mastodon/api/search';
@@ -136,7 +137,7 @@ export const changeUploadCompose = createDataLoadingThunk(
     { getState },
   ) => {
     const media = (
-      (getState().compose as ImmutableMap<string, unknown>).get(
+      getState().compose.get(
         'media_attachments',
       ) as ImmutableList<MediaAttachment>
     ).find((item) => item.get('id') === id);
@@ -226,11 +227,7 @@ export const quoteComposeByStatus = createAppThunk(
       dispatch(showAlert({ message: messages.quoteErrorPoll }));
     } else if (
       composeState.get('is_uploading') ||
-      (mediaAttachments &&
-        typeof mediaAttachments !== 'string' &&
-        typeof mediaAttachments !== 'number' &&
-        typeof mediaAttachments !== 'boolean' &&
-        mediaAttachments.size !== 0)
+      (isList(mediaAttachments) && mediaAttachments.size !== 0)
     ) {
       dispatch(showAlert({ message: messages.quoteErrorUpload }));
     } else if (composeState.get('quoted_status_id')) {
@@ -277,7 +274,7 @@ export const quoteComposeById = createAppThunk(
 );
 
 const composeStateForbidsLink = (composeState: RootState['compose']) => {
-  return (
+  return !!(
     composeState.get('quoted_status_id') ||
     composeState.get('is_submitting') ||
     composeState.get('poll') ||

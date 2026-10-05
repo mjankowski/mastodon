@@ -10,7 +10,7 @@ import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 
 import classNames from 'classnames';
 
-import type { List as ImmutableList, Map as ImmutableMap } from 'immutable';
+import type { List as ImmutableList } from 'immutable';
 
 import { useSpring, animated } from '@react-spring/web';
 import Textarea from 'react-textarea-autosize';
@@ -117,9 +117,7 @@ const Preview: React.FC<{
   });
   const media = useAppSelector((state) =>
     (
-      (state.compose as ImmutableMap<string, unknown>).get(
-        'media_attachments',
-      ) as ImmutableList<MediaAttachment>
+      state.compose.get('media_attachments') as ImmutableList<MediaAttachment>
     ).find((x) => x.get('id') === mediaId),
   );
   const account = useAppSelector((state) =>
@@ -255,16 +253,11 @@ export const AltTextModal = forwardRef<ModalRef, Props & Partial<RestoreProps>>(
     const dispatch = useAppDispatch();
     const media = useAppSelector((state) =>
       (
-        (state.compose as ImmutableMap<string, unknown>).get(
-          'media_attachments',
-        ) as ImmutableList<MediaAttachment>
+        state.compose.get('media_attachments') as ImmutableList<MediaAttachment>
       ).find((x) => x.get('id') === mediaId),
     );
     const lang = useAppSelector(
-      (state) =>
-        (state.compose as ImmutableMap<string, unknown>).get(
-          'language',
-        ) as string,
+      (state) => state.compose.get('language') as string,
     );
     const focusX =
       (media?.getIn(['meta', 'focus', 'x'], 0) as number | undefined) ?? 0;

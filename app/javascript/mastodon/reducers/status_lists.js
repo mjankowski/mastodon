@@ -43,6 +43,7 @@ import {
   TRENDS_STATUSES_EXPAND_FAIL,
 } from '../actions/trends';
 
+/** @type {ImmutableMap<string, ImmutableMap<string, unknown>>} */
 const initialState = ImmutableMap({
   favourites: ImmutableMap({
     next: null,
