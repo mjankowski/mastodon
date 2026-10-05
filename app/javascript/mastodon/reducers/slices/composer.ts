@@ -202,9 +202,7 @@ export const selectComposerIsChanged = createAppSelector(
     (state) => !!state.compose.get('poll'),
     (state) => !!state.compose.get('quoted_status_id'),
     (state) =>
-      state.compose.get(
-        'media_attachments',
-      ) as unknown as Immutable.List<unknown>,
+      state.compose.get('media_attachments') as Immutable.List<unknown>,
     (state) => Number(state.compose.get('pending_media_attachments')),
     (state) => state.composer.initialText,
   ],
@@ -364,7 +362,7 @@ export const submitComposer = createAppThunk(
 
     const privacy = compose.get('privacy') as StatusVisibility;
     const missingAltText = (
-      compose.get('media_attachments') as unknown as Immutable.List<
+      compose.get('media_attachments') as Immutable.List<
         Immutable.Map<string, string>
       >
     ).some(

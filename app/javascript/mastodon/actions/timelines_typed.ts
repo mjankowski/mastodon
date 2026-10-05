@@ -298,10 +298,7 @@ export const removePinnedStatusFromTimelines = createAppThunk(
     }
 
     const statusId = status.get('id') as string;
-    const timelines = getState().timelines as ImmutableMap<
-      string,
-      ImmutableMap<'items' | 'pendingItems', ImmutableList<string>>
-    >;
+    const { timelines } = getState();
 
     timelines.forEach((timeline, key) => {
       if (!isTimelineKeyPinned(key, currentAccountId)) {
@@ -309,8 +306,8 @@ export const removePinnedStatusFromTimelines = createAppThunk(
       }
 
       if (
-        timeline.get('items')?.includes(statusId) ||
-        timeline.get('pendingItems')?.includes(statusId)
+        timeline.get('items').includes(statusId) ||
+        timeline.get('pendingItems').includes(statusId)
       ) {
         dispatch(timelineDeleteStatus({ statusId, timelineKey: key }));
       }

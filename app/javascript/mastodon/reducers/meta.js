@@ -4,6 +4,9 @@ import { changeLayout, needsReload } from 'mastodon/actions/app';
 import { STORE_HYDRATE } from 'mastodon/actions/store';
 import { layoutFromWindow } from 'mastodon/is_mobile';
 
+// Additional keys (`me`, `domain`, `locale`, etc.) are added on hydration,
+// so this is intentionally not a fixed-key `MapOf`.
+/** @type {ImmutableMap<string, string | boolean | null>} */
 const initialState = ImmutableMap({
   streaming_api_base_url: null,
   layout: layoutFromWindow(),
