@@ -170,7 +170,7 @@ group :development do
   gem 'rubocop-i18n', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-rspec_rails', require: false
-  gem 'standard', '~> 1.56.0'
+  gem 'standard'
   gem 'standard-performance'
   gem 'standard-rails'
 
