@@ -110,6 +110,10 @@ export const mockHandlers = {
     action('fetching followed tags data')();
     return HttpResponse.json([]);
   }),
+  accountData: http.get('/api/v1/accounts/:id', () => {
+    action('fetching account data')();
+    return HttpResponse.json({});
+  }),
   emojiCustomData: http.get('/api/v1/custom_emojis', () => {
     action('fetching custom emoji data')();
     return HttpResponse.json([customEmojiFactory()]);
