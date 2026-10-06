@@ -11,12 +11,10 @@ export const HTMLBlock = polymorphicForwardRef<
   'div',
   EmojiHTMLProps & Parameters<typeof useElementHandledLink>[0]
 >(
-  ({
-    onElement: onParentElement,
-    hrefToMention,
-    hashtagAccountId,
-    ...props
-  }) => {
+  (
+    { onElement: onParentElement, hrefToMention, hashtagAccountId, ...props },
+    ref,
+  ) => {
     const { onElement: onLinkElement } = useElementHandledLink({
       hrefToMention,
       hashtagAccountId,
@@ -25,6 +23,6 @@ export const HTMLBlock = polymorphicForwardRef<
       (...args) => onParentElement?.(...args) ?? onLinkElement(...args),
       [onLinkElement, onParentElement],
     );
-    return <EmojiHTML {...props} onElement={onElement} />;
+    return <EmojiHTML {...props} onElement={onElement} ref={ref} />;
   },
 );
