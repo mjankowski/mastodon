@@ -134,6 +134,7 @@ class Api::V1::StatusesController < Api::BaseController
     params.permit(
       :status,
       :in_reply_to_id,
+      :poll,
       :quoted_status_id,
       :quote_approval_policy,
       :sensitive,
