@@ -19,7 +19,7 @@ concurrency:
 jobs:
   build:
     name: build (production)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 15
 
     env:
@@ -69,7 +69,7 @@ jobs:
           retention-days: 0
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 60
 
     needs:
@@ -172,7 +172,7 @@ jobs:
 
   test-e2e:
     name: End to End testing
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
 
     needs:
@@ -277,7 +277,7 @@ jobs:
 
   test-search:
     name: Elastic Search integration testing
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
 
     needs:
