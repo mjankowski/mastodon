@@ -29,7 +29,7 @@ RSpec.configure do |config|
   end
 
   config.after :suite do
-    FileUtils.rm_rf(Rails.root.glob('spec/test_files'))
+    FileUtils.rm_rf(Rails.root.glob("spec/test_files/#{ENV.fetch('TEST_ENV_NUMBER', '0')}"))
   end
 
   # Use the GitHub Annotations formatter for CI
