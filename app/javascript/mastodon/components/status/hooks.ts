@@ -558,7 +558,7 @@ const menuMessages = defineMessages<{
   readonly redraft: NoMessageValues;
   readonly edit: NoMessageValues;
   readonly follow: { readonly name: MessageValue };
-  readonly direct: { readonly name: MessageValue };
+  readonly message: { readonly name: MessageValue };
   readonly mention: { readonly name: MessageValue };
   readonly mute: { readonly name: MessageValue };
   readonly muteBoosts: { readonly name: MessageValue };
