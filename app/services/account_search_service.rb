@@ -34,6 +34,8 @@ class AccountSearchService < BaseService
               functions: [
                 followers_score_function,
               ],
+              boost_mode: 'sum',
+              score_mode: 'sum',
             },
           },
 
@@ -114,6 +116,16 @@ class AccountSearchService < BaseService
               },
             },
 
+            # Boost exact match on display_name
+            {
+              match_phrase: {
+                display_name: {
+                  query: @query,
+                  boost: 500,
+                },
+              },
+            },
+
             {
               multi_match: {
                 query: @query,
@@ -139,6 +151,16 @@ class AccountSearchService < BaseService
                 username: {
                   query: @query,
                   analyzer: 'word_join_analyzer',
+                },
+              },
+            },
+
+            # Boost exact match on display_name
+            {
+              match_phrase: {
+                display_name: {
+                  query: @query,
+                  boost: 500,
                 },
               },
             },

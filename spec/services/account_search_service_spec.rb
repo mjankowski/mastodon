@@ -114,5 +114,17 @@ RSpec.describe AccountSearchService do
 
       expect(results).to eq [account]
     end
+
+    it 'sorts full name match first' do
+      partial_match = Fabricate(:account, display_name: 'Burt Manders', username: 'bryson', followers_count: 1_000_000)
+      full_match_one = Fabricate(:account, display_name: 'Burt Bryson', username: 'brysonator')
+      full_match_two = Fabricate(:account, display_name: 'Burt Bryson', username: 'alternate')
+
+      AccountsIndex.import!
+
+      results = subject.call('bryson', nil, limit: 5)
+
+      expect(results).to eq [full_match_one, full_match_two, partial_match]
+    end
   end
 end
