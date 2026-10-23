@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import { PureComponent } from 'react';
 
-import 'wicg-inert';
-
 import { multiply } from 'color-blend';
 import { createBrowserHistory } from 'history';
 
@@ -77,15 +75,11 @@ class ModalRoot extends PureComponent {
     if (!this.props.children && !!prevProps.children) {
       this.getSiblings().forEach(sibling => sibling.removeAttribute('inert'));
 
-      // Because of the wicg-inert polyfill, the activeElement may not be
-      // immediately selectable, we have to wait for observers to run, as
-      // described in https://github.com/WICG/inert#performance-and-gotchas
-      Promise.resolve().then(() => {
-        if (!this.props.ignoreFocus) {
-          this.activeElement.focus({ preventScroll: true });
-        }
-        this.activeElement = null;
-      }).catch(console.error);
+      // Native browser inert support
+      if (!this.props.ignoreFocus && this.activeElement) {
+        this.activeElement.focus({ preventScroll: true });
+      }
+      this.activeElement = null;
 
       this._handleModalClose();
     }

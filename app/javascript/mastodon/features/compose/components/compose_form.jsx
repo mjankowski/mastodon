@@ -210,13 +210,11 @@ class ComposeForm extends ImmutablePureComponent {
         selectionStart = selectionEnd;
       }
 
-      // Because of the wicg-inert polyfill, the activeElement may not be
-      // immediately selectable, we have to wait for observers to run, as
-      // described in https://github.com/WICG/inert#performance-and-gotchas
-      Promise.resolve().then(() => {
+      // Native browser inert
+      if (this.textareaRef.current) {
         this.textareaRef.current.setSelectionRange(selectionStart, selectionEnd);
         this.textareaRef.current.focus();
-      }).catch(console.error);
+      }
     } else if(prevProps.isSubmitting && !this.props.isSubmitting) {
       this.textareaRef.current.focus();
     } else if (this.props.spoiler !== prevProps.spoiler) {
