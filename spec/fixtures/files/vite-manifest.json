@@ -65,14 +65,6 @@
     "isEntry": true,
     "integrity": "abc-8"
   },
-  "styles/entrypoints/inert.scss": {
-    "file": "assets/inert-xyz.css",
-    "name": "inert",
-    "names": ["inert.css"],
-    "src": "styles/entrypoints/inert.scss",
-    "isEntry": true,
-    "integrity": "abc-10"
-  },
   "_main.css": {
     "file": "assets/main.css",
     "src": "_main.css",
