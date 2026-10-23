@@ -3118,7 +3118,6 @@ __metadata:
     vite-plugin-manifest-sri: "npm:0.2.0"
     vite-plugin-svgr: "npm:5.2.0"
     vitest: "npm:5.0.5"
-    wicg-inert: "npm:3.1.3"
   peerDependenciesMeta:
     react:
       optional: true
@@ -14501,13 +14500,6 @@ __metadata:
   bin:
     why-is-node-running: cli.js
   checksum: 10c0/e3f82673aac2c0a330fdbcf4b282ecdf7e9c773fa82fb4217db5b8b3d374cbb51e708d928f5b17999bc65bc1a5a90fad0f6bd794641bd15fdd525949ccee5e39
-  languageName: node
-  linkType: hard
-
-"wicg-inert@npm:3.1.3":
-  version: 3.1.3
-  resolution: "wicg-inert@npm:3.1.3"
-  checksum: 10c0/160b981584e40d3a568af16a93b70dca847d9fce6d6704b40c60a9a1435f77406cc1abc56aa1bb5a63669c6cb819f09d51d7f27c16f3829cb86052e3fd27f2b0
   languageName: node
   linkType: hard
 
