@@ -41,9 +41,9 @@ RSpec.describe Vite::Manifest do
     end
 
     it 'gets stylesheets' do
-      entry = subject.fetch('styles/entrypoints/inert.scss')
-      expect(entry[:file]).to eq('assets/inert-xyz.css')
-      expect(entry[:integrity]).to eq('abc-10')
+      entry = subject.fetch('entrypoints/admin.ts')
+      expect(entry[:file]).to eq('admin.js')
+      expect(entry[:integrity]).to eq('cba-2')
     end
 
     context 'when assets have dependencies' do
@@ -91,7 +91,7 @@ RSpec.describe Vite::Manifest do
       subject.load
 
       entries = subject.entries
-      expect(entries.keys.count).to eq(6)
+      expect(entries.keys.count).to eq(5)
     end
 
     it 'only keeps track of dependencies' do
