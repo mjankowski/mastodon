@@ -79,7 +79,7 @@ class FetchResourceService < BaseService
   end
 
   def process_link_headers(response)
-    link_header = response['Link'] && parse_link_header(response)
+    link_header = response.headers['Link'] && parse_link_header(response)
     return if link_header.nil?
 
     json_link = link_header.find_link(%w(rel alternate), %w(type application/activity+json)) || link_header.find_link(%w(rel alternate), ['type', 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'])
@@ -88,6 +88,6 @@ class FetchResourceService < BaseService
   end
 
   def parse_link_header(response)
-    LinkHeader.parse(response['Link'].is_a?(Array) ? response['Link'].first : response['Link'])
+    LinkHeader.parse(response.headers['Link'].is_a?(Array) ? response.headers['Link'].first : response.headers['Link'])
   end
 end
