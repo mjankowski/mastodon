@@ -14,13 +14,14 @@ require 'resolv'
 class PerOperationWithDeadline < HTTP::Timeout::PerOperation
   READ_DEADLINE = 30
 
-  def initialize(*args)
-    super
+  def initialize(read_timeout: nil, write_timeout: nil, connect_timeout: nil, **)
+    super(read_timeout:, write_timeout:, connect_timeout:)
 
-    @read_deadline = options.fetch(:read_deadline, READ_DEADLINE)
+    @read_deadline = READ_DEADLINE
+    @read_timeout = read_timeout
   end
 
-  def connect(socket_class, host, port, nodelay = false) # rubocop:disable Style/OptionalBooleanParameter
+  def connect(socket_class, host, port, nodelay: false)
     @socket = socket_class.open(host, port)
     @socket.setsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY, 1) if nodelay
   end
@@ -63,7 +64,7 @@ end
 # Implement HTTP Signature cavage draft as a HTTP.rb middleware
 class CavageSignatureFeature < HTTP::Feature
   def initialize(keypair: nil, covered_headers: [])
-    super
+    super()
 
     @signing = HttpSignatureDraft.new(keypair.keypair, keypair.full_uri) if keypair.present?
     @covered_headers = covered_headers
@@ -83,7 +84,7 @@ class Request
   # We enforce a 5s timeout on DNS resolving, 5s timeout on socket opening
   # and 5s timeout on the TLS handshake, meaning the worst case should take
   # about 15s in total
-  TIMEOUT = { connect_timeout: 5, read_timeout: 10, write_timeout: 10, read_deadline: 30 }.freeze
+  TIMEOUT = { connect_timeout: 5, read_timeout: 10, write_timeout: 10 }.freeze
   SAFE_PRESERVED_CHARS = '+,'
 
   include RoutingHelper
@@ -186,7 +187,7 @@ class Request
       )
     end
 
-    client.request(@verb, @url.to_s, @options.merge(headers:))
+    client.request(@verb, @url.to_s, **@options.merge(headers:))
   end
 
   def perform_rfc9421_signed_request
@@ -204,7 +205,7 @@ class Request
       )
     end
 
-    client.request(@verb, @url.to_s, @options.merge(headers:))
+    client.request(@verb, @url.to_s, **@options.merge(headers:))
   end
 
   # Using code from https://github.com/sporkmonger/addressable/blob/3450895887d0a1770660d8831d1b6fcfed9bd9d6/lib/addressable/uri.rb#L1609-L1635
@@ -280,11 +281,15 @@ class Request
 
       contents = String.new(encoding: encoding)
 
-      while (chunk = readpartial)
-        contents << chunk
-        chunk.clear
+      begin
+        while (chunk = readpartial)
+          contents << chunk
+          chunk.clear
 
-        break if contents.bytesize > limit
+          break if contents.bytesize > limit
+        end
+      rescue EOFError
+        # end of stream
       end
 
       contents
