@@ -4,20 +4,10 @@
 
 import { loadIntlPolyfills } from './intl';
 
-function importExtraPolyfills() {
-  return import('./extra_polyfills');
-}
-
 export function loadPolyfills() {
-  // Safari does not have requestIdleCallback.
-  // This avoids shipping them all the polyfills.
-  const needsExtraPolyfills = !window.requestIdleCallback;
-
   return Promise.all([
     loadVitePreloadPolyfill(),
     loadIntlPolyfills(),
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- those properties might not exist in old browsers, even if they are always here in types
-    needsExtraPolyfills ? importExtraPolyfills() : Promise.resolve(),
     loadEmojiPolyfills(),
   ]);
 }

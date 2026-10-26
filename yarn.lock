@@ -3019,7 +3019,6 @@ __metadata:
     "@types/react-router-dom": "npm:5.3.3"
     "@types/react-sparklines": "npm:1.7.5"
     "@types/redux-immutable": "npm:4.0.6"
-    "@types/requestidlecallback": "npm:0.3.7"
     "@typescript/native": "npm:typescript@7.0.2"
     "@unhead/react": "npm:3.4.3"
     "@use-gesture/react": "npm:10.3.1"
@@ -3096,7 +3095,6 @@ __metadata:
     react-sparklines: "npm:1.7.0"
     react-textarea-autosize: "npm:8.5.9"
     redux-immutable: "npm:4.0.0"
-    requestidlecallback: "npm:0.3.0"
     rollup-plugin-gzip: "npm:4.2.0"
     rollup-plugin-visualizer: "npm:7.1.1"
     sass: "npm:1.105.2"
@@ -5073,13 +5071,6 @@ __metadata:
     immutable: "npm:^4.0.0-rc.1"
     redux: "npm:^4.0.0"
   checksum: 10c0/19972c307f2bbd31a201b28844224ce06e34917823cf2ded3c303cffcced273a2107c4186cc37af9db4f948204fc48c461e609b9f3d2719963049dedae3ebf82
-  languageName: node
-  linkType: hard
-
-"@types/requestidlecallback@npm:0.3.7":
-  version: 0.3.7
-  resolution: "@types/requestidlecallback@npm:0.3.7"
-  checksum: 10c0/aa5d1d981d7ddc98b9212c75c89d2ddb2e521077d6c0c5e285d944a8c6ae8baeec30d4d201aec31716d668d3435f884e80e768e28d929a5b87a55097bc21a5e1
   languageName: node
   linkType: hard
 
@@ -12246,13 +12237,6 @@ __metadata:
   bin:
     regjsparser: bin/parser
   checksum: 10c0/8c9562eeea8ac7c24f58e4b5951f2434b5c2cc7cda8ce7acf7344a072d60c791c10c40df48fdae9f1aaf6fdad445740936d4e986ef2a9b534fa34b0b17de33dd
-  languageName: node
-  linkType: hard
-
-"requestidlecallback@npm:0.3.0":
-  version: 0.3.0
-  resolution: "requestidlecallback@npm:0.3.0"
-  checksum: 10c0/68a2ff3154788643ccf96436cfaf8ad5bbe2f4d3f4b4d7858ec74681bf7d6a487d17df6a238130ff1e73d0a4a85bdc44b5f945eb79ef7d5552e23fc6288e795f
   languageName: node
   linkType: hard
 
