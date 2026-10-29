@@ -13,7 +13,7 @@
         - if f.object&.persisted?
           = f.hidden_field :_destroy, value: '0', class: 'destroy-flag'
 
-        %button.table-action-link{ type: 'button', 'data-action': 'remove-association' }
+        %button.table-action-link{ type: 'button', data: { action: 'remove-association' } }
           = safe_join([material_symbol('close'), t('filters.index.delete')])
 
     .fields-group

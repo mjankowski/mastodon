@@ -24,7 +24,7 @@
       %tfoot
         %tr
           %td{ colspan: 3 }
-            %button.table-action-link{ type: 'button', 'data-action': 'add-association', 'data-template-id': 'translation-fields-template', 'data-placeholder': 'new_translations', 'data-container': '.keywords-table tbody' }
+            %button.table-action-link{ type: :button, data: { action: 'add-association', template_id: 'translation-fields-template', placeholder: 'new_translations', container: '.keywords-table tbody' } }
               = safe_join([material_symbol('add'), t('admin.rules.add_translation')])
 
   %template#translation-fields-template

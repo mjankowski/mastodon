@@ -57,7 +57,7 @@
     %tfoot
       %tr
         %td{ colspan: 3 }
-          %button.table-action-link{ type: 'button', 'data-action': 'add-association', 'data-template-id': 'keyword-fields-template', 'data-placeholder': 'new_keywords', 'data-container': '.keywords-table tbody' }
+          %button.table-action-link{ type: :button, data: { action: 'add-association', template_id: 'keyword-fields-template', placeholder: 'new_keywords', container: '.keywords-table tbody' } }
             = safe_join([material_symbol('add'), t('filters.edit.add_keyword')])
 
 %template#keyword-fields-template
