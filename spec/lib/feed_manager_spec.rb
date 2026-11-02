@@ -691,7 +691,7 @@ RSpec.describe FeedManager do
     end
   end
 
-  describe '#clear_from_home' do
+  shared_examples 'a feed cleared of an account' do
     let(:account) { Fabricate(:account) }
     let(:followed_account) { Fabricate(:account) }
     let(:target_account) { Fabricate(:account) }
@@ -706,19 +706,54 @@ RSpec.describe FeedManager do
     before do
       [
         status_from_followed_account_first,
+        status_from_target_account,
         status_from_followed_account_mentions_target_account,
         status_from_followed_account_reblogs_status_mentions_target_account,
         status_from_followed_account_reblogs_status_from_target_account,
         status_from_followed_account_next,
       ].each do |status|
-        redis.zadd("feed:home:#{account.id}", status.id, status.id)
+        redis.zadd(timeline_key, status.id, status.id)
       end
     end
 
-    it 'correctly cleans the home timeline' do
-      subject.clear_from_home(account, target_account)
+    it 'removes statuses involving the target account and preserves unrelated statuses' do
+      subject
 
-      expect(redis.zrange("feed:home:#{account.id}", 0, -1)).to eq [status_from_followed_account_first.id.to_s, status_from_followed_account_next.id.to_s]
+      expect(redis.zrange(timeline_key, 0, -1)).to eq [status_from_followed_account_first.id.to_s, status_from_followed_account_next.id.to_s]
     end
+
+    it 'publishes deletions to the stream' do
+      allow(redis).to receive(:publish)
+
+      subject
+
+      [
+        status_from_target_account,
+        status_from_followed_account_mentions_target_account,
+        status_from_followed_account_reblogs_status_mentions_target_account,
+        status_from_followed_account_reblogs_status_from_target_account,
+      ].each do |status|
+        expect(redis).to have_received(:publish).with(stream, { event: :delete, payload: status.id.to_s }.to_json)
+      end
+    end
+  end
+
+  describe '#clear_from_home' do
+    subject { described_class.instance.clear_from_home(account, target_account) }
+
+    let(:timeline_key) { "feed:home:#{account.id}" }
+    let(:stream) { "timeline:#{account.id}" }
+
+    it_behaves_like 'a feed cleared of an account'
+  end
+
+  describe '#clear_from_list' do
+    subject { described_class.instance.clear_from_list(list, target_account) }
+
+    let(:list) { Fabricate(:list, account: account) }
+    let(:timeline_key) { "feed:list:#{list.id}" }
+    let(:stream) { "timeline:list:#{list.id}" }
+
+    it_behaves_like 'a feed cleared of an account'
   end
 end
