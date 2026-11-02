@@ -284,17 +284,7 @@ class FeedManager
   # @param [Account] target_account
   # @return [void]
   def clear_from_home(account, target_account)
-    timeline_key        = key(:home, account.id)
-    timeline_status_ids = redis.zrange(timeline_key, 0, -1)
-    statuses            = Status.where(id: timeline_status_ids).select(:id, :reblog_of_id, :account_id).to_a
-    reblogged_ids       = Status.where(id: statuses.filter_map(&:reblog_of_id), account: target_account).pluck(:id)
-    with_mentions_ids   = Mention.active.where(status_id: statuses.flat_map { |s| [s.id, s.reblog_of_id] }.compact, account: target_account).pluck(:status_id)
-
-    target_statuses = statuses.select do |status|
-      status.account_id == target_account.id || reblogged_ids.include?(status.reblog_of_id) || with_mentions_ids.include?(status.id) || with_mentions_ids.include?(status.reblog_of_id)
-    end
-
-    target_statuses.each do |status|
+    statuses_involving_account(:home, account.id, target_account).each do |status|
       unpush_from_home(account, status)
     end
   end
@@ -304,17 +294,7 @@ class FeedManager
   # @param [Account] target_account
   # @return [void]
   def clear_from_list(list, target_account)
-    timeline_key        = key(:list, list.id)
-    timeline_status_ids = redis.zrange(timeline_key, 0, -1)
-    statuses            = Status.where(id: timeline_status_ids).select(:id, :reblog_of_id, :account_id).to_a
-    reblogged_ids       = Status.where(id: statuses.filter_map(&:reblog_of_id), account: target_account).pluck(:id)
-    with_mentions_ids   = Mention.active.where(status_id: statuses.flat_map { |s| [s.id, s.reblog_of_id] }.compact, account: target_account).pluck(:status_id)
-
-    target_statuses = statuses.select do |status|
-      status.account_id == target_account.id || reblogged_ids.include?(status.reblog_of_id) || with_mentions_ids.include?(status.id) || with_mentions_ids.include?(status.reblog_of_id)
-    end
-
-    target_statuses.each do |status|
+    statuses_involving_account(:list, list.id, target_account).each do |status|
       unpush_from_list(list, status)
     end
   end
@@ -446,6 +426,22 @@ class FeedManager
   end
 
   private
+
+  # Find feed statuses authored by, mentioning, or reblogging target_account
+  # @param [Symbol] type
+  # @param [Integer] timeline_id
+  # @param [Account] target_account
+  # @return [Array<Status>]
+  def statuses_involving_account(type, timeline_id, target_account)
+    timeline_status_ids = redis.zrange(key(type, timeline_id), 0, -1)
+    statuses = Status.where(id: timeline_status_ids).select(:id, :reblog_of_id, :account_id).to_a
+    reblogged_ids = Status.where(id: statuses.filter_map(&:reblog_of_id), account: target_account).pluck(:id)
+    with_mentions_ids = Mention.active.where(status_id: statuses.flat_map { |s| [s.id, s.reblog_of_id] }.compact, account: target_account).pluck(:status_id)
+
+    statuses.select do |status|
+      status.account_id == target_account.id || reblogged_ids.include?(status.reblog_of_id) || with_mentions_ids.include?(status.id) || with_mentions_ids.include?(status.reblog_of_id)
+    end
+  end
 
   # Trim a feed to maximum size by removing older items
   # @param [Symbol] type
