@@ -6,13 +6,17 @@ on:
       - 'main'
       - 'stable-*'
     paths: &paths
-      - 'Gemfile*'
+      - '.github/workflows/lint-ruby.yml'
+      - '.haml-lint*.yml'
       - '.rubocop*.yml'
       - '.ruby-version'
-      - 'bin/rubocop'
-      - '**/*.rb'
+      - '**/*.haml'
       - '**/*.rake'
-      - '.github/workflows/lint-ruby.yml'
+      - '**/*.rb'
+      - 'bin/brakeman'
+      - 'bin/haml-lint'
+      - 'bin/rubocop'
+      - 'Gemfile*'
 
   pull_request:
     paths: *paths
@@ -40,3 +44,6 @@ jobs:
 
           - name: Run brakeman
             run: bin/brakeman
+
+          - name: Run haml-lint
+            run: bin/haml-lint --reporter github
