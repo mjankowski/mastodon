@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Admin Tags' do
   describe 'Tag interaction' do
-    let!(:tag) { Fabricate(:tag, name: 'test') }
+    let!(:tag) { Fabricate(:tag, name: 'test', usable: true, trendable: false, listable: true) }
 
     before { sign_in Fabricate(:admin_user) }
 
@@ -25,6 +25,25 @@ RSpec.describe 'Admin Tags' do
       fill_in display_name_field, with: 'TEST'
       expect { click_on submit_button }
         .to(change { tag.reload.display_name }.to('TEST'))
+    end
+
+    it 'updates tag statuses and records the changes in the audit log' do
+      visit admin_tags_path
+      click_on '#test'
+
+      check 'tag_trendable'
+      uncheck 'tag_listable'
+
+      expect { click_on submit_button }
+        .to change(Admin::ActionLog, :count).by(1)
+      expect(tag.reload)
+        .to have_attributes(usable: true, trendable: true, listable: false)
+      expect(page)
+        .to have_title(tag.formatted_name)
+        .and have_text(I18n.t('admin.tags.updated_msg'))
+      expect(Admin::ActionLog.last.recorded_changes)
+        .to eq('listable' => false, 'trendable' => true)
+        .and match_json_schema('tags_format_1.0')
     end
 
     def display_name_field
