@@ -8,13 +8,20 @@ RSpec.describe 'Admin Change Emails' do
   before { sign_in admin }
 
   describe 'Changing the email address for a user', :inline_jobs do
-    let(:user) { Fabricate :user }
+    let(:user) { Fabricate :user, email: 'original@host.example' }
 
     it 'updates user details and sends email' do
       visit admin_account_change_email_path(user.account.id)
       expect(page)
         .to have_title(I18n.t('admin.accounts.change_email.title', username: user.account.username))
 
+      # Same as original
+      fill_in 'user_unconfirmed_email', with: user.email
+      expect { process_not_change_email }
+        .to_not send_email
+
+      # New value
+      visit admin_account_change_email_path(user.account.id)
       fill_in 'user_unconfirmed_email', with: 'test@host.example'
       expect { process_change_email }
         .to send_email(to: 'test@host.example', subject: /Confirm email/)
@@ -27,6 +34,13 @@ RSpec.describe 'Admin Change Emails' do
         .to not_change { user.reload.email }
         .and(change { user.reload.unconfirmed_email }.to('test@host.example'))
         .and(change { user.reload.confirmation_token }.from(nil).to(be_present))
+    end
+
+    def process_not_change_email
+      expect { click_on I18n.t('admin.accounts.change_email.submit') }
+        .to not_change { user.reload.email }
+        .and(not_change { user.reload.unconfirmed_email })
+        .and(not_change { user.reload.confirmation_token }.from(nil))
     end
   end
 end
