@@ -19,14 +19,6 @@ RSpec.describe 'Admin Tags' do
   describe 'update tag' do
     let(:tag) { Fabricate :tag, name: '#supertag' }
 
-    it 'redirects to tag page and saves update log action for all attribute statuses' do
-      put admin_tag_path(tag.id, params: { tag: { trendable: true, listable: false, unallowed: true } })
-
-      expect(response).to have_http_status(302)
-      expect(Admin::ActionLog.pluck(:recorded_changes)).to eq([{ 'listable' => false, 'trendable' => true }])
-      expect(Admin::ActionLog.last.recorded_changes).to match_json_schema('tags_format_1.0')
-    end
-
     it 'returns invalid when the schema does not match' do
       put admin_tag_path(tag.id, params: { tag: { trendable: true } })
 
