@@ -454,17 +454,13 @@ RSpec.describe Auth::SessionsController do
           post :create, params: { user: { email: user.email, password: user.password } }
         end
 
-        it 'renders sign in token authentication page' do
+        it 'renders sign in token authentication page, generates token, sends email' do
           expect(response.parsed_body)
             .to have_css('p.lead', text: I18n.t('users.inactive_sign_in_confirmation'))
-        end
-
-        it 'generates sign in token' do
-          expect(user.reload.sign_in_token).to_not be_nil
-        end
-
-        it 'sends sign in token e-mail' do
-          expect(UserMailer).to have_received(:sign_in_token)
+          expect(user.reload.sign_in_token)
+            .to_not be_nil
+          expect(UserMailer)
+            .to have_received(:sign_in_token)
         end
       end
 
@@ -487,12 +483,11 @@ RSpec.describe Auth::SessionsController do
           post :create, params: { user: { sign_in_token_attempt: user.sign_in_token } }, session: { attempt_user_id: user.id, attempt_user_updated_at: user.updated_at.to_s }
         end
 
-        it 'redirects to home' do
-          expect(response).to redirect_to(root_path)
-        end
-
-        it 'logs the user in' do
-          expect(controller.current_user).to eq user
+        it 'redirects to home and logs the user in' do
+          expect(response)
+            .to redirect_to(root_path)
+          expect(controller.current_user)
+            .to eq user
         end
       end
 
