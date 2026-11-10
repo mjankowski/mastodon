@@ -12,8 +12,6 @@ AllCops:
 
 inherit_from:
   - .rubocop/layout.yml
-  - .rubocop/metrics.yml
-  - .rubocop/naming.yml
   - .rubocop/rails.yml
   - .rubocop/rspec_rails.yml
   - .rubocop/rspec.yml
@@ -21,6 +19,11 @@ inherit_from:
   - .rubocop/i18n.yml
   - .rubocop/custom.yml
   - .rubocop/strict.yml
+
+inherit_gem:
+  standard: config/base.yml
+  standard-performance: config/base.yml
+  standard-rails: config/base.yml
 
 inherit_mode:
   merge:
@@ -33,3 +36,8 @@ plugins:
   - rubocop-rails
   - rubocop-rspec
   - rubocop-rspec_rails
+  - standard-performance
+  - standard-rails
+
+require:
+  - standard
