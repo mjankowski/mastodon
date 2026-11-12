@@ -2,6 +2,7 @@ import type { FC, KeyboardEventHandler } from 'react';
 import { useState, useCallback, useMemo } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -54,7 +55,20 @@ import { AccountField } from '../components/field';
 
 import classes from './styles.module.scss';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly rearrangeTitle: NoMessageValues;
+  readonly handleLabel: { readonly item: MessageValue };
+  readonly screenReaderInstructions: NoMessageValues;
+  readonly onDragStart: { readonly item: MessageValue };
+  readonly onDragMove: { readonly item: MessageValue };
+  readonly onDragMoveOver: {
+    readonly item: MessageValue;
+    readonly over: MessageValue;
+  };
+  readonly onDragEnd: { readonly item: MessageValue };
+  readonly onDragCancel: { readonly item: MessageValue };
+  readonly save: NoMessageValues;
+}>({
   rearrangeTitle: {
     id: 'account_edit.field_reorder_modal.title',
     defaultMessage: 'Rearrange fields',

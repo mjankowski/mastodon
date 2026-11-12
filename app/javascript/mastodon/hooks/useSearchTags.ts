@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -12,7 +13,9 @@ export type TagSearchResult = Omit<ApiHashtagJSON, 'url' | 'history'> & {
   label?: string;
 };
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly addTag: { readonly tagName: MessageValue };
+}>({
   addTag: {
     id: 'account_edit_tags.add_tag',
     defaultMessage: 'Add #{tagName}',

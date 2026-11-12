@@ -1,4 +1,5 @@
 import { defineMessages } from 'react-intl';
+import type { NoMessageValues } from 'react-intl';
 
 import { createAction } from '@reduxjs/toolkit';
 
@@ -13,7 +14,12 @@ interface ApiErrorResponse {
   error?: string;
 }
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly unexpectedTitle: NoMessageValues;
+  readonly unexpectedMessage: NoMessageValues;
+  readonly rateLimitedTitle: NoMessageValues;
+  readonly rateLimitedMessage: { readonly retry_time: number | Date };
+}>({
   unexpectedTitle: { id: 'alert.unexpected.title', defaultMessage: 'Oops!' },
   unexpectedMessage: {
     id: 'alert.unexpected.message',

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageTag, MessageValue } from 'react-intl';
 
 import { useHistory } from 'react-router';
 
@@ -13,7 +14,12 @@ import { useAppDispatch } from 'mastodon/store';
 import type { BaseConfirmationModalProps } from './confirmation_modal';
 import { ConfirmationModal } from './confirmation_modal';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly title: NoMessageValues;
+  readonly intro: { readonly i: MessageTag };
+  readonly message: { readonly serverName: MessageValue };
+  readonly confirm: NoMessageValues;
+}>({
   title: {
     id: 'confirmations.hide_featured_tab.title',
     defaultMessage: 'Hide "Featured" tab?',
