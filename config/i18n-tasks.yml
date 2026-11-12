@@ -46,7 +46,6 @@ ignore_unused:
   - 'simple_form.{placeholders,hints,labels}.*'
   - 'simple_form.{error_notification,required}.:'
   - 'errors.messages.*'
-  - 'admin_mailer.new_appeal.actions.*'
   - 'move_handler.carry_{mutes,blocks}_over_text'
   - 'email_subscription_mailer.notification.*'
   - 'notification_mailer.admin.*'
