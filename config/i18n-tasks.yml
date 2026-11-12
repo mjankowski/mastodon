@@ -46,7 +46,6 @@ ignore_unused:
   - 'simple_form.{placeholders,hints,labels}.*'
   - 'simple_form.{error_notification,required}.:'
   - 'errors.messages.*'
-  - 'move_handler.carry_{mutes,blocks}_over_text'
   - 'email_subscription_mailer.notification.*'
   - 'notification_mailer.admin.*'
   - 'preferences.other' # some locales are missing other keys, therefore leading i18n-tasks to detect `preferences` as plural and not finding use
