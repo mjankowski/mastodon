@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import { showAlert } from 'mastodon/actions/alerts';
 import { openModal } from 'mastodon/actions/modal';
@@ -68,7 +69,7 @@ export const RevokeCollectionInclusionModal: React.FC<
 
       dispatch(
         showAlert({
-          message: intl.formatMessage(
+          message: intl.formatMessage<{ readonly collection: MessageValue }>(
             {
               id: 'collections.revoke_inclusion.confirmation',
               defaultMessage: 'You\'ve been removed from "{collection}"',

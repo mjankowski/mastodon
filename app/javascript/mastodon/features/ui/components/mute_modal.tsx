@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import type { NoMessageValues } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -21,7 +22,14 @@ import { Button } from 'mastodon/components/button';
 import { Icon } from 'mastodon/components/icon';
 import { NavigationFocusTarget } from 'mastodon/components/navigation_focus_target';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly duration: NoMessageValues;
+  readonly minutes: { readonly number: number | bigint };
+  readonly hours: { readonly number: number | bigint };
+  readonly days: { readonly number: number | bigint };
+  readonly indefinite: NoMessageValues;
+  readonly hideFromNotifications: NoMessageValues;
+}>({
   duration: { id: 'mute_modal.duration', defaultMessage: 'Duration' },
   minutes: {
     id: 'intervals.full.minutes',

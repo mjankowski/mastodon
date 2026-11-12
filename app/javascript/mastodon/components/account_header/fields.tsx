@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import type { FC } from 'react';
 
 import { defineMessage, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 
@@ -25,7 +26,7 @@ import { useElementHandledLink } from '../status/handled_link';
 
 import classes from './styles.module.scss';
 
-const verifyMessage = defineMessage({
+const verifyMessage = defineMessage<{ readonly date: MessageValue }>({
   id: 'account.link_verified_on',
   defaultMessage: 'Ownership of this link was checked on {date}',
 });

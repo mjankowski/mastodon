@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { defineMessages, useIntl } from 'react-intl';
+import type { MessageValue } from 'react-intl';
 
 import classes from '../styles.module.scss';
 
@@ -52,7 +53,10 @@ type AccountEditItemButtonsProps<Item extends AnyItem = AnyItem> = Pick<
   'onEdit' | 'onDelete' | 'disabled'
 > & { item: Item };
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly edit: { readonly name: MessageValue };
+  readonly delete: { readonly name: MessageValue };
+}>({
   edit: {
     id: 'account_edit.item_list.edit',
     defaultMessage: 'Edit {name}',
