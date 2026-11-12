@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import type { MessageValue, NoMessageValues } from 'react-intl';
 
 import {
   CirclesFourIcon,
@@ -28,7 +29,10 @@ import { CollectionListItem } from '../collections/components/collection_list_it
 
 import { SearchSection } from './components/search_section';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly searchFor: { readonly q: MessageValue };
+  readonly search: NoMessageValues;
+}>({
   searchFor: { id: 'search_results.title', defaultMessage: 'Search for "{q}"' },
   search: { id: 'navigation_bar.search', defaultMessage: 'Search' },
 });

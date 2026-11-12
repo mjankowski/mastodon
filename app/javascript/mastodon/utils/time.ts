@@ -1,4 +1,4 @@
-import type { IntlShape } from 'react-intl';
+import type { IntlShape, NoMessageValues, MessageValue } from 'react-intl';
 import { defineMessages } from 'react-intl';
 
 export const SECOND = 1000;
@@ -70,7 +70,24 @@ export function unitToTime(unit: TimeUnit): number {
   }
 }
 
-const timeMessages = defineMessages({
+const timeMessages = defineMessages<{
+  readonly today: NoMessageValues;
+  readonly just_now: NoMessageValues;
+  readonly just_now_full: NoMessageValues;
+  readonly seconds: { readonly number: MessageValue };
+  readonly seconds_full: { readonly number: number | bigint };
+  readonly minutes: { readonly number: MessageValue };
+  readonly minutes_full: { readonly number: number | bigint };
+  readonly hours: { readonly number: MessageValue };
+  readonly hours_full: { readonly number: number | bigint };
+  readonly days: { readonly number: MessageValue };
+  readonly days_full: { readonly number: number | bigint };
+  readonly moments_remaining: NoMessageValues;
+  readonly seconds_remaining: { readonly number: number | bigint };
+  readonly minutes_remaining: { readonly number: number | bigint };
+  readonly hours_remaining: { readonly number: number | bigint };
+  readonly days_remaining: { readonly number: number | bigint };
+}>({
   today: { id: 'relative_time.today', defaultMessage: 'today' },
   just_now: { id: 'relative_time.just_now', defaultMessage: 'now' },
   just_now_full: {

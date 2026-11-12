@@ -6,7 +6,11 @@ import type {
   ReactNode,
 } from 'react';
 
-import type { MessageDescriptor } from 'react-intl';
+import type {
+  MessageDescriptor,
+  NoMessageValues,
+  MessageTag,
+} from 'react-intl';
 import { defineMessages, useIntl } from 'react-intl';
 
 import classNames from 'classnames';
@@ -20,7 +24,19 @@ import { CarouselPagination } from './pagination';
 
 import './styles.scss';
 
-const defaultMessages = defineMessages({
+const defaultMessages = defineMessages<{
+  readonly previous: NoMessageValues;
+  readonly next: NoMessageValues;
+  readonly current: {
+    readonly current: number | bigint;
+    readonly max: number | bigint;
+    readonly sr: MessageTag;
+  };
+  readonly slide: {
+    readonly current: number | bigint;
+    readonly max: number | bigint;
+  };
+}>({
   previous: { id: 'lightbox.previous', defaultMessage: 'Previous' },
   next: { id: 'lightbox.next', defaultMessage: 'Next' },
   current: {

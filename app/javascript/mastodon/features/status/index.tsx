@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import type { NoMessageValues, MessageValue } from 'react-intl';
 
 import classNames from 'classnames';
 import { useParams } from 'react-router';
@@ -52,7 +53,15 @@ import {
 import { RefreshController } from './components/refresh_controller';
 import classes from './styles.module.scss';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly revealAll: NoMessageValues;
+  readonly hideAll: NoMessageValues;
+  readonly statusTitleWithAttachments: {
+    readonly attachmentCount: number | bigint;
+    readonly user: MessageValue;
+  };
+  readonly detailedStatus: NoMessageValues;
+}>({
   revealAll: {
     id: 'status.show_more_all',
     defaultMessage: 'Show more for all',

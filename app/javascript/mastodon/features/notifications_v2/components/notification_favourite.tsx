@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import type { MessageValue, MessageTag } from 'react-intl';
 
 import { Link } from 'react-router-dom';
 
@@ -9,7 +10,20 @@ import { useAppSelector } from 'mastodon/store';
 import type { LabelRenderer } from './notification_group_with_status';
 import { NotificationGroupWithStatus } from './notification_group_with_status';
 
-const messages = defineMessages({
+const messages = defineMessages<{
+  readonly like: { readonly name: MessageValue };
+  readonly likeByMultiple: {
+    readonly a: MessageTag;
+    readonly count: number | bigint;
+    readonly name: MessageValue;
+  };
+  readonly messageLike: { readonly name: MessageValue };
+  readonly messageLikeByMultiple: {
+    readonly a: MessageTag;
+    readonly count: number | bigint;
+    readonly name: MessageValue;
+  };
+}>({
   like: {
     id: 'notification.like',
     defaultMessage: '{name} liked your post',
