@@ -28,20 +28,16 @@ search:
     - 'I18n::Tasks::Scanners::AstMatchers::DefaultI18nSubjectMatcher'
 
 ignore_missing:
-  - 'activemodel.errors.*'
   - 'activerecord.attributes.*'
   - 'activerecord.errors.*'
   - '{pagination,doorkeeper}.*'
   - '{date,datetime,time,number}.*'
   - 'errors.messages.*'
-  - 'activerecord.errors.models.doorkeeper/*'
   - 'sessions.{browsers,platforms}.*'
   - 'application_mailer.salutation'
-  - 'errors.500'
   - 'auth.providers.*'
 
 ignore_unused:
-  - 'activemodel.errors.*'
   - 'activerecord.attributes.*'
   - 'activerecord.errors.*'
   - '{devise,pagination,doorkeeper}.*'
@@ -50,22 +46,12 @@ ignore_unused:
   - 'simple_form.{placeholders,hints,labels}.*'
   - 'simple_form.{error_notification,required}.:'
   - 'errors.messages.*'
-  - 'activerecord.errors.models.doorkeeper/*'
-  - 'errors.429'
-  - 'admin.accounts.roles.*'
-  - 'admin.action_logs.actions.*'
-  - 'admin.reports.summary.action_preambles.*'
-  - 'admin.reports.summary.actions.*'
   - 'admin_mailer.new_appeal.actions.*'
-  - 'statuses.attached.*'
   - 'move_handler.carry_{mutes,blocks}_over_text'
-  - 'email_subscription_mailer.notification.*' # View uses ternary key selection
-  - 'notification_mailer.admin.*' # Used in Notification::PROPERTIES
-  - 'imports.overwrite_preambles.{following,blocking,muting,domain_blocking,bookmarks,lists,custom_filters}_html.*'
-  - 'imports.preambles.{following,blocking,muting,domain_blocking,bookmarks,lists,custom_filters}_html.*'
-  - 'mail_subscriptions.unsubscribe.emails.*'
+  - 'email_subscription_mailer.notification.*'
+  - 'notification_mailer.admin.*'
   - 'preferences.other' # some locales are missing other keys, therefore leading i18n-tasks to detect `preferences` as plural and not finding use
-  - 'edit_profile.other' # some locales are missing other keys, therefore leading i18n-tasks to detect `preferences` as plural and not finding use
+  - 'edit_profile.other' # some locales are missing other keys, therefore leading i18n-tasks to detect `edit_profile` as plural and not finding use
   - 'admin.terms_of_service.generate' # temporarily disabled
   - 'admin.username_blocks.matches_exactly_html'
   - 'admin.username_blocks.contains_html'
