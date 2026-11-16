@@ -36,50 +36,58 @@
       = account_link_to target_account, '', path: admin_account_path(target_account.id)
       .report-card__profile__stats
         = link_to t('admin.reports.account.notes', count: target_account.targeted_moderation_notes.count), admin_account_path(target_account.id)
-        %br/
         - if target_account.suspended?
-          %span.red= t('admin.accounts.suspended')
+          %span.information-badge.reject= t('admin.accounts.suspended')
         - elsif target_account.deleted?
-          %span.red= t('admin.accounts.deleted')
+          %span.information-badge.reject= t('admin.accounts.deleted')
         - elsif target_account.silenced?
-          %span.red= t('admin.accounts.silenced')
+          %span.information-badge.limit= t('admin.accounts.silenced')
         - elsif target_account.user_disabled?
-          %span.red= t('admin.accounts.disabled')
+          %span.information-badge.reject= t('admin.accounts.disabled')
         - else
-          %span.neutral= t('admin.accounts.no_limits_imposed')
+          %span.information-badge= t('admin.accounts.no_limits_imposed')
     .report-card__summary
       - reports.each do |report|
         .report-card__summary__item
-          .report-card__summary__item__reported-by
-            - if report.account.instance_actor?
-              = site_hostname
-            - elsif report.local?
-              = admin_account_link_to report.account
-            - else
-              = report.account.domain
+          .report-card__summary__item__header
+            .report-card__summary__item__reported-by
+              = link_to t('admin.reports.report', id: report.id), admin_report_path(report), class: 'report-card__summary__item__title'
+              %span.report-card__summary__item__label= t('admin.reports.reported_by')
+              - if report.account.instance_actor?
+                = site_hostname
+              - elsif report.local?
+                = admin_account_link_to report.account
+              - else
+                = report.account.domain
+
+            .report-card__summary__item__assigned
+              %span.report-card__summary__item__label= t('admin.reports.assigned')
+              - if report.assigned_account.present?
+                = admin_account_link_to report.assigned_account
+              - else
+                = t('admin.reports.no_one_assigned')
+
           .report-card__summary__item__content
             = link_to admin_report_path(report) do
-              .one-line= report.comment.presence || t('admin.reports.comment.none')
+              .report-card__summary__item__comment= report.comment.presence || t('admin.reports.comment.none')
 
-              %span.report-card__summary__item__content__icon{ title: t('admin.accounts.statuses') }
-                = material_symbol('comment')
-                = report.status_ids.size
+              .report-card__summary__item__metadata
+                %span.report-card__summary__item__content__icon{ title: t('admin.accounts.statuses') }
+                  = material_symbol('comment')
+                  = report.status_ids.size
+                  = t('admin.accounts.statuses')
 
-              %span.report-card__summary__item__content__icon{ title: t('admin.accounts.media_attachments') }
-                = material_symbol('photo_camera')
-                = report.media_attachments_count
+                %span.report-card__summary__item__content__icon{ title: t('admin.accounts.media_attachments') }
+                  = material_symbol('photo_camera')
+                  = report.media_attachments_count
+                  = t('admin.accounts.media_attachments')
 
-              %span.report-card__summary__item__content__icon{ title: t('admin.accounts.collections') }
-                = material_symbol('category')
-                = report.collections.size
+                %span.report-card__summary__item__content__icon{ title: t('admin.accounts.collections') }
+                  = material_symbol('category')
+                  = report.collections.size
+                  = t('admin.accounts.collections')
 
-              - if report.forwarded?
-                ·
-                = t('admin.reports.forwarded_to', domain: target_account.domain)
+                - if report.forwarded?
+                  %span= t('admin.reports.forwarded_to', domain: target_account.domain)
 
-          .report-card__summary__item__assigned
-            - if report.assigned_account.present?
-              = admin_account_link_to report.assigned_account
-            - else
-              \-
 = paginate @reports
