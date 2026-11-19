@@ -2743,14 +2743,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@formatjs/intl@npm:6.1.5":
-  version: 6.1.5
-  resolution: "@formatjs/intl@npm:6.1.5"
+"@formatjs/intl@npm:6.2.0":
+  version: 6.2.0
+  resolution: "@formatjs/intl@npm:6.2.0"
   dependencies:
     "@formatjs/fast-memoize": "npm:3.1.7"
     "@formatjs/icu-messageformat-parser": "npm:3.5.23"
-    intl-messageformat: "npm:12.1.5"
-  checksum: 10c0/a6fa4bb1875999b49db848f643b2f5b4a1aaa3482b8a9bed80ff9128b0648c672518de80b4e424308f11e6214f865efaa235c1dc8f617a08331114d93a276e3c
+    intl-messageformat: "npm:12.2.0"
+  checksum: 10c0/f4823d2dd31f9ab3213e3326f51beaa4bc440787a0ac994c27016b791c36beedffaf857b32112407fa7ba1d410f09774b66ea90217b82d42d24f2c17401e8749
   languageName: node
   linkType: hard
 
@@ -3158,7 +3158,7 @@ __metadata:
     husky: "npm:9.1.7"
     idb: "npm:8.0.4"
     immutable: "npm:4.3.9"
-    intl-messageformat: "npm:12.1.5"
+    intl-messageformat: "npm:12.2.0"
     js-yaml: "npm:5.5.0"
     lint-staged: "npm:17.5.1"
     lodash: "npm:4.18.1"
@@ -3175,7 +3175,7 @@ __metadata:
     react-easy-crop: "npm:6.2.5"
     react-immutable-proptypes: "npm:2.2.0"
     react-immutable-pure-component: "npm:2.2.2"
-    react-intl: "npm:12.1.7"
+    react-intl: "npm:12.2.0"
     react-redux: "npm:9.3.1"
     react-redux-loading-bar: "npm:5.0.8"
     react-router: "npm:5.3.4"
@@ -8960,13 +8960,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"intl-messageformat@npm:12.1.5":
-  version: 12.1.5
-  resolution: "intl-messageformat@npm:12.1.5"
+"intl-messageformat@npm:12.2.0":
+  version: 12.2.0
+  resolution: "intl-messageformat@npm:12.2.0"
   dependencies:
     "@formatjs/fast-memoize": "npm:3.1.7"
     "@formatjs/icu-messageformat-parser": "npm:3.5.23"
-  checksum: 10c0/9c9e7c6612e2fa72a2947c357eeecff18fc6ca3d18020bd49b60381a0afc0359b6d98a9da92a418f88835f894f1edd4ed23c33b22ee3a97509e1c3389c4e45c6
+  checksum: 10c0/ef7fd5e281e79f019a54592a5b15bd1cae2d8614af2744aa3f787cf727432018ef038fae13beedfe66be7e073a93a03ac2f1dbe5c0e2cd1c5536ceba5d0e02b8
   languageName: node
   linkType: hard
 
@@ -11758,17 +11758,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intl@npm:12.1.7":
-  version: 12.1.7
-  resolution: "react-intl@npm:12.1.7"
+"react-intl@npm:12.2.0":
+  version: 12.2.0
+  resolution: "react-intl@npm:12.2.0"
   dependencies:
     "@formatjs/icu-messageformat-parser": "npm:3.5.23"
-    "@formatjs/intl": "npm:6.1.5"
-    intl-messageformat: "npm:12.1.5"
+    "@formatjs/intl": "npm:6.2.0"
+    intl-messageformat: "npm:12.2.0"
   peerDependencies:
     "@types/react": ">=18.0.0"
     react: ">=18.0.0"
-  checksum: 10c0/65b453ea6ef9c2313d6338fbc14fbb4fe23c2fa5e92f2b0949e821f295ef0476a73ce5073fdc4422785d2c2e213d517302c421d3d647fe5ed52b0c7ce983ff36
+  checksum: 10c0/e91c7797989257f87555126d542b6cf76c2f4b3b47c76484897f2fd1bf7c6d4037b35aa784b48447a72c4ef3bbfe474b74e2f80ce9b6f9c75f228949de4fbccd
   languageName: node
   linkType: hard
 
