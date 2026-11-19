@@ -367,6 +367,16 @@ code {
     columns: unset;
   }
 
+  .input.with_block_label.user_chosen_languages ul {
+    columns: 12rem 3;
+    column-gap: 1rem;
+
+    li {
+      break-inside: avoid;
+      padding-block: 0.25rem;
+    }
+  }
+
   .input.datetime .label_input,
   .input.date .label_input {
     display: flex;
