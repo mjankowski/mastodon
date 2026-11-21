@@ -18,6 +18,7 @@ import {
 import { NavigationFocusTarget } from '@/mastodon/components/navigation_focus_target';
 import { me } from '@/mastodon/initial_state';
 import { useAppDispatch } from '@/mastodon/store';
+import { share } from '@/mastodon/utils/share';
 
 import { CollectionPreviewCard } from './collection_preview_card';
 import classes from './share_modal.module.scss';
@@ -48,7 +49,7 @@ export const CollectionShareModal: React.FC<{
   const collectionLink = collection.url;
 
   const handleShareOnDevice = useCallback(() => {
-    void navigator.share({
+    void share({
       url: collectionLink,
     });
   }, [collectionLink]);

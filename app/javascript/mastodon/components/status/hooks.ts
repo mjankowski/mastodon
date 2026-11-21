@@ -52,6 +52,7 @@ import {
 import { useAppSelector, useAppDispatch } from '@/mastodon/store';
 import type { AppDispatch } from '@/mastodon/store';
 import type { OnElementHandler } from '@/mastodon/utils/html';
+import { share } from '@/mastodon/utils/share';
 
 import type { HotkeyHandlerFunction, HotkeyName } from '../hotkeys';
 import { FOCUS_TARGET } from '../navigation_focus_target';
@@ -739,7 +740,7 @@ function getMenuItems({
     menu.push({
       text: intl.formatMessage(menuMessages.share),
       action: () => {
-        void navigator.share({
+        void share({
           url: statusUrl,
         });
       },
