@@ -53,6 +53,7 @@ import {
 } from '@/mastodon/permissions';
 import type { AppDispatch } from '@/mastodon/store';
 import { useAppDispatch, useAppSelector } from '@/mastodon/store';
+import { share } from '@/mastodon/utils/share';
 
 export const AccountMenu: FC<
   { accountId: string } & Pick<ButtonProps, 'size'>
@@ -249,7 +250,7 @@ function getMenuItems({
       items.push({
         text: intl.formatMessage(messages.share),
         action: () => {
-          void navigator.share({
+          void share({
             url: account.url,
           });
         },

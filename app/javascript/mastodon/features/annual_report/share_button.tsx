@@ -9,6 +9,7 @@ import { closeModal } from '@/mastodon/actions/modal';
 import { Button } from '@/mastodon/components/button';
 import type { AnnualReport as AnnualReportData } from '@/mastodon/models/annual_report';
 import { useAppDispatch } from '@/mastodon/store';
+import { share } from '@/mastodon/utils/share';
 
 import { archetypeNames } from './archetype';
 import styles from './index.module.scss';
@@ -67,7 +68,7 @@ export const ShareButton: FC<{ report: AnnualReportData }> = ({ report }) => {
   const handleSecondaryShare = useCallback(() => {
     if (report.schema_version === 2 && report.share_url) {
       if (supportsNativeShare) {
-        void navigator.share({
+        void share({
           url: report.share_url,
         });
       } else {

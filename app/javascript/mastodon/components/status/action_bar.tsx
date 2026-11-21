@@ -17,6 +17,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@/mastodon/store/typed_functions';
+import { share } from '@/mastodon/utils/share';
 
 import { AnimatedNumber } from '../animated_number';
 import { Button, IconButton, ToggleButton, ToggleIconButton } from '../button';
@@ -70,7 +71,7 @@ export const StatusActionBar: React.FC<StatusActionBarProps> = ({
     const nav = navigator as Partial<Pick<Navigator, 'share'>> &
       Pick<Navigator, 'clipboard'>;
     if (nav.share) {
-      void nav.share({
+      void share({
         url: statusUrl,
       });
     } else {
