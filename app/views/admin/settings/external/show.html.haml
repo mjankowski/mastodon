@@ -51,6 +51,9 @@
 
   %h2= t('admin.settings.security.federation_authentication')
 
+  .flash-message
+    = authorized_fetch_warning_hint_text
+
   .fields-group
     = f.input :authorized_fetch,
               as: :radio_buttons,
@@ -61,7 +64,6 @@
               include_blank: false,
               label_method: ->(mode) { safe_join([I18n.t(mode, scope: 'admin.settings.security.authorized_fetch_modes'), content_tag(:span, I18n.t(mode, scope: 'admin.settings.security.authorized_fetch_hints'), class: 'hint')]) },
               recommended: authorized_fetch_recommended_value,
-              warning_hint: authorized_fetch_warning_hint_text,
               wrapper: :with_block_label
 
   .actions

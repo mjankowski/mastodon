@@ -21,17 +21,8 @@ module RecommendedComponent
   end
 end
 
-module WarningHintComponent
-  def warning_hint(_wrapper_options = nil)
-    @warning_hint ||= begin
-      options[:warning_hint].to_s.html_safe if options[:warning_hint].present? # rubocop:disable Rails/OutputSafety
-    end
-  end
-end
-
 SimpleForm.include_component(AppendComponent)
 SimpleForm.include_component(RecommendedComponent)
-SimpleForm.include_component(WarningHintComponent)
 
 SimpleForm.setup do |config|
   # Wrappers are used by the form builder to generate a
@@ -97,7 +88,6 @@ SimpleForm.setup do |config|
       end
     end
 
-    b.use :warning_hint, wrap_with: { tag: :span, class: [:hint, 'warning-hint'] }
     b.use :hint, wrap_with: { tag: :span, class: :hint }
     b.use :error, wrap_with: { tag: :span, class: :error }
   end
@@ -112,7 +102,6 @@ SimpleForm.setup do |config|
   config.wrappers :with_block_label, class: [:input, :with_block_label], hint_class: :field_with_hint, error_class: :field_with_errors do |b|
     b.use :html5
     b.use :label
-    b.use :warning_hint, wrap_with: { tag: :span, class: [:hint, 'warning-hint'] }
     b.use :hint, wrap_with: { tag: :span, class: :hint }
     b.use :input, wrap_with: { tag: :div, class: :label_input }
     b.use :error, wrap_with: { tag: :span, class: :error }

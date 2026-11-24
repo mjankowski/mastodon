@@ -20,11 +20,13 @@
 
   %h2= t('admin.settings.content_retention.danger_zone')
 
+  .flash-message
+    = t('simple_form.hints.form_admin_settings.content_cache_retention_period')
+
   .fields-group
     = f.input :content_cache_retention_period,
               hint: false,
               input_html: { pattern: '[0-9]+' },
-              warning_hint: t('simple_form.hints.form_admin_settings.content_cache_retention_period'),
               wrapper: :with_block_label
 
   .actions
