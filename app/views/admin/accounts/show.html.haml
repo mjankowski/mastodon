@@ -28,7 +28,7 @@
     %table.table.inline-table
       %tbody
         - if @account.local?
-          = render 'admin/accounts/local_account', account: @account
+          = render 'admin/accounts/local_account', account: @account, security_actions: account_security_actions(@account)
         - else
           = render 'admin/accounts/remote_account', account: @account, domain_block: @domain_block
         - if @account&.user&.created_by_application.present?

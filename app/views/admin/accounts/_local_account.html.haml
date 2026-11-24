@@ -40,25 +40,16 @@
       = t('admin.accounts.confirming')
   %td= table_link_to 'refresh', t('admin.accounts.resend_confirmation.send'), resend_admin_account_confirmation_path(account.id), method: :post if can?(:confirm, account.user)
 %tr
-  %th{ rowspan: can?(:reset_password, account.user) ? 2 : 1 }= t('admin.accounts.security')
-  %td{ rowspan: can?(:reset_password, account.user) ? 2 : 1 }
+  %th{ rowspan: [security_actions.size, 1].max }= t('admin.accounts.security')
+  %td{ rowspan: [security_actions.size, 1].max }
     - if account.user&.two_factor_enabled?
       = t 'admin.accounts.security_measures.password_and_2fa'
     - else
       = t 'admin.accounts.security_measures.only_password'
-  - if account.user&.two_factor_enabled? && can?(:disable_2fa, account.user)
-    %td
-      = table_link_to 'lock_open', t('admin.accounts.disable_two_factor_authentication'), admin_user_two_factor_authentication_path(account.user.id), method: :delete
-  - elsif account.user&.suspicious_inactive_sign_in? && can?(:disable_sign_in_token, account.user)
-    %td
-      = table_link_to 'lock_open', t('admin.accounts.disable_sign_in_token'), admin_user_sign_in_token_authentication_path(account.user.id), method: :delete, data: { confirm: t('admin.accounts.are_you_sure') }
-  - elsif account.user&.sign_in_token_disabled? && can?(:enable_sign_in_token, account.user)
-    %td
-      = table_link_to 'lock', t('admin.accounts.enable_sign_in_token'), admin_user_sign_in_token_authentication_path(account.user.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') }
-- if can?(:reset_password, account.user)
+  %td= security_actions.first
+- security_actions.drop(1).each do |action|
   %tr
-    %td
-      = table_link_to 'key', t('admin.accounts.reset_password'), admin_account_reset_path(account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') }
+    %td= action
 %tr
   %th= t('simple_form.labels.defaults.locale')
   %td= standard_locale_name(account.user_locale)
