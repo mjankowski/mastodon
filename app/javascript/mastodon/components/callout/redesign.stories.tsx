@@ -2,24 +2,34 @@ import { InfoIcon } from '@phosphor-icons/react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 
+import { Button } from '../button';
+
 import type { CalloutProps } from './redesign';
 import { Callout } from './redesign';
 
 const meta = {
   title: 'Redesign/Callout',
-  render({ hasIcon, ...props }) {
-    const actionProps = props.actionText
-      ? fn().mockName('actionClick')
-      : undefined;
-    const secondaryActionProps = props.secondaryActionText
-      ? fn().mockName('secondaryActionClick')
-      : undefined;
+  render({ hasIcon, actionText, secondaryActionText, ...props }) {
+    const actionClick = fn().mockName('actionClick');
+    const secondaryActionClick = fn().mockName('secondaryActionClick');
     return (
       <Callout
         {...props}
-        {...actionProps}
-        {...secondaryActionProps}
         icon={hasIcon ? InfoIcon : undefined}
+        actions={
+          <>
+            {actionText && (
+              <Button size='sm' onClick={actionClick}>
+                {actionText}
+              </Button>
+            )}
+            {props.size !== 'sm' && secondaryActionText && (
+              <Button size='sm' onClick={secondaryActionClick}>
+                {secondaryActionText}
+              </Button>
+            )}
+          </>
+        }
       />
     );
   },
@@ -40,6 +50,8 @@ const meta = {
   CalloutProps<React.ElementType> & {
     as?: never;
     hasIcon?: boolean;
+    actionText?: string;
+    secondaryActionText?: string;
     children: string;
   }
 >;
