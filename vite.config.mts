@@ -187,6 +187,11 @@ export const config: UserConfigFnPromise = async ({ mode, command }) => {
     },
     worker: {
       format: 'es',
+      rolldownOptions: {
+        output: {
+          codeSplitting: false,
+        },
+      },
     },
     plugins: [
       react(),
