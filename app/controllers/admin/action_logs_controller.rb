@@ -16,7 +16,12 @@ module Admin
     end
 
     def filter_params
-      params.slice(:page, *Admin::ActionLogFilter::KEYS).permit(:page, *Admin::ActionLogFilter::KEYS)
+      params.slice(:page, *Admin::ActionLogFilter::KEYS).permit(:page, *Admin::ActionLogFilter::KEYS).tap do |permitted_params|
+        next unless permitted_params.key?(:target_type)
+
+        action_type = Admin::ActionLogFilter::ACTION_TYPE_MAP[permitted_params[:action_type]&.to_sym]
+        permitted_params.delete(:action_type) if action_type && action_type[:target_type] != permitted_params[:target_type]
+      end
     end
   end
 end

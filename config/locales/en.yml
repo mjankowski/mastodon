@@ -232,6 +232,7 @@ en:
         create_domain_block: Create Domain Block
         create_email_domain_block: Create Email Domain Block
         create_ip_block: Create IP rule
+        create_moderation_subscription: Create Moderation Subscription
         create_relay: Create Relay
         create_unavailable_domain: Create Unavailable Domain
         create_user_role: Create Role
@@ -240,12 +241,14 @@ en:
         destroy_account: Delete Account Data
         destroy_announcement: Delete Announcement
         destroy_canonical_email_block: Delete Email Block
+        destroy_collection: Delete Collection
         destroy_custom_emoji: Delete Custom Emoji
         destroy_domain_allow: Delete Domain Allow
         destroy_domain_block: Delete Domain Block
         destroy_email_domain_block: Delete Email Domain Block
         destroy_instance: Purge Domain
         destroy_ip_block: Delete IP rule
+        destroy_moderation_subscription: Delete Moderation Subscription
         destroy_relay: Delete Relay
         destroy_status: Delete Post
         destroy_unavailable_domain: Delete Unavailable Domain
@@ -254,11 +257,11 @@ en:
         disable_2fa_user: Disable 2FA
         disable_custom_emoji: Disable Custom Emoji
         disable_relay: Disable Relay
-        disable_sign_in_token_auth_user: Disable Email Token Authentication for User
+        disable_sign_in_token_user: Disable Email Token Authentication for User
         disable_user: Disable User
         enable_custom_emoji: Enable Custom Emoji
         enable_relay: Enable Relay
-        enable_sign_in_token_auth_user: Enable Email Token Authentication for User
+        enable_sign_in_token_user: Enable Email Token Authentication for User
         enable_user: Enable User
         memorialize_account: Memorialize Account
         promote_user: Promote User
@@ -266,6 +269,7 @@ en:
         reject_appeal: Reject Appeal
         reject_user: Reject User
         remove_avatar_user: Remove Avatar
+        remove_header_user: Remove Header
         reopen_report: Reopen Report
         resend_user: Resend Confirmation Mail
         reset_password_user: Reset Password
@@ -279,9 +283,11 @@ en:
         unsilence_account: Undo Limit Account
         unsuspend_account: Unsuspend Account
         update_announcement: Update Announcement
+        update_collection: Update Collection
         update_custom_emoji: Update Custom Emoji
         update_domain_block: Update Domain Block
         update_ip_block: Update IP rule
+        update_moderation_subscription: Update Moderation Subscription
         update_report: Update Report
         update_status: Update Post
         update_tag: Update Hashtag
@@ -327,11 +333,11 @@ en:
         disable_2fa_user_html: "%{name} disabled two factor requirement for user %{target}"
         disable_custom_emoji_html: "%{name} disabled emoji %{target}"
         disable_relay_html: "%{name} disabled the relay %{target}"
-        disable_sign_in_token_auth_user_html: "%{name} disabled email token authentication for %{target}"
+        disable_sign_in_token_user_html: "%{name} disabled email token authentication for %{target}"
         disable_user_html: "%{name} disabled login for user %{target}"
         enable_custom_emoji_html: "%{name} enabled emoji %{target}"
         enable_relay_html: "%{name} enabled the relay %{target}"
-        enable_sign_in_token_auth_user_html: "%{name} enabled email token authentication for %{target}"
+        enable_sign_in_token_user_html: "%{name} enabled email token authentication for %{target}"
         enable_user_html: "%{name} enabled login for user %{target}"
         listable_tag_html: can be suggested
         memorialize_account_html: "%{name} turned %{target}'s account into a memoriam page"
@@ -343,6 +349,7 @@ en:
         reject_appeal_html: "%{name} rejected moderation decision appeal from %{target}"
         reject_user_html: "%{name} rejected sign-up from %{target}"
         remove_avatar_user_html: "%{name} removed %{target}'s avatar"
+        remove_header_user_html: "%{name} removed %{target}'s header"
         reopen_report_html: "%{name} reopened report %{target}"
         resend_user_html: "%{name} resent confirmation email for %{target}"
         reset_password_user_html: "%{name} reset password of user %{target}"
@@ -361,6 +368,7 @@ en:
         update_custom_emoji_html: "%{name} updated emoji %{target}"
         update_domain_block_html: "%{name} updated domain block for %{target}"
         update_ip_block_html: "%{name} changed rule for IP %{target}"
+        update_moderation_subscription_html: "%{name} updated moderation subscription %{target}"
         update_report_html: "%{name} updated report %{target}"
         update_status_html: "%{name} updated post by %{target}"
         update_tag_html: "%{name} changed %{target} settings to: "
@@ -377,6 +385,7 @@ en:
       deleted_suggestion: a deleted moderation subscription
       empty: No logs found.
       filter_by_action: Filter by action
+      filter_by_target_type: Filter by target type
       filter_by_user: Filter by user
       suggested_by_html: Action suggested by %{subscription}
       title: Audit log

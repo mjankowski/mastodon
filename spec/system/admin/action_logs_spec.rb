@@ -19,6 +19,23 @@ RSpec.describe 'Admin Action Logs' do
         .to have_title(I18n.t('admin.action_logs.title'))
         .and have_css('.log-entry')
     end
+
+    it 'filters logs by target type and action' do
+      Fabricate(:action_log, account: account, action: 'create', target: Fabricate(:announcement))
+
+      visit admin_action_logs_path(target_type: 'Announcement')
+
+      expect(page)
+        .to have_select('target_type', selected: 'Announcement')
+        .and have_select('action_type', options: ['All', 'Create Announcement', 'Delete Announcement', 'Update Announcement'])
+        .and have_css('.log-entry', count: 2)
+
+      visit admin_action_logs_path(target_type: 'Announcement', action_type: 'create_announcement')
+
+      expect(page)
+        .to have_select('action_type', selected: 'Create Announcement')
+        .and have_css('.log-entry', count: 1)
+    end
   end
 
   private

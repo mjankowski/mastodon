@@ -83,10 +83,18 @@ module Admin::ActionLogsHelper
     log.public_send(key) ? key : :"not_#{key}"
   end
 
-  def sorted_action_log_types
+  def sorted_action_log_target_types
     Admin::ActionLogFilter::ACTION_TYPE_MAP
-      .keys
-      .map { |key| [I18n.t("admin.action_logs.action_types.#{key}"), key] }
+      .values
+      .pluck(:target_type)
+      .uniq
+      .map { |type| [type.constantize.model_name.human(default: type.titleize), type] }
+      .sort_by(&:first)
+  end
+
+  def sorted_action_log_types(target_type)
+    Admin::ActionLogFilter::ACTION_TYPE_MAP
+      .filter_map { |key, value| [I18n.t("admin.action_logs.action_types.#{key}"), key] if value[:target_type] == target_type }
       .sort_by(&:first)
   end
 end

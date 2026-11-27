@@ -4,6 +4,7 @@ class Admin::ActionLogFilter
   KEYS = %i(
     action_type
     account_id
+    target_type
     target_account_id
     target_domain
     target_tag
@@ -32,16 +33,20 @@ class Admin::ActionLogFilter
     create_domain_block: { target_type: 'DomainBlock', action: 'create' }.freeze,
     create_email_domain_block: { target_type: 'EmailDomainBlock', action: 'create' }.freeze,
     create_ip_block: { target_type: 'IpBlock', action: 'create' }.freeze,
+    create_moderation_subscription: { target_type: 'ModerationSubscription', action: 'create' }.freeze,
     create_relay: { target_type: 'Relay', action: 'create' }.freeze,
     create_unavailable_domain: { target_type: 'UnavailableDomain', action: 'create' }.freeze,
     create_user_role: { target_type: 'UserRole', action: 'create' }.freeze,
     create_canonical_email_block: { target_type: 'CanonicalEmailBlock', action: 'create' }.freeze,
     demote_user: { target_type: 'User', action: 'demote' }.freeze,
+    destroy_account: { target_type: 'Account', action: 'destroy' }.freeze,
     destroy_announcement: { target_type: 'Announcement', action: 'destroy' }.freeze,
+    destroy_collection: { target_type: 'Collection', action: 'destroy' }.freeze,
     destroy_custom_emoji: { target_type: 'CustomEmoji', action: 'destroy' }.freeze,
     destroy_domain_allow: { target_type: 'DomainAllow', action: 'destroy' }.freeze,
     destroy_domain_block: { target_type: 'DomainBlock', action: 'destroy' }.freeze,
     destroy_ip_block: { target_type: 'IpBlock', action: 'destroy' }.freeze,
+    destroy_moderation_subscription: { target_type: 'ModerationSubscription', action: 'destroy' }.freeze,
     destroy_relay: { target_type: 'Relay', action: 'destroy' }.freeze,
     destroy_email_domain_block: { target_type: 'EmailDomainBlock', action: 'destroy' }.freeze,
     destroy_instance: { target_type: 'Instance', action: 'destroy' }.freeze,
@@ -53,13 +58,16 @@ class Admin::ActionLogFilter
     disable_custom_emoji: { target_type: 'CustomEmoji', action: 'disable' }.freeze,
     disable_user: { target_type: 'User', action: 'disable' }.freeze,
     disable_relay: { target_type: 'Relay', action: 'disable' }.freeze,
+    disable_sign_in_token_user: { target_type: 'User', action: 'disable_sign_in_token' }.freeze,
     enable_custom_emoji: { target_type: 'CustomEmoji', action: 'enable' }.freeze,
     enable_user: { target_type: 'User', action: 'enable' }.freeze,
     enable_relay: { target_type: 'Relay', action: 'enable' }.freeze,
+    enable_sign_in_token_user: { target_type: 'User', action: 'enable_sign_in_token' }.freeze,
     memorialize_account: { target_type: 'Account', action: 'memorialize' }.freeze,
     promote_user: { target_type: 'User', action: 'promote' }.freeze,
     publish_terms_of_service: { target_type: 'TermsOfService', action: 'publish' }.freeze,
     remove_avatar_user: { target_type: 'User', action: 'remove_avatar' }.freeze,
+    remove_header_user: { target_type: 'User', action: 'remove_header' }.freeze,
     reopen_report: { target_type: 'Report', action: 'reopen' }.freeze,
     resend_user: { target_type: 'User', action: 'resend' }.freeze,
     reset_password_user: { target_type: 'User', action: 'reset_password' }.freeze,
@@ -72,7 +80,10 @@ class Admin::ActionLogFilter
     unsilence_account: { target_type: 'Account', action: 'unsilence' }.freeze,
     unsuspend_account: { target_type: 'Account', action: 'unsuspend' }.freeze,
     update_announcement: { target_type: 'Announcement', action: 'update' }.freeze,
+    update_collection: { target_type: 'Collection', action: 'update' }.freeze,
     update_custom_emoji: { target_type: 'CustomEmoji', action: 'update' }.freeze,
+    update_domain_block: { target_type: 'DomainBlock', action: 'update' }.freeze,
+    update_moderation_subscription: { target_type: 'ModerationSubscription', action: 'update' }.freeze,
     update_report: { target_type: 'Report', action: 'update' }.freeze,
     update_status: { target_type: 'Status', action: 'update' }.freeze,
     update_user_role: { target_type: 'UserRole', action: 'update' }.freeze,
@@ -112,6 +123,8 @@ class Admin::ActionLogFilter
       latest_action_logs.where(ACTION_TYPE_MAP[value.to_sym])
     when 'account_id'
       latest_action_logs.where(account_id: value)
+    when 'target_type'
+      latest_action_logs.where(target_type: value)
     when 'target_account_id'
       account = Account.find_or_initialize_by(id: value)
       latest_action_logs.where(target: [account, account.user].compact)
