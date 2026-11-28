@@ -265,6 +265,7 @@ en:
         reject_appeal: Reject Appeal
         reject_user: Reject User
         remove_avatar_user: Remove Avatar
+        remove_header_user: Remove Header
         reopen_report: Reopen Report
         resend_user: Resend Confirmation Mail
         reset_password_user: Reset Password

@@ -63,6 +63,7 @@ class Admin::ActionLogFilter
     promote_user: { target_type: 'User', action: 'promote' }.freeze,
     publish_terms_of_service: { target_type: 'TermsOfService', action: 'publish' }.freeze,
     remove_avatar_user: { target_type: 'User', action: 'remove_avatar' }.freeze,
+    remove_header_user: { target_type: 'User', action: 'remove_header' }.freeze,
     reopen_report: { target_type: 'Report', action: 'reopen' }.freeze,
     resend_user: { target_type: 'User', action: 'resend' }.freeze,
     reset_password_user: { target_type: 'User', action: 'reset_password' }.freeze,
