@@ -87,6 +87,7 @@ en:
       destroyed_msg: "%{username}'s data is now queued to be deleted imminently"
       disable: Freeze
       disable_sign_in_token: Temporarily disable security code challenge
+      disable_sign_in_token_auth: Disable email token authentication
       disable_two_factor_authentication: Disable 2FA
       disabled: Frozen
       discoverable:
@@ -253,11 +254,11 @@ en:
         disable_2fa_user: Disable 2FA
         disable_custom_emoji: Disable Custom Emoji
         disable_relay: Disable Relay
-        disable_sign_in_token_auth_user: Disable Email Token Authentication for User
+        disable_sign_in_token_user: Disable Email Token Authentication for User
         disable_user: Disable User
         enable_custom_emoji: Enable Custom Emoji
         enable_relay: Enable Relay
-        enable_sign_in_token_auth_user: Enable Email Token Authentication for User
+        enable_sign_in_token_user: Enable Email Token Authentication for User
         enable_user: Enable User
         memorialize_account: Memorialize Account
         promote_user: Promote User
@@ -327,11 +328,11 @@ en:
         disable_2fa_user_html: "%{name} disabled two factor requirement for user %{target}"
         disable_custom_emoji_html: "%{name} disabled emoji %{target}"
         disable_relay_html: "%{name} disabled the relay %{target}"
-        disable_sign_in_token_auth_user_html: "%{name} disabled email token authentication for %{target}"
+        disable_sign_in_token_user_html: "%{name} disabled email token authentication for %{target}"
         disable_user_html: "%{name} disabled login for user %{target}"
         enable_custom_emoji_html: "%{name} enabled emoji %{target}"
         enable_relay_html: "%{name} enabled the relay %{target}"
-        enable_sign_in_token_auth_user_html: "%{name} enabled email token authentication for %{target}"
+        enable_sign_in_token_user_html: "%{name} enabled email token authentication for %{target}"
         enable_user_html: "%{name} enabled login for user %{target}"
         listable_tag_html: can be suggested
         memorialize_account_html: "%{name} turned %{target}'s account into a memoriam page"
@@ -343,6 +344,7 @@ en:
         reject_appeal_html: "%{name} rejected moderation decision appeal from %{target}"
         reject_user_html: "%{name} rejected sign-up from %{target}"
         remove_avatar_user_html: "%{name} removed %{target}'s avatar"
+        remove_header_user_html: "%{name} removed %{target}'s header"
         reopen_report_html: "%{name} reopened report %{target}"
         resend_user_html: "%{name} resent confirmation email for %{target}"
         reset_password_user_html: "%{name} reset password of user %{target}"
